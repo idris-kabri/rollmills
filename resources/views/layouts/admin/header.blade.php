@@ -4,10 +4,10 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Dashboard | Fakhri Electric Store</title>
-    <meta name="csrf-token" content="jGUWK2Xr2e2QuaKVLNhSjvgsvhP59I2QoCW4xz59" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- <link href="{{asset('assets/images/white-logo.png')}}" rel="icon shortcut" />
-    <meta property="og:image" content="{{asset('assets/images/white-logo.png')}}" /> --}}
+    <link href="{{asset('assets/backend/images/white-logo.png')}}" rel="icon shortcut" />
+    <meta property="og:image" content="{{asset('assets/backend/images/white-logo.png')}}" />
 
     <meta name="description" content="Copyright 2025 © Botble Technologies. Version 1.41.2" />
     <meta property="og:description" content="Copyright 2025 © Botble Technologies. Version 1.41.2" />
@@ -30,8 +30,6 @@
             -moz-appearance: textfield;
         }
     </style>
-
-    <link href="{{ asset('assets/backend/css/main.css') }}" rel="stylesheet" type="text/css" />
 
     <style>
         @font-face {
@@ -410,59 +408,54 @@
             --link-hover-color-rgb: 32, 107, 196;
         }
     </style>
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/font-awesome/css/fontawesome.min.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/font-awesome/css/fontawesome.min.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/select2/css/select2.min.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/select2/css/select2.min.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/css/libraries/select2.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/css/libraries/select2.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/toastr/toastr.min.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/toastr/toastr.min.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/mcustom-scrollbar/jquery.mCustomScrollbar.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/mcustom-scrollbar/jquery.mCustomScrollbar.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/flatpickr/flatpickr.min.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/flatpickr/flatpickr.min.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/spectrum/spectrum.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/spectrum/spectrum.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/fancybox/jquery.fancybox.min.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/fancybox/jquery.fancybox.min.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/morris/morris.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/morris/morris.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/css/core.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/core/base/css/core.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('themes/shopwise/css/flaticon.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/themes/shopwise/css/flaticon.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('themes/shopwise/css/ionicons.min.css?v=1.41.') }}2" />
+        href="{{ asset('assets/backend/themes/shopwise/css/ionicons.min.css') }}2" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('themes/shopwise/css/linearicons.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/themes/shopwise/css/linearicons.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/plugins/language/css/language.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/plugins/language/css/language.css') }}" />
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/plugins/analytics/libraries/jvectormap/jquery-jvectormap-1.2.2.css?v=1.41.2') }}" />
+        href="{{ asset('assets/backend/vendor/core/plugins/analytics/libraries/jvectormap/jquery-jvectormap-1.2.2.css') }}" />
 
-    <script src="{{ asset('vendor/core/core/base/libraries/jquery.min.js?v=1.41.2') }}"></script> --}}
-    {{-- <script src="{{ asset('vendor/core/core/base/js/app.js?v=1.41.2') }}"></script> --}}
-    {{-- <script src="{{ asset('vendor/core/core/base/libraries/vue.global.min.js?v=1.41.2') }}"></script> --}}
-    {{-- <script src="{{ asset('vendor/core/core/base/js/vue-app.js?v=1.41.2') }}"></script> --}}
-    {{-- <script src="{{ asset('vendor/core/core/base/libraries/ckeditor/ckeditor.js?v=1.41.2') }}"></script>
-    <script src="{{ asset('vendor/core/core/base/js/editor.js?v=1.41.2') }}"></script> --}}
-    {{-- <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css">
+    <script src="{{ asset('assets/backend/vendor/core/core/base/libraries/jquery.min.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css">
 
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/libraries/jquery-nestable/jquery.nestable.min.css') }}">
-    <link media="all" type="text/css" rel="stylesheet" href="{{ asset('vendor/core/core/base/css/core.css') }}">
+        href="{{ asset('assets/backend/vendor/core/core/base/libraries/jquery-nestable/jquery.nestable.min.css') }}">
+    <link media="all" type="text/css" rel="stylesheet" href="{{ asset('assets/backend/vendor/core/core/base/css/core.css') }}">
 
 
     <link media="all" type="text/css" rel="stylesheet"
-        href="{{ asset('vendor/core/core/base/css/tree-category.css') }}"> --}}
+        href="{{ asset('assets/backend/vendor/core/core/base/css/tree-category.css') }}">
     @livewireStyles
 
 
     <!-- toastr style  -->
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         
     <!-- loder style  -->
     <style>
@@ -545,19 +538,12 @@
         }
     </style>
 
-    {{-- <link rel="stylesheet" href="{{asset('assets/css/adminLoader.css')}}">  --}}
+    <link rel="stylesheet" href="{{asset('assets/backend/css/adminLoader.css')}}"> 
 
     <!-- DataTables CSS (in <head>) -->
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
 </head>
 
 <body class="page-sidebar-closed-hide-logo page-content-white page-container-bg-solid" style="">
     <div id="app">
-        {{--<div wire:loading.remove.delay class="preloader">
-            <div class="lds-ellipsis">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>--}}
