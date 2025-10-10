@@ -1,0 +1,124 @@
+.wallet-card {
+    background-color: hsla(352, 100%, 60%, 0.200);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(255, 165, 0, 0.1);
+    padding: 2rem;
+}
+
+.balance-info h2 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #292b2c;
+    margin: 0;
+}
+
+.balance-info p {
+    color: #292b2c;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.add-money-btn:hover {
+    box-shadow: 0 0 20px 2px #FF324D;
+}
+
+.add-money-btn {
+    transition: box-shadow 0.6s !important;
+    background-color: #FF324D;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.wallet-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.wallet-table thead {
+    background-color: #1f2937;
+    /* dark header background */
+    color: white;
+}
+
+.wallet-table th,
+.wallet-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.wallet-table tbody td {
+    color: #6b7280;
+    /* muted gray for empty state */
+}
+
+.no-transaction {
+    padding: 12px 16px;
+    color: #6b7280;
+}
+
+.box-shadow-remove{
+    box-shadow: 0 0px 4px 0 transparent !important;
+}
+.box-shadow{
+    box-shadow: 0 0px 4px 0 #e9e9e9 !important;
+}
+
+
+.card {
+    position: relative;
+}
+
+.checkmark {
+    position: absolute;
+    top: 10%;
+    right: 90%;
+    width: 24px;
+    height: 24px;
+    background-color: #FF324D;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+
+.checkmark svg {
+    color: white; /* Green color for the checkmark */
+    width: 16px;
+    height: 16px;
+}
+
+/* Hide arrows for all number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}

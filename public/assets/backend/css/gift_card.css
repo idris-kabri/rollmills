@@ -1,0 +1,433 @@
+.body-div {
+  margin: 0;
+  /* padding: 15px; */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.roboto-mono {
+  font-family: "Roboto Mono", monospace;
+}
+
+.body-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.body-div .background-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.body-div #card-display-background {
+  height: 100%;
+  left: 0;
+  max-width: 1800px;
+  opacity: 0.25;
+  position: absolute;
+  width: 100%;
+}
+
+.body-div #card-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+  width: 100%;
+}
+
+.body-div #card-display .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.body-div #card-display .col-md-3 {
+  padding: 8px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 25%;
+}
+
+.body-div #card-display .card-wrapper {
+  background-color: transparent;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+  padding: 0;
+  position: relative;
+  transition: transform 250ms;
+  width: 100%;
+}
+
+.body-div #card-display .card-wrapper .card {
+  background-color: rgb(20, 20, 20);
+  border-radius: inherit;
+  /* box-shadow: 0 0 30px 8px rgba(0, 0, 0, 0.3); */
+  cursor: pointer;
+  height: 220px;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+.body-div #card-display .card-wrapper .card .card-svgs {
+  border-radius: inherit;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.body-div #card-display .card-wrapper .card .card-svgs .svg {
+  opacity: 0.1;
+  position: absolute;
+  transition: transform 250ms;
+}
+
+.body-div #card-display .card-wrapper .card .card-svgs .svg-left {
+  left: 0;
+  top: 50%;
+  transform: translate(-25%, -25%);
+}
+
+.body-div #card-display .card-wrapper .card .card-svgs .svg-right {
+  right: 0;
+  top: -50%;
+  transform: translate(25%, -25%);
+}
+
+.body-div #card-display .card-wrapper .card .card-amount {
+  bottom: 15px;
+  color: white;
+  font-size: 3.5em;
+  left: 15px;
+  position: absolute;
+}
+
+.body-div #card-display .card-wrapper .card .card-brand {
+  color: white;
+  font-size: 2em;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.body-div #card-display .card-wrapper .card .card-title {
+  position: absolute;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 500;
+  left: 15px;
+  top: 20px;
+  max-width: 60%;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.card-title.custom-card-title {
+  transform: translateX(-50%) !important;
+  left: 50% !important;
+  max-width: 100% !important;
+  top: 20% !important;
+  color: #FF324D !important;
+}
+
+.body-div #card-display .card-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.body-div #card-display .card-wrapper:hover .card .card-svgs .svg-left {
+  transform: translate(-30%, -30%);
+}
+
+.body-div #card-display .card-wrapper:hover .card .card-svgs .svg-right {
+  transform: translate(30%, -30%);
+}
+
+@media (max-width: 1700px) {
+  .body-div #card-display .card-wrapper .card {
+    height: 200px;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-amount {
+    font-size: 3em;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-brand {
+    font-size: 1.8em;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-title {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 1200px) {
+  .body-div #card-display .col-md-3 {
+    width: 33.333%;
+  }
+
+  .body-div #card-display .card-wrapper .card {
+    height: 180px;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-amount {
+    font-size: 2.8em;
+  }
+}
+
+@media (max-width: 992px) {
+  .body-div #card-display .col-md-3 {
+    width: 50%;
+  }
+
+  .body-div #card-display .card-wrapper .card {
+    height: 160px;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-amount {
+    font-size: 2.5em;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-brand {
+    font-size: 1.6em;
+    right: 15px;
+    top: 15px;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-title {
+    font-size: 0.9em;
+    left: 12px;
+    top: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .body-div #card-display .col-md-3 {
+    width: 50%;
+  }
+
+  .body-div #card-display .card-wrapper .card {
+    height: 140px;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-amount {
+    font-size: 2.2em;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-title {
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 576px) {
+  .body-div #card-display .col-md-3 {
+    width: 100%;
+  }
+
+  .body-div #card-display .card-wrapper .card {
+    height: 120px;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-amount {
+    font-size: 1.8em;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-brand {
+    font-size: 1.3em;
+  }
+
+  .body-div #card-display .card-wrapper .card .card-title {
+    font-size: 0.7em;
+  }
+}
+
+@keyframes reappear {
+  from {
+    top: 0;
+  }
+
+  to {
+    top: -35px;
+  }
+}
+
+.background-image {
+  width: 100%;
+  height: 60vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dsecription h3 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.dsecription p {
+  text-align: justify;
+  margin: 2px 0 0 0;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+
+.secondary-amount {
+  bottom: 12%;
+  color: white;
+  font-size: 2em;
+  left: 62%;
+  position: absolute;
+}
+
+@media (max-width: 992px) {
+  .secondary-amount {
+    font-size: 1.5em;
+    left: 58%;
+  }
+}
+
+@media (max-width: 576px) {
+  .secondary-amount {
+    font-size: 1.2em;
+    left: 52%;
+    bottom: 8%;
+  }
+}
+
+
+
+.body-div #card-display .card-wrapper .card input {
+  background: white;
+  padding: 6px 8px !important;
+  border: none;
+  border-radius: 20px;
+  color: black;
+  font-size: 1em;
+  font-family: "Roboto Mono", monospace;
+  position: absolute;
+  bottom: 38px;
+  left: 15px;
+  width: 50%;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #FF324D;
+  font-size: 18px;
+}
+
+.body-div #card-display .card-wrapper .card input::-webkit-outer-spin-button,
+.body-div #card-display .card-wrapper .card input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+.body-div #card-display .card-wrapper .card .submit-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  padding: 6px 14px;
+  background-color: #ffffff10;
+  color: white;
+  border: 1px solid white;
+  border-radius: 8px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 200ms;
+  z-index: 3;
+}
+
+.body-div #card-display .card-wrapper .card .submit-btn:hover {
+  background-color: #ffffff25;
+}
+
+.custom-btn {
+  color: white;
+  background-color: #FF324D;
+}
+
+.card-shadow {
+  box-shadow: 2px 2px 5px #FF324D, -2px -2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-wrapper.custom-gift-card .card {
+  background: #111;
+  background-image: url('../images/giftCardBackground.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 15px;
+  /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); */
+  padding: 2rem 1.5rem;
+  position: relative;
+  color: #f0f0f0;
+  overflow: hidden;
+  text-align: center;
+  border: 2px solid #FF324D;
+}
+
+.card-wrapper.custom-gift-card .ribbon {
+  background: #f5e1a4;
+  color: #111;
+  font-weight: bold;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0 0 8px 8px;
+  position: absolute;
+  top: 0;
+  /* left: 0;  */
+  right: 0;
+  font-size: 0.85rem;
+}
+
+.gift-card-logo img {
+  width: 60px;
+  margin-bottom: 1rem;
+  filter: brightness(1.2);
+}
+
+.custom-gift-card .secondary-amount {
+  font-size: 2.1rem;
+  /* background: #222; */
+  color: #222;
+  padding: 0.4rem 0.8rem;
+  /* border-radius: 10px; */
+  /* margin-bottom: 1rem; */
+  display: inline-block;
+}
+
+.custom-gift-card .card-input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #333;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.form-check-input:checked {
+  background-color: #FF324D;
+  border-color: #FF324D;
+}
+
+/* Optional: To make sure the dot inside also matches */
+.form-check-input:checked::before {
+  background-color: #FF324D;
+}

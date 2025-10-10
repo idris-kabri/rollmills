@@ -31,3 +31,4 @@ Route::get('/wishlist', WishlistComponent::class)->name('wishlist');
 
 Route::get('/login', LoginComponent::class)->name('login');
 Route::get('/register', RegisterComponent::class)->name('register');
+@include('admin.php');
