@@ -29,7 +29,12 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/UploadHelper.php",
+            "app/Helpers/Helper.php",
+            "app/Helpers/OfferHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
