@@ -101,7 +101,7 @@
                     <div class="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0">
                         <div class="logo mb-30">
                             <a href="index.html" class="mb-15"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                                    src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo" /></a>
                             <p class="font-lg text-heading">Awesome grocery store website template</p>
                         </div>
                         <ul class="contact-infor">

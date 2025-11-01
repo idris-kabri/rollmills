@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Nest - Multipurpose eCommerce HTML Template</title>
+    <title>RollMills</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,7 +12,7 @@
     <meta property="og:url" content="" />
     <meta property="og:image" content="" />
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/frontend/imgs/theme/favicon.svg')}}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/frontend/imgs/theme/favicon.png')}}" />
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/main.css') }}" />
     <!-- Template CSS -->
@@ -29,7 +29,7 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="#"><img src="{{ asset('assets/frontend/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                        <a href="#"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo" /></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
@@ -156,7 +156,7 @@
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="index.html"><img src="{{ asset('assets/frontend/imgs/theme/logo.svg')}}" alt="logo" /></a>
+                        <a href="index.html"><img src="{{ asset('assets/frontend/imgs/theme/logo.png')}}" alt="logo" /></a>
                     </div>
                     <div class="header-nav d-none d-lg-flex">
                         <div class="main-categori-wrap d-none d-lg-block">
@@ -462,7 +462,7 @@
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="index.html"><img src="{{ asset('assets/frontend/imgs/theme/logo.svg')}}" alt="logo" /></a>
+                    <a href="index.html"><img src="{{ asset('assets/frontend/imgs/theme/logo.png')}}" alt="logo" /></a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                     <button class="close-style search-close">

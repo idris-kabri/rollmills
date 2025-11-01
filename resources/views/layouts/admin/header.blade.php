@@ -3,14 +3,14 @@
     <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Dashboard | Fakhri Electric Store</title>
+    <title>Dashboard | Roll Mills Store</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link href="{{asset('assets/backend/images/white-logo.png')}}" rel="icon shortcut" />
+    <link href="{{asset('assets/frontend/imgs/theme/favicon.png')}}" rel="icon shortcut" />
     <meta property="og:image" content="{{asset('assets/backend/images/white-logo.png')}}" />
 
-    <meta name="description" content="Copyright 2025 © Botble Technologies. Version 1.41.2" />
-    <meta property="og:description" content="Copyright 2025 © Botble Technologies. Version 1.41.2" />
+    <meta name="description" content="Copyright 2025 © Roll mills. Version 1.0.0" />
+    <meta property="og:description" content="Copyright 2025 © Roll mills. Version 1.0.0" />
 
     <style>
         [v-cloak],

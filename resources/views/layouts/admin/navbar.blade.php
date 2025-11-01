@@ -16,8 +16,8 @@
 
         <h1 class="navbar-brand navbar-brand-autodark me-4">
             <a href="/admin">
-                <img src="{{ asset('assets/images/white-logo.png') }}" style="max-height: 32px; height: auto"
-                    alt="Botble Technologies" class="navbar-brand-image" />
+                <img src="{{asset('assets/frontend/imgs/theme/logo.png')}}" style="max-height: 32px; height: auto"
+                    alt="Roll mills" class="navbar-brand-image" />
             </a>
         </h1>
 

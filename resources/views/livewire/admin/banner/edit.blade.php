@@ -142,7 +142,7 @@
                                             style="display: none;" /> 
                                         <br/>
                                         @if($banner_type == 'slider_banner')
-                                        <span class="text-danger">825 X 550px</span>
+                                        <span class="text-danger">1200 X 615px</span>
                                         @elseif($banner_type == 'top_side_banner')
                                         <span class="text-danger">250 X 355px</span>
                                         @elseif($banner_type == 'middle_page_banner')

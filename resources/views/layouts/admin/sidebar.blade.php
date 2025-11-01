@@ -8,8 +8,8 @@
 
             <h2 class="d-block d-lg-none navbar-brand navbar-brand-autodark">
                 <a href="/admin">
-                    <img src="{{ asset('assets/images/white-logo.png') }}" style="max-height: 32px; height: auto"
-                        alt="Botble Technologies" class="navbar-brand-image" />
+                    <img src="{{asset('assets/frontend/imgs/theme/logo.png')}}" style="max-height: 32px; height: auto"
+                        alt="Roll mills" class="navbar-brand-image" />
                 </a>
             </h2>
 
