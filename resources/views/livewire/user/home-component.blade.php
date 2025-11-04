@@ -12,7 +12,7 @@
                                     if (count($words) > 2) {
                                         $firstPart = implode(' ', array_slice($words, 0, 2));
                                         $secondPart = implode(' ', array_slice($words, 2));
-                                        $newHeading = $firstPart . " <br> " . $secondPart;
+                                        $newHeading = $firstPart . ' <br> ' . $secondPart;
                                     } else {
                                         $newHeading = $slider->heading;
                                     }
@@ -32,15 +32,32 @@
                     </div>
                 </div>
                 <div class="col-lg-4 d-none d-xl-block">
+                    @php
+                        $second_banner_heading = explode(' ', $top_side_banner->heading);
+                        if (count($second_banner_heading) > 1) {
+                            $firstPart = implode(' ', array_slice($second_banner_heading, 0, 1));
+                            $secondPart = implode(' ', array_slice($second_banner_heading, 1));
+                            $newHeadingSide = $firstPart . ' <br> ' . $secondPart;
+                        } else {
+                            $newHeadingSide = $top_side_banner->heading;
+                        }
+                        $second_banner_sub_heading = explode(' ', $top_side_banner->sub_heading);
+                        if (count($second_banner_sub_heading) > 1) {
+                            $firstPart_subheading = implode(' ', array_slice($second_banner_sub_heading, 0, 1));
+                            $secondPart_subheading = implode(' ', array_slice($second_banner_sub_heading, 1));
+                            $newSubHeadingSide = $firstPart_subheading . ' <br> ' . $secondPart_subheading;
+                        } else {
+                            $newSubHeadingSide = $top_side_banner->sub_heading;
+                        }
+                    @endphp
                     <div class="banner-img style-3 animated animated">
                         <div class="banner-text mt-50">
                             <h2 class="mb-50">
-                                Delivered <br />
-                                to
-                                <span class="text-brand">your<br />
-                                    home</span>
+                                {!! $newHeadingSide !!}
+                                <span class="text-brand">{!! $newSubHeadingSide !!}</span>
                             </h2>
-                            <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i
+                            <a href="{{ $top_side_banner->link ?? '#' }}"
+                                class="btn btn-xs">{{ $top_side_banner->button_text }} <i
                                     class="fi-rs-arrow-small-right"></i></a>
                         </div>
                     </div>
@@ -120,8 +137,8 @@
                     </div>
                     <div class="card-2 bg-15 wow animate__animated animate__fadeInUp" data-wow-delay=".7s">
                         <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img src="{{ asset('assets/frontend/imgs/shop/cat-2.png') }}"
-                                    alt="" /></a>
+                            <a href="shop-grid-right.html"><img
+                                    src="{{ asset('assets/frontend/imgs/shop/cat-2.png') }}" alt="" /></a>
                         </figure>
                         <h6><a href="shop-grid-right.html">Strawberry</a></h6>
                         <span>36 items</span>
@@ -165,42 +182,36 @@
     <section class="banners mb-25">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="banner-img">
-                        <img src="{{ asset('assets/frontend/imgs/banner/banner-1.png') }}" alt="" />
-                        <div class="banner-text">
-                            <h4>
-                                Everyday Fresh & <br />Clean with Our<br />
-                                Products
-                            </h4>
-                            <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i
-                                    class="fi-rs-arrow-small-right"></i></a>
+                @foreach ($middle_page_banner as $index => $banner)
+                    @php
+                        $class = '';
+                        $i = $index + 1;
+                        $count = count($middle_page_banner);
+                        if ($i == $count) {
+                            $class = 'd-md-none d-lg-flex';
+                        } else {
+                            $class = 'col-md-6';
+                        }
+                    @endphp
+                    <div class="col-lg-4 {{ $class }}">
+                        <div class="banner-img">
+                            <img src="{{ asset('storage/' . $banner->image) }}" alt="" />
+                            <div class="banner-text">
+                                <h4>
+                                    @php
+                                        $h_tag = str_replace('<p>', '', $banner->sub_heading);
+                                        $h_tag = str_replace('</p>', '', $h_tag);
+                                        $h_tag = str_replace('<strong>', '', $h_tag);
+                                        $h_tag = str_replace('</strong>', '', $h_tag);
+                                    @endphp
+                                    {!! $h_tag !!}
+                                </h4>
+                                <a href="{{ $banner->link ?? '#' }}" class="btn btn-xs">{{ $banner->button_text }}
+                                    <i class="fi-rs-arrow-small-right"></i></a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="banner-img">
-                        <img src="{{ asset('assets/frontend/imgs/banner/banner-2.png') }}" alt="" />
-                        <div class="banner-text">
-                            <h4>
-                                Make your Breakfast<br />
-                                Healthy and Easy
-                            </h4>
-                            <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i
-                                    class="fi-rs-arrow-small-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 d-md-none d-lg-flex">
-                    <div class="banner-img mb-sm-0">
-                        <img src="{{ asset('assets/frontend/imgs/banner/banner-3.png') }}" alt="" />
-                        <div class="banner-text">
-                            <h4>The best Organic <br />Products Online</h4>
-                            <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i
-                                    class="fi-rs-arrow-small-right"></i></a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -4086,10 +4097,11 @@
             </div>
             <div class="row">
                 <div class="col-lg-3 d-none d-lg-flex">
-                    <div class="banner-img style-2">
+                    
+                    <div class="banner-img style-2" style="background: url('{{ asset("storage/" . $best_deal_banner->image) }}');">
                         <div class="banner-text">
-                            <h2 class="mb-100">Bring nature into your home</h2>
-                            <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i
+                            <h2 class="mb-100">{{ $best_deal_banner->heading }}</h2>
+                            <a href="{{ $best_deal_banner->link ?? '#' }}" class="btn btn-xs">{{ $best_deal_banner->button_text }} <i
                                     class="fi-rs-arrow-small-right"></i></a>
                         </div>
                     </div>
