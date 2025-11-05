@@ -1,0 +1,303 @@
+.fs-10 {
+    font-size: 10px !important;
+}
+
+.fs-11 {
+    font-size: 11px !important;
+}
+
+.fs-12 {
+    font-size: 12px !important;
+}
+
+.fs-13 {
+    font-size: 13px !important;
+}
+
+.fs-14 {
+    font-size: 14px !important;
+}
+
+.fs-15 {
+    font-size: 15px !important;
+}
+
+.fs-16 {
+    font-size: 16px !important;
+}
+
+.fs-17 {
+    font-size: 17px !important;
+}
+
+.fs-18 {
+    font-size: 18px !important;
+}
+
+.fs-19 {
+    font-size: 19px !important;
+}
+
+.fs-20 {
+    font-size: 20px !important;
+}
+
+.fs-21 {
+    font-size: 21px !important;
+}
+
+.fs-22 {
+    font-size: 22px !important;
+}
+
+.fs-23 {
+    font-size: 23px !important;
+}
+
+.fs-24 {
+    font-size: 24px !important;
+}
+
+.fw-500 {
+    font-weight: 500 !important;
+}
+
+.fw-600 {
+    font-weight: 600 !important;
+}
+
+.fw-700 {
+    font-weight: 700 !important;
+}
+
+.fw-800 {
+    font-weight: 800 !important;
+}
+
+.fw-900 {
+    font-weight: 900 !important;
+}
+
+.quicksand {
+    font-family: "Quicksand", sans-serif !important;
+}
+
+.fit-content {
+    width: fit-content !important;
+}
+
+/* ==================================================================== */
+/* Contact Us Css Start */
+/* ==================================================================== */
+
+.custom-a-tag:hover i {
+    transform: rotate(-30deg);
+    transition: transform 0.3s ease;
+}
+
+.contact_style3 {
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px 20px;
+    border-radius: 10px;
+    transition: all 0.4s ease;
+    height: 90%;
+}
+
+.contact_style3:hover {
+    transform: translateY(-8px);
+    border-bottom: 3px solid #e1990c;
+}
+
+.contact_style3 .contact_icon {
+    border: 2px solid #e1990c;
+    margin: 0 0 10px;
+    height: 80px;
+    width: 80px;
+    text-align: center;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.contact_style3:hover .contact_icon::before {
+    -moz-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.contact_style3 .contact_icon::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #e1990c;
+    transition: all 0.5s ease-in-out;
+    -moz-transform: scale(0);
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    border-radius: 100%;
+    z-index: -1;
+}
+
+.contact_style3:hover .contact_icon i {
+    color: #fff;
+}
+
+.contact_style3 .contact_icon i {
+    line-height: 78px;
+    transition: all 0.5s ease-in-out;
+}
+
+.contact_icon i {
+    font-size: 34px;
+    color: #e1990c;
+}
+
+.contact_text span {
+    color: #333;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 15px;
+    font-size: 25px;
+}
+
+/* ==================================================================== */
+/* Contact Us Css End */
+/* ==================================================================== */
+
+/* ==================================================================== */
+/* Login Css Start */
+/* ==================================================================== */
+
+.login-input {
+    background: #fdfdfd !important;
+    border: 2px solid #ececec !important;
+    height: 55px !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none;
+    padding: 15px 20px !important;
+    font-size: 14px !important;
+    border-radius: 15px;
+    width: 100%;
+    font-family: "Quicksand", sans-serif;
+    color: #555;
+    font-weight: 500;
+}
+
+.login-input::placeholder {
+    color: #bfbfbf;
+    font-weight: 500;
+    font-family: "Quicksand", sans-serif;
+}
+
+.login-input:focus {
+    background: #ddd;
+    border: 2px solid #ddd !important;
+}
+
+.hover-brand:hover {
+    transition: all 0.3s ease-in-out !important;
+}
+
+.hover-brand:hover {
+    background-color: #e1990c !important;
+}
+
+/* ==================================================================== */
+/* Login Css End */
+/* ==================================================================== */
+
+/* ==================================================================== */
+/* Responsive Css Start */
+/* ==================================================================== */
+
+@media (max-width: 767px) {
+    .product-cart-wrap .product-img-action-wrap {
+        position: relative;
+        background-color: #fff;
+        overflow: hidden;
+        max-height: 200px;
+        padding: 15px 15px 0 15px;
+    }
+
+    .product-cart-wrap .product-content-wrap h2 a {
+        font-size: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+
+    .product-cart-wrap .product-img-action-wrap .product-img-zoom a img {
+        -webkit-transition: all 1.5s cubic-bezier(0, 0, 0.05, 1);
+        transition: all 1.5s cubic-bezier(0, 0, 0.05, 1);
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .product-cart-wrap .product-img-action-wrap .product-img a img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .product-cart-wrap .product-card-bottom {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-top: 5px;
+        flex-direction: column;
+    }
+
+    .product-cart-wrap .product-content-wrap .product-price {
+        padding-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .product-cart-wrap .product-content-wrap .product-price span {
+        font-size: 16px;
+        font-weight: bold;
+        color: #e1990c;
+    }
+
+    .product-cart-wrap .product-content-wrap .product-price span.old-price {
+        font-size: 12px;
+        color: #adadad;
+        margin: 0 0 0 7px;
+        text-decoration: line-through;
+    }
+
+    .product-cart-wrap .product-card-bottom .add-cart .add {
+        position: relative;
+        display: inline-block;
+        padding: 6px 20px 6px 20px;
+        border-radius: 4px;
+        background-color: #def9ec;
+        font-size: 14px;
+        font-weight: 700;
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+
+    .font-small.text-muted a {
+        display: none;
+    }
+}
+
+/* ==================================================================== */
+/* Responsive Css End */
+/* ==================================================================== */

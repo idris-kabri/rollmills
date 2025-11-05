@@ -13,12 +13,12 @@
                  <div class="col-xl-10 col-lg-12 m-auto">
                      <section class="row align-items-center mb-50">
                          <div class="col-lg-6">
-                             <img src="{{asset('assets/frontend/imgs/page/about-1.png')}}" alt=""
+                             <img src="{{ asset('assets/frontend/imgs/page/about-1.png') }}" alt=""
                                  class="border-radius-15 mb-md-3 mb-lg-0 mb-sm-4" />
                          </div>
                          <div class="col-lg-6">
                              <div class="pl-25">
-                                 <h2 class="mb-30">Welcome to Nest</h2>
+                                 <h2 class="mb-30">Welcome to Roll Mills</h2>
                                  <p class="mb-25">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                                      eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
                                      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -32,10 +32,13 @@
                                  <div class="carausel-3-columns-cover position-relative">
                                      <div id="carausel-3-columns-arrows"></div>
                                      <div class="carausel-3-columns" id="carausel-3-columns">
-                                         <img src="{{asset('assets/frontend/imgs/page/about-2.png')}}" alt="" />
+                                         <img src="{{ asset('assets/frontend/imgs/page/about-2.png') }}"
+                                             alt="" />
                                          <img src="assets/imgs/page/about-3.png')}}" alt="" />
-                                         <img src="{{asset('assets/frontend/imgs/page/about-4.png')}}" alt="" />
-                                         <img src="{{asset('assets/frontend/imgs/page/about-2.png')}}" alt="" />
+                                         <img src="{{ asset('assets/frontend/imgs/page/about-4.png') }}"
+                                             alt="" />
+                                         <img src="{{ asset('assets/frontend/imgs/page/about-2.png') }}"
+                                             alt="" />
                                      </div>
                                  </div>
                              </div>
@@ -46,56 +49,75 @@
                          <div class="row">
                              <div class="col-lg-4 col-md-6 mb-24">
                                  <div class="featured-card">
-                                     <img src="{{asset('assets/frontend/imgs/theme/icons/icon-1.svg')}}" alt="" />
+                                     <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-1.svg') }}"
+                                         alt="" />
                                      <h4>Best Prices & Offers</h4>
                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority
                                          have suffered alteration in some form</p>
-                                     <a href="#">Read more</a>
+                                     <a href="#"
+                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
+                                         more <i class="fa-solid fa-arrow-right"></i></a>
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
                                  <div class="featured-card">
-                                     <img src="{{asset('assets/frontend/imgs/theme/icons/icon-2.svg')}}" alt="" />
+                                     <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-2.svg') }}"
+                                         alt="" />
                                      <h4>Wide Assortment</h4>
                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority
                                          have suffered alteration in some form</p>
-                                     <a href="#">Read more</a>
+                                     <a href="#"
+                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
+                                         more <i class="fa-solid fa-arrow-right"></i></a>
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
                                  <div class="featured-card">
-                                     <img src="{{asset('assets/frontend/imgs/theme/icons/icon-3.svg')}}" alt="" />
+                                     <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-3.svg') }}"
+                                         alt="" />
                                      <h4>Free Delivery</h4>
                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority
                                          have suffered alteration in some form</p>
-                                     <a href="#">Read more</a>
+                                     <a href="#"
+                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
+                                         more <i class="fa-solid fa-arrow-right"></i>
+                                     </a>
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
                                  <div class="featured-card">
-                                     <img src="{{asset('assets/frontend/imgs/theme/icons/icon-4.svg')}}" alt="" />
+                                     <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-4.svg') }}"
+                                         alt="" />
                                      <h4>Easy Returns</h4>
                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority
                                          have suffered alteration in some form</p>
-                                     <a href="#">Read more</a>
+                                     <a href="#"
+                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
+                                         more <i class="fa-solid fa-arrow-right"></i></a>
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
                                  <div class="featured-card">
-                                     <img src="{{asset('assets/frontend/imgs/theme/icons/icon-5.svg')}}" alt="" />
+                                     <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-5.svg') }}"
+                                         alt="" />
                                      <h4>100% Satisfaction</h4>
                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority
                                          have suffered alteration in some form</p>
-                                     <a href="#">Read more</a>
+                                     <a href="#"
+                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
+                                         more <i class="fa-solid fa-arrow-right"></i></a>
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
                                  <div class="featured-card">
-                                     <img src="{{asset('assets/frontend/imgs/theme/icons/icon-6.svg')}}" alt="" />
+                                     <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-6.svg') }}"
+                                         alt="" />
                                      <h4>Great Daily Deal</h4>
                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority
                                          have suffered alteration in some form</p>
-                                     <a href="#">Read more</a>
+                                     <a href="#"
+                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
+                                         more <i class="fa-solid fa-arrow-right"></i></a>
                                  </div>
                              </div>
                          </div>
@@ -103,7 +125,7 @@
                      <section class="row align-items-center mb-50">
                          <div class="row mb-50 align-items-center">
                              <div class="col-lg-7 pr-30">
-                                 <img src="{{asset('assets/frontend/imgs/page/about-5.png')}}" alt=""
+                                 <img src="{{ asset('assets/frontend/imgs/page/about-5.png') }}" alt=""
                                      class="mb-md-3 mb-lg-0 mb-sm-4" />
                              </div>
                              <div class="col-lg-5">
@@ -138,7 +160,7 @@
              </div>
          </div>
          <section class="container mb-50 d-none d-md-block">
-             <div class="row about-count">
+             <div class="row about-count rounded-0">
                  <div class="col-lg-1-5 col-md-6 text-center mb-lg-0 mb-md-5">
                      <h1 class="heading-1"><span class="count">12</span>+</h1>
                      <h4>Glorious years</h4>
@@ -182,22 +204,23 @@
                                  <div class="row">
                                      <div class="col-lg-6 col-md-6">
                                          <div class="team-card">
-                                             <img src="{{asset('assets/frontend/imgs/page/about-6.png')}}" alt="" />
+                                             <img src="{{ asset('assets/frontend/imgs/page/about-6.png') }}"
+                                                 alt="" />
                                              <div class="content text-center">
                                                  <h4 class="mb-5">H. Merinda</h4>
                                                  <span>CEO & Co-Founder</span>
                                                  <div class="social-network mt-20">
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-facebook-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-facebook-brand.svg') }}"
                                                              alt="" /></a>
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-twitter-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-twitter-brand.svg') }}"
                                                              alt="" /></a>
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-instagram-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-instagram-brand.svg') }}"
                                                              alt="" /></a>
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-youtube-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-youtube-brand.svg') }}"
                                                              alt="" /></a>
                                                  </div>
                                              </div>
@@ -205,22 +228,23 @@
                                      </div>
                                      <div class="col-lg-6 col-md-6">
                                          <div class="team-card">
-                                             <img src="{{asset('assets/frontend/imgs/page/about-8.png')}}" alt="" />
+                                             <img src="{{ asset('assets/frontend/imgs/page/about-8.png') }}"
+                                                 alt="" />
                                              <div class="content text-center">
                                                  <h4 class="mb-5">Dilan Specter</h4>
                                                  <span>Head Engineer</span>
                                                  <div class="social-network mt-20">
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-facebook-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-facebook-brand.svg') }}"
                                                              alt="" /></a>
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-twitter-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-twitter-brand.svg') }}"
                                                              alt="" /></a>
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-instagram-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-instagram-brand.svg') }}"
                                                              alt="" /></a>
                                                      <a href="#"><img
-                                                             src="{{asset('assets/frontend/imgs/theme/icons/icon-youtube-brand.svg')}}"
+                                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-youtube-brand.svg') }}"
                                                              alt="" /></a>
                                                  </div>
                                              </div>

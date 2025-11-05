@@ -7,39 +7,53 @@
              </div>
          </div>
      </div>
-     <div class="page-content pt-50">
+     <div class="page-content pt-80 pb-40">
          <div class="container">
              <div class="row">
                  <div class="col-xl-10 col-lg-12 m-auto">
                      <section class="row align-items-end mb-50">
-                         <div class="col-lg-4 mb-lg-0 mb-md-5 mb-sm-5">
-                             <h4 class="mb-20 text-brand">How can help you ?</h4>
-                             <h1 class="mb-30">Let us know how we can help you</h1>
-                             <p class="mb-20">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus,
+                         <div class="col-lg-6 mx-auto mb-lg-5 mb-md-5 mb-sm-5">
+                             <h4 class="mb-20 text-brand text-center">How can help you ?</h4>
+                             <h1 class="mb-30 text-center">Let us know how we can help you</h1>
+                             <p class="mb-2 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                                 elit tellus,
                                  luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec
-                                 ullamcorper mattis, pulvinar dapibus leo.</p>
                          </div>
-                         <div class="col-lg-8">
-                             <div class="row">
-                                 <div class="col-lg-6 mb-4">
-                                     <h5 class="mb-20">01. Visit Feedback</h5>
-                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus
+                         <div class="col-lg-12">
+                             <div class="row d-flex justify-content-lg-around">
+                                 <div class="col-lg-5 col-md-6 mb-4">
+                                     <h1 class="mb-3 fs-24 bg-brand p-3 text-white rounded-pill mx-auto text-center fit-content"
+                                         style="line-height: inherit">01</h1>
+                                     <h5 class="mb-2 text-brand text-center fs-22">Visit Feedback</h5>
+                                     <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                                         elit tellus, luctus
                                          nec ullamcorper mattis, pulvinar dapibus leo.</p>
                                  </div>
-                                 <div class="col-lg-6 mb-4">
-                                     <h5 class="mb-20">02. Employer Services</h5>
-                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus
+                                 <div class="col-lg-5 col-md-6 mb-4">
+                                     <h1
+                                         class="mb-3 fs-24 bg-brand p-3 text-white rounded-pill mx-auto text-center fit-content">
+                                         02</h1>
+                                     <h5 class="mb-2 text-brand text-center fs-22">02. Employer Services</h5>
+                                     <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                                         elit tellus, luctus
                                          nec ullamcorper mattis, pulvinar dapibus leo.</p>
                                  </div>
-                                 <div class="col-lg-6 mb-lg-0 mb-4">
-                                     <h5 class="mb-20 text-brand">03. Billing Inquiries</h5>
-                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus
+                                 <div class="col-lg-5 col-md-6 mb-lg-0 mb-4">
+                                     <h1
+                                         class="mb-3 fs-24 bg-brand p-3 text-white rounded-pill mx-auto text-center fit-content">
+                                         03</h1>
+                                     <h5 class="mb-2 text-brand text-center fs-22">03. Billing Inquiries</h5>
+                                     <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                                         elit tellus, luctus
                                          nec ullamcorper mattis, pulvinar dapibus leo.</p>
                                  </div>
-                                 <div class="col-lg-6">
-                                     <h5 class="mb-20">04.General Inquiries</h5>
-                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus
+                                 <div class="col-lg-5 col-md-6">
+                                     <h1
+                                         class="mb-3 fs-24 bg-brand p-3 text-white rounded-pill mx-auto text-center fit-content">
+                                         04</h1>
+                                     <h5 class="mb-2 text-brand text-center fs-22">04.General Inquiries</h5>
+                                     <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                                         elit tellus, luctus
                                          nec ullamcorper mattis, pulvinar dapibus leo.</p>
                                  </div>
                              </div>
@@ -58,6 +72,50 @@
                  <div class="col-xl-10 col-lg-12 m-auto">
                      <section class="mb-50">
                          <div class="row mb-60">
+                             <div class="col-xl-4 col-md-6">
+                                 <div class="contact_wrap contact_style3">
+                                     <div class="contact_icon">
+                                         <i class="fi fi-rs-map-marker"></i>
+                                     </div>
+                                     <div class="contact_text">
+                                         <span>Address</span>
+                                         205 North Michigan Avenue, Suite 810<br />
+                                         Chicago, 60601, USA<br />
+                                         <abbr title="Phone">Phone:</abbr> (123) 456-7890<br />
+                                         <abbr title="Email">Email: </abbr>contact@Evara.com<br />
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-xl-4 col-md-6">
+                                 <div class="contact_wrap contact_style3">
+                                     <div class="contact_icon">
+                                         <i class="fi fi-rs-envelope"></i>
+                                     </div>
+                                     <div class="contact_text">
+                                         <span>Email Address</span>
+                                         205 North Michigan Avenue, Suite 810<br />
+                                         Chicago, 60601, USA<br />
+                                         <abbr title="Phone">Phone:</abbr> (123) 456-7890<br />
+                                         <abbr title="Email">Email: </abbr>contact@Evara.com<br />
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-xl-4 col-md-6">
+                                 <div class="contact_wrap contact_style3">
+                                     <div class="contact_icon">
+                                         <i class="fi fi-rs-phone-call"></i>
+                                     </div>
+                                     <div class="contact_text">
+                                         <span>Phone</span>
+                                         205 North Michigan Avenue, Suite 810<br />
+                                         Chicago, 60601, USA<br />
+                                         <abbr title="Phone">Phone:</abbr> (123) 456-7890<br />
+                                         <abbr title="Email">Email: </abbr>contact@Evara.com<br />
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         {{-- <div class="row mb-60">
                              <div class="col-md-4 mb-4 mb-md-0">
                                  <h4 class="mb-15 text-brand">Office</h4>
                                  205 North Michigan Avenue, Suite 810<br />
@@ -88,7 +146,7 @@
                                      class="btn btn-sm font-weight-bold text-white mt-20 border-radius-5 btn-shadow-brand hover-up"><i
                                          class="fi-rs-marker mr-5"></i>View map</a>
                              </div>
-                         </div>
+                         </div> --}}
                          <div class="row">
                              <div class="col-xl-8">
                                  <div class="contact-from-area padding-20-row-col">
@@ -123,7 +181,7 @@
                                                  <div class="textarea-style mb-30">
                                                      <textarea name="message" placeholder="Message"></textarea>
                                                  </div>
-                                                 <button class="submit submit-auto-width" type="submit">Send
+                                                 <button class="submit submit-auto-width btn py-3 quicksand" type="submit">Send
                                                      message</button>
                                              </div>
                                          </div>
@@ -132,8 +190,8 @@
                                  </div>
                              </div>
                              <div class="col-lg-4 pl-50 d-lg-block d-none">
-                                 <img class="border-radius-15 mt-50" src="{{asset('assets/frontend/imgs/page/contact-2.png')}}"
-                                     alt="" />
+                                 <img class="border-radius-15 mt-50"
+                                     src="{{ asset('assets/frontend/imgs/page/contact-2.png') }}" alt="" />
                              </div>
                          </div>
                      </section>

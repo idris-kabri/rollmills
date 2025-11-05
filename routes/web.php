@@ -15,10 +15,14 @@ use App\Livewire\User\CompareComponent;
 use App\Livewire\User\ShopComponent;
 use App\Livewire\User\ShopDetailComponent;
 use App\Livewire\User\WishlistComponent;
+use App\Livewire\User\ReturnPolicy; // ✅ Added this line
+use App\Livewire\User\ShippingPolicy; // ✅ Added this line
 
 Route::get('/', HomeComponent::class)->name('home');
 Route::get('/about', AboutComponent::class)->name('about');
 Route::get('/my-account', AccountComponent::class)->name('my-account');
+Route::get('/return-policy', ReturnPolicy::class)->name('return-policy');
+Route::get('/shipping-policy', ShippingPolicy::class)->name('shipping-policy');
 Route::get('/contact', ContactComponent::class)->name('contact');
 Route::get('/privacy-policy', PrivacyPolicyComponent::class)->name('privacy-policy');
 Route::get('/terms', TermsComponent::class)->name('terms');
@@ -31,4 +35,5 @@ Route::get('/wishlist', WishlistComponent::class)->name('wishlist');
 
 Route::get('/login', LoginComponent::class)->name('login');
 Route::get('/register', RegisterComponent::class)->name('register');
+
 @include('admin.php');
