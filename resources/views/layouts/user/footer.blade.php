@@ -1,5 +1,5 @@
 <footer class="main">
-    <section class="newsletter mb-15">
+    {{-- <section class="newsletter mb-15">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -21,55 +21,55 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <section class="featured section-padding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 mb-md-4 mb-xl-0">
+                <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-md-4 mb-xl-0">
                     <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-1.svg') }}" alt="" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Best prices & offers</h3>
-                            <p>Orders $50 or more</p>
+                            <h3 class="icon-box-title fw-700">Best prices & offers</h3>
+                            <p class="fw-500">Orders $50 or more</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                     <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-2.svg') }}" alt="" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Free delivery</h3>
-                            <p>24/7 amazing services</p>
+                            <h3 class="icon-box-title fw-700">User Satisfaction</h3>
+                            <p class="fw-500">24/7 amazing services</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                     <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-3.svg') }}" alt="" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Great daily deal</h3>
-                            <p>When you sign up</p>
+                            <h3 class="icon-box-title fw-700">Great daily deal</h3>
+                            <p class="fw-500">When you sign up</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                     <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-4.svg') }}" alt="" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Wide assortment</h3>
-                            <p>Mega Discounts</p>
+                            <h3 class="icon-box-title fw-700">Wide assortment</h3>
+                            <p class="fw-500">Mega Discounts</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                {{-- <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                     <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-5.svg') }}" alt="" />
@@ -90,11 +90,11 @@
                             <p>Within 30 days</p>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
-    <section class="section-padding footer-mid">
+    <section class="section-padding footer-mid pt-0">
         <div class="container pt-15 pb-20">
             <div class="row">
                 <div class="col">
@@ -102,46 +102,48 @@
                         <div class="logo mb-30">
                             <a href="index.html" class="mb-15"><img
                                     src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo" /></a>
-                            <p class="font-lg text-heading">Awesome grocery store website template</p>
+                            <p class="text-heading fw-600 quicksand text-secondary">Welcome to Roll Mills
+                                Your trusted destination for high quality Household And Decoration products and
+                                solutions!</p>
                         </div>
                         <ul class="contact-infor">
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-location.svg') }}"
-                                    alt="" /><strong>Address: </strong> <span>5171 W Campbell Ave undefined
-                                    Kent, Utah 53127 United States</span></li>
+                                    alt="" /><strong>Address: </strong> <a class="hover-a" href="#">5171 W Campbell Ave
+                                    undefined
+                                    Kent, Utah 53127 United States</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-contact.svg') }}"
-                                    alt="" /><strong>Call Us:</strong><span>(+91) - 540-025-124553</span></li>
+                                    alt="" /><strong>Call Us:</strong> <a class="hover-a" href="tel:+91 93584 73253">+91 93584
+                                    73253</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-email-2.svg') }}"
-                                    alt="" /><strong>Email:</strong><span>sale@Nest.com</span></li>
-                            <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-clock.svg') }}"
-                                    alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li>
+                                    alt="" /><strong>Email:</strong> <a
+                                    class="hover-a" href="mailto:info@rollmillsstore.com">info@rollmillsstore.com</a></li>
+                            {{-- <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-clock.svg') }}"
+                                    alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li> --}}
                         </ul>
                     </div>
                 </div>
                 <div class="footer-link-widget col">
                     <h4 class="widget-title">Company</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Delivery Information</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms &amp; Conditions</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Support Center</a></li>
-                        <li><a href="#">Careers</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/my-acount">Delivery Information</a></li>
+                        <li><a href="/privacy-policy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms &amp; Conditions</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-link-widget col">
                     <h4 class="widget-title">Account</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="#">Sign In</a></li>
-                        <li><a href="#">View Cart</a></li>
-                        <li><a href="#">My Wishlist</a></li>
-                        <li><a href="#">Track My Order</a></li>
-                        <li><a href="#">Help Ticket</a></li>
-                        <li><a href="#">Shipping Details</a></li>
-                        <li><a href="#">Compare products</a></li>
+                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/cart">View Cart</a></li>
+                        <li><a href="/wishlist">My Wishlist</a></li>
+                        <li><a href="/my-account">Track My Order</a></li>
+                        <li><a href="/contact">Help Ticket</a></li>
+                        <li><a href="/compare">Compare products</a></li>
                     </ul>
                 </div>
-                <div class="footer-link-widget col">
+                {{-- <div class="footer-link-widget col">
                     <h4 class="widget-title">Corporate</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
                         <li><a href="#">Become a Vendor</a></li>
@@ -152,7 +154,7 @@
                         <li><a href="#">Accessibility</a></li>
                         <li><a href="#">Promotions</a></li>
                     </ul>
-                </div>
+                </div> --}}
                 <div class="footer-link-widget col">
                     <h4 class="widget-title">Popular</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
@@ -165,7 +167,7 @@
                         <li><a href="#">Cheese</a></li>
                     </ul>
                 </div>
-                <div class="footer-link-widget widget-install-app col">
+                {{-- <div class="footer-link-widget widget-install-app col">
                     <h4 class="widget-title">Install App</h4>
                     <p class="wow fadeIn animated">From App Store or Google Play</p>
                     <div class="download-app">
@@ -177,7 +179,7 @@
                     <p class="mb-20">Secured Payment Gateways</p>
                     <img class="wow fadeIn animated"
                         src="{{ asset('assets/frontend/imgs/theme/payment-method.png') }}" alt="" />
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -187,17 +189,16 @@
                 <div class="footer-bottom"></div>
             </div>
             <div class="col-xl-4 col-lg-6 col-md-6">
-                <p class="font-sm mb-0">&copy; 2022, <strong class="text-brand">Nest</strong> - HTML Ecommerce
-                    Template <br />All rights reserved</p>
+                <p class="font-sm mb-0">&copy; 2025, <strong class="text-brand">Roll Mills</strong> - All rights reserved</p>
             </div>
             <div class="col-xl-4 col-lg-6 text-center d-none d-xl-block">
-                <div class="hotline d-lg-inline-flex mr-30">
+                {{-- <div class="hotline d-lg-inline-flex mr-30">
                     <img src="{{ asset('assets/frontend/imgs/theme/icons/phone-call.svg') }}" alt="hotline" />
                     <p>1900 - 6666<span>Working 8:00 - 22:00</span></p>
-                </div>
-                <div class="hotline d-lg-inline-flex">
+                </div> --}}
+                <div class="hotline d-lg-inline-flex" style="width: 250px">
                     <img src="{{ asset('assets/frontend/imgs/theme/icons/phone-call.svg') }}" alt="hotline" />
-                    <p>1900 - 8888<span>24/7 Support Center</span></p>
+                    <p>+91 93584 73253</p>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-6 col-md-6 text-end d-none d-md-block">

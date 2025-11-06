@@ -1,5 +1,5 @@
 <main class="main">
-    <section class="home-slider style-2 position-relative mb-50">
+    <section class="home-slider style-2 position-relative mb-3`0">
         <div class="container">
             <div class="row">
                 <div class="col-xl-8 col-lg-12">
@@ -78,14 +78,14 @@
             <div class="carausel-10-columns-cover position-relative">
                 <div class="carausel-10-columns" id="carausel-10-columns">
                     @foreach ($parentCategory as $index => $category)
-                        <div class="card-2 bg-9 wow animate__animated animate__fadeInUp"
+                        <div class="card-2 wow animate__animated animate__fadeInUp"
                             data-wow-delay=".{{ $index + 1 }}s">
-                            <figure class="img-hover-scale overflow-hidden">
-                                <a href="shop-grid-right.html"><img src="{{ asset('storage/' . $category->image) }}"
-                                        alt="" /></a>
+                            <figure class="img-hover-scale overflow-hidden w-100 h-100">
+                                <a href="/shop" class="w-100 h-100"><img
+                                        src="{{ asset('storage/' . $category->image) }}" alt="" /></a>
                             </figure>
-                            <h6><a href="shop-grid-right.html">{{ $category->name }}</a></h6>
-                            <span>{{ $category->product_sum }} items</span>
+                            <h6><a href="/shop">{{ $category->name }}</a></h6>
+                            <span class="fw-600 fs-12 quicksand">{{ $category->product_sum }} items</span>
                         </div>
                     @endforeach
                 </div>
@@ -151,11 +151,66 @@
                         </li>
                     @endforeach
                 </ul>
+                <div class="d-inline-block d-xl-none">
+                    <a class="categories-button-active custom-dropdown-home gap-2" href="#">
+                        <span class="fi-rs-apps text-white fs-12"></span>  All Categories
+                        <i class="fi-rs-angle-down fs-12"></i>
+                    </a>
+                    <div class="categories-dropdown-wrap categories-dropdown-active-large-2 categories-dropdown-active-large font-heading">
+                        <div class="categori-dropdown-inner">
+                            <ul>
+                                <li>
+                                    <a href="shop-grid-right.html"> <img
+                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-1.svg"
+                                            alt="">Milks and Dairies</a>
+                                </li>
+                                <li>
+                                    <a href="shop-grid-right.html"> <img
+                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-2.svg"
+                                            alt="">Clothing &amp; beauty</a>
+                                </li>
+                                <li>
+                                    <a href="shop-grid-right.html"> <img
+                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-3.svg"
+                                            alt="">Pet Foods &amp; Toy</a>
+                                </li>
+                                <li>
+                                    <a href="shop-grid-right.html"> <img
+                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-4.svg"
+                                            alt="">Baking material</a>
+                                </li>
+                                <li>
+                                    <a href="shop-grid-right.html"> <img
+                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-5.svg"
+                                            alt="">Fresh Fruit</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="more_slide_open" style="display: none">
+                            <div class="categori-dropdown-inner">
+                                <ul class="end">
+                                    <li>
+                                        <a href="shop-grid-right.html"> <img
+                                                src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/icon-3.svg"
+                                                alt="">Wines &amp; Drinks</a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-grid-right.html"> <img
+                                                src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/icon-4.svg"
+                                                alt="">Fresh Seafood</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show
+                                more...</span></div>
+                    </div>
+                </div>
             </div>
             <!--End nav-tabs-->
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="tab-{{ $seleted_popular_product_category }}" role="tabpanel"
-                    aria-labelledby="tab-one">
+                <div class="tab-pane fade show active" id="tab-{{ $seleted_popular_product_category }}"
+                    role="tabpanel" aria-labelledby="tab-one">
                     <div class="row product-grid-4">
                         @foreach ($popular_products as $popular_product)
                             <div class="col-lg-1-5 col-md-4 col-6">
@@ -1096,10 +1151,6 @@
                                     </div>
                                     <span class="font-small ml-5 text-muted"> (4.0)</span>
                                 </div>
-                                <div>
-                                    <span class="font-small text-muted">By <a
-                                            href="vendor-details-1.html">NestFood</a></span>
-                                </div>
                                 <div class="product-card-bottom">
                                     <div class="product-price">
                                         <span>$32.85</span>
@@ -1136,10 +1187,6 @@
                                         <div class="product-rating" style="width: 90%"></div>
                                     </div>
                                     <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div>
-                                    <span class="font-small text-muted">By <a href="vendor-details-1.html">Old El
-                                            Paso</a></span>
                                 </div>
                                 <div class="product-card-bottom">
                                     <div class="product-price">
@@ -1554,8 +1601,7 @@
                         <div class="card-1">
                             <figure class="img-hover-scale overflow-hidden">
                                 <a href="shop-grid-right.html"><img
-                                        src="{{ asset('storage/' . $category->image) }}"
-                                        alt="" /></a>
+                                        src="{{ asset('storage/' . $category->image) }}" alt="" /></a>
                             </figure>
                             <h6>
                                 <a href="shop-grid-right.html">{{ $category->name }}</a>

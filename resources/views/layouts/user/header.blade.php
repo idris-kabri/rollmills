@@ -21,11 +21,8 @@
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Flaticon -->
-    <link rel="stylesheet"
-        href="https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css" />
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -35,16 +32,16 @@
         <div class="mobile-promotion">
             <span>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</span>
         </div>
-        <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
+        <div class="header-middle header-middle-ptb-1 d-none d-xl-block">
             <div class="container">
                 <div class="header-wrap">
-                    <div class="logo logo-width-1">
-                        <a href="#"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}"
-                                alt="logo" /></a>
+                    <div class="logo logo-width-1 ms-3">
+                        <a href="/"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo"
+                                class="img-fluid" /></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
-                            <form action="#">
+                            <form action="#" class="border-1 rounded-pill overflow-hidden">
                                 <select class="select-active">
                                     <option>All Categories</option>
                                     <option>Milks and Dairies</option>
@@ -58,10 +55,11 @@
                                     <option>Noodles & Rice</option>
                                     <option>Ice cream</option>
                                 </select>
-                                <input type="text" placeholder="Search for items..." />
+                                <input type="text" placeholder="Search for items..."
+                                    class="placeholder-font-family-quicksand placeholder-style" />
                             </form>
                         </div>
-                        <div class="header-action-right">
+                        <div class="header-action-right ms-4">
                             <div class="header-action-2">
                                 <div class="search-location">
                                     <form action="#">
@@ -84,38 +82,39 @@
                                     </form>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a href="shop-compare.html">
+                                    <a href="/compare">
                                         <img class="svgInject" alt="Nest"
                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-compare.svg') }}" />
                                         <span class="pro-count blue">3</span>
                                     </a>
-                                    <a href="shop-compare.html"><span class="lable ml-0">Compare</span></a>
+                                    <a href="/compare"><span class="lable">Compare</span></a>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a href="shop-wishlist.html">
+                                    <a href="/wishlist">
                                         <img class="svgInject" alt="Nest"
                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-heart.svg') }}" />
                                         <span class="pro-count blue">6</span>
                                     </a>
-                                    <a href="shop-wishlist.html"><span class="lable">Wishlist</span></a>
+                                    <a href="/wishlist"><span class="lable">Wishlist</span></a>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="shop-cart.html">
+                                    <a class="cart-img" href="/cart">
                                         <img alt="Nest"
                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}" />
                                         <span class="pro-count blue">2</span>
                                     </a>
-                                    <a href="shop-cart.html"><span class="lable">Cart</span></a>
+                                    <a href="/cart"><span class="lable">Cart</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                         <ul>
                                             <li>
                                                 <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest"
+                                                    <a href="/shop-detail"><img alt="Nest"
                                                             src="{{ asset('assets/frontend/imgs/shop/thumbnail-3.jpg') }}" /></a>
                                                 </div>
                                                 <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Daisy Casual Bag</a></h4>
-                                                    <h4><span>1 × </span>$800.00</h4>
+                                                    <h4><a href="/shop-detail">Daisy Casual Bag</a></h4>
+                                                    <h4 class="fs-14 text-secondary fw-500"><span>1 × </span>$800.00
+                                                    </h4>
                                                 </div>
                                                 <div class="shopping-cart-delete">
                                                     <a href="#"><i class="fi-rs-cross-small"></i></a>
@@ -123,12 +122,13 @@
                                             </li>
                                             <li>
                                                 <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest"
+                                                    <a href="/shop-detail"><img alt="Nest"
                                                             src="{{ asset('assets/frontend/imgs/shop/thumbnail-2.jpg') }}" /></a>
                                                 </div>
                                                 <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Corduroy Shirts</a></h4>
-                                                    <h4><span>1 × </span>$3200.00</h4>
+                                                    <h4><a href="/shop-detail">Corduroy Shirts</a></h4>
+                                                    <h4 class="fs-14 text-secondary fw-500"><span>1 × </span>$3200.00
+                                                    </h4>
                                                 </div>
                                                 <div class="shopping-cart-delete">
                                                     <a href="#"><i class="fi-rs-cross-small"></i></a>
@@ -140,34 +140,34 @@
                                                 <h4>Total <span>$4000.00</span></h4>
                                             </div>
                                             <div class="shopping-cart-button">
-                                                <a href="shop-cart.html" class="outline">View cart</a>
-                                                <a href="shop-checkout.html">Checkout</a>
+                                                <a href="/cart" class="outline">View cart</a>
+                                                <a href="/checkout">Checkout</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a href="page-account.html">
+                                    <a href="/my-account">
                                         <img class="svgInject" alt="Nest"
                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
                                     </a>
-                                    <a href="page-account.html"><span class="lable ml-0">Account</span></a>
-                                    <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                                    <a href="/my-account"><span class="lable">Account</span></a>
+                                    {{-- <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
-                                            <li><a href="page-account.html"><i class="fi fi-rs-user mr-10"></i>My
+                                            <li><a href="/my-account"><i class="fi fi-rs-user mr-10"></i>My
                                                     Account</a></li>
-                                            <li><a href="page-account.html"><i
+                                            <li><a href="/my-account"><i
                                                         class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a></li>
-                                            <li><a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My
+                                            <li><a href="/my-account"><i class="fi fi-rs-label mr-10"></i>My
                                                     Voucher</a></li>
                                             <li><a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>My
                                                     Wishlist</a></li>
-                                            <li><a href="page-account.html"><i
+                                            <li><a href="/my-account"><i
                                                         class="fi fi-rs-settings-sliders mr-10"></i>Setting</a></li>
                                             <li><a href="page-login.html"><i class="fi fi-rs-sign-out mr-10"></i>Sign
                                                     out</a></li>
                                         </ul>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -176,13 +176,14 @@
             </div>
         </div>
         <div class="header-bottom header-bottom-bg-color sticky-bar">
-            <div class="container">
-                <div class="header-wrap header-space-between position-relative">
-                    <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="index.html"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}"
-                                alt="logo" /></a>
+            <div class="container h-100">
+                <div class="header-wrap header-space-between position-relative h-100">
+                    <div class="logo logo-width-1 d-block d-xl-none h-100">
+                        <a href="/" class="h-100 align-items-center d-flex"><img
+                                src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo"
+                                class="img-fluid" /></a>
                     </div>
-                    <div class="header-nav d-none d-lg-flex">
+                    <div class="header-nav d-none d-xl-flex">
                         <div class="main-categori-wrap d-none d-lg-block">
                             <a class="categories-button-active" href="#">
                                 <span class="fi-rs-apps"></span> <span class="et">Browse</span> All Categories
@@ -284,22 +285,12 @@
                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-hot.svg') }}"
                                             alt="hot deals" /><a href="shop-grid-right.html">Deals</a></li>
                                     <li>
-                                        <a class="active" href="index.html">Home <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="index.html">Home 1</a></li>
-                                            <li><a href="index-2.html">Home 2</a></li>
-                                            <li><a href="index-3.html">Home 3</a></li>
-                                            <li><a href="index-4.html">Home 4</a></li>
-                                            <li><a href="index-5.html">Home 5</a></li>
-                                            <li><a href="index-6.html">Home 6</a></li>
-                                        </ul>
+                                        <a class="active" href="/">Home</a>
                                     </li>
+
                                     <li>
-                                        <a href="page-about.html">About</a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-grid-right.html">Shop <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
+                                        <a href="/shop">Shop </a>
+                                        {{-- <ul class="sub-menu">
                                             <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
                                             <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
                                             <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
@@ -333,9 +324,9 @@
                                                     <li><a href="shop-invoice-6.html">Shop Invoice 6</a></li>
                                                 </ul>
                                             </li>
-                                        </ul>
+                                        </ul> --}}
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="#">Vendors <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             <li><a href="vendors-grid.html">Vendors Grid</a></li>
@@ -345,7 +336,7 @@
                                             <li><a href="vendor-dashboard.html">Vendor Dashboard</a></li>
                                             <li><a href="vendor-guide.html">Vendor Guide</a></li>
                                         </ul>
-                                    </li>
+                                    </li> --}}
                                     <li class="position-static">
                                         <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
                                         <ul class="mega-menu">
@@ -413,8 +404,8 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="blog-category-grid.html">Blog <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
+                                        <a href="/blog">Blog</a>
+                                        {{-- <ul class="sub-menu">
                                             <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
                                             <li><a href="blog-category-list.html">Blog Category List</a></li>
                                             <li><a href="blog-category-big.html">Blog Category Big</a></li>
@@ -427,9 +418,12 @@
                                                     <li><a href="blog-post-fullwidth.html">No Sidebar</a></li>
                                                 </ul>
                                             </li>
-                                        </ul>
+                                        </ul> --}}
                                     </li>
                                     <li>
+                                        <a href="/about">About Us</a>
+                                    </li>
+                                    {{-- <li>
                                         <a href="#">Pages <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             <li><a href="page-about.html">About Us</a></li>
@@ -444,37 +438,46 @@
                                             <li><a href="page-terms.html">Terms of Service</a></li>
                                             <li><a href="page-404.html">404 Page</a></li>
                                         </ul>
-                                    </li>
+                                    </li> --}}
                                     <li>
-                                        <a href="page-contact.html">Contact</a>
+                                        <a href="/contact">Contact Us</a>
                                     </li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
-                    <div class="hotline d-none d-lg-flex">
-                        <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-headphone.svg') }}"
-                            alt="hotline" />
-                        <p>1900 - 888<span>24/7 Support Center</span></p>
+                    <div class="hotline d-none d-xl-flex align-items-center">
+                        <a href="tel:+91 93584 73253" class="d-flex align-items-center">
+                            <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-headphone.svg') }}"
+                                alt="hotline" style="width: 32px" class="img-color" />
+                            <p class="fs-18 text-dark fw-600">+91 93584 73253</p>
+                        </a>
                     </div>
-                    <div class="header-action-icon-2 d-block d-lg-none">
+                    <div class="header-action-icon-2 d-block d-xl-none">
                         <div class="burger-icon burger-icon-white">
                             <span class="burger-icon-top"></span>
                             <span class="burger-icon-mid"></span>
                             <span class="burger-icon-bottom"></span>
                         </div>
                     </div>
-                    <div class="header-action-right d-block d-lg-none">
+                    <div class="header-action-right d-block d-xl-none">
                         <div class="header-action-2">
+                             <div class="header-action-icon-2">
+                                    <a href="/compare">
+                                        <img class="svgInject" alt="Nest"
+                                            src="{{ asset('assets/frontend/imgs/theme/icons/icon-compare.svg') }}" />
+                                        <span class="pro-count white">3</span>
+                                    </a>
+                                </div>
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="/wishlist">
                                     <img alt="Nest"
                                         src="{{ asset('assets/frontend/imgs/theme/icons/icon-heart.svg') }}" />
                                     <span class="pro-count white">4</span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="shop-cart.html">
+                                <a class="/cart" href="shop-cart.html">
                                     <img alt="Nest"
                                         src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}" />
                                     <span class="pro-count white">2</span>
@@ -529,7 +532,7 @@
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="index.html"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}"
+                    <a href="/"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}"
                             alt="logo" /></a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
@@ -551,19 +554,11 @@
                     <nav>
                         <ul class="mobile-menu font-heading">
                             <li class="menu-item-has-children">
-                                <a href="index.html">Home</a>
-                                <ul class="dropdown">
-                                    <li><a href="index.html">Home 1</a></li>
-                                    <li><a href="index-2.html">Home 2</a></li>
-                                    <li><a href="index-3.html">Home 3</a></li>
-                                    <li><a href="index-4.html">Home 4</a></li>
-                                    <li><a href="index-5.html">Home 5</a></li>
-                                    <li><a href="index-6.html">Home 6</a></li>
-                                </ul>
+                                <a href="/">Home</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="shop-grid-right.html">shop</a>
-                                <ul class="dropdown">
+                                <a href="/shop">shop</a>
+                                {{-- <ul class="dropdown">
                                     <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
                                     <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
                                     <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
@@ -594,9 +589,12 @@
                                             <li><a href="shop-invoice-6.html">Shop Invoice 6</a></li>
                                         </ul>
                                     </li>
-                                </ul>
+                                </ul> --}}
                             </li>
                             <li class="menu-item-has-children">
+                                <a href="/my-account">My Account</a>
+                            </li>
+                            {{-- <li class="menu-item-has-children">
                                 <a href="#">Vendors</a>
                                 <ul class="dropdown">
                                     <li><a href="vendors-grid.html">Vendors Grid</a></li>
@@ -606,7 +604,7 @@
                                     <li><a href="vendor-dashboard.html">Vendor Dashboard</a></li>
                                     <li><a href="vendor-guide.html">Vendor Guide</a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li class="menu-item-has-children">
                                 <a href="#">Mega menu</a>
                                 <ul class="dropdown">
@@ -640,8 +638,8 @@
                                 </ul>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="blog-category-fullwidth.html">Blog</a>
-                                <ul class="dropdown">
+                                <a href="/blog">Blogs</a>
+                                {{-- <ul class="dropdown">
                                     <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
                                     <li><a href="blog-category-list.html">Blog Category List</a></li>
                                     <li><a href="blog-category-big.html">Blog Category Big</a></li>
@@ -654,12 +652,18 @@
                                             <li><a href="blog-post-fullwidth.html">No Sidebar</a></li>
                                         </ul>
                                     </li>
-                                </ul>
+                                </ul> --}}
                             </li>
                             <li class="menu-item-has-children">
+                                <a href="/about">About Us</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="/contact">Contact Us</a>
+                            </li>
+
+                            {{-- <li class="menu-item-has-children">
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="page-about.html">About Us</a></li>
                                     <li><a href="page-contact.html">Contact</a></li>
                                     <li><a href="page-account.html">My Account</a></li>
                                     <li><a href="page-login.html">Login</a></li>
@@ -671,8 +675,8 @@
                                     <li><a href="page-terms.html">Terms of Service</a></li>
                                     <li><a href="page-404.html">404 Page</a></li>
                                 </ul>
-                            </li>
-                            <li class="menu-item-has-children">
+                            </li> --}}
+                            {{-- <li class="menu-item-has-children">
                                 <a href="#">Language</a>
                                 <ul class="dropdown">
                                     <li><a href="#">English</a></li>
@@ -680,20 +684,21 @@
                                     <li><a href="#">German</a></li>
                                     <li><a href="#">Spanish</a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
                         </ul>
                     </nav>
                     <!-- mobile menu end -->
                 </div>
-                <div class="mobile-header-info-wrap">
+                <div class="mobile-header-info-wrap border border-1 rounded-3">
                     <div class="single-mobile-header-info">
-                        <a href="page-contact.html"><i class="fi-rs-marker"></i> Our location </a>
+                        <a href="/contact"><i class="fi-rs-marker"></i> 02 Floor, Taheri Complex, Opp. <br>
+                            Gopi Restaurant, Sagwara, India </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="page-login.html"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                        <a href="/login"><i class="fi-rs-user"></i>Log In / Sign Up </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="#"><i class="fi-rs-headphones"></i>(+01) - 2345 - 6789 </a>
+                        <a href="tel:+91 93584 73253"><i class="fi-rs-headphones"></i>+91 93584 73253</a>
                     </div>
                 </div>
                 <div class="mobile-social-icon mb-50">
@@ -714,7 +719,7 @@
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-youtube-white.svg') }}"
                             alt="" /></a>
                 </div>
-                <div class="site-copyright">Copyright 2022 © Nest. All rights reserved. Powered by AliThemes.</div>
+                <div class="site-copyright">Copyright 2025 © RollMills. All rights reserved.</div>
             </div>
         </div>
     </div>

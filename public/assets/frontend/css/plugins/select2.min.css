@@ -385,8 +385,8 @@
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-	background-color: #9ddbc9;
-	color: $color-heading
+	background-color: #dcaa15b7;
+	color: white;
 }
 
 .select2-container--default .select2-results__group {

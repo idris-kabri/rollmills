@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div class="row product-grid">
-                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                        <div class="col-lg-1-5 col-md-4 col-6">
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
@@ -106,9 +106,9 @@
                                     </div>
                                 </div>
                                 <div class="product-content-wrap">
-                                    <div class="product-category">
+                                    {{-- <div class="product-category">
                                         <a href="shop-grid-right.html">Snack</a>
-                                    </div>
+                                    </div> --}}
                                     <h2><a href="shop-product-right.html">Seeds of Change Organic Quinoe</a></h2>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">
@@ -116,10 +116,10 @@
                                         </div>
                                         <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
-                                    <div>
+                                    {{-- <div>
                                         <span class="font-small text-muted">By <a
                                                 href="vendor-details-1.html">NestFood</a></span>
-                                    </div>
+                                    </div> --}}
                                     <div class="product-card-bottom">
                                         <div class="product-price">
                                             <span>$28.85</span>
@@ -134,7 +134,7 @@
                             </div>
                         </div>
                         <!--end product card-->
-                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                        <div class="col-lg-1-5 col-md-4 col-6">
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
@@ -158,9 +158,9 @@
                                     </div>
                                 </div>
                                 <div class="product-content-wrap">
-                                    <div class="product-category">
+                                    {{-- <div class="product-category">
                                         <a href="shop-grid-right.html">Hodo Foods</a>
-                                    </div>
+                                    </div> --}}
                                     <h2><a href="shop-product-right.html">All Natural Italian-Style Chicken
                                             Meatballs</a></h2>
                                     <div class="product-rate-cover">
@@ -169,10 +169,10 @@
                                         </div>
                                         <span class="font-small ml-5 text-muted"> (3.5)</span>
                                     </div>
-                                    <div>
+                                    {{-- <div>
                                         <span class="font-small text-muted">By <a
                                                 href="vendor-details-1.html">Stouffer</a></span>
-                                    </div>
+                                    </div> --}}
                                     <div class="product-card-bottom">
                                         <div class="product-price">
                                             <span>$52.85</span>
