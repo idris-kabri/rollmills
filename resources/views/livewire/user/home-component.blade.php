@@ -66,7 +66,7 @@
         </div>
     </section>
     <!--End hero slider-->
-    <section class="popular-categories section-padding">
+    <section class="popular-categories section-padding" wire:ignore>
         <div class="container wow animate__animated animate__fadeIn">
             <div class="section-title">
                 <div class="title">
@@ -78,14 +78,15 @@
             <div class="carausel-10-columns-cover position-relative">
                 <div class="carausel-10-columns" id="carausel-10-columns">
                     @foreach ($parentCategory as $index => $category)
-                        <div class="card-2 bg-9 wow animate__animated animate__fadeInUp" data-wow-delay=".{{$index + 1}}s">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('storage/' . $category->image) }}" alt="" /></a>
-                        </figure>
-                        <h6><a href="shop-grid-right.html">{{ $category->name }}</a></h6>
-                        <span>{{ $category->product_sum }} items</span>
-                    </div>
+                        <div class="card-2 bg-9 wow animate__animated animate__fadeInUp"
+                            data-wow-delay=".{{ $index + 1 }}s">
+                            <figure class="img-hover-scale overflow-hidden">
+                                <a href="shop-grid-right.html"><img src="{{ asset('storage/' . $category->image) }}"
+                                        alt="" /></a>
+                            </figure>
+                            <h6><a href="shop-grid-right.html">{{ $category->name }}</a></h6>
+                            <span>{{ $category->product_sum }} items</span>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -134,79 +135,88 @@
                 <h3>Popular Products</h3>
                 <ul class="nav nav-tabs links" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button wire:click="setPopularProductCategory('all')" class="nav-link {{$seleted_popular_product_category == 'all' ? 'active' : ''}}" id="nav-tab-all" data-bs-toggle="tab"
-                            data-bs-target="#tab-all" type="button" role="tab" aria-controls="tab-all"
-                            aria-selected="true">All</button>
+                        <button wire:click="setPopularProductCategory('all')"
+                            class="nav-link {{ $seleted_popular_product_category == 'all' ? 'active' : '' }}"
+                            id="nav-tab-all" data-bs-toggle="tab" data-bs-target="#tab-all" type="button"
+                            role="tab" aria-controls="tab-all" aria-selected="true">All</button>
                     </li>
-                    @foreach($parentCategory as $popular_categroy)
-                    <li class="nav-item" role="presentation">
-                        <button wire:click="setPopularProductCategory('{{ $popular_categroy->id }}')" class="nav-link" id="nav-tab-{{ $popular_categroy->id }}" data-bs-toggle="tab" data-bs-target="#tab-{{ $popular_categroy->id }}"
-                            type="button" role="tab" aria-controls="tab-{{ $popular_categroy->id }}" aria-selected="false">{{ $popular_categroy->name }}</button>
-                    </li>
+                    @foreach ($parentCategory as $popular_categroy)
+                        <li class="nav-item" role="presentation">
+                            <button wire:click="setPopularProductCategory('{{ $popular_categroy->id }}')"
+                                class="nav-link {{ $seleted_popular_product_category == "$popular_categroy->id" ? 'active' : '' }}"
+                                id="nav-tab-{{ $popular_categroy->id }}" data-bs-toggle="tab"
+                                data-bs-target="#tab-{{ $popular_categroy->id }}" type="button" role="tab"
+                                aria-controls="tab-{{ $popular_categroy->id }}"
+                                aria-selected="false">{{ $popular_categroy->name }}</button>
+                        </li>
                     @endforeach
                 </ul>
             </div>
             <!--End nav-tabs-->
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="tab-{{ $seleted_popular_product_category }}" role="tabpanel" aria-labelledby="tab-one">
+                <div class="tab-pane fade show active" id="tab-{{ $seleted_popular_product_category }}" role="tabpanel"
+                    aria-labelledby="tab-one">
                     <div class="row product-grid-4">
                         @foreach ($popular_products as $popular_product)
-                        <div class="col-lg-1-5 col-md-4 col-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="shop-product-right.html">
-                                            <img class="default-img"
-                                                src="{{ asset('storage/' . $popular_product->featured_image) }}"
-                                                alt="" />
+                            <div class="col-lg-1-5 col-md-4 col-6">
+                                <div class="product-cart-wrap mb-30">
+                                    <div class="product-img-action-wrap">
+                                        <div class="product-img product-img-zoom">
+                                            <a href="shop-product-right.html">
+                                                <img class="default-img"
+                                                    src="{{ asset('storage/' . $popular_product->featured_image) }}"
+                                                    alt="" />
                                                 @php
                                                     $product_images = json_decode($popular_product->images, true);
                                                 @endphp
-                                            <img class="hover-img"
-                                                src="{{ asset('storage/' . $product_images[0]) }}"
-                                                alt="" />
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Add To Wishlist" class="action-btn"
-                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="hot">Hot</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap mt-2">
-                                    <h2><a href="shop-product-right.html">{{ $popular_product->name }}</a></h2>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 90%"></div>
+                                                <img class="hover-img"
+                                                    src="{{ asset('storage/' . $product_images[0]) }}"
+                                                    alt="" />
+                                            </a>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                    </div>
-                                    <div class="product-card-bottom">
-                                        <div class="product-price">
-                                            @if($popular_product->sale_price > 0 && now() >= $popular_product->sale_start_date && now() <= $popular_product->sale_end_date)
-                                            <span>₹{{ $popular_product->sale_price }}</span>
-                                            <span class="old-price">₹{{$popular_product->price}}</span>
-                                            @elseif($popular_product->sale_default_price > 0)
-                                            <span>₹{{ $popular_product->sale_default_price }}</span>
-                                            <span class="old-price">₹{{$popular_product->price}}</span>
-                                            @else
-                                            <span>₹{{ $popular_product->price }}</span>
-                                            @endif
+                                        <div class="product-action-1">
+                                            <a aria-label="Add To Wishlist" class="action-btn"
+                                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                    class="fi-rs-shuffle"></i></a>
+                                            <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                                data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
                                         </div>
-                                        <div class="add-cart">
-                                            <a class="add" href="shop-cart.html"><i
-                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-content-wrap mt-2">
+                                        <h2><a href="shop-product-right.html">{{ $popular_product->name }}</a></h2>
+                                        <div class="product-rate-cover">
+                                            <div class="product-rate d-inline-block">
+                                                <div class="product-rating" style="width: 90%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted"> (4.0)</span>
+                                        </div>
+                                        <div class="product-card-bottom">
+                                            <div class="product-price">
+                                                @if (
+                                                    $popular_product->sale_price > 0 &&
+                                                        now() >= $popular_product->sale_start_date &&
+                                                        now() <= $popular_product->sale_end_date)
+                                                    <span>₹{{ $popular_product->sale_price }}</span>
+                                                    <span class="old-price">₹{{ $popular_product->price }}</span>
+                                                @elseif($popular_product->sale_default_price > 0)
+                                                    <span>₹{{ $popular_product->sale_default_price }}</span>
+                                                    <span class="old-price">₹{{ $popular_product->price }}</span>
+                                                @else
+                                                    <span>₹{{ $popular_product->price }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="add-cart">
+                                                <a class="add" href="shop-cart.html"><i
+                                                        class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endforeach
                     </div>
                     <!--End product-grid-4-->
@@ -228,24 +238,26 @@
                             aria-selected="true">Featured</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="nav-tab-two-1" data-bs-toggle="tab"
-                            data-bs-target="#tab-two-1" type="button" role="tab" aria-controls="tab-two"
+                        <button class="nav-link" id="nav-tab-two-1" data-bs-toggle="tab" data-bs-target="#tab-two-1"
+                            type="button" role="tab" aria-controls="tab-two"
                             aria-selected="false">Popular</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="nav-tab-three-1" data-bs-toggle="tab"
-                            data-bs-target="#tab-three-1" type="button" role="tab"
-                            aria-controls="tab-three" aria-selected="false">New added</button>
+                            data-bs-target="#tab-three-1" type="button" role="tab" aria-controls="tab-three"
+                            aria-selected="false">New added</button>
                     </li>
                 </ul>
             </div>
-            <div class="row">
+            <div class="row" wire:ignore>
                 <div class="col-lg-3 d-none d-lg-flex">
-                    
-                    <div class="banner-img style-2" style="background: url('{{ asset("storage/" . $best_deal_banner->image) }}');">
+
+                    <div class="banner-img style-2"
+                        style="background: url('{{ asset('storage/' . $best_deal_banner->image) }}');">
                         <div class="banner-text">
                             <h2 class="mb-100">{{ $best_deal_banner->heading }}</h2>
-                            <a href="{{ $best_deal_banner->link ?? '#' }}" class="btn btn-xs">{{ $best_deal_banner->button_text }} <i
+                            <a href="{{ $best_deal_banner->link ?? '#' }}"
+                                class="btn btn-xs">{{ $best_deal_banner->button_text }} <i
                                     class="fi-rs-arrow-small-right"></i></a>
                         </div>
                     </div>
@@ -298,8 +310,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -349,8 +361,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -400,8 +412,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -451,8 +463,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -502,8 +514,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -562,8 +574,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -613,8 +625,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -664,8 +676,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -715,8 +727,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -766,8 +778,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -780,8 +792,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="tab-three-1" role="tabpanel"
-                            aria-labelledby="tab-three-1">
+                        <div class="tab-pane fade" id="tab-three-1" role="tabpanel" aria-labelledby="tab-three-1">
                             <div class="carausel-4-columns-cover arrow-center position-relative">
                                 <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow"
                                     id="carausel-4-columns-3-arrows"></div>
@@ -826,8 +837,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -877,8 +888,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -928,8 +939,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -979,8 +990,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -1030,8 +1041,8 @@
                                             </div>
                                             <div class="sold mt-15 mb-15">
                                                 <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: 50%" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuemin="0" aria-valuemax="100">
                                                     </div>
                                                 </div>
                                                 <span class="font-xs text-heading"> Sold: 90/120</span>
@@ -1539,113 +1550,18 @@
             </div>
             <div class="carausel-8-columns-cover position-relative">
                 <div class="carausel-8-columns" id="carausel-8-columns">
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-1.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Milks and <br />Dairies</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-2.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Wines & <br />
-                                Alcohol</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-3.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Clothing & <br />Beauty</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-4.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Pet Foods <br />& Toy</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-5.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Packaged <br />fast food</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-6.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Baking <br />material</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-7.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Vegetables <br />& tubers</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-8.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Fresh <br />Seafood</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-9.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6>
-                            <a href="shop-grid-right.html">Noodles <br />Rice</a>
-                        </h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-10.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6><a href="shop-grid-right.html">Fastfood</a></h6>
-                    </div>
-                    <div class="card-1">
-                        <figure class="img-hover-scale overflow-hidden">
-                            <a href="shop-grid-right.html"><img
-                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-11.svg') }}"
-                                    alt="" /></a>
-                        </figure>
-                        <h6><a href="shop-grid-right.html">Ice cream</a></h6>
-                    </div>
+                    @foreach ($parentCategory as $index => $category)
+                        <div class="card-1">
+                            <figure class="img-hover-scale overflow-hidden">
+                                <a href="shop-grid-right.html"><img
+                                        src="{{ asset('storage/' . $category->image) }}"
+                                        alt="" /></a>
+                            </figure>
+                            <h6>
+                                <a href="shop-grid-right.html">{{ $category->name }}</a>
+                            </h6>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
