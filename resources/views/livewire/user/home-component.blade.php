@@ -1,5 +1,5 @@
 <main class="main">
-    <section class="home-slider style-2 position-relative mb-3`0">
+    <section class="home-slider style-2 position-relative mb-3" wire:ignore>
         <div class="container">
             <div class="row">
                 <div class="col-xl-8 col-lg-12">
@@ -133,77 +133,43 @@
         <div class="container">
             <div class="section-title style-2">
                 <h3>Popular Products</h3>
-                <ul class="nav nav-tabs links" id="myTab" role="tablist">
+                <ul class="nav nav-tabs links d-none d-xl-flex" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button wire:click="setPopularProductCategory('all')"
                             class="nav-link {{ $seleted_popular_product_category == 'all' ? 'active' : '' }}"
                             id="nav-tab-all" data-bs-toggle="tab" data-bs-target="#tab-all" type="button"
                             role="tab" aria-controls="tab-all" aria-selected="true">All</button>
                     </li>
-                    @foreach ($parentCategory as $popular_categroy)
+                    @foreach ($parentCategory as $popular_category)
                         <li class="nav-item" role="presentation">
-                            <button wire:click="setPopularProductCategory('{{ $popular_categroy->id }}')"
-                                class="nav-link {{ $seleted_popular_product_category == "$popular_categroy->id" ? 'active' : '' }}"
-                                id="nav-tab-{{ $popular_categroy->id }}" data-bs-toggle="tab"
-                                data-bs-target="#tab-{{ $popular_categroy->id }}" type="button" role="tab"
-                                aria-controls="tab-{{ $popular_categroy->id }}"
-                                aria-selected="false">{{ $popular_categroy->name }}</button>
+                            <button wire:click="setPopularProductCategory('{{ $popular_category->id }}')"
+                                class="nav-link {{ $seleted_popular_product_category == "$popular_category->id" ? 'active' : '' }}"
+                                id="nav-tab-{{ $popular_category->id }}" data-bs-toggle="tab"
+                                data-bs-target="#tab-{{ $popular_category->id }}" type="button" role="tab"
+                                aria-controls="tab-{{ $popular_category->id }}"
+                                aria-selected="false">{{ $popular_category->name }}</button>
                         </li>
                     @endforeach
                 </ul>
-                <div class="d-inline-block d-xl-none">
+                <div class="d-flex justify-content-end d-xl-none">
                     <a class="categories-button-active custom-dropdown-home gap-2" href="#">
-                        <span class="fi-rs-apps text-white fs-12"></span>  All Categories
+                        <span class="fi-rs-apps text-white fs-12"></span> All Categories
                         <i class="fi-rs-angle-down fs-12"></i>
                     </a>
-                    <div class="categories-dropdown-wrap categories-dropdown-active-large-2 categories-dropdown-active-large font-heading">
+                    <div
+                        class="categories-dropdown-wrap categories-dropdown-active-large-2 categories-dropdown-active-large font-heading">
                         <div class="categori-dropdown-inner">
                             <ul>
-                                <li>
-                                    <a href="shop-grid-right.html"> <img
-                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-1.svg"
-                                            alt="">Milks and Dairies</a>
-                                </li>
-                                <li>
-                                    <a href="shop-grid-right.html"> <img
-                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-2.svg"
-                                            alt="">Clothing &amp; beauty</a>
-                                </li>
-                                <li>
-                                    <a href="shop-grid-right.html"> <img
-                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-3.svg"
-                                            alt="">Pet Foods &amp; Toy</a>
-                                </li>
-                                <li>
-                                    <a href="shop-grid-right.html"> <img
-                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-4.svg"
-                                            alt="">Baking material</a>
-                                </li>
-                                <li>
-                                    <a href="shop-grid-right.html"> <img
-                                            src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/category-5.svg"
-                                            alt="">Fresh Fruit</a>
-                                </li>
+                                @foreach ($parentCategory as $popular_category)
+                                    <li>
+                                        <a href="javascript:void(0)"
+                                            wire:click.prevent="setPopularProductCategory('{{ $popular_category->id }}')">
+                                            <img src="{{ asset('storage/' . $popular_category->image) }}"
+                                                alt="">{{ $popular_category->name }}</a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
-                        <div class="more_slide_open" style="display: none">
-                            <div class="categori-dropdown-inner">
-                                <ul class="end">
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img
-                                                src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/icon-3.svg"
-                                                alt="">Wines &amp; Drinks</a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img
-                                                src="http://127.0.0.1:8000/assets/frontend/imgs/theme/icons/icon-4.svg"
-                                                alt="">Fresh Seafood</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show
-                                more...</span></div>
                     </div>
                 </div>
             </div>
@@ -213,65 +179,7 @@
                     role="tabpanel" aria-labelledby="tab-one">
                     <div class="row product-grid-4">
                         @foreach ($popular_products as $popular_product)
-                            <div class="col-lg-1-5 col-md-4 col-6">
-                                <div class="product-cart-wrap mb-30">
-                                    <div class="product-img-action-wrap">
-                                        <div class="product-img product-img-zoom">
-                                            <a href="shop-product-right.html">
-                                                <img class="default-img"
-                                                    src="{{ asset('storage/' . $popular_product->featured_image) }}"
-                                                    alt="" />
-                                                @php
-                                                    $product_images = json_decode($popular_product->images, true);
-                                                @endphp
-                                                <img class="hover-img"
-                                                    src="{{ asset('storage/' . $product_images[0]) }}"
-                                                    alt="" />
-                                            </a>
-                                        </div>
-                                        <div class="product-action-1">
-                                            <a aria-label="Add To Wishlist" class="action-btn"
-                                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                            <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
-                                                    class="fi-rs-shuffle"></i></a>
-                                            <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
-                                                data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                        </div>
-                                        <div class="product-badges product-badges-position product-badges-mrg">
-                                            <span class="hot">Hot</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-content-wrap mt-2">
-                                        <h2><a href="shop-product-right.html">{{ $popular_product->name }}</a></h2>
-                                        <div class="product-rate-cover">
-                                            <div class="product-rate d-inline-block">
-                                                <div class="product-rating" style="width: 90%"></div>
-                                            </div>
-                                            <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                        </div>
-                                        <div class="product-card-bottom">
-                                            <div class="product-price">
-                                                @if (
-                                                    $popular_product->sale_price > 0 &&
-                                                        now() >= $popular_product->sale_start_date &&
-                                                        now() <= $popular_product->sale_end_date)
-                                                    <span>₹{{ $popular_product->sale_price }}</span>
-                                                    <span class="old-price">₹{{ $popular_product->price }}</span>
-                                                @elseif($popular_product->sale_default_price > 0)
-                                                    <span>₹{{ $popular_product->sale_default_price }}</span>
-                                                    <span class="old-price">₹{{ $popular_product->price }}</span>
-                                                @else
-                                                    <span>₹{{ $popular_product->price }}</span>
-                                                @endif
-                                            </div>
-                                            <div class="add-cart">
-                                                <a class="add" href="shop-cart.html"><i
-                                                        class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . $seleted_popular_product_category))
                         @endforeach
                     </div>
                     <!--End product-grid-4-->
