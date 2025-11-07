@@ -10,18 +10,27 @@
      <div class="container mb-80 mt-50">
          <div class="row">
              <div class="col-xl-10 col-lg-12 m-auto">
-                 <h1 class="heading-2 mb-10">Products Compare</h1>
-                 <h6 class="text-body mb-40">There are <span class="text-brand">3</span> products to compare</h6>
+                 <div class="content mb-50">
+                     <h1 class="title style-3 mb-20 text-center">Products Compare</h1>
+                     <h6 class="text-body text-center">There are <span class="text-brand">3</span> products to compare
+                     </h6>
+                 </div>
+                 {{-- <h1 class="heading-2 mb-10 text-center"></h1>
+                 <h6 class="text-body mb-40 text-center">There are <span class="text-brand">3</span> products to compare --}}
+                 </h6>
                  <div class="table-responsive">
                      <table class="table text-center table-compare">
                          <tbody>
                              <tr class="pr_image">
-                                 <td class="text-muted font-sm fw-600 font-heading mw-200">Preview</td>
-                                 <td class="row_img"><img src="{{asset('assets/frontend/imgs/shop/product-2-1.jpg')}}" alt="compare-img" />
+                                 <td class="text-muted font-sm fw-600 font-heading px-lg-5 px-4">Preview</td>
+                                 <td class="row_img"><img src="{{ asset('assets/frontend/imgs/shop/product-2-1.jpg') }}"
+                                         alt="compare-img" />
                                  </td>
-                                 <td class="row_img"><img src="{{asset('assets/frontend/imgs/shop/product-1-1.jpg')}}" alt="compare-img" />
+                                 <td class="row_img"><img src="{{ asset('assets/frontend/imgs/shop/product-1-1.jpg') }}"
+                                         alt="compare-img" />
                                  </td>
-                                 <td class="row_img"><img src="{{asset('assets/frontend/imgs/shop/product-3-1.jpg')}}" alt="compare-img" />
+                                 <td class="row_img"><img src="{{ asset('assets/frontend/imgs/shop/product-3-1.jpg') }}"
+                                         alt="compare-img" />
                                  </td>
                              </tr>
                              <tr class="pr_title">
@@ -80,17 +89,17 @@
                              </tr>
                              <tr class="description">
                                  <td class="text-muted font-sm fw-600 font-heading">Description</td>
-                                 <td class="row_text font-xs">
+                                 <td class="row_text font-xs px-2">
                                      <p class="font-sm text-muted">Lorem Ipsum is simply dummy text of the printing and
                                          typesetting industry. Lorem Ipsum has been the industry's standard dummy text
                                          ever since the 1500s, when an unknown printer took a galley of type and</p>
                                  </td>
-                                 <td class="row_text font-xs">
+                                 <td class="row_text font-xs px-2">
                                      <p class="font-sm text-muted">Lorem Ipsum is simply dummy text of the printing and
                                          typesetting industry. Lorem Ipsum has been the industry's standard dummy text
                                          ever since the 1500s, when an unknown printer took a galley of type and</p>
                                  </td>
-                                 <td class="row_text font-xs">
+                                 <td class="row_text font-xs px-2">
                                      <p class="font-sm text-muted">Lorem Ipsum is simply dummy text of the printing and
                                          typesetting industry. Lorem Ipsum has been the industry's standard dummy text
                                          ever since the 1500s, when an unknown printer took a galley of type and</p>

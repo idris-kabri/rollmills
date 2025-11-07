@@ -108,15 +108,17 @@
                         </div>
                         <ul class="contact-infor">
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-location.svg') }}"
-                                    alt="" /><strong>Address: </strong> <a class="hover-a" href="#">5171 W Campbell Ave
+                                    alt="" /><strong>Address: </strong> <a class="hover-a" href="#">5171 W
+                                    Campbell Ave
                                     undefined
                                     Kent, Utah 53127 United States</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-contact.svg') }}"
-                                    alt="" /><strong>Call Us:</strong> <a class="hover-a" href="tel:+91 93584 73253">+91 93584
+                                    alt="" /><strong>Call Us:</strong> <a class="hover-a"
+                                    href="tel:+91 93584 73253">+91 93584
                                     73253</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-email-2.svg') }}"
-                                    alt="" /><strong>Email:</strong> <a
-                                    class="hover-a" href="mailto:info@rollmillsstore.com">info@rollmillsstore.com</a></li>
+                                    alt="" /><strong>Email:</strong> <a class="hover-a"
+                                    href="mailto:info@rollmillsstore.com">info@rollmillsstore.com</a></li>
                             {{-- <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-clock.svg') }}"
                                     alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li> --}}
                         </ul>
@@ -189,7 +191,8 @@
                 <div class="footer-bottom"></div>
             </div>
             <div class="col-xl-4 col-lg-6 col-md-6">
-                <p class="font-sm mb-0">&copy; 2025, <strong class="text-brand">Roll Mills</strong> - All rights reserved</p>
+                <p class="font-sm mb-0">&copy; 2025, <strong class="text-brand">Roll Mills</strong> - All rights
+                    reserved</p>
             </div>
             <div class="col-xl-4 col-lg-6 text-center d-none d-xl-block">
                 {{-- <div class="hotline d-lg-inline-flex mr-30">
@@ -309,6 +312,33 @@
 <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=1529828748194896&ev=PageView&noscript=1" /></noscript>
 <!-- End Meta Pixel Code -->
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const copyBtn = document.getElementById("copyCodeBtn");
+        const codeText = document.getElementById("couponCode");
+
+        copyBtn.addEventListener("click", function() {
+            const code = codeText.textContent.trim();
+
+            navigator.clipboard.writeText(code).then(() => {
+                // Change text to give feedback
+                copyBtn.textContent = "Copied!";
+                copyBtn.style.color = "#fff";
+
+                // Reset text after 2 seconds
+                setTimeout(() => {
+                    copyBtn.textContent = "Copy Code";
+                    copyBtn.style.color = "";
+                }, 2000);
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
+        });
+    });
+</script>
+
 </body>
 
 </html>

@@ -175,8 +175,8 @@
             </div>
             <!--End nav-tabs-->
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="tab-{{ $seleted_popular_product_category }}"
-                    role="tabpanel" aria-labelledby="tab-one">
+                <div class="tab-pane fade show active" id="tab-{{ $seleted_popular_product_category }}" role="tabpanel"
+                    aria-labelledby="tab-one">
                     <div class="row product-grid-4">
                         @foreach ($popular_products as $popular_product)
                             @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . $seleted_popular_product_category))

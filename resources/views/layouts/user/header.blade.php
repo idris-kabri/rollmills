@@ -12,7 +12,7 @@
     <meta property="og:url" content="" />
     <meta property="og:image" content="" />
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/frontend/imgs/theme/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/frontend/imgs/theme/logo.png') }}" />
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/main.css') }}" />
     <!-- Template CSS -->
@@ -23,6 +23,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    {{-- Font Family Courier Prime --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -462,13 +468,13 @@
                     </div>
                     <div class="header-action-right d-block d-xl-none">
                         <div class="header-action-2">
-                             <div class="header-action-icon-2">
-                                    <a href="/compare">
-                                        <img class="svgInject" alt="Nest"
-                                            src="{{ asset('assets/frontend/imgs/theme/icons/icon-compare.svg') }}" />
-                                        <span class="pro-count white">3</span>
-                                    </a>
-                                </div>
+                            <div class="header-action-icon-2">
+                                <a href="/compare">
+                                    <img class="svgInject" alt="Nest"
+                                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-compare.svg') }}" />
+                                    <span class="pro-count white">3</span>
+                                </a>
+                            </div>
                             <div class="header-action-icon-2">
                                 <a href="/wishlist">
                                     <img alt="Nest"
