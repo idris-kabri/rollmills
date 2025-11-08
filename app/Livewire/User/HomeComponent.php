@@ -7,6 +7,7 @@ use App\Models\Banner;
 use App\Models\ProductCategory;
 use App\Models\Product;
 use App\Models\ProductCategoryAssign;
+use Carbon\Carbon;
 
 class HomeComponent extends Component
 {
@@ -17,6 +18,8 @@ class HomeComponent extends Component
     public $parentCategory = [];
     public $seleted_popular_product_category = 'all';
     public $popular_products = [];
+    public $sale_products = [];
+    public $sale_product_filter = 'featured';
 
     public function mount()
     {
@@ -37,6 +40,11 @@ class HomeComponent extends Component
                 $item->product_sum = $product_sum;
                 return $item;
             });
+        $today = Carbon::now();
+        $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_from_date', '<=', $today)->where('sale_to_date', '>=', $today)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
+        if ($this->sale_products->count() == 0) {
+            $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
+        }
     }
 
     public function setPopularProductCategory($category)
@@ -47,6 +55,23 @@ class HomeComponent extends Component
         } else {
             $product_category_assign = ProductCategoryAssign::where('category_id', $category)->pluck('product_id');
             $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->whereIn('id', $product_category_assign)->inRandomOrder()->limit(15)->get();
+        }
+    }
+
+    public function setSaleProductCategory($category)
+    {
+        $today = Carbon::now();
+        $this->sale_product_filter = $category;
+        if ($category == 'featured') {
+            $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_from_date', '<=', $today)->where('sale_to_date', '>=', $today)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
+            if ($this->sale_products->count() == 0) {
+                $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
+            }
+        } else {
+            $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_from_date', '<=', $today)->where('sale_to_date', '>=', $today)->orderBy('created_at', 'desc')->limit(15)->get();
+            if ($this->sale_products->count() == 0) {
+                $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->orderBy('created_at', 'desc')->limit(15)->get();
+            }
         }
     }
 
