@@ -9,10 +9,10 @@
         </div>
         <div class="container mb-30">
             <div class="row">
-                <div class="col-xl-10 col-lg-12 m-auto">
+                <div class="col-xl-11 col-lg-12 m-auto">
                     <div class="product-detail accordion-detail">
                         <div class="row mb-50 mt-30">
-                            <div class="col-md-6 col-sm-12 col-xs-12 mb-md-0 mb-sm-5">
+                            <div class="col-lg-6 col-sm-12 col-xs-12 mb-lg-0 mb-sm-5">
                                 <div class="detail-gallery">
                                     <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                     <!-- MAIN SLIDES -->
@@ -52,7 +52,7 @@
                                 </div>
                                 <!-- End Gallery -->
                             </div>
-                            <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="col-lg-6 col-sm-12 col-xs-12">
                                 <div class="detail-info pr-30 pl-30">
                                     <span class="stock-status out-stock"> Sale Off </span>
                                     <h2 class="title-detail">Seeds of Change Organic Quinoa, Brown</h2>
@@ -68,7 +68,7 @@
                                         <div class="product-price primary-color float-left">
                                             <span class="current-price text-brand">$38</span>
                                             <span>
-                                                <span class="save-price font-md color3 ml-15">26% Off</span>
+                                                <span class="save-price font-md color3 ml-15 fw-700">26% Off</span>
                                                 <span class="old-price font-md ml-15">$52</span>
                                             </span>
                                         </div>
@@ -86,10 +86,10 @@
                                             <li><a href="#">150g</a></li>
                                         </ul>
                                     </div>
-                                    <div class="detail-extralink mb-50">
-                                        <div class="detail-qty border radius">
+                                    <div class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start justify-content-center mb-50">
+                                        <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
                                             <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                            <input type="text" name="quantity" class="qty-val" value="1" min="1">
+                                            <input type="text" name="quantity" class="qty-val fw-600 fs-18" value="1" min="1">
                                             <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                         </div>
                                         <div class="product-extra-link2">
@@ -100,14 +100,15 @@
                                     </div>
                                     <div class="font-xs">
                                         <ul class="mr-50 float-start">
-                                            <li class="mb-5">Type: <span class="text-brand">Organic</span></li>
-                                            <li class="mb-5">MFG:<span class="text-brand"> Jun 4.2022</span></li>
-                                            <li>LIFE: <span class="text-brand">70 days</span></li>
+                                            <li class="mb-5 fw-600">Type: <span class="text-brand ms-2">Organic</span></li>
+                                            <li class="mb-5 fw-600">MFG:<span class="text-brand ms-2"> Jun 4.2022</span></li>
+                                            <li  class="mb-5 fw-600">LIFE: <span class="text-brand ms-2">70 days</span></li>
                                         </ul>
                                         <ul class="float-start">
-                                            <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
-                                            <li class="mb-5">Tags: <a href="#" rel="tag">Snack</a>, <a href="#" rel="tag">Organic</a>, <a href="#" rel="tag">Brown</a></li>
-                                            <li>Stock:<span class="in-stock text-brand ml-5">8 Items In Stock</span></li>
+                                            <li class="mb-5 fw-600">SKU: <a href="#"  class="text-brand ms-2">FWM15VKT</a></li>
+                                            <li class="mb-5 fw-600">Tags: <a href="#" rel="tag"  class="text-brand ms-2">Snack</a>, 
+                                                <a href="#" rel="tag">Organic</a>, <a href="#" rel="tag">Brown</a></li>
+                                            <li class="mb-5 fw-600">Stock:<span class="in-stock text-brand ms-2 ml-5">8 Items In Stock</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -123,9 +124,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" id="Additional-info-tab" data-bs-toggle="tab" href="#Additional-info">Additional info</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link" id="Vendor-info-tab" data-bs-toggle="tab" href="#Vendor-info">Vendor</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item">
                                         <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews (3)</a>
                                     </li>
@@ -255,7 +256,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade" id="Vendor-info">
+                                    {{-- <div class="tab-pane fade" id="Vendor-info">
                                         <div class="vendor-logo d-flex mb-30">
                                             <img src="{{asset('assets/frontend/imgs/vendor/vendor-18.svg')}}" alt="" />
                                             <div class="vendor-name ml-15">
@@ -289,7 +290,7 @@
                                             </div>
                                         </div>
                                         <p>Noodles & Company is an American fast-casual restaurant that offers international and American noodle dishes and pasta in addition to soups and salads. Noodles & Company was founded in 1995 by Aaron Kennedy and is headquartered in Broomfield, Colorado. The company went public in 2013 and recorded a $457 million revenue in 2017.In late 2018, there were 460 Noodles & Company locations across 29 states and Washington, D.C.</p>
-                                    </div>
+                                    </div> --}}
                                     <div class="tab-pane fade" id="Reviews">
                                         <!--Comments-->
                                         <div class="comments-area">

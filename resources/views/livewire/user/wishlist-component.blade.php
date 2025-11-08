@@ -51,7 +51,7 @@
                                     </div>
                                 </td>
                                 <td class="product-des product-name">
-                                    <h6><a class="product-name mb-10" href="shop-product-right.html">Field Roast Chao
+                                    <h6><a class="product-name mb-10" href="/shop-detail">Field Roast Chao
                                             Cheese Creamy Original</a></h6>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">

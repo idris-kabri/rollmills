@@ -483,7 +483,7 @@
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="/cart" href="shop-cart.html">
+                                <a class="" href="/cart">
                                     <img alt="Nest"
                                         src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}" />
                                     <span class="pro-count white">2</span>
@@ -522,8 +522,8 @@
                                             <h4>Total <span>$383.00</span></h4>
                                         </div>
                                         <div class="shopping-cart-button">
-                                            <a href="shop-cart.html">View cart</a>
-                                            <a href="shop-checkout.html">Checkout</a>
+                                            <a href="/cart">View cart</a>
+                                            <a href="/checkout">Checkout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -729,3 +729,166 @@
             </div>
         </div>
     </div>
+
+    <div class="mobile-header-active-filter mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a href="/"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}"
+                            alt="logo" /></a>
+                </div>
+                <div class="mobile-menu-close-filter close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-header-content-area">
+                <div class="mobile-menu-wrap mobile-header-border">
+                    <!-- mobile menu start -->
+                    <div class="sidebar-widget widget-category-2 mb-40">
+                        <h5 class="section-title style-1 border-0 pb-2 mb-30">Category</h5>
+                        <ul>
+                            <li>
+                                <a href="shop-grid-right.html"> <img
+                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-1.svg') }}"
+                                        alt="" />Milks & Dairies</a><span class="count">30</span>
+                            </li>
+                            <li>
+                                <a href="shop-grid-right.html"> <img
+                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-2.svg') }}"
+                                        alt="" />Clothing</a><span class="count">35</span>
+                            </li>
+                            <li>
+                                <a href="shop-grid-right.html"> <img
+                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-3.svg') }}"
+                                        alt="" />Pet Foods </a><span class="count">42</span>
+                            </li>
+                            <li>
+                                <a href="shop-grid-right.html"> <img
+                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-4.svg') }}"
+                                        alt="" />Baking material</a><span class="count">68</span>
+                            </li>
+                            <li>
+                                <a href="shop-grid-right.html"> <img
+                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-5.svg') }}"
+                                        alt="" />Fresh Fruit</a><span class="count">87</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Fillter By Price -->
+                    <div class="sidebar-widget range mb-40">
+                        <h5 class="section-title style-1 border-0 pb-2 mb-30">Filter by price</h5>
+                        <div class="price-filter">
+                            <div class="price-filter-inner">
+                                <div id="slider-range" class="mb-20"></div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="caption">From: &nbsp; <strong id="slider-range-value1"
+                                            class="text-brand"></strong></div>
+                                    <div class="caption">To: &nbsp; <strong id="slider-range-value2"
+                                            class="text-brand"></strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fillter By Condition -->
+                    <div class="sidebar-widget price_range range mb-30">
+                        <h5 class="section-title style-1 border-0 pb-2 mb-10">Fill by condition</h5>
+                        <div class="list-group">
+                            <div class="list-group-item mb-10 mt-10">
+                                <label class="fw-900">Color</label>
+                                <div class="custome-checkbox">
+                                    <input class="form-check-input" type="checkbox" name="checkbox"
+                                        id="exampleCheckbox1" value="" />
+                                    <label class="form-check-label" for="exampleCheckbox1"><span>Red
+                                            (56)</span></label>
+                                    <br />
+                                    <input class="form-check-input" type="checkbox" name="checkbox"
+                                        id="exampleCheckbox2" value="" />
+                                    <label class="form-check-label" for="exampleCheckbox2"><span>Green
+                                            (78)</span></label>
+                                    <br />
+                                    <input class="form-check-input" type="checkbox" name="checkbox"
+                                        id="exampleCheckbox3" value="" />
+                                    <label class="form-check-label" for="exampleCheckbox3"><span>Blue
+                                            (54)</span></label>
+                                </div>
+                                <label class="fw-900 mt-15">Item Condition</label>
+                                <div class="custome-checkbox">
+                                    <input class="form-check-input" type="checkbox" name="checkbox"
+                                        id="exampleCheckbox11" value="" />
+                                    <label class="form-check-label" for="exampleCheckbox11"><span>New
+                                            (1506)</span></label>
+                                    <br />
+                                    <input class="form-check-input" type="checkbox" name="checkbox"
+                                        id="exampleCheckbox21" value="" />
+                                    <label class="form-check-label" for="exampleCheckbox21"><span>Refurbished
+                                            (27)</span></label>
+                                    <br />
+                                    <input class="form-check-input" type="checkbox" name="checkbox"
+                                        id="exampleCheckbox31" value="" />
+                                    <label class="form-check-label" for="exampleCheckbox31"><span>Used
+                                            (45)</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="shop-grid-right.html" class="btn btn-sm btn-default mt-20"><i
+                                class="fi-rs-filter mr-5"></i>Apply Fillters</a>
+                    </div>
+                    <!-- mobile menu end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
+        aria-modal="true" role="dialog" style="padding-right: 0px; display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="deal" style="background-image: url('assets/imgs/banner/popup-1.png')">
+                        <div class="deal-top">
+                            <h6 class="mb-10 text-brand-2">Deal of the Day</h6>
+                        </div>
+                        <div class="deal-content detail-info">
+                            <h4 class="product-title"><a href="shop-product-right.html" class="text-heading">Organic
+                                    fruit for your family's health</a></h4>
+                            <div class="clearfix product-price-cover">
+                                <div class="product-price primary-color float-left">
+                                    <span class="current-price text-brand">$38</span>
+                                    <span>
+                                        <span class="save-price font-md color3 ml-15">26% Off</span>
+                                        <span class="old-price font-md ml-15">$52</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="deal-bottom">
+                            <p class="mb-20">Hurry Up! Offer End In:</p>
+                            <div class="deals-countdown pl-5" data-countdown="2025/03/25 00:00:00"><span
+                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
+                                        class="countdown-period"> days </span></span><span
+                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
+                                        class="countdown-period"> hours </span></span><span
+                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
+                                        class="countdown-period"> mins </span></span><span
+                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
+                                        class="countdown-period"> sec </span></span></div>
+                            <div class="product-detail-rating">
+                                <div class="product-rate-cover text-end">
+                                    <div class="product-rate d-inline-block">
+                                        <div class="product-rating" style="width: 90%"></div>
+                                    </div>
+                                    <span class="font-small ml-5 text-muted"> (32 rates)</span>
+                                </div>
+                            </div>
+                            <a href="shop-grid-right.html" class="btn hover-up">Shop Now <i
+                                    class="fi-rs-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}

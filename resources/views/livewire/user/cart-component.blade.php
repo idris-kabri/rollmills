@@ -26,8 +26,8 @@
         </div>
         <div class="row">
             <div class="col-xl-9">
-                <div class="table-responsive shopping-summery">
-                    <table class="table table-wishlist">
+                <div class="table-responsive shopping-summery table-responsive-custom">
+                    <table class="table table-wishlist mb-0">
                         <thead>
                             <tr class="main-heading">
                                 <th class="custome-checkbox start pl-30">
@@ -49,12 +49,17 @@
                                         id="exampleCheckbox1" value="">
                                     <label class="form-check-label" for="exampleCheckbox1"></label>
                                 </td>
-                                <td class="image product-thumbnail pt-40"><img
+                                <td class="image product-thumbnail pt-40 position-relative"><img
                                         src="{{ asset('assets/frontend/imgs/shop/product-1-1.jpg') }}" alt="#">
+                                    <div class="display-visible-480 d-none">
+                                        <a href="#"
+                                            class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
+                                            <i class="fi-rs-trash text-white"></i></a>
+                                    </div>
                                 </td>
                                 <td class="product-des product-name">
                                     <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                            href="shop-product-right.html">Field Roast Chao Cheese Creamy Original</a>
+                                            href="/shop-detail">Field Roast Chao Cheese Creamy Original</a>
                                     </h6>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">
@@ -64,11 +69,11 @@
                                         <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                 </td>
-                                <td class="price" data-title="Price">
-                                    <h4 class="text-body">$2.51 </h4>
+                                <td class="price small-screen-table-td" data-title="Price">
+                                    <h4 class="text-body small-screen-table-td-content">$2.51</h4>
                                 </td>
                                 <td class="text-center detail-info" data-title="Stock">
-                                    <div class="detail-extralink mr-15">
+                                    <div class="detail-extralink mr-15 display-hide-480">
                                         <div class="detail-qty border radius">
                                             <a href="#" class="qty-down"><i
                                                     class="fi-rs-angle-small-down"></i></a>
@@ -76,12 +81,18 @@
                                             <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                         </div>
                                     </div>
+                                    <div class="quantity d-none">
+                                        <input type="button" value="-" class="minus">
+                                        <input type="number" min="1" value="1" class="qty" size="4"
+                                            title="Qty">
+                                        <input type="button" value="+" class="plus">
+                                    </div>
                                 </td>
-                                <td class="price" data-title="Price">
-                                    <h4 class="text-brand">$2.51 </h4>
+                                <td class="price small-screen-table-td" data-title="Total Price">
+                                    <h4 class="text-brand small-screen-table-td-content">$2.51</h4>
                                 </td>
-                                <td class="action text-center" data-title="Remove"><a href="#"
-                                        class="text-body"><i class="fi-rs-trash"></i></a></td>
+                                <td class="action text-center small-screen-table-td remove-btn" data-title="Remove"><a
+                                        href="#" class="text-body"><i class="fi-rs-trash"></i></a></td>
                             </tr>
                             <tr>
                                 <td class="custome-checkbox pl-30">
@@ -166,10 +177,10 @@
                     </table>
                 </div>
                 {{-- <div class="divider-2 mb-30"></div> --}}
-                <div class="cart-action d-flex justify-content-between">
-                    <a class="btn d-flex align-items-center"><i class="fi-rs-arrow-left mr-10"></i>Continue
+                <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
+                    <a class="btn d-flex align-items-center custom-pad"><i class="fi-rs-arrow-left mr-10"></i>Continue
                         Shopping</a>
-                    <a class="btn d-flex align-items-center mr-10 mb-sm-15"><i class="fi-rs-refresh mr-10"></i>Update
+                    <a class="btn d-flex align-items-center custom-pad"><i class="fi-rs-refresh mr-10"></i>Update
                         Cart</a>
                 </div>
             </div>
@@ -461,32 +472,32 @@
                     <div class="table-responsive">
                         <table class="table no-border">
                             <tbody>
-                                <tr>
-                                    <td class="cart_total_label">
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Subtotal</h6>
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end fs-16">$12.31</h4>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="cart_total_label">
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Shipping</h6>
                                     </td>
                                     <td class="cart_total_amount">
                                         <h5 class="text-heading text-end fs-16">Free</h4>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="cart_total_label">
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Estimate for</h6>
                                     </td>
                                     <td class="cart_total_amount">
                                         <h5 class="text-heading text-end fs-16">United Kingdom</h4>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="cart_total_label">
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Total</h6>
                                     </td>
                                     <td class="cart_total_amount">

@@ -1183,17 +1183,17 @@ button[type="submit"] {
     color: #ffffff;
     border: none;
     background-color: #dca915;
-    border: 1px solid #29a56c;
+    border: 1px solid var(--color-1);
     border-radius: 10px;
 }
 
 button.submit:hover,
 button[type="submit"]:hover {
-    background-color: #29a56c;
+    background-color: var(--color-2);
 }
 
 .btn-brand:hover {
-    background-color: #29a56c;
+    background-color: var(--color-2);
 }
 
 .btn-login {
@@ -1933,6 +1933,7 @@ input.qty-val {
     border-radius: 0;
     height: unset;
     padding: 0 !important;
+    color: var(--color-1);
 }
 
 /*COMPONENTS -> SLIDER*/
@@ -3660,7 +3661,8 @@ table .product-thumbnail img {
 .banner-img.style-2 {
     border-radius: 15px;
     overflow: hidden;
-    height: 520px;
+    height: 425px;
+    /* height: 520px; */
     background-size: cover;
     width: 100%;
 }
@@ -5341,7 +5343,7 @@ table .product-thumbnail img {
 }
 
 .detail-extralink .detail-qty {
-margin: 0 12px 0px 0;
+    margin: 0 35px 0px 0;
     background: #fff;
     border: 2px solid var(--color-light-1) !important;
     font-size: 16px;
@@ -5351,7 +5353,6 @@ margin: 0 12px 0px 0;
     padding: 7px 20px 7px 0px;
     max-width: 90px;
 }
-
 
 .stock-status {
     display: inline-block;
@@ -5783,7 +5784,7 @@ table.no-border thead {
 }
 
 .shipping_calculator .custom_select .select2-container {
-    max-width: unset;
+    max-width: -webkit-fill-available;
 }
 
 .shipping_calculator
@@ -6650,7 +6651,7 @@ h6.post-title {
 }
 
 .invoice-content .btn-print {
-    background: #253d4e;
+    background: var(--color-2);
 }
 
 .invoice-content .btn-print:after {
@@ -12287,8 +12288,12 @@ footer .hotline img {
     }
 
     .detail-info .detail-extralink .detail-qty {
-        padding: 11px 20px 11px 10px;
-        max-width: 60px;
+        padding: 8px 30px 8px 10px;
+        max-width: 80px;
+    }
+
+    .custom-pad{
+        padding: 12px 15px;
     }
 
     .detail-info .product-extra-link2 .button.button-add-to-cart {
@@ -12709,7 +12714,7 @@ footer .hotline img {
     }
 
     .banner-img.style-2 {
-        height: 483px;
+        height: 400px;
     }
 
     .slider-nav-thumbnails button.slick-arrow.slick-prev {
@@ -12872,6 +12877,48 @@ footer .hotline img {
 
 /*small phone*/
 @media only screen and (max-width: 480px) {
+    .quantity .minus,
+    .quantity .plus {
+        padding: 2px;
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--color-light-1);
+        background: white;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        color: #6c757d;
+        transition: all 0.2s ease;
+    }
+
+    .quantity .qty {
+        padding: 3px;
+        background: #f9f9f9;
+        font-weight: 600;
+        color: var(--color-1);
+        border: 1px solid var(--color-light-1);
+        border-radius: 100px;
+        width: 36px;
+        text-align: center;
+        height: 36px;
+    }
+
+    .display-hide-480 {
+        display: none;
+    }
+
+    .quantity {
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        align-items: center;
+        display: flex !important;
+        gap: 10px;
+    }
+
     .archive-header {
         padding: 30px;
     }

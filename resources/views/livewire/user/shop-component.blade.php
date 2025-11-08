@@ -33,10 +33,10 @@
                 </div>
             </div>
         </div>
-        <div class="container mb-30">
+        <div class="container mb-40">
             <div class="row">
-                <div class="col-xl-3 primary-sidebar sticky-sidebar">
-                    <div class="sidebar-widget widget-category-2 mb-30">
+                <div class="col-xl-3 primary-sidebar">
+                    <div class="sidebar-widget widget-category-2 mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">Category</h5>
                         <ul>
                             <li>
@@ -67,8 +67,8 @@
                         </ul>
                     </div>
                     <!-- Fillter By Price -->
-                    <div class="sidebar-widget price_range range mb-30">
-                        <h5 class="section-title style-1 mb-30">Fill by price</h5>
+                    <div class="sidebar-widget price_range range mb-30 d-none d-xl-block">
+                        <h5 class="section-title style-1 mb-30">Filter by price</h5>
                         <div class="price-filter">
                             <div class="price-filter-inner">
                                 <div id="slider-range" class="mb-20"></div>
@@ -122,7 +122,7 @@
                                 class="fi-rs-filter mr-5"></i> Fillter</a>
                     </div>
                     <!-- Product sidebar Widget -->
-                    <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10">
+                    <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">New products</h5>
                         <div class="single-post clearfix">
                             <div class="image">
@@ -161,8 +161,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="banner-img wow fadeIn mb-lg-0 animated d-lg-block d-none">
-                        <img src="{{asset('assets/frontend/imgs/banner/banner-11.png')}}" alt="" />
+                    <div class="banner-img wow fadeIn mb-lg-0 animated d-xl-block d-none">
+                        <img src="{{ asset('assets/frontend/imgs/banner/banner-11.png') }}" alt="" />
                         <div class="banner-text">
                             <span>Oganic</span>
                             <h4>
@@ -199,7 +199,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="sort-by-cover mt-2 mr-10">
                                 <div class="sort-by-product-wrap">
                                     <div class="sort-by">
@@ -221,19 +221,11 @@
                             </div>
 
                             <div class="sort-by-cover mt-2 d-block d-xl-none">
-                                <div class="sort-by-product-wrap bg-brand text-white">
+                                <div class="sort-by-product-wrap bg-brand text-white shop-filter">
                                     <div class="sort-by">
-                                        <span class="fw-700"><i class="fi-rs-apps-sort text-white fw-600"></i>Filter</span>
+                                        <span class="fw-700"><i
+                                                class="fi-rs-apps-sort text-white fw-600"></i>Filter</span>
                                     </div>
-                                </div>
-                                <div class="sort-by-dropdown">
-                                    <ul>
-                                        <li><a class="active" href="#">Featured</a></li>
-                                        <li><a href="#">Price: Low to High</a></li>
-                                        <li><a href="#">Price: High to Low</a></li>
-                                        <li><a href="#">Release Date</a></li>
-                                        <li><a href="#">Avg. Rating</a></li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -1132,8 +1124,7 @@
                                 <li class="page-item"><a class="page-link dot" href="#">...</a></li>
                                 <li class="page-item"><a class="page-link" href="#">6</a></li>
                                 <li class="page-item">
-                                    <a class="page-link" href="#"><i
-                                            class="fi-rs-arrow-small-right"></i></a>
+                                    <a class="page-link" href="#"><i class="fi-rs-arrow-small-right"></i></a>
                                 </li>
                             </ul>
                         </nav>
@@ -1312,9 +1303,9 @@
                     <!--End Deals-->
                 </div>
 
-                <div class="coll-12">
+                <div class="col-12 mt-30">
                     <section class="section-padding pb-5">
-                        <div class="section-title">
+                        <div class="section-title mb-20">
                             <h3 class="">Deals Of The Day</h3>
                             <a class="show-all" href="shop-grid-right.html">
                                 All Deals
@@ -1488,6 +1479,121 @@
                             </div>
                         </div>
                     </section>
+
+                    <!-- Product sidebar Widget -->
+                    <div
+                        class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10 d-block d-xl-none card border-2 rounded-20">
+                        <h5 class="section-title style-1 mb-30 border-0">New products</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="single-post clearfix mb-20">
+                                    <div class="image">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/thumbnail-3.jpg') }}"
+                                            alt="#" />
+                                    </div>
+                                    <div class="content pt-10">
+                                        <h5><a href="shop-product-detail.html">Chen Cardigan</a></h5>
+                                        <p class="price mb-0 mt-5">$99.50</p>
+                                        <div class="product-rate">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="single-post clearfix mb-20">
+                                    <div class="image">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/thumbnail-4.jpg') }}"
+                                            alt="#" />
+                                    </div>
+                                    <div class="content pt-10">
+                                        <h6><a href="shop-product-detail.html">Chen Sweater</a></h6>
+                                        <p class="price mb-0 mt-5">$89.50</p>
+                                        <div class="product-rate">
+                                            <div class="product-rating" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="single-post clearfix mb-20">
+                                    <div class="image">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/thumbnail-5.jpg') }}"
+                                            alt="#" />
+                                    </div>
+                                    <div class="content pt-10">
+                                        <h6><a href="shop-product-detail.html">Colorful Jacket</a></h6>
+                                        <p class="price mb-0 mt-5">$25</p>
+                                        <div class="product-rate">
+                                            <div class="product-rating" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="single-post clearfix mb-20">
+                                    <div class="image">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/thumbnail-3.jpg') }}"
+                                            alt="#" />
+                                    </div>
+                                    <div class="content pt-10">
+                                        <h5><a href="shop-product-detail.html">Chen Cardigan</a></h5>
+                                        <p class="price mb-0 mt-5">$99.50</p>
+                                        <div class="product-rate">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="single-post clearfix mb-20">
+                                    <div class="image">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/thumbnail-4.jpg') }}"
+                                            alt="#" />
+                                    </div>
+                                    <div class="content pt-10">
+                                        <h6><a href="shop-product-detail.html">Chen Sweater</a></h6>
+                                        <p class="price mb-0 mt-5">$89.50</p>
+                                        <div class="product-rate">
+                                            <div class="product-rating" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="single-post clearfix mb-20">
+                                    <div class="image">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/thumbnail-5.jpg') }}"
+                                            alt="#" />
+                                    </div>
+                                    <div class="content pt-10">
+                                        <h6><a href="shop-product-detail.html">Colorful Jacket</a></h6>
+                                        <p class="price mb-0 mt-5">$25</p>
+                                        <div class="product-rate">
+                                            <div class="product-rating" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="banner-img wow fadeIn mb-lg-0 animated d-xl-none d-block">
+                        <img src="{{ asset('assets/frontend/imgs/banner/banner-11.png') }}" alt="" />
+                        <div class="banner-text">
+                            <span>Oganic</span>
+                            <h4>
+                                Save 17% <br />
+                                on <span class="text-brand">Oganic</span><br />
+                                Juice
+                            </h4>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

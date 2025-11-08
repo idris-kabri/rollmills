@@ -323,11 +323,9 @@
             const code = codeText.textContent.trim();
 
             navigator.clipboard.writeText(code).then(() => {
-                // Change text to give feedback
                 copyBtn.textContent = "Copied!";
                 copyBtn.style.color = "#fff";
 
-                // Reset text after 2 seconds
                 setTimeout(() => {
                     copyBtn.textContent = "Copy Code";
                     copyBtn.style.color = "";
