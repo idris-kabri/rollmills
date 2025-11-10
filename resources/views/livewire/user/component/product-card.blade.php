@@ -23,7 +23,11 @@
                 @php
                     $original_price = $product->price;
                     $sale_price = 0;
-                    if($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date){
+                    $currentDate = \Carbon\Carbon::now();
+                    $sale_from_date = \Carbon\Carbon::parse($product->sale_from_date);
+                    $sale_to_date = \Carbon\Carbon::parse($product->sale_to_date);
+
+                    if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
                         $sale_price = $product->sale_price;
                     }else{
                         $sale_price = $product->sale_default_price;
@@ -35,14 +39,19 @@
             @else 
                 @php
                     $original_price = $product->price;
-                    $sale_price = 0;
-                    $check_type = '';
-                    if($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date){
+                    $sale_price = 0; 
+                    $check_type = ''; 
+
+                    $currentDate = \Carbon\Carbon::now();
+                    $sale_from_date = \Carbon\Carbon::parse($product->sale_from_date);
+                    $sale_to_date = \Carbon\Carbon::parse($product->sale_to_date);
+
+                    if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
                         $sale_price = $product->sale_price; 
                         $check_type = 'sale_product';
-                    }elseif($product->is_featured == 1){
+                    } elseif ($product->is_featured == 1 && $check_type == '') {
                         $check_type = 'featured_product';
-                     }else{
+                    } else {
                         $sale_price = $product->sale_default_price; 
                         $check_type = 'sale_default_product';
                     }
