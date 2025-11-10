@@ -92,7 +92,7 @@
             </div>
         </div>
     </section>
-    <section class="banners mb-25">
+    <section class="banners mb-25" wire:ignore>
         <div class="container">
             <div class="row">
                 @foreach ($middle_page_banner as $index => $banner)
@@ -128,14 +128,16 @@
             </div>
         </div>
     </section>
-    <!--End banners-->
+    <!--End banners--> 
+
+    <!-- Popular Products Section  -->
     <section class="product-tabs section-padding position-relative">
-        <div class="container">
+        <div class="container" wire:ignore.self>
             <div class="section-title style-2">
                 <h3>Popular Products</h3>
                 <ul class="nav nav-tabs links" id="">
                     <li class="nav-item">
-                        <button onClick="setPopularCategory('all')"
+                        <button wire:click="setPopularProductCategory('all')"
                             class="nav-link {{ $seleted_popular_product_category == 'all' ? 'active' : '' }}"
                             id="" type="button">
                             All
@@ -143,7 +145,7 @@
                     </li>
                     @foreach ($parentCategory as $popular_category)
                         <li class="nav-item">
-                            <button onClick="setPopularCategory('{{ $popular_category->id }}')"
+                            <button wire:click="setPopularProductCategory('{{ $popular_category->id }}')"
                                 class="nav-link {{ $seleted_popular_product_category == $popular_category->id ? 'active' : '' }}" type="button" wire:key="popular-category-{{ $popular_category->id }}">
                                 {{ $popular_category->name }}
                             </button>
@@ -157,12 +159,12 @@
                     </a>
                     <div
                         class="categories-dropdown-wrap categories-dropdown-active-large-2 categories-dropdown-active-large font-heading">
-                        <div class="categori-dropdown-inner">
+                        <div class="categori-dropdown-inner" wire:ignore.self>
                             <ul>
                                 @foreach ($parentCategory as $popular_category)
                                     <li>
                                         <a href="javascript:void(0)"
-                                            wire:click.prevent="setPopularProductCategory('{{ $popular_category->id }}')">
+                                            wire:click="setPopularProductCategory('{{ $popular_category->id }}')">
                                             <img src="{{ asset('storage/' . $popular_category->image) }}"
                                                 alt="">{{ $popular_category->name }}</a>
                                     </li>
@@ -173,35 +175,37 @@
                 </div>
             </div>
             <!--End nav-tabs-->
-            <div class="row product-grid-4">
-                    @foreach ($popular_products as $popular_product)
-                        <div class="col-lg-1-5 col-md-4 col-6">
-                            @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
-                        </div>
-                    @endforeach\
+            <div class="row product-grid-4"> 
+                    @if(count($popular_products) > 0)
+                        @foreach ($popular_products as $popular_product)
+                            <div class="col-lg-1-5 col-md-4 col-6">
+                                @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
+                            </div>
+                        @endforeach 
+                    @else 
+                        <h4 class="text-danger text-center">No Item Found!</h4> 
+                    @endif
             </div>
             <!--End tab-content-->
         </div>
     </section>
-    <!--Products Tabs-->
-    <section class="section-padding pb-5">
+
+    
+    <!--Daily Best Sells Tabs-->
+    {{--<section class="section-padding pb-5" wire:ignore>
         <div class="container">
             <div class="section-title">
                 <h3 class="">Daily Best Sells</h3>
                 <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button wire:click="setSaleProductCategory('featured')" class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}" id="nav-tab-featured" data-bs-toggle="tab"
-                            data-bs-target="#tab-featured" type="button" role="tab" aria-controls="tab-featured"
-                            aria-selected="true">Featured</button>
+                        <button type="button" wire:click="setSaleProductCategory('featured')" class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}">Featured</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button wire:click="setSaleProductCategory('new')" class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}" id="nav-tab-new" data-bs-toggle="tab"
-                            data-bs-target="#tab-new" type="button" role="tab" aria-controls="tab-new"
-                            aria-selected="false">New added</button>
+                        <button type="button" wire:click="setSaleProductCategory('new')" class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}">New added</button>
                     </li>
                 </ul>
             </div>
-            <div class="row" wire:ignore>
+            <div class="row">
                 <div class="col-lg-3 d-none d-lg-flex">
 
                     <div class="banner-img style-2"
@@ -223,7 +227,7 @@
                                     id="carausel-4-columns-arrows"></div>
                                 <div class="carausel-4-columns carausel-arrow-center" id="carausel-4-columns">
                                     @foreach ($sale_products as $sale_product)
-                                        @livewire('user.component.product-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . $seleted_popular_product_category))
+                                        @livewire('user.component.product-sale-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . $seleted_popular_product_category))
                                     @endforeach
                                     <!--End product Wrap-->
                                 </div>
@@ -235,9 +239,10 @@
                 <!--End Col-lg-9-->
             </div>
         </div>
-    </section>
+    </section>--}}
+
     <!--End Best Sales-->
-    <section class="section-padding pb-5">
+    <section class="section-padding pb-5" wire:ignore>
         <div class="container">
             <div class="section-title">
                 <h3 class="">Deals Of The Day</h3>
@@ -302,7 +307,7 @@
         </div>
     </section>
     <!--End Deals-->
-    <section class="section-padding mb-30">
+    <section class="section-padding mb-30" wire:ignore>
         <div class="container">
             <div class="row">
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0">
@@ -453,7 +458,7 @@
         </div>
     </section>
     <!--End 4 columns-->
-    <section class="popular-categories section-padding">
+    <section class="popular-categories section-padding" wire:ignore>
         <div class="container">
             <div class="section-title">
                 <div class="title">
@@ -485,11 +490,3 @@
     </section>
     <!--End category slider-->``
 </main>
-
-@push('scripts')
-    <script>
-        function setPopularCategory(category) {
-            @this.setPopularProductCategory(category);
-        }
-    </script>
-@endpush

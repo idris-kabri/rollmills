@@ -1,4 +1,18 @@
-    <main class="main">
+    <main class="main"> 
+        <style>
+            .ui-widget.ui-widget-content {
+                border: 1px solid #dca915;
+                height: 0.4rem;
+                background: #dca915 !important;
+            } 
+            .price-filter .caption {
+                font-size: 15px;
+                font-weight: 500;
+            }
+            #shop-slider-range .ui-slider-handle:last-child {
+                display: none !important;
+            }
+        </style>
         <div class="page-header mt-30 mb-50">
             <div class="container">
                 <div class="archive-header">
@@ -49,23 +63,30 @@
                             @endforeach
                         </ul>
                     </div>
-                    <!-- Fillter By Price -->
+
+                    <!-- Filter By Price -->
                     <div class="sidebar-widget price_range range mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">Filter by price</h5>
                         <div class="price-filter">
                             <div class="price-filter-inner">
-                                <div id="slider-range" class="mb-20"></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="caption">From: <strong id="slider-range-value1"
-                                            class="text-brand"></strong></div>
-                                    <div class="caption">To: <strong id="slider-range-value2"
-                                            class="text-brand"></strong></div>
+                                <div id="shop-slider-range" class="mb-20"></div>
+                            
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="caption">
+                                        <strong class="text-brand">Price:</strong>
+                                        <span id="shop-slider-range-value1" class="text-brand">{{$minFilterPrice}}</span>
+                                        <span class="mx-1">to</span>
+                                        <span id="shop-slider-range-value2" class="text-brand">{{$maxFilterPrice}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i>
-                            Fillter</a>
+
+                        <button wire:click="render" class="btn btn-sm btn-default mt-2">
+                            <i class="fi-rs-filter mr-5"></i> Filter
+                        </button>
                     </div>
+
                     <!-- Product sidebar Widget -->
                     <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">New products</h5>
@@ -148,8 +169,7 @@
                             <div class="sort-by-cover mt-2 d-block d-xl-none">
                                 <div class="sort-by-product-wrap bg-brand text-white shop-filter">
                                     <div class="sort-by">
-                                        <span class="fw-700"><i
-                                                class="fi-rs-apps-sort text-white fw-600"></i>Filter</span>
+                                        <span class="fw-700"><i class="fi-rs-apps-sort text-white fw-600"></i>Filter</span>
                                     </div>
                                 </div>
                             </div>
@@ -164,21 +184,7 @@
                     </div>
                     <!--product grid-->
                     <div class="pagination-area mt-20 mb-20">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-start">
-                                <li class="page-item">
-                                    <a class="page-link" href="#"><i class="fi-rs-arrow-small-left"></i></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#"><i class="fi-rs-arrow-small-right"></i></a>
-                                </li>
-                            </ul>
-                        </nav>
+                        {{ $products->links() }}
                     </div>
                 </div>
 
@@ -212,12 +218,24 @@
                                             <div class="deals-content">
                                                 <h2><a
                                                         href="shop-product-right.html">{{ $deals_of_the_day_product->name }}</a>
-                                                </h2>
+                                                </h2> 
                                                 <div class="product-rate-cover">
+                                                    @php
+                                                        $deals_of_the_day_product_reviews = \App\Models\ProductReview::where('status', 1)
+                                                                    ->where('product_id', $deals_of_the_day_product->id)
+                                                                    ->get();
+
+                                                        $deals_of_the_day_product_reviews_count = $deals_of_the_day_product_reviews->count();
+                                                        $deals_of_the_day_product_reviews_avg = $deals_of_the_day_product_reviews_count > 0 ? round($deals_of_the_day_product_reviews->avg('ratings'), 1) : 0;
+                                                        $deals_of_the_day_product_reviews_percentage = ($deals_of_the_day_product_reviews_avg / 5) * 100;
+                                                    @endphp
+
                                                     <div class="product-rate d-inline-block">
-                                                        <div class="product-rating" style="width: 90%"></div>
+                                                        <div class="product-rating" style="width: {{ $deals_of_the_day_product_reviews_percentage }}%;"></div>
                                                     </div>
-                                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
+                                                    <span class="font-small ml-5 text-muted">
+                                                        ({{ $deals_of_the_day_product_reviews_avg }})
+                                                    </span>
                                                 </div>
                                                 <div class="product-card-bottom">
                                                     <div class="product-price">
@@ -287,3 +305,26 @@
             </div>
         </div>
     </main>
+@push('scripts')  
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () { 
+        let minPrice = @json($minFilterPrice);
+        let maxPrice = @json($maxFilterPrice);
+
+        $("#shop-slider-range").slider({
+            range: true,
+            min: minPrice,
+            max: maxPrice,
+            values: [0, 1000],
+            slide: function (event, ui) {
+                $("#shop-slider-range-value1").text(ui.values[0]);
+                // $("#shop-slider-range-value2").text(ui.values[1]);
+            }
+        });
+
+        // Set initial text
+        $("#shop-slider-range-value1").text($("#shop-slider-range").slider("values", 0));
+    });
+</script>
+@endpush

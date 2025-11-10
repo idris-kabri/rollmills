@@ -979,14 +979,15 @@ strong,
     margin-left: 5px;
 }
 
-.section-title.style-1 {
+/* .section-title.style-1 {
     position: relative;
     border-bottom: 1px solid #ececec;
     padding-bottom: 20px;
     font-size: 24px;
-}
+} */
 
-.section-title.style-1::after {
+/* me  */
+/* .section-title.style-1::after {
     content: "";
     width: 80px;
     height: 2px;
@@ -994,7 +995,7 @@ strong,
     bottom: 0;
     left: 0;
     background-color: #dcaa15b7;
-}
+} */
 
 .section-title span {
     color: #dca915;
