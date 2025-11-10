@@ -33,6 +33,12 @@
                                                 placeholder="Enter Number" class="login-input" />
                                         </div>
                                         <div class="form-group mb-20">
+                                            <label for="" class="ps-2 fw-600 quicksand fs-16 mb-2"> Enter Mobile
+                                                Number</label>
+                                            <input type="text" required="" wire:model="password"
+                                                placeholder="Enter Number" class="login-input" />
+                                        </div>
+                                        <div class="form-group mb-20">
                                             <label for="" class="ps-2 fw-600 quicksand fs-16 mb-2"> Enter
                                                 OTP</label>
                                             <div class="d-flex justify-content-between"> 

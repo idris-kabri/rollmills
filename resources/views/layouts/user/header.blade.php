@@ -30,6 +30,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
 
+    {{-- @livewireStyles --}}
 </head>
 
 <body>
@@ -453,10 +454,10 @@
                         </div>
                     </div>
                     <div class="hotline d-none d-xl-flex align-items-center">
-                        <a href="tel:+91 93584 73253" class="d-flex align-items-center">
+                        <a href="tel:+91 87647 66553" class="d-flex align-items-center">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-headphone.svg') }}"
                                 alt="hotline" style="width: 32px" class="img-color" />
-                            <p class="fs-18 text-dark fw-600">+91 93584 73253</p>
+                            <p class="fs-18 text-dark fw-600">+91 87647 66553</p>
                         </a>
                     </div>
                     <div class="header-action-icon-2 d-block d-xl-none">
@@ -704,7 +705,7 @@
                         <a href="/login"><i class="fi-rs-user"></i>Log In / Sign Up </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="tel:+91 93584 73253"><i class="fi-rs-headphones"></i>+91 93584 73253</a>
+                        <a href="tel:+91 87647 66553"><i class="fi-rs-headphones"></i>+91 87647 66553</a>
                     </div>
                 </div>
                 <div class="mobile-social-icon mb-50">

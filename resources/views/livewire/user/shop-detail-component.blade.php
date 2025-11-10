@@ -272,7 +272,8 @@
                                             </div>
                                         </div>
                                         <ul class="contact-infor mb-50">
-                                            <li><img src="{{asset('assets/frontend/imgs/theme/icons/icon-location.svg')}}" alt="" /><strong>Address: </strong> <span>5171 W Campbell Ave undefined Kent, Utah 53127 United States</span></li>
+                                            <li><img src="{{asset('assets/frontend/imgs/theme/icons/icon-location.svg')}}" alt="" /><strong>Address: </strong> <span>02 Floor, Taheri Complex, Opp.
+Gopi Restaurant, Sagwara, India</span></li>
                                             <li><img src="{{asset('assets/frontend/imgs/theme/icons/icon-contact.svg')}}" alt="" /><strong>Contact Seller:</strong><span>(+91) - 540-025-553</span></li>
                                         </ul>
                                         <div class="d-flex mb-55">

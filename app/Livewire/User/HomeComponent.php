@@ -20,6 +20,11 @@ class HomeComponent extends Component
     public $popular_products = [];
     public $sale_products = [];
     public $sale_product_filter = 'featured';
+    public $deals_of_the_day_products = [];
+    public $top_selling = [];
+    public $trending_products = [];
+    public $latest_products = [];
+    public $top_rated_products = [];
 
     public function mount()
     {
@@ -28,6 +33,10 @@ class HomeComponent extends Component
         $this->middle_page_banner = Banner::where('status', 1)->where('banner_type', 'middle_page_banner')->get();
         $this->best_deal_banner = Banner::where('status', 1)->where('banner_type', 'daily_best_deals')->first();
         $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->whereNull('parent_id')->inRandomOrder()->limit(15)->get();
+        $this->deals_of_the_day_products = Product::where('status', 1)->orderBy('sale_to_date', 'asc')->limit(4)->get();
+        if($this->deals_of_the_day_products->count() == 0){
+            $this->deals_of_the_day_products = Product::where('status', 1)->inRandomOrder()->limit(4)->get();
+        }
         $this->parentCategory = ProductCategory::where('parent_id', null)
             ->get()
             ->map(function ($item) {
@@ -45,14 +54,20 @@ class HomeComponent extends Component
         if ($this->sale_products->count() == 0) {
             $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
         }
+        $this->top_selling = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->inRandomOrder()->limit(3)->get();
+        $this->trending_products = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->inRandomOrder()->limit(3)->get();
+        $this->latest_products = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->orderBy('created_at', 'desc')->inRandomOrder()->limit(3)->get();
+        $this->top_rated_products = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->inRandomOrder()->limit(3)->get();
     }
 
     public function setPopularProductCategory($category)
     {
         $this->seleted_popular_product_category = $category;
         if ($category == 'all') {
+            $this->popular_products = [];
             $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->where('parent_id', null)->inRandomOrder()->limit(15)->get();
         } else {
+            $this->popular_products = [];
             $product_category_assign = ProductCategoryAssign::where('category_id', $category)->pluck('product_id');
             $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->whereIn('id', $product_category_assign)->inRandomOrder()->limit(15)->get();
         }

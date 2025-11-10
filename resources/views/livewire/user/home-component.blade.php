@@ -133,21 +133,20 @@
         <div class="container">
             <div class="section-title style-2">
                 <h3>Popular Products</h3>
-                <ul class="nav nav-tabs links d-none d-xl-flex" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button wire:click="setPopularProductCategory('all')"
+                <ul class="nav nav-tabs links" id="">
+                    <li class="nav-item">
+                        <button onClick="setPopularCategory('all')"
                             class="nav-link {{ $seleted_popular_product_category == 'all' ? 'active' : '' }}"
-                            id="nav-tab-all" data-bs-toggle="tab" data-bs-target="#tab-all" type="button"
-                            role="tab" aria-controls="tab-all" aria-selected="true">All</button>
+                            id="" type="button">
+                            All
+                        </button>
                     </li>
                     @foreach ($parentCategory as $popular_category)
-                        <li class="nav-item" role="presentation">
-                            <button wire:click="setPopularProductCategory('{{ $popular_category->id }}')"
-                                class="nav-link {{ $seleted_popular_product_category == "$popular_category->id" ? 'active' : '' }}"
-                                id="nav-tab-{{ $popular_category->id }}" data-bs-toggle="tab"
-                                data-bs-target="#tab-{{ $popular_category->id }}" type="button" role="tab"
-                                aria-controls="tab-{{ $popular_category->id }}"
-                                aria-selected="false">{{ $popular_category->name }}</button>
+                        <li class="nav-item">
+                            <button onClick="setPopularCategory('{{ $popular_category->id }}')"
+                                class="nav-link {{ $seleted_popular_product_category == $popular_category->id ? 'active' : '' }}" type="button" wire:key="popular-category-{{ $popular_category->id }}">
+                                {{ $popular_category->name }}
+                            </button>
                         </li>
                     @endforeach
                 </ul>
@@ -174,19 +173,12 @@
                 </div>
             </div>
             <!--End nav-tabs-->
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="tab-{{ $seleted_popular_product_category }}" role="tabpanel"
-                    aria-labelledby="tab-one">
-                    <div class="row product-grid-4">
-                        @foreach ($popular_products as $popular_product)
-                            <div class="col-lg-1-5 col-md-4 col-6">
-                                @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . $seleted_popular_product_category))
-                            </div>
-                        @endforeach
-                    </div>
-                    <!--End product-grid-4-->
-                </div>
-                <!--En tab seven-->
+            <div class="row product-grid-4">
+                    @foreach ($popular_products as $popular_product)
+                        <div class="col-lg-1-5 col-md-4 col-6">
+                            @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
+                        </div>
+                    @endforeach\
             </div>
             <!--End tab-content-->
         </div>
@@ -255,161 +247,57 @@
                 </a>
             </div>
             <div class="row">
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="product-cart-wrap style-2">
-                        <div class="product-img-action-wrap">
-                            <div class="product-img">
-                                <a href="shop-product-right.html">
-                                    <img src="{{ asset('assets/frontend/imgs/banner/banner-5.png') }}"
-                                        alt="" />
-                                </a>
-                            </div>
-                        </div>
-                        <div class="product-content-wrap">
-                            <div class="deals-countdown-wrap">
-                                <div class="deals-countdown" data-countdown="2025/03/25 00:00:00"></div>
-                            </div>
-                            <div class="deals-content">
-                                <h2><a href="shop-product-right.html">Seeds of Change Organic Quinoa, Brown, & Red
-                                        Rice</a></h2>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-card-bottom">
-                                    <div class="product-price">
-                                        <span>$32.85</span>
-                                        <span class="old-price">$33.8</span>
-                                    </div>
-                                    <div class="add-cart">
-                                        <a class="add" href="shop-cart.html"><i
-                                                class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                                    </div>
+                @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="product-cart-wrap style-2">
+                            <div class="product-img-action-wrap">
+                                <div class="product-img">
+                                    <a href="shop-product-right.html">
+                                        <img src="{{ asset('storage/' . $deals_of_the_day_product->featured_image) }}"
+                                            alt="" />
+                                    </a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="product-cart-wrap style-2">
-                        <div class="product-img-action-wrap">
-                            <div class="product-img">
-                                <a href="shop-product-right.html">
-                                    <img src="{{ asset('assets/frontend/imgs/banner/banner-6.png') }}"
-                                        alt="" />
-                                </a>
-                            </div>
-                        </div>
-                        <div class="product-content-wrap">
-                            <div class="deals-countdown-wrap">
-                                <div class="deals-countdown" data-countdown="2026/04/25 00:00:00"></div>
-                            </div>
-                            <div class="deals-content">
-                                <h2><a href="shop-product-right.html">Perdue Simply Smart Organics Gluten Free</a>
-                                </h2>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                            <div class="product-content-wrap">
+                                <div class="deals-countdown-wrap">
+                                    <div class="deals-countdown"
+                                        data-countdown="{{ \Carbon\Carbon::parse($deals_of_the_day_product->sale_to_date)->format('Y/m/d') }} 00:00:00">
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
                                 </div>
-                                <div class="product-card-bottom">
-                                    <div class="product-price">
-                                        <span>$24.85</span>
-                                        <span class="old-price">$26.8</span>
+                                <div class="deals-content">
+                                    <h2><a href="shop-product-right.html">{{ $deals_of_the_day_product->name }}</a>
+                                    </h2>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
-                                    <div class="add-cart">
-                                        <a class="add" href="shop-cart.html"><i
-                                                class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            @if (
+                                                $deals_of_the_day_product->sale_price > 0 &&
+                                                    now() >= $deals_of_the_day_product->sale_start_date &&
+                                                    now() <= $deals_of_the_day_product->sale_end_date)
+                                                <span>₹{{ $deals_of_the_day_product->sale_price }}</span>
+                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
+                                            @elseif($deals_of_the_day_product->sale_default_price > 0)
+                                                <span>₹{{ $deals_of_the_day_product->sale_default_price }}</span>
+                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
+                                            @else
+                                                <span>₹{{ $deals_of_the_day_product->price }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6 d-none d-lg-block">
-                    <div class="product-cart-wrap style-2">
-                        <div class="product-img-action-wrap">
-                            <div class="product-img">
-                                <a href="shop-product-right.html">
-                                    <img src="{{ asset('assets/frontend/imgs/banner/banner-7.png') }}"
-                                        alt="" />
-                                </a>
-                            </div>
-                        </div>
-                        <div class="product-content-wrap">
-                            <div class="deals-countdown-wrap">
-                                <div class="deals-countdown" data-countdown="2027/03/25 00:00:00"></div>
-                            </div>
-                            <div class="deals-content">
-                                <h2><a href="shop-product-right.html">Signature Wood-Fired Mushroom and
-                                        Caramelized</a></h2>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 80%"></div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted"> (3.0)</span>
-                                </div>
-                                <div>
-                                    <span class="font-small text-muted">By <a
-                                            href="vendor-details-1.html">Progresso</a></span>
-                                </div>
-                                <div class="product-card-bottom">
-                                    <div class="product-price">
-                                        <span>$12.85</span>
-                                        <span class="old-price">$13.8</span>
-                                    </div>
-                                    <div class="add-cart">
-                                        <a class="add" href="shop-cart.html"><i
-                                                class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6 d-none d-xl-block">
-                    <div class="product-cart-wrap style-2">
-                        <div class="product-img-action-wrap">
-                            <div class="product-img">
-                                <a href="shop-product-right.html">
-                                    <img src="{{ asset('assets/frontend/imgs/banner/banner-8.png') }}"
-                                        alt="" />
-                                </a>
-                            </div>
-                        </div>
-                        <div class="product-content-wrap">
-                            <div class="deals-countdown-wrap">
-                                <div class="deals-countdown" data-countdown="2025/02/25 00:00:00"></div>
-                            </div>
-                            <div class="deals-content">
-                                <h2><a href="shop-product-right.html">Simply Lemonade with Raspberry Juice</a></h2>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 80%"></div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted"> (3.0)</span>
-                                </div>
-                                <div>
-                                    <span class="font-small text-muted">By <a
-                                            href="vendor-details-1.html">Yoplait</a></span>
-                                </div>
-                                <div class="product-card-bottom">
-                                    <div class="product-price">
-                                        <span>$15.85</span>
-                                        <span class="old-price">$16.8</span>
-                                    </div>
-                                    <div class="add-cart">
-                                        <a class="add" href="shop-cart.html"><i
-                                                class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -420,289 +308,145 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0">
                     <h4 class="section-title style-1 mb-30 animated animated">Top Selling</h4>
                     <div class="product-list-small animated animated">
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-1.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Nestle Original Coffee-Mate Coffee Creamer</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                        @foreach ($top_selling as $product)
+                            <article class="row align-items-center hover-up">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img
+                                            src="{{ asset('storage/' . $product->featured_image) }}"
+                                            alt="" /></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h6>
+                                        <a href="shop-product-right.html">{{ $product->name }}</a>
+                                    </h6>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-2.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Nestle Original Coffee-Mate Coffee Creamer</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                                    <div class="product-price">
+                                        @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
+                                            <span>₹{{ $product->sale_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @elseif($product->sale_default_price > 0)
+                                            <span>₹{{ $product->sale_default_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @else
+                                            <span>₹{{ $product->price }}</span>
+                                        @endif
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
                                 </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-3.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Nestle Original Coffee-Mate Coffee Creamer</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
+                            </article>
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-md-0">
                     <h4 class="section-title style-1 mb-30 animated animated">Trending Products</h4>
                     <div class="product-list-small animated animated">
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-4.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Organic Cage-Free Grade A Large Brown Eggs</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                        @foreach ($trending_products as $product)
+                            <article class="row align-items-center hover-up">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img
+                                            src="{{ asset('storage/' . $product->featured_image) }}"
+                                            alt="" /></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h6>
+                                        <a href="shop-product-right.html">{{ $product->name }}</a>
+                                    </h6>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-5.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Seeds of Change Organic Quinoa, Brown, & Red
-                                        Rice</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                                    <div class="product-price">
+                                        @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
+                                            <span>₹{{ $product->sale_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @elseif($product->sale_default_price > 0)
+                                            <span>₹{{ $product->sale_default_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @else
+                                            <span>₹{{ $product->price }}</span>
+                                        @endif
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
                                 </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-6.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Naturally Flavored Cinnamon Vanilla Light Roast
-                                        Coffee</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
+                            </article>
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 d-none d-lg-block">
                     <h4 class="section-title style-1 mb-30 animated animated">Recently added</h4>
                     <div class="product-list-small animated animated">
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-7.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Pepperidge Farm Farmhouse Hearty White Bread</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                        @foreach ($latest_products as $product)
+                            <article class="row align-items-center hover-up">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img
+                                            src="{{ asset('storage/' . $product->featured_image) }}"
+                                            alt="" /></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h6>
+                                        <a href="shop-product-right.html">{{ $product->name }}</a>
+                                    </h6>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-8.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Organic Frozen Triple Berry Blend</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                                    <div class="product-price">
+                                        @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
+                                            <span>₹{{ $product->sale_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @elseif($product->sale_default_price > 0)
+                                            <span>₹{{ $product->sale_default_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @else
+                                            <span>₹{{ $product->price }}</span>
+                                        @endif
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
                                 </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-9.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Oroweat Country Buttermilk Bread</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
+                            </article>
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 d-none d-xl-block">
                     <h4 class="section-title style-1 mb-30 animated animated">Top Rated</h4>
                     <div class="product-list-small animated animated">
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-10.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Foster Farms Takeout Crispy Classic Buffalo
-                                        Wings</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                        @foreach ($top_rated_products as $product)
+                            <article class="row align-items-center hover-up">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img
+                                            src="{{ asset('storage/' . $product->featured_image) }}"
+                                            alt="" /></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h6>
+                                        <a href="shop-product-right.html">{{ $product->name }}</a>
+                                    </h6>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-11.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">Angie’s Boomchickapop Sweet & Salty Kettle
-                                        Corn</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
+                                    <div class="product-price">
+                                        @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
+                                            <span>₹{{ $product->sale_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @elseif($product->sale_default_price > 0)
+                                            <span>₹{{ $product->sale_default_price }}</span>
+                                            <span class="old-price">₹{{ $product->price }}</span>
+                                        @else
+                                            <span>₹{{ $product->price }}</span>
+                                        @endif
                                     </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
                                 </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="row align-items-center hover-up">
-                            <figure class="col-md-4 mb-0">
-                                <a href="shop-product-right.html"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/thumbnail-12.jpg') }}"
-                                        alt="" /></a>
-                            </figure>
-                            <div class="col-md-8 mb-0">
-                                <h6>
-                                    <a href="shop-product-right.html">All Natural Italian-Style Chicken Meatballs</a>
-                                </h6>
-                                <div class="product-rate-cover">
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span>$32.85</span>
-                                    <span class="old-price">$33.8</span>
-                                </div>
-                            </div>
-                        </article>
+                            </article>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -727,8 +471,8 @@
                     @foreach ($parentCategory as $index => $category)
                         <div class="card-1">
                             <figure class="img-hover-scale overflow-hidden">
-                                <a href="shop-grid-right.html"><img
-                                        src="{{ asset('storage/' . $category->image) }}" alt="" /></a>
+                                <a href="shop-grid-right.html"><img src="{{ asset('storage/' . $category->image) }}"
+                                        alt="" /></a>
                             </figure>
                             <h6>
                                 <a href="shop-grid-right.html">{{ $category->name }}</a>
@@ -741,3 +485,11 @@
     </section>
     <!--End category slider-->``
 </main>
+
+@push('scripts')
+    <script>
+        function setPopularCategory(category) {
+            @this.setPopularProductCategory(category);
+        }
+    </script>
+@endpush

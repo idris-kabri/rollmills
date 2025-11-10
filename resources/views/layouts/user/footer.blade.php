@@ -108,14 +108,12 @@
                         </div>
                         <ul class="contact-infor">
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-location.svg') }}"
-                                    alt="" /><strong>Address: </strong> <a class="hover-a" href="#">5171 W
-                                    Campbell Ave
-                                    undefined
-                                    Kent, Utah 53127 United States</a></li>
+                                    alt="" /><strong>Address: </strong> <a class="hover-a" href="#">02
+                                    Floor, Taheri Complex, Opp.
+                                    Gopi Restaurant, Sagwara, India</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-contact.svg') }}"
                                     alt="" /><strong>Call Us:</strong> <a class="hover-a"
-                                    href="tel:+91 93584 73253">+91 93584
-                                    73253</a></li>
+                                    href="tel:+91 87647 66553">+91 87647 66553</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-email-2.svg') }}"
                                     alt="" /><strong>Email:</strong> <a class="hover-a"
                                     href="mailto:info@rollmillsstore.com">info@rollmillsstore.com</a></li>
@@ -201,7 +199,7 @@
                 </div> --}}
                 <div class="hotline d-lg-inline-flex" style="width: 250px">
                     <img src="{{ asset('assets/frontend/imgs/theme/icons/phone-call.svg') }}" alt="hotline" />
-                    <p>+91 93584 73253</p>
+                    <p>+91 87647 66553</p>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-6 col-md-6 text-end d-none d-md-block">
@@ -336,6 +334,9 @@
         });
     });
 </script>
+@livewireScripts
+
+@stack('scripts')
 
 </body>
 

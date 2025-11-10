@@ -63,9 +63,9 @@
                                      by means of a clear statement. You can inform us of your decision by:</p>
                                  <ul>
                                      <li>
-                                         <p>By email: <a href="mailto:rollmills@gmail.com"
+                                         <p>By email: <a href="mailto:info@rollmillsstore.com"
                                                  rel="external nofollow noopener" target="_blank">
-                                                 rollmills@gmail.com</a></p>
+                                                 info@rollmillsstore.com</a></p>
                                      </li>
                                      <li>
                                          <p>By visiting this page on our website: <a
@@ -74,8 +74,8 @@
                                                  target="_blank">http://www.rollmills.com/contact</a></p>
                                      </li>
                                      <li>
-                                         <p>By phone: <a href="tel:408.996.1010" rel="external nofollow noopener"
-                                                 target="_blank"> 408.996.1010 </a></p>
+                                         <p>By phone: <a href="tel:87647 66553" rel="external nofollow noopener"
+                                                 target="_blank"> 87647 66553 </a></p>
                                      </li>
                                  </ul>
                                  <p>We will reimburse You no later than 14 days from the day on which We receive the
@@ -122,9 +122,9 @@
                                  </p>
                                  <ul>
                                      <li>
-                                         <p>By email: <a href="mailto:rollmills@gmail.com"
+                                         <p>By email: <a href="mailto:info@rollmillsstore.com"
                                                  rel="external nofollow noopener" target="_blank">
-                                                 rollmills@gmail.com</a></p>
+                                                 info@rollmillsstore.com</a></p>
                                      </li>
                                      <li>
                                          <p>By visiting this page on our website: <a
@@ -133,8 +133,8 @@
                                                  target="_blank">http://www.rollmills.com/contact</a></p>
                                      </li>
                                      <li>
-                                         <p>By phone: <a href="tel:408.996.1010" rel="external nofollow noopener"
-                                                 target="_blank"> 408.996.1010 </a></p>
+                                         <p>By phone: <a href="tel:87647 66553" rel="external nofollow noopener"
+                                                 target="_blank"> 87647 66553 </a></p>
                                      </li>
                                  </ul>
                              </div>
