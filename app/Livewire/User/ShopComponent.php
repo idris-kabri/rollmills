@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Livewire\User;
+
 use App\Models\Banner;
 use App\Models\ProductCategory;
 use App\Models\Product;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ShopComponent extends Component
 {
+    use WithPagination;
+    public $minFilterPrice = 0;
+    public $maxFilterPrice = 1000;
+    protected string $paginationTheme = 'bootstrap';
+
     public $categories = [];
     public $product_count = 0;
     public $limit = 50;
@@ -24,6 +31,12 @@ class ShopComponent extends Component
         $this->categories = ProductCategory::where('status', 1)->orderBy('name', 'asc')->where('parent_id', null)->get();
         $this->new_products = Product::where('status', 1)->orderBy('created_at', 'desc')->limit(4)->get();
         $this->updateProductCount();
+    }
+
+    public function setPriceRange($data)
+    {
+        $this->minFilterPrice = $data['min'];
+        $this->maxFilterPrice = $data['max'];
     }
 
     public function setLimit($limit)

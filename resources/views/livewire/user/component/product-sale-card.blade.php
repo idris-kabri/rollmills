@@ -23,11 +23,7 @@
                 @php
                     $original_price = $product->price;
                     $sale_price = 0;
-                    $currentDate = \Carbon\Carbon::now();
-                    $sale_from_date = \Carbon\Carbon::parse($product->sale_from_date);
-                    $sale_to_date = \Carbon\Carbon::parse($product->sale_to_date);
-
-                    if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+                    if($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date){
                         $sale_price = $product->sale_price;
                     }else{
                         $sale_price = $product->sale_default_price;
@@ -39,23 +35,18 @@
             @else 
                 @php
                     $original_price = $product->price;
-                    $sale_price = 0; 
-                    $check_type = ''; 
-
-                    $currentDate = \Carbon\Carbon::now();
-                    $sale_from_date = \Carbon\Carbon::parse($product->sale_from_date);
-                    $sale_to_date = \Carbon\Carbon::parse($product->sale_to_date);
-
-                    if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+                    $sale_price = 0;
+                    $check_type = '';
+                    if($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date){
                         $sale_price = $product->sale_price; 
                         $check_type = 'sale_product';
-                    } elseif ($product->is_featured == 1 && $check_type == '') {
+                    }elseif($product->is_featured == 1){
                         $check_type = 'featured_product';
-                    } else {
+                     }else{
                         $sale_price = $product->sale_default_price; 
                         $check_type = 'sale_default_product';
                     }
-                    $percentage = $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
+                    $percentage = (($original_price - $sale_price) / $original_price) * 100;
                 @endphp  
 
                 @if($check_type == 'sale_product') 
@@ -71,24 +62,11 @@
     <div class="product-content-wrap mt-2">
         <h2><a href="shop-product-right.html">{{ $product->name }}</a></h2>
         <div class="product-rate-cover">
-            @php
-                $reviews = \App\Models\ProductReview::where('status', 1)
-                            ->where('product_id', $product->id)
-                            ->get();
-
-                $reviews_count = $reviews->count();
-                $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
-                $reviews_percentage = ($reviews_avg / 5) * 100; // convert rating to percentage (for width)
-            @endphp
-
             <div class="product-rate d-inline-block">
-                <div class="product-rating" style="width: {{ $reviews_percentage }}%;"></div>
+                <div class="product-rating" style="width: 90%"></div>
             </div>
-            <span class="font-small ml-5 text-muted">
-                ({{ $reviews_avg }})
-            </span>
+            <span class="font-small ml-5 text-muted"> (4.0)</span>
         </div>
-
         <div class="product-card-bottom">
             <div class="product-price">
                 @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)

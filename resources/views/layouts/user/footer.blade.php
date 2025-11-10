@@ -235,7 +235,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
 <!-- Vendor JS-->
 <script src="{{ asset('assets/frontend/js/vendor/modernizr-3.6.0.min.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/vendor/jquery-3.6.0.min.js') }}"></script>
@@ -250,11 +250,15 @@
 <script src="{{ asset('assets/frontend/js/plugins/select2.min.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/waypoints.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/counterup.js') }}"></script>
-<script src="{{ asset('assets/frontend/js/plugins/jquery.countdown.min.js') }}"></script>
+<!-- <script src="{{ asset('assets/frontend/js/plugins/jquery.countdown.min.js') }}"></script> -->
+
 <script src="{{ asset('assets/frontend/js/plugins/images-loaded.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/isotope.js') }}"></script>
+
+<!-- this script give error  -->
 <script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
-<script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script>
+<script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script> 
+
 <script src="{{ asset('assets/frontend/js/plugins/jquery.theia.sticky.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/jquery.elevatezoom.js') }}"></script>
 <!-- Template  JS -->
@@ -334,10 +338,9 @@
         });
     });
 </script>
-@livewireScripts
 
 @stack('scripts')
-
+@livewireScripts
 </body>
 
 </html>
