@@ -127,6 +127,14 @@
     border-radius: 25px !important;
 }
 
+.hover-bg {
+    transition: all 0.3s ease-in-out;
+}
+
+.hover-bg:hover {
+    background: var(--color-2);
+}
+
 /* ==================================================================== */
 /* Contact Us Css Start */
 /* ==================================================================== */
@@ -546,13 +554,62 @@
     border-color: var(--color-light-1) !important;
 }
 
-.my-account-cards .card:hover .content h5{
-    color: var(--color-1) ;
+.my-account-cards .card:hover .content h5 {
+    color: var(--color-1);
     transition: color 0.3s ease-in-out;
 }
 
 /* ==================================================================== */
 /* My Account Css End */
+/* ==================================================================== */
+
+/* ==================================================================== */
+/* Orders Page & Profile Page Start End */
+/* ==================================================================== */
+
+.product-cards .img-section {
+    width: 110px;
+    height: 110px;
+}
+
+.login-input2 {
+    background: #fdfdfd !important;
+    border: 2px solid #ececec !important;
+    height: 55px !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none;
+    padding: 12px 18px !important;
+    font-size: 15px !important;
+    border-radius: 5px;
+    width: 100%;
+    font-family: "Quicksand", sans-serif;
+    color: #555;
+    font-weight: 600;
+}
+
+.address-cards {
+    min-height: 300px;
+}
+
+.add-address {
+    border-style: dashed !important;
+    cursor: pointer;
+}
+
+.address-cards-action {
+    transition: all 0.3s ease-in-out;
+}
+
+.address-cards-action:hover {
+    transform: translateY(-3px);
+    background: var(--color-1);
+    color: #fff !important;
+    border-color: var(--color-1) !important;
+    cursor: pointer;
+}
+
+/* ==================================================================== */
+/* Orders Page & Profile Page Css End */
 /* ==================================================================== */
 
 /* ==================================================================== */

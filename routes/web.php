@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\LoginComponent;
 use App\Livewire\Auth\RegisterComponent;
@@ -15,9 +14,12 @@ use App\Livewire\User\CompareComponent;
 use App\Livewire\User\ShopComponent;
 use App\Livewire\User\ShopDetailComponent;
 use App\Livewire\User\WishlistComponent;
-use App\Livewire\User\ReturnPolicy; // ✅ Added this line
-use App\Livewire\User\ShippingPolicy; // ✅ Added this line
-use App\Livewire\User\CouponClaim; // ✅ Added this line
+use App\Livewire\User\ReturnPolicy; 
+use App\Livewire\User\ShippingPolicy;
+use App\Livewire\User\CouponClaim;
+use App\Livewire\User\Order;
+use App\Livewire\User\Profile;
+use App\Livewire\User\Address;
 
 Route::get('/', HomeComponent::class)->name('home');
 Route::get('/about', AboutComponent::class)->name('about');
@@ -34,7 +36,9 @@ Route::get('/shop', ShopComponent::class)->name('shop');
 Route::get('/shop-detail', ShopDetailComponent::class)->name('shop-detail');
 Route::get('/wishlist', WishlistComponent::class)->name('wishlist');
 Route::get('/coupon-claim', CouponClaim::class)->name("coupon.claim");
-
+Route::get('/user-order', Order::class)->name("user-order");
+Route::get('/user-profile', Profile::class)->name("user-profile");
+Route::get('/user-address', Address::class)->name("user-address");
 Route::get('/login', LoginComponent::class)->name('login');
 Route::get('/register', RegisterComponent::class)->name('register');
 

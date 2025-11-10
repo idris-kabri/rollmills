@@ -144,7 +144,8 @@
                     @foreach ($parentCategory as $popular_category)
                         <li class="nav-item">
                             <button onClick="setPopularCategory('{{ $popular_category->id }}')"
-                                class="nav-link {{ $seleted_popular_product_category == $popular_category->id ? 'active' : '' }}" type="button" wire:key="popular-category-{{ $popular_category->id }}">
+                                class="nav-link {{ $seleted_popular_product_category == $popular_category->id ? 'active' : '' }}"
+                                type="button" wire:key="popular-category-{{ $popular_category->id }}">
                                 {{ $popular_category->name }}
                             </button>
                         </li>
@@ -164,7 +165,9 @@
                                         <a href="javascript:void(0)"
                                             wire:click.prevent="setPopularProductCategory('{{ $popular_category->id }}')">
                                             <img src="{{ asset('storage/' . $popular_category->image) }}"
-                                                alt="">{{ $popular_category->name }}</a>
+                                                alt="">
+                                            {{ $popular_category->name }}
+                                        </a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -174,11 +177,11 @@
             </div>
             <!--End nav-tabs-->
             <div class="row product-grid-4">
-                    @foreach ($popular_products as $popular_product)
-                        <div class="col-lg-1-5 col-md-4 col-6">
-                            @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
-                        </div>
-                    @endforeach\
+                @foreach ($popular_products as $popular_product)
+                    <div class="col-lg-1-5 col-md-4 col-6">
+                        @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
+                    </div>
+                @endforeach\
             </div>
             <!--End tab-content-->
         </div>
@@ -190,14 +193,16 @@
                 <h3 class="">Daily Best Sells</h3>
                 <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button wire:click="setSaleProductCategory('featured')" class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}" id="nav-tab-featured" data-bs-toggle="tab"
-                            data-bs-target="#tab-featured" type="button" role="tab" aria-controls="tab-featured"
-                            aria-selected="true">Featured</button>
+                        <button wire:click="setSaleProductCategory('featured')"
+                            class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}"
+                            id="nav-tab-featured" data-bs-toggle="tab" data-bs-target="#tab-featured" type="button"
+                            role="tab" aria-controls="tab-featured" aria-selected="true">Featured</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button wire:click="setSaleProductCategory('new')" class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}" id="nav-tab-new" data-bs-toggle="tab"
-                            data-bs-target="#tab-new" type="button" role="tab" aria-controls="tab-new"
-                            aria-selected="false">New added</button>
+                        <button wire:click="setSaleProductCategory('new')"
+                            class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}" id="nav-tab-new"
+                            data-bs-toggle="tab" data-bs-target="#tab-new" type="button" role="tab"
+                            aria-controls="tab-new" aria-selected="false">New added</button>
                     </li>
                 </ul>
             </div>
