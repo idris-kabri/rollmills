@@ -188,7 +188,7 @@
         <div class="container">
             <div class="section-title">
                 <h3 class="">Daily Best Sells</h3>
-                {{-- <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
+                <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button wire:click="setSaleProductCategory('featured')" class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}" id="nav-tab-featured" data-bs-toggle="tab"
                             data-bs-target="#tab-featured" type="button" role="tab" aria-controls="tab-featured"
@@ -199,7 +199,7 @@
                             data-bs-target="#tab-new" type="button" role="tab" aria-controls="tab-new"
                             aria-selected="false">New added</button>
                     </li>
-                </ul> --}}
+                </ul>
             </div>
             <div class="row" wire:ignore>
                 <div class="col-lg-3 d-none d-lg-flex">
