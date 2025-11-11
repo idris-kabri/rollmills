@@ -17,7 +17,6 @@ class HomeComponent extends Component
     public $best_deal_banner = [];
     public $parentCategory = [];
     public $seleted_popular_product_category = 'all';
-    public $popular_products = [];
     public $sale_products = [];
     public $sale_product_filter = 'featured';
     public $deals_of_the_day_products = [];
@@ -34,7 +33,7 @@ class HomeComponent extends Component
         $this->best_deal_banner = Banner::where('status', 1)->where('banner_type', 'daily_best_deals')->first();
         $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->whereNull('parent_id')->inRandomOrder()->limit(15)->get();
         $this->deals_of_the_day_products = Product::where('status', 1)->orderBy('sale_to_date', 'asc')->limit(4)->get();
-        if($this->deals_of_the_day_products->count() == 0){
+        if ($this->deals_of_the_day_products->count() == 0) {
             $this->deals_of_the_day_products = Product::where('status', 1)->inRandomOrder()->limit(4)->get();
         }
         $this->parentCategory = ProductCategory::where('parent_id', null)
@@ -63,38 +62,34 @@ class HomeComponent extends Component
     public function setPopularProductCategory($category)
     {
         $this->seleted_popular_product_category = $category;
-        if ($category == 'all') {
-            $this->popular_products = [];
-            $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->where('parent_id', null)->inRandomOrder()->limit(15)->get();
-        } else {
-            $this->popular_products = [];
-            $product_category_assign = ProductCategoryAssign::where('category_id', $category)->pluck('product_id');
-            $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->whereIn('id', $product_category_assign)->inRandomOrder()->limit(15)->get();
-        } 
-
-        // dd($this->seleted_popular_product_category,$this->popular_products);
     }
 
     public function setSaleProductCategory($category)
-    { 
-        $today = Carbon::now();
+    {
         $this->sale_product_filter = $category;
-        if ($category == 'featured') {
-            $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_from_date', '<=', $today)->where('sale_to_date', '>=', $today)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
-            if (count($this->sale_products) == 0) {
-                $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
-            }
-        } else {
-            $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_from_date', '<=', $today)->where('sale_to_date', '>=', $today)->orderBy('created_at', 'desc')->limit(15)->get();
-            if (count($this->sale_products) == 0) {
-                $this->sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->orderBy('created_at', 'desc')->limit(15)->get();
-            }
-        } 
-        
     }
 
     public function render()
     {
-        return view('livewire.user.home-component')->layout('layouts.user.app');
+        $today = Carbon::now();
+        if ($this->seleted_popular_product_category == 'all') {
+            $popular_products = Product::where('status', 1)->where('is_featured', 1)->where('parent_id', null)->inRandomOrder()->limit(15)->get();
+        } else {
+            $product_category_assign = ProductCategoryAssign::where('category_id', $this->seleted_popular_product_category)->pluck('product_id');
+            $popular_products = Product::where('status', 1)->where('is_featured', 1)->whereIn('id', $product_category_assign)->inRandomOrder()->limit(15)->get();
+        }
+
+        if ($this->sale_product_filter == 'featured') {
+            $sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_from_date', '<=', $today)->where('sale_to_date', '>=', $today)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
+            if (count($sale_products) == 0) {
+                $sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->where('is_featured', 1)->inRandomOrder()->limit(15)->get();
+            }
+        } else {
+            $sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_from_date', '<=', $today)->where('sale_to_date', '>=', $today)->orderBy('created_at', 'desc')->limit(15)->get();
+            if (count($sale_products) == 0) {
+                $sale_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->orderBy('created_at', 'desc')->limit(15)->get();
+            }
+        }
+        return view('livewire.user.home-component', compact('popular_products', 'sale_products'))->layout('layouts.user.app');
     }
 }

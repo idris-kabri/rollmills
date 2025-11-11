@@ -194,7 +194,7 @@
 
     
     <!--Daily Best Sells Tabs-->
-    {{--<section class="section-padding pb-5" wire:ignore>
+    <section class="section-padding pb-5">
         <div class="container">
             <div class="section-title">
                 <h3 class="">Daily Best Sells</h3>
@@ -241,7 +241,7 @@
                 <!--End Col-lg-9-->
             </div>
         </div>
-    </section>--}}
+    </section>
 
     <!--End Best Sales-->
     <section class="section-padding pb-5" wire:ignore>

@@ -9,9 +9,6 @@
                 font-size: 15px;
                 font-weight: 500;
             }
-            #shop-slider-range .ui-slider-handle:last-child {
-                display: none !important;
-            }
         </style>
         <div class="page-header mt-30 mb-50">
             <div class="container">
@@ -319,7 +316,7 @@
             values: [0, 1000],
             slide: function (event, ui) {
                 $("#shop-slider-range-value1").text(ui.values[0]);
-                // $("#shop-slider-range-value2").text(ui.values[1]);
+                $("#shop-slider-range-value2").text(ui.values[1]);
             }
         });
 

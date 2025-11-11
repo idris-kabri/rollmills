@@ -250,7 +250,7 @@
 <script src="{{ asset('assets/frontend/js/plugins/select2.min.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/waypoints.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/counterup.js') }}"></script>
-<!-- <script src="{{ asset('assets/frontend/js/plugins/jquery.countdown.min.js') }}"></script> -->
+<script src="{{ asset('assets/frontend/js/plugins/jquery.countdown.min.js') }}"></script>
 
 <script src="{{ asset('assets/frontend/js/plugins/images-loaded.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/isotope.js') }}"></script>
@@ -340,7 +340,6 @@
 </script>
 
 @stack('scripts')
-@livewireScripts
 </body>
 
 </html>
