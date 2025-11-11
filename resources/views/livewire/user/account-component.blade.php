@@ -3,7 +3,7 @@
          <div class="container">
              <div class="breadcrumb">
                  <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                 <span></span> Pages <span></span> My Account
+                  <span></span> My Account
              </div>
          </div>
      </div>
@@ -40,8 +40,8 @@
                                              alt="" class="img-fluid mx-auto">
                                      </div>
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">Login & Security</h5>
-                                         <p class="fw-500 text-secondary text-start">Edit login, name, and mobile number
+                                         <h5 class="underline text-start mb-2">My Profile</h5>
+                                         <p class="fw-500 text-secondary text-start">Edit profile name, and mobile number.
                                          </p>
                                      </div>
                                  </a>
@@ -106,14 +106,6 @@
                                          <p class="fw-500 text-secondary text-start">Send us an email for assistance</p>
                                      </div>
                                  </a>
-                             </div>
-                         </div>
-                     </div>
-
-                     <div class="row mt-50">
-                         <div class="col-12">
-                             <div class="content mb-50">
-                                 <h1 class="title style-3 mb-20 text-center">Orders</h1>
                              </div>
                          </div>
                      </div>

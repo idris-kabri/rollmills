@@ -573,7 +573,7 @@
 }
 
 .login-input2 {
-    background: #fdfdfd !important;
+    background: #fff !important;
     border: 2px solid #ececec !important;
     height: 55px !important;
     -webkit-box-shadow: none !important;
@@ -606,6 +606,12 @@
     color: #fff !important;
     border-color: var(--color-1) !important;
     cursor: pointer;
+}
+
+.owl-carousel {
+    display: block !important;
+    width: 100%;
+    z-index: 1;
 }
 
 /* ==================================================================== */

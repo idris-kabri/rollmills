@@ -3,7 +3,7 @@
          <div class="container">
              <div class="breadcrumb">
                  <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                 <span></span> My Account <span></span> Profile
+                 <span></span> <a href="/my-account">My Account</a> <span></span> Profile
              </div>
          </div>
      </div>

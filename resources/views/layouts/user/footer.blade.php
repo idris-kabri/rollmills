@@ -235,7 +235,10 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+{{-- OwlCarousel --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" crossorigin="anonymous">
+</script>
 <!-- Vendor JS-->
 <script src="{{ asset('assets/frontend/js/vendor/modernizr-3.6.0.min.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/vendor/jquery-3.6.0.min.js') }}"></script>
@@ -257,7 +260,7 @@
 
 <!-- this script give error  -->
 <script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
-<script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script> 
+<script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script>
 
 <script src="{{ asset('assets/frontend/js/plugins/jquery.theia.sticky.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/jquery.elevatezoom.js') }}"></script>

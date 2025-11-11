@@ -18,6 +18,7 @@ use App\Livewire\User\ReturnPolicy;
 use App\Livewire\User\ShippingPolicy;
 use App\Livewire\User\CouponClaim;
 use App\Livewire\User\Order;
+use App\Livewire\User\OrderDetail;
 use App\Livewire\User\Profile;
 use App\Livewire\User\Address;
 
@@ -37,6 +38,7 @@ Route::get('/shop-detail', ShopDetailComponent::class)->name('shop-detail');
 Route::get('/wishlist', WishlistComponent::class)->name('wishlist');
 Route::get('/coupon-claim', CouponClaim::class)->name("coupon.claim");
 Route::get('/user-order', Order::class)->name("user-order");
+Route::get('/user-order-detail', OrderDetail::class)->name("user-order-detail");
 Route::get('/user-profile', Profile::class)->name("user-profile");
 Route::get('/user-address', Address::class)->name("user-address");
 Route::get('/login', LoginComponent::class)->name('login');

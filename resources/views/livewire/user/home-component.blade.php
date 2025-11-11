@@ -128,14 +128,14 @@
             </div>
         </div>
     </section>
-    <!--End banners--> 
+    <!--End banners-->
 
     <!-- Popular Products Section  -->
     <section class="product-tabs section-padding position-relative">
         <div class="container" wire:ignore.self>
             <div class="section-title style-2">
                 <h3>Popular Products</h3>
-                <ul class="nav nav-tabs links" id="">
+                <ul class="nav nav-tabs links d-none d-xl-flex" id="">
                     <li class="nav-item">
                         <button wire:click="setPopularProductCategory('all')"
                             class="nav-link {{ $seleted_popular_product_category == 'all' ? 'active' : '' }}"
@@ -146,7 +146,8 @@
                     @foreach ($parentCategory as $popular_category)
                         <li class="nav-item">
                             <button wire:click="setPopularProductCategory('{{ $popular_category->id }}')"
-                                class="nav-link {{ $seleted_popular_product_category == $popular_category->id ? 'active' : '' }}" type="button" wire:key="popular-category-{{ $popular_category->id }}">
+                                class="nav-link {{ $seleted_popular_product_category == $popular_category->id ? 'active' : '' }}"
+                                type="button" wire:key="popular-category-{{ $popular_category->id }}">
                                 {{ $popular_category->name }}
                             </button>
                         </li>
@@ -177,22 +178,22 @@
                 </div>
             </div>
             <!--End nav-tabs-->
-            <div class="row product-grid-4"> 
-                    @if(count($popular_products) > 0)
-                        @foreach ($popular_products as $popular_product)
-                            <div class="col-lg-1-5 col-md-4 col-6">
-                                @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
-                            </div>
-                        @endforeach 
-                    @else 
-                        <h4 class="text-danger text-center">No Item Found!</h4> 
-                    @endif
+            <div class="row product-grid-4">
+                @if (count($popular_products) > 0)
+                    @foreach ($popular_products as $popular_product)
+                        <div class="col-lg-1-5 col-md-4 col-6">
+                            @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
+                        </div>
+                    @endforeach
+                @else
+                    <h4 class="text-danger text-center">No Item Found!</h4>
+                @endif
             </div>
             <!--End tab-content-->
         </div>
     </section>
 
-    
+
     <!--Daily Best Sells Tabs-->
     <section class="section-padding pb-5">
         <div class="container">
@@ -200,16 +201,17 @@
                 <h3 class="">Daily Best Sells</h3>
                 <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button type="button" wire:click="setSaleProductCategory('featured')" class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}">Featured</button>
+                        <button type="button" wire:click="setSaleProductCategory('featured')"
+                            class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}">Featured</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button type="button" wire:click="setSaleProductCategory('new')" class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}">New added</button>
+                        <button type="button" wire:click="setSaleProductCategory('new')"
+                            class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}">New added</button>
                     </li>
                 </ul>
             </div>
             <div class="row">
                 <div class="col-lg-3 d-none d-lg-flex">
-
                     <div class="banner-img style-2"
                         style="background: url('{{ asset('storage/' . $best_deal_banner->image) }}');">
                         <div class="banner-text">
@@ -221,13 +223,254 @@
                     </div>
                 </div>
                 <div class="col-lg-9 col-md-12">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:1200,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;v7EtgvYjLjzMGfPrlJeU&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;3895f1fb19ddcfc0bf9690e5dd3c8514930d6afcfbff3df9251683f260395ad9&quot;}"
+                                wire:effects="[]" wire:id="v7EtgvYjLjzMGfPrlJeU" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/ZfI0KNnFPmNbTq21ZWpM9qbVp7uUkQNyiWbE85qc.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/kf8XtFfszLmAeEDUCP5RwgdN20iYVUBDPgUvbjVL.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Sturlite Prima High Bay 6000K</a></h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹3465</span>
+                                            <span class="old-price">₹6790</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:479,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;Q2zK7Z18o92xXQ67P0Ly&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;45091f99a0a187e36d7c6f22e8b4f56f311654d4068c5d0d1b8bbdd1e73e72d1&quot;}"
+                                wire:effects="[]" wire:id="Q2zK7Z18o92xXQ67P0Ly" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/ETFuxZr0pIPee64snV6MTLa7ATZT6KoPCzteRn7j.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/qIWBeem4ONffdaBXljCmJExx6Wp7eXgI5LgVs6bf.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Cera Gayle Sink Mixer F1014501</a></h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹3849</span>
+                                            <span class="old-price">₹5920</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:432,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;mextcZ66rcBARL3jUmZh&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;78c12063ae42410b0e5e58f6207e0f1fca2f071747626879dabce2a73a3c6a4c&quot;}"
+                                wire:effects="[]" wire:id="mextcZ66rcBARL3jUmZh" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/8qrQcYnUcW9BX2O8DRfQyOa0heTljqq5DI0SnGrn.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/rYzW2KGcEUh8Q8PFbM7hxxs1uFkASC5AipGjJuZg.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Cera Chromo Wall Mixer 3-In 1 F1019403</a>
+                                    </h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹4249</span>
+                                            <span class="old-price">₹6500</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:415,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;Jr5GuJd1bkI0YmF9tIMV&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;4907aa88c79fc689a84dd7001926f07b979d922680bd3ac95f5470cdb550b1e6&quot;}"
+                                wire:effects="[]" wire:id="Jr5GuJd1bkI0YmF9tIMV" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/2YE4UlS7IqZf2CkxM1TS0j8hzbeKM5CAOKDYaoUB.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/8lq6n0NJWQwyUThaLkOQQfkeQF2MmvsBuksIghEh.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Cera Chromo 2-Way Angle Cock F1019211</a>
+                                    </h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹1299</span>
+                                            <span class="old-price">₹2000</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {{-- <div class="col-lg-9 col-md-12">
                     <div class="tab-content" id="myTabContent-1">
                         <div class="tab-pane fade show active" id="tab-{{ $sale_product_filter }}" role="tabpanel"
                             aria-labelledby="nav-tab-{{ $sale_product_filter }}">
                             <div class="carausel-4-columns-cover arrow-center position-relative">
                                 <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow"
                                     id="carausel-4-columns-arrows"></div>
-                                <div class="carausel-4-columns carausel-arrow-center" id="carausel-4-columns">
+                                <div class="carausel-4-columns carausel-4-columns-new carausel-arrow-center"
+                                    id="carausel-4-columns">
                                     @foreach ($sale_products as $sale_product)
                                         @livewire('user.component.product-sale-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . $seleted_popular_product_category))
                                     @endforeach
@@ -237,14 +480,14 @@
                         </div>
                     </div>
                     <!--End tab-content-->
-                </div>
+                </div> --}}
                 <!--End Col-lg-9-->
             </div>
         </div>
     </section>
 
     <!--End Best Sales-->
-    <section class="section-padding pb-5" wire:ignore>
+    <section class="section-padding pb-5 mt-25" wire:ignore>
         <div class="container">
             <div class="section-title">
                 <h3 class="">Deals Of The Day</h3>
@@ -255,7 +498,58 @@
             </div>
             <div class="row">
                 @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
-                    <div class="col-xl-3 col-lg-4 col-md-6">
+                    <div class="col-xl-3 col-lg-4 col-md-6 mb-20">
+                        <div class="product-cart-wrap style-2">
+                            <div class="product-img-action-wrap">
+                                <div class="product-img">
+                                    <a href="shop-product-right.html">
+                                        <img src="{{ asset('storage/' . $deals_of_the_day_product->featured_image) }}"
+                                            alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-content-wrap">
+                                <div class="deals-countdown-wrap">
+                                    <div class="deals-countdown"
+                                        data-countdown="{{ \Carbon\Carbon::parse($deals_of_the_day_product->sale_to_date)->format('Y/m/d') }} 00:00:00">
+                                    </div>
+                                </div>
+                                <div class="deals-content">
+                                    <h2><a href="shop-product-right.html">{{ $deals_of_the_day_product->name }}</a>
+                                    </h2>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
+                                    </div>
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            @if (
+                                                $deals_of_the_day_product->sale_price > 0 &&
+                                                    now() >= $deals_of_the_day_product->sale_start_date &&
+                                                    now() <= $deals_of_the_day_product->sale_end_date)
+                                                <span>₹{{ $deals_of_the_day_product->sale_price }}</span>
+                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
+                                            @elseif($deals_of_the_day_product->sale_default_price > 0)
+                                                <span>₹{{ $deals_of_the_day_product->sale_default_price }}</span>
+                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
+                                            @else
+                                                <span>₹{{ $deals_of_the_day_product->price }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
+                    <div class="col-xl-3 col-lg-4 col-md-6 mb-20">
                         <div class="product-cart-wrap style-2">
                             <div class="product-img-action-wrap">
                                 <div class="product-img">
@@ -309,6 +603,305 @@
         </div>
     </section>
     <!--End Deals-->
+
+
+    <!--Daily Best Sells Tabs-->
+    <section class="section-padding pb-25">
+        <div class="container">
+            <div class="section-title">
+                <h3 class="">Daily Best Sells</h3>
+                <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button type="button" wire:click="setSaleProductCategory('featured')"
+                            class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}">Featured</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" wire:click="setSaleProductCategory('new')"
+                            class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}">New added</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-lg-9 col-md-12">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:1200,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;v7EtgvYjLjzMGfPrlJeU&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;3895f1fb19ddcfc0bf9690e5dd3c8514930d6afcfbff3df9251683f260395ad9&quot;}"
+                                wire:effects="[]" wire:id="v7EtgvYjLjzMGfPrlJeU" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/ZfI0KNnFPmNbTq21ZWpM9qbVp7uUkQNyiWbE85qc.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/kf8XtFfszLmAeEDUCP5RwgdN20iYVUBDPgUvbjVL.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Sturlite Prima High Bay 6000K</a></h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹3465</span>
+                                            <span class="old-price">₹6790</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:479,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;Q2zK7Z18o92xXQ67P0Ly&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;45091f99a0a187e36d7c6f22e8b4f56f311654d4068c5d0d1b8bbdd1e73e72d1&quot;}"
+                                wire:effects="[]" wire:id="Q2zK7Z18o92xXQ67P0Ly" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/ETFuxZr0pIPee64snV6MTLa7ATZT6KoPCzteRn7j.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/qIWBeem4ONffdaBXljCmJExx6Wp7eXgI5LgVs6bf.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Cera Gayle Sink Mixer F1014501</a></h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹3849</span>
+                                            <span class="old-price">₹5920</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:432,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;mextcZ66rcBARL3jUmZh&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;78c12063ae42410b0e5e58f6207e0f1fca2f071747626879dabce2a73a3c6a4c&quot;}"
+                                wire:effects="[]" wire:id="mextcZ66rcBARL3jUmZh" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/8qrQcYnUcW9BX2O8DRfQyOa0heTljqq5DI0SnGrn.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/rYzW2KGcEUh8Q8PFbM7hxxs1uFkASC5AipGjJuZg.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Cera Chromo Wall Mixer 3-In 1 F1019403</a>
+                                    </h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹4249</span>
+                                            <span class="old-price">₹6500</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:415,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;Jr5GuJd1bkI0YmF9tIMV&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;4907aa88c79fc689a84dd7001926f07b979d922680bd3ac95f5470cdb550b1e6&quot;}"
+                                wire:effects="[]" wire:id="Jr5GuJd1bkI0YmF9tIMV" class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="shop-product-right.html">
+                                            <img class="default-img"
+                                                src="http://127.0.0.1:8000/storage/product/2YE4UlS7IqZf2CkxM1TS0j8hzbeKM5CAOKDYaoUB.jpg"
+                                                alt="">
+                                            <img class="hover-img"
+                                                src="http://127.0.0.1:8000/storage/product/8lq6n0NJWQwyUThaLkOQQfkeQF2MmvsBuksIghEh.jpg"
+                                                alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
+                                            class="hot">Hot</span>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap mt-2">
+                                    <h2><a href="shop-product-right.html">Cera Chromo 2-Way Angle Cock F1019211</a>
+                                    </h2>
+                                    <div class="product-rate-cover">
+
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">
+                                            (0)
+                                        </span>
+                                    </div>
+
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <!--[if BLOCK]><![endif]--> <span>₹1299</span>
+                                            <span class="old-price">₹2000</span>
+                                            <!--[if ENDBLOCK]><![endif]-->
+                                        </div>
+                                        <!--[if BLOCK]><![endif]-->
+                                        <div class="add-cart">
+                                            <a class="add" href="shop-cart.html"><i
+                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                        </div>
+                                        <!--[if ENDBLOCK]><![endif]-->
+                                    </div>
+                                    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 d-none d-lg-flex">
+                    <div class="banner-img style-2"
+                        style="background: url('{{ asset('storage/' . $best_deal_banner->image) }}');">
+                        <div class="banner-text">
+                            <h2 class="mb-100">{{ $best_deal_banner->heading }}</h2>
+                            <a href="{{ $best_deal_banner->link ?? '#' }}"
+                                class="btn btn-xs">{{ $best_deal_banner->button_text }} <i
+                                    class="fi-rs-arrow-small-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+
+                {{-- <div class="col-lg-9 col-md-12">
+                    <div class="tab-content" id="myTabContent-1">
+                        <div class="tab-pane fade show active" id="tab-{{ $sale_product_filter }}" role="tabpanel"
+                            aria-labelledby="nav-tab-{{ $sale_product_filter }}">
+                            <div class="carausel-4-columns-cover arrow-center position-relative">
+                                <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow"
+                                    id="carausel-4-columns-arrows"></div>
+                                <div class="carausel-4-columns carausel-4-columns-new carausel-arrow-center"
+                                    id="carausel-4-columns">
+                                    @foreach ($sale_products as $sale_product)
+                                        @livewire('user.component.product-sale-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . $seleted_popular_product_category))
+                                    @endforeach
+                                    <!--End product Wrap-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End tab-content-->
+                </div> --}}
+                <!--End Col-lg-9-->
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
     <section class="section-padding mb-30" wire:ignore>
         <div class="container">
             <div class="row">
@@ -492,3 +1085,37 @@
     </section>
     <!--End category slider-->``
 </main>
+
+{{-- @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $("#product-owl-carousel").owlCarousel({
+                loop: true,
+                margin: 15,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                    },
+                    576: {
+                        items: 2,
+                    },
+                    768: {
+                        items: 3,
+                    },
+                    1200: {
+                        items: 4,
+                    },
+                },
+                navText: [
+                    '<i class="fi-rs-arrow-small-left"></i>',
+                    '<i class="fi-rs-arrow-small-right"></i>',
+                ],
+            });
+        });
+    </script>
+@endpush --}}

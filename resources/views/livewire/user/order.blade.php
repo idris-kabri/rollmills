@@ -3,7 +3,7 @@
          <div class="container">
              <div class="breadcrumb">
                  <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                 <span></span> My Account <span></span> Orders
+                 <span></span> <a href="/my-account">My Account</a> <span></span> Orders
              </div>
          </div>
      </div>
@@ -52,7 +52,7 @@
                                                                  <div class="categori-dropdown-inner">
                                                                      <ul>
                                                                          <li>
-                                                                             <a href="#">
+                                                                             <a href="/user-order-detail">
                                                                                  View Order Details
                                                                              </a>
                                                                          </li>
@@ -93,11 +93,11 @@
                                                      </div>
                                                  </div>
                                                  <div class="card-content p-3 py-4">
-                                                     <div class="d-flex justify-content-between">
-                                                         <div class="content">
+                                                     <div class="d-sm-flex justify-content-between">
+                                                         <div class="content mb-2 mb-md-0">
                                                              <p
                                                                  class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand
-                                                                 d-flex align-items-center">
+                                                                 d-flex align-items-center fit-content">
                                                                  <i class="fa-solid fa-box-open me-1"></i>
                                                                  Order placed : &nbsp; <span class="text-muted">23
                                                                      October 2025</span>
@@ -106,7 +106,7 @@
 
                                                          <div class="content">
                                                              <p
-                                                                 class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center">
+                                                                 class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center fit-content">
                                                                  <i class="fa-solid fa-indian-rupee-sign mr-1"></i>
                                                                  Total Amount : &nbsp; <span class="text-muted">₹2500 (2
                                                                      Items)</span>
@@ -119,7 +119,7 @@
                                                              <div class="col-lg-6">
                                                                  <div class="card p-3 mb-3 rounded-15">
                                                                      <div class="d-flex gap-3">
-                                                                         <a class="img-section border p-1 rounded-3"
+                                                                         <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                              href="#">
                                                                              <img src="{{ asset('assets/frontend/imgs/shop/product-16-2.jpg') }}"
                                                                                  alt="img" class="img-fluid">
@@ -157,7 +157,7 @@
                                                              <div class="col-lg-6">
                                                                  <div class="card p-3 mb-3 rounded-15">
                                                                      <div class="d-flex gap-3">
-                                                                         <a class="img-section border p-1 rounded-3"
+                                                                         <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                              href="#">
                                                                              <img src="{{ asset('assets/frontend/imgs/shop/product-16-2.jpg') }}"
                                                                                  alt="img" class="img-fluid">
@@ -256,11 +256,11 @@
                                                      </div>
                                                  </div>
                                                  <div class="card-content p-3 py-4">
-                                                     <div class="d-flex justify-content-between">
-                                                         <div class="content">
+                                                     <div class="d-sm-flex justify-content-between">
+                                                         <div class="content mb-2 mb-md-0">
                                                              <p
                                                                  class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand
-                                                                 d-flex align-items-center">
+                                                                 d-flex align-items-center fit-content">
                                                                  <i class="fa-solid fa-box-open me-1"></i>
                                                                  Order placed : &nbsp; <span class="text-muted">23
                                                                      October 2025</span>
@@ -269,7 +269,7 @@
 
                                                          <div class="content">
                                                              <p
-                                                                 class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center">
+                                                                 class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center fit-content">
                                                                  <i class="fa-solid fa-indian-rupee-sign mr-1"></i>
                                                                  Total Amount : &nbsp; <span class="text-muted">₹2500
                                                                      (2
@@ -283,7 +283,7 @@
                                                              <div class="col-lg-6">
                                                                  <div class="card p-3 mb-3 rounded-15">
                                                                      <div class="d-flex gap-3">
-                                                                         <a class="img-section border p-1 rounded-3"
+                                                                         <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                              href="#">
                                                                              <img src="{{ asset('assets/frontend/imgs/shop/product-16-2.jpg') }}"
                                                                                  alt="img" class="img-fluid">
@@ -322,7 +322,7 @@
                                                              <div class="col-lg-6">
                                                                  <div class="card p-3 mb-3 rounded-15">
                                                                      <div class="d-flex gap-3">
-                                                                         <a class="img-section border p-1 rounded-3"
+                                                                         <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                              href="#">
                                                                              <img src="{{ asset('assets/frontend/imgs/shop/product-16-2.jpg') }}"
                                                                                  alt="img" class="img-fluid">
@@ -513,23 +513,24 @@
                                                      </div>
                                                  </div>
                                                  <div class="card-content p-3 py-4">
-                                                     <div class="d-flex justify-content-between">
+                                                     <div class="d-sm-flex justify-content-between">
                                                          <div class="">
                                                              <div class="content mb-2">
                                                                  <p
                                                                      class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand
-                                                                    d-flex align-items-center">
+                                                                    d-flex align-items-center fit-content">
                                                                      <i class="fa-solid fa-box-open me-1"></i>
                                                                      Order placed : &nbsp; <span class="text-muted">23
                                                                          October 2025</span>
                                                                  </p>
                                                              </div>
-                                                             <div class="content">
+                                                             <div class="content mb-2 mb-md-0">
                                                                  <p
                                                                      class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand
-                                                                    d-flex align-items-center">
+                                                                    d-flex align-items-center fit-content">
                                                                      <i class="fa-solid fa-truck me-1"></i>
-                                                                     Expected Arrival : &nbsp; <span class="text-muted">28
+                                                                     Expected Arrival : &nbsp; <span
+                                                                         class="text-muted">28
                                                                          October 2025</span>
                                                                  </p>
                                                              </div>
@@ -538,7 +539,7 @@
 
                                                          <div class="content">
                                                              <p
-                                                                 class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center">
+                                                                 class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center fit-content">
                                                                  <i class="fa-solid fa-indian-rupee-sign mr-1"></i>
                                                                  Total Amount : &nbsp; <span class="text-muted">₹2500
                                                                      (2
@@ -552,7 +553,7 @@
                                                              <div class="col-lg-6">
                                                                  <div class="card p-3 mb-3 rounded-15">
                                                                      <div class="d-flex gap-3">
-                                                                         <a class="img-section border p-1 rounded-3"
+                                                                         <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                              href="#">
                                                                              <img src="{{ asset('assets/frontend/imgs/shop/product-16-2.jpg') }}"
                                                                                  alt="img" class="img-fluid">
@@ -591,7 +592,7 @@
                                                              <div class="col-lg-6">
                                                                  <div class="card p-3 mb-3 rounded-15">
                                                                      <div class="d-flex gap-3">
-                                                                         <a class="img-section border p-1 rounded-3"
+                                                                         <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                              href="#">
                                                                              <img src="{{ asset('assets/frontend/imgs/shop/product-16-2.jpg') }}"
                                                                                  alt="img" class="img-fluid">
