@@ -35,3 +35,14 @@ function getPrice($id){
         
     } 
 }
+
+function checkReview(){  
+    $review = false;
+    $setting = Setting::where('label','Enable Review')->first(); 
+
+    if($setting){ 
+        $review = filter_var($setting->value, FILTER_VALIDATE_BOOLEAN);
+    } 
+
+    return $review;
+}

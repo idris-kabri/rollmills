@@ -138,7 +138,7 @@
                                                         </div>
 
                                                     </div>
-                                                    <p class="text-danger mb-0">540 x 600px</p>
+                                                    <p class="text-danger mb-0">1100 x 1100px</p>
                                                     <a href="javascript:void(0);" id="choose-image"
                                                         onclick="selectImage('gallery-input');"
                                                         class="mb-0 text-body">
@@ -802,7 +802,7 @@
                                                                                 </a>
                                                                             </div>
                                                                         </div>
-                                                                        <p class="text-danger mb-0">540 x 600px</p>
+                                                                        <p class="text-danger mb-0">1100 x 1100px</p>
                                                                         <a href="javascript:void(0);"
                                                                             id="choose-image"
                                                                             onclick="selectImage('variation-image-{{ $i }}');">
@@ -952,7 +952,7 @@
                                                                             </div>
 
                                                                         </div>
-                                                                        <p class="text-danger mb-0">540 x 600px</p>
+                                                                        <p class="text-danger mb-0">1100 x 1100px</p>
                                                                         <a href="javascript:void(0);"
                                                                             id="choose-image"
                                                                             onclick="selectImage('gallery-input-{{ $i }}');"
@@ -1627,7 +1627,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <p class="text-danger mb-0">540 x 600px</p>
+                                    <p class="text-danger mb-0">1100 x 1100px</p>
                                     <a href="javascript:void(0);" id="choose-image"
                                         onclick="selectImage('featured-image-input');">
                                         Choose image

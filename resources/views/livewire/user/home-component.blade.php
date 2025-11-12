@@ -199,16 +199,6 @@
         <div class="container">
             <div class="section-title">
                 <h3 class="">Daily Best Sells</h3>
-                <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button type="button" wire:click="setSaleProductCategory('featured')"
-                            class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}">Featured</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button type="button" wire:click="setSaleProductCategory('new')"
-                            class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}">New added</button>
-                    </li>
-                </ul>
             </div>
             <div class="row">
                 <div class="col-lg-3 d-none d-lg-flex">
@@ -225,8 +215,7 @@
                 <div class="col-lg-9 col-md-12">
                     <div class="row">
                         <div class="col-md-3 col-lg-3 col-6">
-                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:1200,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;v7EtgvYjLjzMGfPrlJeU&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;3895f1fb19ddcfc0bf9690e5dd3c8514930d6afcfbff3df9251683f260395ad9&quot;}"
-                                wire:effects="[]" wire:id="v7EtgvYjLjzMGfPrlJeU" class="product-cart-wrap mb-30">
+                            <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
                                         <a href="shop-product-right.html">
@@ -247,10 +236,7 @@
                                             data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
                                     </div>
                                     <div class="product-badges product-badges-position product-badges-mrg">
-                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
-                                            class="hot">Hot</span>
-                                        <!--[if ENDBLOCK]><![endif]-->
-                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <span class="hot">Hot</span>
                                     </div>
                                 </div>
                                 <div class="product-content-wrap mt-2">
@@ -282,17 +268,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-6">
-                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:479,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;Q2zK7Z18o92xXQ67P0Ly&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;45091f99a0a187e36d7c6f22e8b4f56f311654d4068c5d0d1b8bbdd1e73e72d1&quot;}"
-                                wire:effects="[]" wire:id="Q2zK7Z18o92xXQ67P0Ly" class="product-cart-wrap mb-30">
+                        <div class="col-md-3 col-lg-3 col-6">
+                            <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
                                         <a href="shop-product-right.html">
                                             <img class="default-img"
-                                                src="http://127.0.0.1:8000/storage/product/ETFuxZr0pIPee64snV6MTLa7ATZT6KoPCzteRn7j.jpg"
+                                                src="http://127.0.0.1:8000/storage/product/ZfI0KNnFPmNbTq21ZWpM9qbVp7uUkQNyiWbE85qc.jpg"
                                                 alt="">
                                             <img class="hover-img"
-                                                src="http://127.0.0.1:8000/storage/product/qIWBeem4ONffdaBXljCmJExx6Wp7eXgI5LgVs6bf.jpg"
+                                                src="http://127.0.0.1:8000/storage/product/kf8XtFfszLmAeEDUCP5RwgdN20iYVUBDPgUvbjVL.jpg"
                                                 alt="">
                                         </a>
                                     </div>
@@ -305,14 +290,11 @@
                                             data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
                                     </div>
                                     <div class="product-badges product-badges-position product-badges-mrg">
-                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
-                                            class="hot">Hot</span>
-                                        <!--[if ENDBLOCK]><![endif]-->
-                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <span class="hot">Hot</span>
                                     </div>
                                 </div>
                                 <div class="product-content-wrap mt-2">
-                                    <h2><a href="shop-product-right.html">Cera Gayle Sink Mixer F1014501</a></h2>
+                                    <h2><a href="shop-product-right.html">Sturlite Prima High Bay 6000K</a></h2>
                                     <div class="product-rate-cover">
 
                                         <div class="product-rate d-inline-block">
@@ -325,8 +307,8 @@
 
                                     <div class="product-card-bottom">
                                         <div class="product-price">
-                                            <!--[if BLOCK]><![endif]--> <span>₹3849</span>
-                                            <span class="old-price">₹5920</span>
+                                            <!--[if BLOCK]><![endif]--> <span>₹3465</span>
+                                            <span class="old-price">₹6790</span>
                                             <!--[if ENDBLOCK]><![endif]-->
                                         </div>
                                         <!--[if BLOCK]><![endif]-->
@@ -340,17 +322,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-6">
-                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:432,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;mextcZ66rcBARL3jUmZh&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;78c12063ae42410b0e5e58f6207e0f1fca2f071747626879dabce2a73a3c6a4c&quot;}"
-                                wire:effects="[]" wire:id="mextcZ66rcBARL3jUmZh" class="product-cart-wrap mb-30">
+                        <div class="col-md-3 col-lg-3 col-6">
+                            <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
                                         <a href="shop-product-right.html">
                                             <img class="default-img"
-                                                src="http://127.0.0.1:8000/storage/product/8qrQcYnUcW9BX2O8DRfQyOa0heTljqq5DI0SnGrn.jpg"
+                                                src="http://127.0.0.1:8000/storage/product/ZfI0KNnFPmNbTq21ZWpM9qbVp7uUkQNyiWbE85qc.jpg"
                                                 alt="">
                                             <img class="hover-img"
-                                                src="http://127.0.0.1:8000/storage/product/rYzW2KGcEUh8Q8PFbM7hxxs1uFkASC5AipGjJuZg.jpg"
+                                                src="http://127.0.0.1:8000/storage/product/kf8XtFfszLmAeEDUCP5RwgdN20iYVUBDPgUvbjVL.jpg"
                                                 alt="">
                                         </a>
                                     </div>
@@ -363,15 +344,11 @@
                                             data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
                                     </div>
                                     <div class="product-badges product-badges-position product-badges-mrg">
-                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
-                                            class="hot">Hot</span>
-                                        <!--[if ENDBLOCK]><![endif]-->
-                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <span class="hot">Hot</span>
                                     </div>
                                 </div>
                                 <div class="product-content-wrap mt-2">
-                                    <h2><a href="shop-product-right.html">Cera Chromo Wall Mixer 3-In 1 F1019403</a>
-                                    </h2>
+                                    <h2><a href="shop-product-right.html">Sturlite Prima High Bay 6000K</a></h2>
                                     <div class="product-rate-cover">
 
                                         <div class="product-rate d-inline-block">
@@ -384,8 +361,8 @@
 
                                     <div class="product-card-bottom">
                                         <div class="product-price">
-                                            <!--[if BLOCK]><![endif]--> <span>₹4249</span>
-                                            <span class="old-price">₹6500</span>
+                                            <!--[if BLOCK]><![endif]--> <span>₹3465</span>
+                                            <span class="old-price">₹6790</span>
                                             <!--[if ENDBLOCK]><![endif]-->
                                         </div>
                                         <!--[if BLOCK]><![endif]-->
@@ -399,17 +376,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-6">
-                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:415,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;Jr5GuJd1bkI0YmF9tIMV&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;4907aa88c79fc689a84dd7001926f07b979d922680bd3ac95f5470cdb550b1e6&quot;}"
-                                wire:effects="[]" wire:id="Jr5GuJd1bkI0YmF9tIMV" class="product-cart-wrap mb-30">
+                        <div class="col-md-3 col-lg-3 col-6">
+                            <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
                                         <a href="shop-product-right.html">
                                             <img class="default-img"
-                                                src="http://127.0.0.1:8000/storage/product/2YE4UlS7IqZf2CkxM1TS0j8hzbeKM5CAOKDYaoUB.jpg"
+                                                src="http://127.0.0.1:8000/storage/product/ZfI0KNnFPmNbTq21ZWpM9qbVp7uUkQNyiWbE85qc.jpg"
                                                 alt="">
                                             <img class="hover-img"
-                                                src="http://127.0.0.1:8000/storage/product/8lq6n0NJWQwyUThaLkOQQfkeQF2MmvsBuksIghEh.jpg"
+                                                src="http://127.0.0.1:8000/storage/product/kf8XtFfszLmAeEDUCP5RwgdN20iYVUBDPgUvbjVL.jpg"
                                                 alt="">
                                         </a>
                                     </div>
@@ -422,15 +398,11 @@
                                             data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
                                     </div>
                                     <div class="product-badges product-badges-position product-badges-mrg">
-                                        <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--> <span
-                                            class="hot">Hot</span>
-                                        <!--[if ENDBLOCK]><![endif]-->
-                                        <!--[if ENDBLOCK]><![endif]-->
+                                        <span class="hot">Hot</span>
                                     </div>
                                 </div>
                                 <div class="product-content-wrap mt-2">
-                                    <h2><a href="shop-product-right.html">Cera Chromo 2-Way Angle Cock F1019211</a>
-                                    </h2>
+                                    <h2><a href="shop-product-right.html">Sturlite Prima High Bay 6000K</a></h2>
                                     <div class="product-rate-cover">
 
                                         <div class="product-rate d-inline-block">
@@ -443,8 +415,8 @@
 
                                     <div class="product-card-bottom">
                                         <div class="product-price">
-                                            <!--[if BLOCK]><![endif]--> <span>₹1299</span>
-                                            <span class="old-price">₹2000</span>
+                                            <!--[if BLOCK]><![endif]--> <span>₹3465</span>
+                                            <span class="old-price">₹6790</span>
                                             <!--[if ENDBLOCK]><![endif]-->
                                         </div>
                                         <!--[if BLOCK]><![endif]-->
@@ -460,28 +432,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                {{-- <div class="col-lg-9 col-md-12">
-                    <div class="tab-content" id="myTabContent-1">
-                        <div class="tab-pane fade show active" id="tab-{{ $sale_product_filter }}" role="tabpanel"
-                            aria-labelledby="nav-tab-{{ $sale_product_filter }}">
-                            <div class="carausel-4-columns-cover arrow-center position-relative">
-                                <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow"
-                                    id="carausel-4-columns-arrows"></div>
-                                <div class="carausel-4-columns carausel-4-columns-new carausel-arrow-center"
-                                    id="carausel-4-columns">
-                                    @foreach ($sale_products as $sale_product)
-                                        @livewire('user.component.product-sale-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . $seleted_popular_product_category))
-                                    @endforeach
-                                    <!--End product Wrap-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--End tab-content-->
-                </div> --}}
-                <!--End Col-lg-9-->
             </div>
         </div>
     </section>
@@ -610,23 +560,12 @@
         <div class="container">
             <div class="section-title">
                 <h3 class="">Daily Best Sells</h3>
-                <ul class="nav nav-tabs links" id="myTab-2" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button type="button" wire:click="setSaleProductCategory('featured')"
-                            class="nav-link {{ $sale_product_filter == 'featured' ? 'active' : '' }}">Featured</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button type="button" wire:click="setSaleProductCategory('new')"
-                            class="nav-link {{ $sale_product_filter == 'new' ? 'active' : '' }}">New added</button>
-                    </li>
-                </ul>
             </div>
             <div class="row">
                 <div class="col-lg-9 col-md-12">
                     <div class="row">
                         <div class="col-md-3 col-lg-3 col-6">
-                            <div wire:snapshot="{&quot;data&quot;:{&quot;product&quot;:[null,{&quot;class&quot;:&quot;App\\Models\\Product&quot;,&quot;key&quot;:1200,&quot;s&quot;:&quot;mdl&quot;}],&quot;parameter&quot;:&quot;hot&quot;,&quot;get_sold&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;v7EtgvYjLjzMGfPrlJeU&quot;,&quot;name&quot;:&quot;user.component.product-card&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;3895f1fb19ddcfc0bf9690e5dd3c8514930d6afcfbff3df9251683f260395ad9&quot;}"
-                                wire:effects="[]" wire:id="v7EtgvYjLjzMGfPrlJeU" class="product-cart-wrap mb-30">
+                            <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
                                         <a href="shop-product-right.html">
@@ -871,35 +810,9 @@
                         </div>
                     </div>
                 </div>
-
-
-                {{-- <div class="col-lg-9 col-md-12">
-                    <div class="tab-content" id="myTabContent-1">
-                        <div class="tab-pane fade show active" id="tab-{{ $sale_product_filter }}" role="tabpanel"
-                            aria-labelledby="nav-tab-{{ $sale_product_filter }}">
-                            <div class="carausel-4-columns-cover arrow-center position-relative">
-                                <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow"
-                                    id="carausel-4-columns-arrows"></div>
-                                <div class="carausel-4-columns carausel-4-columns-new carausel-arrow-center"
-                                    id="carausel-4-columns">
-                                    @foreach ($sale_products as $sale_product)
-                                        @livewire('user.component.product-sale-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . $seleted_popular_product_category))
-                                    @endforeach
-                                    <!--End product Wrap-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--End tab-content-->
-                </div> --}}
-                <!--End Col-lg-9-->
             </div>
         </div>
     </section>
-
-
-
-
 
 
     <section class="section-padding mb-30" wire:ignore>
@@ -1083,7 +996,7 @@
             </div>
         </div>
     </section>
-    <!--End category slider-->``
+    <!--End category slider-->
 </main>
 
 {{-- @push('scripts')

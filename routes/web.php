@@ -34,7 +34,7 @@ Route::get('/cart', CartComponent::class)->name('cart');
 Route::get('/checkout', CheckoutComponent::class)->name('checkout');
 Route::get('/compare', CompareComponent::class)->name('compare');
 Route::get('/shop', ShopComponent::class)->name('shop');
-Route::get('/shop-detail', ShopDetailComponent::class)->name('shop-detail');
+Route::get('/shop-detail/{id}', ShopDetailComponent::class)->name('shop-detail');
 Route::get('/wishlist', WishlistComponent::class)->name('wishlist');
 Route::get('/coupon-claim', CouponClaim::class)->name("coupon.claim");
 Route::get('/user-order', Order::class)->name("user-order");

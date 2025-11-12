@@ -2,9 +2,18 @@
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
-                <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                <span></span> <a href="shop-grid-right.html">Vegetables & tubers</a> <span></span> Seeds of Change
-                Organic
+                @php
+                    $count_category_assign = count($mainProduct->categoryAssigns);
+                @endphp
+                <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                @if ($count_category_assign > 1)
+                    <span></span> <a
+                        href="shop-grid-right.html">{{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->name }}</a>
+                    <span></span> {{ $mainProduct->categoryAssigns[0]->category->name }}
+                @else
+                    <span></span> <a
+                        href="shop-grid-right.html">{{ $mainProduct->categoryAssigns[0]->category->name }}</a>
+                @endif
             </div>
         </div>
     </div>
@@ -15,54 +24,30 @@
                     <div class="row mb-50 mt-30">
                         <div class="col-lg-6 col-sm-12 col-xs-12 mb-lg-0 mb-sm-5">
                             <div class="detail-gallery">
+                                @php
+                                    $gallaryImages = json_decode($mainProduct->images, true);
+                                @endphp
                                 <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                 <!-- MAIN SLIDES -->
                                 <div class="product-image-slider">
                                     <figure class="border-radius-10">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/product-16-2.jpg') }}"
+                                        <img src="{{ asset('storage/' . $mainProduct->featured_image) }}"
                                             alt="product image" />
                                     </figure>
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/product-16-1.jpg') }}"
-                                            alt="product image" />
-                                    </figure>
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/product-16-3.jpg') }}"
-                                            alt="product image" />
-                                    </figure>
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/product-16-4.jpg') }}"
-                                            alt="product image" />
-                                    </figure>
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/product-16-5.jpg') }}"
-                                            alt="product image" />
-                                    </figure>
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/product-16-6.jpg') }}"
-                                            alt="product image" />
-                                    </figure>
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/product-16-7.jpg') }}"
-                                            alt="product image" />
-                                    </figure>
+                                    @foreach ($gallaryImages as $gallaryImage)
+                                        <figure class="border-radius-10">
+                                            <img src="{{ asset('storage/' . $gallaryImage) }}" alt="product image" />
+                                        </figure>
+                                    @endforeach
                                 </div>
                                 <!-- THUMBNAILS -->
                                 <div class="slider-nav-thumbnails">
-                                    <div><img src="{{ asset('assets/frontend/imgs/shop/thumbnail-3.jpg') }}"
+                                    <div><img src="{{ asset('storage/' . $mainProduct->featured_image) }}"
                                             alt="product image" /></div>
-                                    <div><img src="{{ asset('assets/frontend/imgs/shop/thumbnail-4.jpg') }}"
-                                            alt="product image" /></div>
-                                    <div><img src="{{ asset('assets/frontend/imgs/shop/thumbnail-5.jpg') }}"
-                                            alt="product image" /></div>
-                                    <div><img src="{{ asset('assets/frontend/imgs/shop/thumbnail-6.jpg') }}"
-                                            alt="product image" /></div>
-                                    <div><img src="{{ asset('assets/frontend/imgs/shop/thumbnail-7.jpg') }}"
-                                            alt="product image" /></div>
-                                    <div><img src="{{ asset('assets/frontend/imgs/shop/thumbnail-8.jpg') }}"
-                                            alt="product image" /></div>
-                                    <div><img src="{{ asset('assets/frontend/imgs/shop/thumbnail-9.jpg') }}"
-                                            alt="product image" /></div>
+                                    @foreach ($gallaryImages as $gallaryImage)
+                                        <div><img src="{{ asset('storage/' . $gallaryImage) }}" alt="product image" />
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <!-- End Gallery -->
@@ -70,28 +55,64 @@
                         <div class="col-lg-6 col-sm-12 col-xs-12">
                             <div class="detail-info pr-30 pl-30">
                                 <span class="stock-status out-stock"> Sale Off </span>
-                                <h2 class="title-detail">Seeds of Change Organic Quinoa, Brown</h2>
-                                <div class="product-detail-rating">
-                                    <div class="product-rate-cover text-end">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 90%"></div>
+                                <h2 class="title-detail">{{ $mainProduct->name }}</h2>
+                                @php
+                                    $review = checkReview();
+                                @endphp
+                                @if ($review)
+                                    @php
+                                        $percentage = ($mainProduct_reviews_avg / 5) * 100;
+                                    @endphp
+                                    <div class="product-detail-rating">
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <div class="product-rating" style="width: {{ $percentage }}%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted"> ({{ $mainProduct_reviews_count }}
+                                                reviews)</span>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (32 reviews)</span>
                                     </div>
-                                </div>
+                                @endif
+                                @php
+                                    $original_price = $mainProduct->price;
+                                    $sale_price = 0;
+                                    $currentDate = \Carbon\Carbon::now();
+                                    $sale_from_date = \Carbon\Carbon::parse($mainProduct->sale_from_date);
+                                    $sale_to_date = \Carbon\Carbon::parse($mainProduct->sale_to_date);
+                                    $percentage = 0;
+
+                                    if (
+                                        $mainProduct->sale_price > 0 &&
+                                        $currentDate->between($sale_from_date, $sale_to_date)
+                                    ) {
+                                        $sale_price = $mainProduct->sale_price;
+                                    } else if($mainProduct->sale_default_price > 0) {
+                                        $sale_price = $mainProduct->sale_default_price;
+                                    }
+                                    if($sale_price > 0){
+                                        $percentage =
+                                            $original_price > 0
+                                                ? (($original_price - $sale_price) / $original_price) * 100
+                                                : 0;
+                                    }
+                                @endphp
                                 <div class="clearfix product-price-cover">
+                                    @if($sale_price > 0)
                                     <div class="product-price primary-color float-left">
-                                        <span class="current-price text-brand">$38</span>
+                                        <span class="current-price text-brand">₹{{ number_format($sale_price) }}</span>
                                         <span>
-                                            <span class="save-price font-md color3 ml-15 fw-700">26% Off</span>
-                                            <span class="old-price font-md ml-15">$52</span>
+                                            <span class="save-price font-md color3 ml-15 fw-700">{{round($percentage)}}% Off</span>
+                                            <span class="old-price font-md ml-15">₹{{ number_format($original_price) }}</span>
                                         </span>
                                     </div>
+                                    @else
+                                    <div class="product-price primary-color float-left">
+                                        <span class="current-price text-brand">${{ number_format($mainProduct->price) }}</span>
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="short-desc mb-30">
-                                    <p class="font-lg">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam
-                                        rem officia, corrupti reiciendis minima nisi modi, quasi, odio minus dolore
-                                        impedit fuga eum eligendi.</p>
+                                    <p class="font-lg">{!! $mainProduct->short_description !!}</p>
                                 </div>
                                 <div class="attr-detail attr-size mb-30">
                                     <strong class="mr-10">Size / Weight: </strong>
@@ -116,8 +137,8 @@
                                                 class="fi-rs-shopping-cart"></i>Add to cart</button>
                                         <a aria-label="Add To Wishlist" class="action-btn hover-up"
                                             href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up"
-                                            href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                        <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i
+                                                class="fi-rs-shuffle"></i></a>
                                     </div>
                                 </div>
                                 <div class="font-xs">

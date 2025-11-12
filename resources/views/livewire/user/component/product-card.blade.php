@@ -1,7 +1,7 @@
 <div class="product-cart-wrap mb-30">
     <div class="product-img-action-wrap">
         <div class="product-img product-img-zoom">
-            <a href="shop-product-right.html">
+            <a href="/shop-detail/{{ $product->id }}">
                 <img class="default-img" src="{{ asset('storage/' . $product->featured_image) }}" alt="" />
                 @php
                     $product_images = json_decode($product->images, true);
@@ -69,7 +69,7 @@
         </div>
     </div>
     <div class="product-content-wrap mt-2">
-        <h2><a href="shop-product-right.html">{{ $product->name }}</a></h2>
+        <h2><a href="/shop-detail/{{ $product->id }}">{{ $product->name }}</a></h2>
         <div class="product-rate-cover">
             @php
                 $reviews = \App\Models\ProductReview::where('status', 1)
