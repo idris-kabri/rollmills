@@ -112,7 +112,7 @@
 }
 
 .hover-a:hover {
-    color: var(--color-1);
+    color: var(--color-1) !important;
 }
 
 .rounded-15 {
@@ -161,7 +161,7 @@
 
 .contact_style3 .contact_icon {
     border: 2px solid #e1990c;
-    margin: 0 0 10px;
+    margin: 0 0 20px;
     height: 80px;
     width: 80px;
     text-align: center;
