@@ -15,55 +15,56 @@
             <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i
                     class="fi-rs-eye"></i></a>
         </div>
-        <div class="product-badges product-badges-position product-badges-mrg"> 
-            @if($parameter)
+        <div class="product-badges product-badges-position product-badges-mrg">
+            @if ($parameter)
                 @if ($parameter == 'hot')
-                    <span class="hot">Hot</span>
+                    <span class="product-cart-componet-badge hot">Hot</span>
                 @elseif($parameter == 'sale')
+                    @php
+                        $original_price = $product->price;
+                        $sale_price = 0;
+                        $currentDate = \Carbon\Carbon::now();
+                        $sale_from_date = \Carbon\Carbon::parse($product->sale_from_date);
+                        $sale_to_date = \Carbon\Carbon::parse($product->sale_to_date);
+
+                        if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+                            $sale_price = $product->sale_price;
+                        } else {
+                            $sale_price = $product->sale_default_price;
+                        }
+                        $percentage =
+                            $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
+                    @endphp
+                    <span class="product-cart-componet-badge save">Save {{ number_format($percentage) }}%</span>
+                @endif
+            @else
                 @php
                     $original_price = $product->price;
                     $sale_price = 0;
+                    $check_type = '';
+
                     $currentDate = \Carbon\Carbon::now();
                     $sale_from_date = \Carbon\Carbon::parse($product->sale_from_date);
                     $sale_to_date = \Carbon\Carbon::parse($product->sale_to_date);
 
                     if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
                         $sale_price = $product->sale_price;
-                    }else{
-                        $sale_price = $product->sale_default_price;
-                    }
-                    $percentage = $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
-                @endphp
-                    <span class="best">Save {{ number_format($percentage) }}%</span>
-                @endif 
-            @else 
-                @php
-                    $original_price = $product->price;
-                    $sale_price = 0; 
-                    $check_type = ''; 
-
-                    $currentDate = \Carbon\Carbon::now();
-                    $sale_from_date = \Carbon\Carbon::parse($product->sale_from_date);
-                    $sale_to_date = \Carbon\Carbon::parse($product->sale_to_date);
-
-                    if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
-                        $sale_price = $product->sale_price; 
                         $check_type = 'sale_product';
                     } elseif ($product->is_featured == 1 && $check_type == '') {
                         $check_type = 'featured_product';
                     } else {
-                        $sale_price = $product->sale_default_price; 
+                        $sale_price = $product->sale_default_price;
                         $check_type = 'sale_default_product';
                     }
                     $percentage = $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
-                @endphp  
+                @endphp
 
-                @if($check_type == 'sale_product') 
-                    <span class="best">Save {{ number_format($percentage) }}%</span> 
+                @if ($check_type == 'sale_product')
+                    <span class="product-cart-componet-badge save">Save {{ number_format($percentage) }}%</span>
                 @elseif($check_type == 'featured_product')
-                    <span class="hot">Hot</span> 
-                @else 
-                    <span class="best">Save {{ number_format($percentage) }}%</span> 
+                    <span class="product-cart-componet-badge hot">Hot</span>
+                @else
+                    <span class="product-cart-componet-badge save">Save {{ number_format($percentage) }}%</span>
                 @endif
             @endif
         </div>
@@ -72,9 +73,7 @@
         <h2><a href="/shop-detail/{{ $product->id }}">{{ $product->name }}</a></h2>
         <div class="product-rate-cover">
             @php
-                $reviews = \App\Models\ProductReview::where('status', 1)
-                            ->where('product_id', $product->id)
-                            ->get();
+                $reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $product->id)->get();
 
                 $reviews_count = $reviews->count();
                 $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
@@ -92,13 +91,13 @@
         <div class="product-card-bottom">
             <div class="product-price">
                 @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
-                    <span>₹{{ $product->sale_price }}</span>
+                    <span class="price-transition">₹{{ $product->sale_price }}</span>
                     <span class="old-price">₹{{ $product->price }}</span>
                 @elseif($product->sale_default_price > 0)
-                    <span>₹{{ $product->sale_default_price }}</span>
+                    <span class="price-transition">₹{{ $product->sale_default_price }}</span>
                     <span class="old-price">₹{{ $product->price }}</span>
                 @else
-                    <span>₹{{ $product->price }}</span>
+                    <span class="price-transition">₹{{ $product->price }}</span>
                 @endif
             </div>
             @if ($get_sold == false)

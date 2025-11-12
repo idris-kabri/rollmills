@@ -347,6 +347,54 @@
     height: 35px;
 }
 
+.product-cart-componet-badge {
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-family: "Quicksand", sans-serif;
+    padding: 4px 10px;
+    font-size: 13px;
+    display: inline-block;
+}
+
+.product-cart-componet-badge.hot {
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+}
+
+.product-cart-componet-badge.save {
+    background: linear-gradient(135deg, #0072ff, #00c6ff);
+}
+
+.product-cart-componet-badge::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.43),
+        transparent
+    );
+    animation: shimmer 2s infinite;
+}
+
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
 /* ==================================================================== */
 /* Home Page Css End */
 /* ==================================================================== */

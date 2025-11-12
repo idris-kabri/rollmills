@@ -3,7 +3,7 @@
             .ui-widget.ui-widget-content {
                 border: 1px solid #dca915;
                 height: 0.4rem;
-                background: #dca915 !important;
+                background: #e9e9e9 !important;
             } 
             .price-filter .caption {
                 font-size: 15px;
