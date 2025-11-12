@@ -755,6 +755,12 @@
 /* ==================================================================== */
 
 @media (max-width: 767px) {
+    .title.style-3 {
+        font-size: 38px;
+        padding-bottom: 20px;
+        background-size: 125px;
+    }
+
     .product-cart-wrap .product-img-action-wrap {
         position: relative;
         background-color: #fff;

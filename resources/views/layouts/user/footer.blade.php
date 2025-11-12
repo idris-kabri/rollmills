@@ -128,6 +128,7 @@
                         <li><a href="/about">About Us</a></li>
                         <li><a href="/my-acount">Delivery Information</a></li>
                         <li><a href="/privacy-policy">Privacy Policy</a></li>
+                        <li><a href="/return-policy">Return Policy</a></li>
                         <li><a href="/terms">Terms &amp; Conditions</a></li>
                         <li><a href="/contact">Contact Us</a></li>
                     </ul>
