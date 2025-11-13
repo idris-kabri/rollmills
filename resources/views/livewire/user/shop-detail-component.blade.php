@@ -53,8 +53,40 @@
                             <!-- End Gallery -->
                         </div>
                         <div class="col-lg-6 col-sm-12 col-xs-12">
+                            @php
+                                $original_price = $mainProduct->price;
+                                $sale_price = 0;
+                                $check_type = '';
+
+                                $currentDate = \Carbon\Carbon::now();
+                                $sale_from_date = \Carbon\Carbon::parse($mainProduct->sale_from_date);
+                                $sale_to_date = \Carbon\Carbon::parse($mainProduct->sale_to_date);
+
+                                if (
+                                    $mainProduct->sale_price > 0 &&
+                                    $currentDate->between($sale_from_date, $sale_to_date)
+                                ) {
+                                    $sale_price = $mainProduct->sale_price;
+                                    $check_type = 'sale_product';
+                                } elseif ($mainProduct->is_featured == 1 && $check_type == '') {
+                                    $check_type = 'featured_product';
+                                } else {
+                                    $sale_price = $mainProduct->sale_default_price;
+                                    $check_type = 'sale_default_product';
+                                }
+                                $percentage =
+                                    $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
+                            @endphp
                             <div class="detail-info pr-30 pl-30">
-                                <span class="stock-status out-stock"> Sale Off </span>
+                                @if ($check_type == 'sale_product')
+                                    <span class="product-cart-componet-badge save">Save
+                                        {{ number_format($percentage) }}%</span>
+                                @elseif($check_type == 'featured_product')
+                                    <span class="product-cart-componet-badge hot">Hot</span>
+                                @else
+                                    <span class="product-cart-componet-badge save">Save
+                                        {{ number_format($percentage) }}%</span>
+                                @endif
                                 <h2 class="title-detail">{{ $mainProduct->name }}</h2>
                                 @php
                                     $review = checkReview();
@@ -86,10 +118,10 @@
                                         $currentDate->between($sale_from_date, $sale_to_date)
                                     ) {
                                         $sale_price = $mainProduct->sale_price;
-                                    } else if($mainProduct->sale_default_price > 0) {
+                                    } elseif ($mainProduct->sale_default_price > 0) {
                                         $sale_price = $mainProduct->sale_default_price;
                                     }
-                                    if($sale_price > 0){
+                                    if ($sale_price > 0) {
                                         $percentage =
                                             $original_price > 0
                                                 ? (($original_price - $sale_price) / $original_price) * 100
@@ -97,33 +129,41 @@
                                     }
                                 @endphp
                                 <div class="clearfix product-price-cover">
-                                    @if($sale_price > 0)
-                                    <div class="product-price primary-color float-left">
-                                        <span class="current-price text-brand">₹{{ number_format($sale_price) }}</span>
-                                        <span>
-                                            <span class="save-price font-md color3 ml-15 fw-700">{{round($percentage)}}% Off</span>
-                                            <span class="old-price font-md ml-15">₹{{ number_format($original_price) }}</span>
-                                        </span>
-                                    </div>
+                                    @if ($sale_price > 0)
+                                        <div class="product-price primary-color float-left">
+                                            <span
+                                                class="current-price text-brand">₹{{ number_format($sale_price) }}</span>
+                                            <span>
+                                                <span
+                                                    class="save-price font-md color3 ml-15 fw-700">{{ round($percentage) }}%
+                                                    Off</span>
+                                                <span
+                                                    class="old-price font-md ml-15">₹{{ number_format($original_price) }}</span>
+                                            </span>
+                                        </div>
                                     @else
-                                    <div class="product-price primary-color float-left">
-                                        <span class="current-price text-brand">${{ number_format($mainProduct->price) }}</span>
-                                    </div>
+                                        <div class="product-price primary-color float-left">
+                                            <span
+                                                class="current-price text-brand">${{ number_format($mainProduct->price) }}</span>
+                                        </div>
                                     @endif
                                 </div>
                                 <div class="short-desc mb-30">
                                     <p class="font-lg">{!! $mainProduct->short_description !!}</p>
                                 </div>
-                                <div class="attr-detail attr-size mb-30">
-                                    <strong class="mr-10">Size / Weight: </strong>
-                                    <ul class="list-filter size-filter font-small">
-                                        <li><a href="#">50g</a></li>
-                                        <li class="active"><a href="#">60g</a></li>
-                                        <li><a href="#">80g</a></li>
-                                        <li><a href="#">100g</a></li>
-                                        <li><a href="#">150g</a></li>
-                                    </ul>
-                                </div>
+                                @foreach ($groupedAttributes as $key => $attributes)
+                                    <div class="attr-detail attr-size mb-30">
+                                        <strong class="mr-10">{{ $attributes['name'] }} </strong>
+                                        <ul class="list-filter size-filter font-small">
+                                            @foreach ($attributes['items'] as $item)
+                                                <li><a href="#"
+                                                        class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}"
+                                                        wire:click.prevent="handleAttributeClick({{ $key }}, '{{ $item }}')">{{ $item }}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endforeach
                                 <div
                                     class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start justify-content-center mb-50">
                                     <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
