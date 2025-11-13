@@ -385,7 +385,6 @@
     animation: shimmer 2s infinite;
 }
 
-
 @keyframes shimmer {
     0% {
         transform: translateX(-100%) translateY(-100%) rotate(45deg);
@@ -792,6 +791,32 @@
     color: var(--color-2);
     font-size: 12px;
     font-weight: 600;
+}
+
+.cart-checkbox-custom {
+    border: 1px solid var(--color-1);
+}
+
+.cart-checkbox-custom:focus {
+    border-color: var(--color-light-1);
+    outline: 0;
+    box-shadow: 0 0 0 1px rgba(220, 169, 21, 0.2);
+}
+.cart-checkbox-custom:checked {
+    background-color: var(--color-1);
+    border-color: var(--color-1);
+}
+
+.cart-checkbox-custom[type="checkbox"] {
+    border-radius: 100px;
+}
+
+.widget-category-2 ul li a i {
+    transition: all 0.3s ease-in-out;
+}
+
+.widget-category-2 ul li a.show i {
+    transform: rotate(90deg);
 }
 
 /* ==================================================================== */

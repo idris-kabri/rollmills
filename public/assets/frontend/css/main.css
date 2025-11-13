@@ -4794,7 +4794,7 @@ table .product-thumbnail img {
     background: #dca915;
     border: none;
     border-radius: 100%;
-    top: -7px;
+    top: -6px;
 }
 
 .range .label-input {
@@ -10036,6 +10036,10 @@ span.fi-rs-apps {
     margin-top: 0px;
     pointer-events: auto;
 }
+/* 
+.widget-category-2 ul li:hover .dropdown-menu.shop-page-sub-category {
+    display: none;
+} */
 
 .widget-category-2 ul li.has-children {
     position: relative;

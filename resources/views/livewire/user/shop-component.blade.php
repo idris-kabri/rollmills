@@ -1,9 +1,9 @@
     <main class="main">
         <style>
             .ui-widget.ui-widget-content {
-                border: 1px solid #dca915;
+                border: none;
                 height: 0.4rem;
-                background: #e9e9e9 !important;
+                background: #e9e9e985;
             }
 
             .price-filter .caption {
@@ -57,41 +57,84 @@
                 <div class="col-xl-3 primary-sidebar">
                     <div class="sidebar-widget widget-category-2 mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">Category</h5>
+
+                        <div class="">
+                            <ul>
+                                <li>
+                                    <a href="#" class="fw-600 quicksand w-100">
+                                        {{-- Arrow Chnage Css in index.css // Line no. 814-820 --}}
+                                        <i class="fi fi-rr-angle-small-right d-flex align-items-center me-1"
+                                            style="margin-bottom: 2px"></i> Electronics
+                                        <span
+                                            class="count ms-auto d-flex justify-content-center align-items-center">22</span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class=" pl-25 py-3">
+                                <div class="form-check">
+                                    <input class="form-check-input cart-checkbox-custom" type="checkbox" value=""
+                                        id="flexCheckDefault1">
+                                    <label class="form-check-label hover-a text-heading quicksand fw-600"
+                                        for="flexCheckDefault1">
+                                        Default checkbox
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input cart-checkbox-custom" type="checkbox" value=""
+                                        id="flexCheckDefault2">
+                                    <label class="form-check-label hover-a text-heading quicksand fw-600"
+                                        for="flexCheckDefault2">
+                                        Default checkbox
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input cart-checkbox-custom" type="checkbox" value=""
+                                        id="flexCheckDefault3">
+                                    <label class="form-check-label hover-a text-heading quicksand fw-600"
+                                        for="flexCheckDefault3">
+                                        Default checkbox
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                         <ul>
                             @foreach ($categories as $category)
                                 <li>
-                                    <a href="shop-grid-right.html"> <img
-                                            src="{{ asset('storage/' . $category->image) }}') }}"
-                                            alt="" />{{ $category->name }}</a><span
-                                        class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
+                                    <a href="#" class="fw-600 quicksand">
+                                        <img src="{{ asset('storage/' . $category->image) }}') }}"
+                                            alt="" />{{ $category->name }}
+                                    </a>
+                                    <span class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
 
                     <!-- Filter By Price -->
-                    <div class="sidebar-widget price_range range mb-30 d-none d-xl-block">
+                    <div class="sidebar-widget range mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">Filter by price</h5>
                         <div class="price-filter">
                             <div class="price-filter-inner">
                                 <div id="shop-slider-range" class="mb-20"></div>
 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="caption">
-                                        <strong class="text-brand">Price:</strong>
+                                <div class="d-flex justify-content-between align-items-center caption mt-20">
+                                    <div class="">
+                                        <strong class="text-muted fw-600 fs-17 me-1">From :</strong>
                                         <span id="shop-slider-range-value1"
-                                            class="text-brand">{{ $minFilterPrice }}</span>
-                                        <span class="mx-1">to</span>
+                                            class="text-brand fw-600 fs-17">{{ $minFilterPrice }}</span>
+                                    </div>
+                                    <div class="">
+                                        <strong class="text-muted fw-600 fs-17 me-1">To :</strong>
                                         <span id="shop-slider-range-value2"
-                                            class="text-brand">{{ $maxFilterPrice }}</span>
+                                            class="text-brand fw-600 fs-17">{{ $maxFilterPrice }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <button wire:click="render" class="btn btn-sm btn-default mt-2">
-                            <i class="fi-rs-filter mr-5"></i> Filter
-                        </button>
                     </div>
 
                     <!-- Product sidebar Widget -->
@@ -112,6 +155,7 @@
                             </div>
                         @endforeach
                     </div>
+
                     <div class="banner-img wow fadeIn mb-lg-0 animated d-xl-block d-none">
                         <img src="{{ asset('storage/' . $shop_page_banner->image) }}" alt="" />
                         <div class="banner-text">
