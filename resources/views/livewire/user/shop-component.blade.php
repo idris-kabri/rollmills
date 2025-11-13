@@ -1,13 +1,21 @@
-    <main class="main"> 
+    <main class="main">
         <style>
             .ui-widget.ui-widget-content {
                 border: 1px solid #dca915;
                 height: 0.4rem;
                 background: #e9e9e9 !important;
-            } 
+            }
+
             .price-filter .caption {
                 font-size: 15px;
                 font-weight: 500;
+            }
+
+            .ui-widget-header {
+                border: 1px solid #dddddd;
+                background: #dca915;
+                color: #333333;
+                font-weight: bold;
             }
         </style>
         <div class="page-header mt-30 mb-50">
@@ -67,13 +75,15 @@
                         <div class="price-filter">
                             <div class="price-filter-inner">
                                 <div id="shop-slider-range" class="mb-20"></div>
-                            
+
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="caption">
                                         <strong class="text-brand">Price:</strong>
-                                        <span id="shop-slider-range-value1" class="text-brand">{{$minFilterPrice}}</span>
+                                        <span id="shop-slider-range-value1"
+                                            class="text-brand">{{ $minFilterPrice }}</span>
                                         <span class="mx-1">to</span>
-                                        <span id="shop-slider-range-value2" class="text-brand">{{$maxFilterPrice}}</span>
+                                        <span id="shop-slider-range-value2"
+                                            class="text-brand">{{ $maxFilterPrice }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -154,10 +164,12 @@
                                 </div>
                                 <div class="sort-by-dropdown">
                                     <ul>
-                                        <li><a class="{{ $sortby == 'featured' ? 'active' : '' }}" href="#" wire:click.prevent="setSortBy('featured')">Featured</a></li>
+                                        <li><a class="{{ $sortby == 'featured' ? 'active' : '' }}" href="#"
+                                                wire:click.prevent="setSortBy('featured')">Featured</a></li>
                                         <li><a href="#">Price: Low to High</a></li>
                                         <li><a href="#">Price: High to Low</a></li>
-                                        <li><a href="#" class="{{ $sortby == 'new' ? 'active' : '' }}" wire:click.prevent="setSortBy('new')">Release Date</a></li>
+                                        <li><a href="#" class="{{ $sortby == 'new' ? 'active' : '' }}"
+                                                wire:click.prevent="setSortBy('new')">Release Date</a></li>
                                         <li><a href="#">Avg. Rating</a></li>
                                     </ul>
                                 </div>
@@ -166,7 +178,8 @@
                             <div class="sort-by-cover mt-2 d-block d-xl-none">
                                 <div class="sort-by-product-wrap bg-brand text-white shop-filter">
                                     <div class="sort-by">
-                                        <span class="fw-700"><i class="fi-rs-apps-sort text-white fw-600"></i>Filter</span>
+                                        <span class="fw-700"><i
+                                                class="fi-rs-apps-sort text-white fw-600"></i>Filter</span>
                                     </div>
                                 </div>
                             </div>
@@ -215,20 +228,32 @@
                                             <div class="deals-content">
                                                 <h2><a
                                                         href="shop-product-right.html">{{ $deals_of_the_day_product->name }}</a>
-                                                </h2> 
+                                                </h2>
                                                 <div class="product-rate-cover">
                                                     @php
-                                                        $deals_of_the_day_product_reviews = \App\Models\ProductReview::where('status', 1)
-                                                                    ->where('product_id', $deals_of_the_day_product->id)
-                                                                    ->get();
+                                                        $deals_of_the_day_product_reviews = \App\Models\ProductReview::where(
+                                                            'status',
+                                                            1,
+                                                        )
+                                                            ->where('product_id', $deals_of_the_day_product->id)
+                                                            ->get();
 
                                                         $deals_of_the_day_product_reviews_count = $deals_of_the_day_product_reviews->count();
-                                                        $deals_of_the_day_product_reviews_avg = $deals_of_the_day_product_reviews_count > 0 ? round($deals_of_the_day_product_reviews->avg('ratings'), 1) : 0;
-                                                        $deals_of_the_day_product_reviews_percentage = ($deals_of_the_day_product_reviews_avg / 5) * 100;
+                                                        $deals_of_the_day_product_reviews_avg =
+                                                            $deals_of_the_day_product_reviews_count > 0
+                                                                ? round(
+                                                                    $deals_of_the_day_product_reviews->avg('ratings'),
+                                                                    1,
+                                                                )
+                                                                : 0;
+                                                        $deals_of_the_day_product_reviews_percentage =
+                                                            ($deals_of_the_day_product_reviews_avg / 5) * 100;
                                                     @endphp
 
                                                     <div class="product-rate d-inline-block">
-                                                        <div class="product-rating" style="width: {{ $deals_of_the_day_product_reviews_percentage }}%;"></div>
+                                                        <div class="product-rating"
+                                                            style="width: {{ $deals_of_the_day_product_reviews_percentage }}%;">
+                                                        </div>
                                                     </div>
                                                     <span class="font-small ml-5 text-muted">
                                                         ({{ $deals_of_the_day_product_reviews_avg }})
@@ -302,26 +327,26 @@
             </div>
         </div>
     </main>
-@push('scripts')  
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () { 
-        let minPrice = @json($minFilterPrice);
-        let maxPrice = @json($maxFilterPrice);
+    @push('scripts')
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let minPrice = @json($minFilterPrice);
+                let maxPrice = @json($maxFilterPrice);
 
-        $("#shop-slider-range").slider({
-            range: true,
-            min: minPrice,
-            max: maxPrice,
-            values: [0, 1000],
-            slide: function (event, ui) {
-                $("#shop-slider-range-value1").text(ui.values[0]);
-                $("#shop-slider-range-value2").text(ui.values[1]);
-            }
-        });
+                $("#shop-slider-range").slider({
+                    range: true,
+                    min: minPrice,
+                    max: maxPrice,
+                    values: [0, 1000],
+                    slide: function(event, ui) {
+                        $("#shop-slider-range-value1").text(ui.values[0]);
+                        $("#shop-slider-range-value2").text(ui.values[1]);
+                    }
+                });
 
-        // Set initial text
-        $("#shop-slider-range-value1").text($("#shop-slider-range").slider("values", 0));
-    });
-</script>
-@endpush
+                // Set initial text
+                $("#shop-slider-range-value1").text($("#shop-slider-range").slider("values", 0));
+            });
+        </script>
+    @endpush

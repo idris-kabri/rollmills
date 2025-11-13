@@ -4387,10 +4387,13 @@ table .product-thumbnail img {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: pricePulse 2s ease-in-out infinite;
-    z-index: 1; 
+    z-index: 1;
 }
 
-.product-cart-wrap .product-content-wrap .product-price span.price-transition::before {
+.product-cart-wrap
+    .product-content-wrap
+    .product-price
+    span.price-transition::before {
     content: "";
     position: absolute;
     top: -50%;
@@ -4408,9 +4411,15 @@ table .product-thumbnail img {
 }
 
 @keyframes pricePulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 @keyframes shimmer2 {
@@ -4779,13 +4788,13 @@ table .product-thumbnail img {
 }
 
 .range .ui-slider-handle.ui-state-default.ui-corner-all {
-    width: 14px;
-    height: 14px;
+    width: 17px;
+    height: 17px;
     line-height: 10px;
     background: #dca915;
     border: none;
     border-radius: 100%;
-    top: -5px;
+    top: -7px;
 }
 
 .range .label-input {
