@@ -16,7 +16,8 @@ use Illuminate\Validation\ValidationException;
 use Livewire\WithFileUploads;
 
 class ShopDetailComponent extends Component
-{
+{ 
+    use WithFileUploads,HasToastNotification;
     public $mainProduct;
     public $mainProduct_reviews;
     public $mainProduct_reviews_count;
@@ -40,7 +41,7 @@ class ShopDetailComponent extends Component
 
     protected $listeners = ['closeQuickView' => 'handleCloseQuickView'];
 
-    public function mount($id)
+    public function mount($slug = null,$id)
     {
         $this->id = $id;
         $this->selectedAttribute = [];
@@ -129,7 +130,6 @@ class ShopDetailComponent extends Component
                 'review_email' => Auth::check() ? 'nullable' : 'required|email',
                 'review_remark' => 'required|string',
             ]);
-
             $review = new ProductReview();
             $review->product_id = $this->mainProduct->id;
             if (Auth::user()) {
@@ -147,8 +147,13 @@ class ShopDetailComponent extends Component
                 $review->image = $path;
             }
             $review->save();
-            $this->toastSuccess('Thanks For Review This Product!');
-            $this->redirectWithDelay("/shop-product-detail/{$this->mainProduct->id}");
+            $this->toastSuccess('Thanks For Review This Product!'); 
+            if($this->mainProduct->slug){ 
+                $url = '/shop-detail/' . $this->mainProduct->slug . $this->mainProduct->id;
+            }else{ 
+                $url = '/shop-detail/no-slug/'. $this->mainProduct->id;
+            }
+            $this->redirectWithDelay($url);
         } catch (ValidationException $e) {
             $firstError = collect($e->validator->errors()->all())->first();
             $this->toastError($firstError);

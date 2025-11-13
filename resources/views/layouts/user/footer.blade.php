@@ -268,7 +268,25 @@
 <!-- Template  JS -->
 <script src="{{ asset('assets/frontend/js/main.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/shop.js') }}"></script>
-<!-- Google Tag Manager -->
+<!-- Google Tag Manager -->  
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script>
+    // Listen for the success event
+    document.addEventListener('success', event => {
+        toastr.success(event.detail.message);
+    });
+
+    document.addEventListener('error', event => {
+        toastr.error(event.detail.message);
+    });
+
+    window.addEventListener('redirectAfterDelay', (event) => {
+        const redirectUrl = event.detail[0].url ?? '/';
+        setTimeout(() => {
+            window.location.href = redirectUrl;
+        }, 2000);
+    });
+ </script>
 <script>
     (function(w, d, s, l, i) {
         w[l] = w[l] || [];

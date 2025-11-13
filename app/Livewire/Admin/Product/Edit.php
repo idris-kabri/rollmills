@@ -15,7 +15,8 @@ use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+use Livewire\WithFileUploads; 
+use Illuminate\Support\Str;
 
 class Edit extends Component
 {
@@ -30,6 +31,7 @@ class Edit extends Component
     public $selectedCategories = [];
     public $categoriesSearch;
     public $name;
+    public $slug;
     public $main_description;
     public $short_description;
     public $gallery_images = [];
@@ -203,6 +205,7 @@ class Edit extends Component
 
         $this->productId = $product->id;
         $this->name = $product->name;
+        $this->slug = $product->slug;
         $this->main_description = $product->description;
         $this->short_description = $product->short_description;
         $this->youtube_link = $product->youtube_video_link;
@@ -350,6 +353,10 @@ class Edit extends Component
         }
     }
 
+    public function updatedName($value){ 
+        $this->slug = Str::slug($value, '-');
+    }
+
     public function formSubmit()
     {
         $validator = Validator::make($this->all(), [
@@ -418,6 +425,7 @@ class Edit extends Component
                 $product_id = [];
                 $product = Product::findOrFail($this->productId);
                 $product->name = $this->name;
+                $product->slug = $this->slug;
                 $product->description = $this->main_description;
                 $product->short_description = $this->short_description;
                 $product->youtube_video_link = $this->youtube_link;

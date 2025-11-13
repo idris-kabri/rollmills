@@ -1,12 +1,20 @@
 <div class="product-cart-wrap mb-30">
     <div class="product-img-action-wrap">
-        <div class="product-img product-img-zoom">
-            <a href="/shop-detail/{{ $product->id }}">
-                <img class="default-img" src="{{ asset('storage/' . $product->featured_image) }}" alt="" />
+        <div class="product-img product-img-zoom"> 
+           @php  
+                if($product->slug){ 
+                    $shop_detail_url = route('shop-detail', ['slug' => $product->slug, 'id' => $product->id]);
+                } else { 
+                    $shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $product->id]);
+                }
+            @endphp
+
+            <a href="{{$shop_detail_url}}">
+                <img class="default-img" src="{{ asset('storage/' . $product->featured_image) }}"  alt="{{$product->seo_meta}}" />
                 @php
                     $product_images = json_decode($product->images, true);
                 @endphp
-                <img class="hover-img" src="{{ asset('storage/' . $product_images[0]) }}" alt="" />
+                <img class="hover-img" src="{{ asset('storage/' . $product_images[0]) }}"  alt="{{$product->seo_meta}}" />
             </a>
         </div>
         <div class="product-action-1">
@@ -70,14 +78,14 @@
         </div>
     </div>
     <div class="product-content-wrap mt-2">
-        <h2><a href="/shop-detail/{{ $product->id }}">{{ $product->name }}</a></h2>
+            <h2><a href="{{$shop_detail_url}}">{{ $product->name }}</a></h2>
         <div class="product-rate-cover">
             @php
                 $reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $product->id)->get();
 
                 $reviews_count = $reviews->count();
                 $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
-                $reviews_percentage = ($reviews_avg / 5) * 100; // convert rating to percentage (for width)
+                $reviews_percentage = ($reviews_avg / 5) * 100;
             @endphp
 
             <div class="product-rate d-inline-block">

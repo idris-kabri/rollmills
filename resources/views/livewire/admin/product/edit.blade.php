@@ -49,9 +49,23 @@
                                             Name
                                         </label>
                                         <input class="form-control @error('name') is-invalid @enderror"
-                                            data-counter="250" placeholder="Name" name="name" required="required" wire:model='name'
+                                            data-counter="250" placeholder="Name" name="name" required="required" wire:model.live='name'
                                             type="text" id="name">
                                         @error('name')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3 position-relative">
+                                        <label class="form-label form-label required" for="slug">
+                                            Slug
+                                        </label>
+                                        <input class="form-control @error('slug') is-invalid @enderror"
+                                            data-counter="250" placeholder="Slug" name="slug" wire:model='slug'
+                                            type="text" id="slug">
+                                        @error('slug')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>

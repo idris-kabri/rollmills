@@ -5347,6 +5347,11 @@ table .product-thumbnail img {
     background-color: #dca915;
     border-color: #dca915;
 }
+.size-filter.list-filter li.active a {
+    color: #fff;
+    background-color: #dca915;
+    border-color: #dca915;
+}
 
 .detail-qty {
     max-width: 80px;

@@ -140,16 +140,43 @@
                     <!-- Product sidebar Widget -->
                     <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">New products</h5>
-                        @foreach ($new_products as $new_product)
+                        @foreach ($new_products as $new_product) 
+                            @php  
+                                if($new_product->slug){ 
+                                    $new_product_shop_detail_url = route('shop-detail', ['slug' => $new_product->slug, 'id' => $new_product->id]);
+                                } else { 
+                                    $new_product_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $new_product->id]);
+                                }
+                            @endphp
                             <div class="single-post clearfix">
                                 <div class="image">
-                                    <img src="{{ asset('storage/' . $new_product->featured_image) }}" alt="#" />
+                                    <img src="{{ asset('storage/' . $new_product->featured_image) }}" alt="{{$new_product->seo_meta}}" />
                                 </div>
                                 <div class="content pt-10">
-                                    <h5><a href="shop-product-detail.html">{{ $new_product->name }}</a></h5>
-                                    <p class="price mb-0 mt-5">₹{{ $new_product->price }}</p>
+                                    <h5><a href="{{$new_product_shop_detail_url}}">{{ $new_product->name }}</a></h5> 
+
+                                    <div class="product-price">
+                                        @if ($new_product->sale_price > 0 && now() >= $new_product->sale_start_date && now() <= $new_product->sale_end_date)
+                                            <span class="price-transition mb-0 mt-5">₹{{ $new_product->sale_price }}</span>
+                                            <span class="old-price mb-0 mt-5"> <del>₹{{ $new_product->price }}</del></span>
+                                        @elseif($new_product->sale_default_price > 0)
+                                            <span class="price-transition mb-0 mt-5">₹{{ $new_product->sale_default_price }}</span>
+                                            <span class="old-price mb-0 mt-5"> <del>₹{{ $new_product->price }}</del></span>
+                                        @else
+                                            <span class="price-transition mb-0 mt-5">₹{{ $new_product->price }}</span>
+                                        @endif 
+                                    </div>
+
+                                    @php
+                                        $new_product_reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $new_product->id)->get();
+
+                                        $new_product_reviews_count = $new_product_reviews->count();
+                                        $new_product_reviews_avg = $new_product_reviews_count > 0 ? round($new_product_reviews->avg('ratings'), 1) : 0;
+                                        $new_product_reviews_percentage = ($new_product_reviews_avg / 5) * 100;
+                                    @endphp
+
                                     <div class="product-rate">
-                                        <div class="product-rating" style="width: 90%"></div>
+                                        <div class="product-rating" style="width: {{$new_product_reviews_percentage}}%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -252,14 +279,21 @@
                             </a>
                         </div>
                         <div class="row">
-                            @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
+                            @foreach ($deals_of_the_day_products as $deals_of_the_day_product) 
+                                @php  
+                                    if($deals_of_the_day_product->slug){ 
+                                        $deals_of_the_day_product_shop_detail_url = route('shop-detail', ['slug' => $deals_of_the_day_product->slug, 'id' => $deals_of_the_day_product->id]);
+                                    } else { 
+                                        $deals_of_the_day_product_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $deals_of_the_day_product->id]);
+                                    }
+                                @endphp
                                 <div class="col-xl-3 col-lg-4 col-md-6">
                                     <div class="product-cart-wrap style-2">
                                         <div class="product-img-action-wrap">
                                             <div class="product-img">
-                                                <a href="shop-product-right.html">
+                                                <a href="{{$deals_of_the_day_product_shop_detail_url}}">
                                                     <img src="{{ asset('storage/' . $deals_of_the_day_product->featured_image) }}"
-                                                        alt="" />
+                                                        alt="{{$deals_of_the_day_product->seo_meta}}" />
                                                 </a>
                                             </div>
                                         </div>
@@ -271,7 +305,7 @@
                                             </div>
                                             <div class="deals-content">
                                                 <h2><a
-                                                        href="shop-product-right.html">{{ $deals_of_the_day_product->name }}</a>
+                                                        href="{{$deals_of_the_day_product_shop_detail_url}}">{{ $deals_of_the_day_product->name }}</a>
                                                 </h2>
                                                 <div class="product-rate-cover">
                                                     @php
@@ -343,7 +377,7 @@
                                     <div class="single-post clearfix mb-20">
                                         <div class="image">
                                             <img src="{{ asset('storage/' . $new_product->featured_image) }}"
-                                                alt="#" />
+                                                alt="{{$new_product->seo_meta}}" />
                                         </div>
                                         <div class="content pt-10">
                                             <h5><a href="shop-product-detail.html">{{ $new_product->name }}</a></h5>
