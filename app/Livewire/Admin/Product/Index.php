@@ -18,7 +18,7 @@ class Index extends Component
             $query->where('name', 'LIKE', "%{$this->search}%")
                 ->orWhere('price', 'LIKE', "%{$this->search}%")
                 ->orWhere('sale_price', 'LIKE', "%{$this->search}%");
-        })->where('parent_id', null)->paginate(10);
+        })->orderBy('id','desc')->where('parent_id', null)->paginate(10);
         
         return view('livewire.admin.product.index', [
             'products' =>  $products

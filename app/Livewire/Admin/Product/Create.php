@@ -15,7 +15,8 @@ use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+use Livewire\WithFileUploads; 
+use Illuminate\Support\Str;
 
 class Create extends Component
 {
@@ -67,12 +68,17 @@ class Create extends Component
     public $sale_default_price = 0;
     public $new_images = [];
     public $tempImages = [];
+    public $slug;
 
     public function mount()
     {
         $this->productAttributes = ProductAttribute::with('getAttibuteItems')->get();
         $this->all_products = Product::all();
         $this->brands = Brand::all();
+    }
+
+    public function updatedName($value){ 
+        $this->slug = Str::slug($value, '-');
     }
 
     public function updatedTempImages($value, $keyPath)
@@ -234,6 +240,7 @@ class Create extends Component
     {
         $validator = Validator::make($this->all(), [
             'name' => 'required',
+            'slug' => 'required',
             'main_description' => 'required',
             'short_description' => 'required',
             'youtube_link' => 'sometimes|nullable',
@@ -300,6 +307,7 @@ class Create extends Component
                 $product_id = [];
                 $product = new Product;
                 $product->name = $this->name;
+                $product->slug = $this->slug;
                 $product->description = $this->main_description;
                 $product->short_description = $this->short_description;
                 $product->youtube_video_link = $this->youtube_link;

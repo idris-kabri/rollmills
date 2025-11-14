@@ -49,9 +49,23 @@
                                             Name
                                         </label>
                                         <input class="form-control @error('name') is-invalid @enderror"
-                                            data-counter="250" placeholder="Name" name="name" required="required" wire:model='name'
+                                            data-counter="250" placeholder="Name" name="name" required="required" wire:model.live='name'
                                             type="text" id="name">
                                         @error('name')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3 position-relative">
+                                        <label class="form-label form-label required" for="slug">
+                                            Slug
+                                        </label>
+                                        <input class="form-control @error('slug') is-invalid @enderror"
+                                            data-counter="250" placeholder="Slug" name="slug" wire:model='slug'
+                                            type="text" id="slug">
+                                        @error('slug')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -138,7 +152,7 @@
                                                         </div>
 
                                                     </div>
-                                                    <p class="text-danger mb-0">540 x 600px</p>
+                                                    <p class="text-danger mb-0">1100 x 1100px</p>
                                                     <a href="javascript:void(0);" id="choose-image"
                                                         onclick="selectImage('gallery-input');"
                                                         class="mb-0 text-body">
@@ -802,7 +816,7 @@
                                                                                 </a>
                                                                             </div>
                                                                         </div>
-                                                                        <p class="text-danger mb-0">540 x 600px</p>
+                                                                        <p class="text-danger mb-0">1100 x 1100px</p>
                                                                         <a href="javascript:void(0);"
                                                                             id="choose-image"
                                                                             onclick="selectImage('variation-image-{{ $i }}');">
@@ -952,7 +966,7 @@
                                                                             </div>
 
                                                                         </div>
-                                                                        <p class="text-danger mb-0">540 x 600px</p>
+                                                                        <p class="text-danger mb-0">1100 x 1100px</p>
                                                                         <a href="javascript:void(0);"
                                                                             id="choose-image"
                                                                             onclick="selectImage('gallery-input-{{ $i }}');"
@@ -1394,8 +1408,8 @@
                             <div class=" card-body">
                                 <select name="status" class="form-control form-select @error('status') is-invalid @enderror"
                                     required="required" id="status-select-10813" wire:model="status">
-                                    <option {{$status == 1 ? 'selected' : ''}}value="published">Published</option>
-                                    <option {{$status == 0 ? 'selected' : ''}}value="draft">Draft</option>
+                                    <option {{$status == 1 ? 'selected' : ''}} value="published">Published</option>
+                                    <option {{$status == 0 ? 'selected' : ''}} value="draft">Draft</option>
                                 </select>
                                 @error('status')
                                 <div class="invalid-feedback">
@@ -1627,7 +1641,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <p class="text-danger mb-0">540 x 600px</p>
+                                    <p class="text-danger mb-0">1100 x 1100px</p>
                                     <a href="javascript:void(0);" id="choose-image"
                                         onclick="selectImage('featured-image-input');">
                                         Choose image

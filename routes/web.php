@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\LoginComponent;
 use App\Livewire\Auth\RegisterComponent;
@@ -15,10 +14,19 @@ use App\Livewire\User\CompareComponent;
 use App\Livewire\User\ShopComponent;
 use App\Livewire\User\ShopDetailComponent;
 use App\Livewire\User\WishlistComponent;
+use App\Livewire\User\ReturnPolicy; 
+use App\Livewire\User\ShippingPolicy;
+use App\Livewire\User\CouponClaim;
+use App\Livewire\User\Order;
+use App\Livewire\User\OrderDetail;
+use App\Livewire\User\Profile;
+use App\Livewire\User\Address;
 
 Route::get('/', HomeComponent::class)->name('home');
 Route::get('/about', AboutComponent::class)->name('about');
 Route::get('/my-account', AccountComponent::class)->name('my-account');
+Route::get('/return-policy', ReturnPolicy::class)->name('return-policy');
+Route::get('/shipping-policy', ShippingPolicy::class)->name('shipping-policy');
 Route::get('/contact', ContactComponent::class)->name('contact');
 Route::get('/privacy-policy', PrivacyPolicyComponent::class)->name('privacy-policy');
 Route::get('/terms', TermsComponent::class)->name('terms');
@@ -26,9 +34,14 @@ Route::get('/cart', CartComponent::class)->name('cart');
 Route::get('/checkout', CheckoutComponent::class)->name('checkout');
 Route::get('/compare', CompareComponent::class)->name('compare');
 Route::get('/shop', ShopComponent::class)->name('shop');
-Route::get('/shop-detail', ShopDetailComponent::class)->name('shop-detail');
+Route::get('/shop-detail/{slug?}/{id}', ShopDetailComponent::class)->name('shop-detail');
 Route::get('/wishlist', WishlistComponent::class)->name('wishlist');
-
+Route::get('/coupon-claim', CouponClaim::class)->name("coupon.claim");
+Route::get('/user-order', Order::class)->name("user-order");
+Route::get('/user-order-detail', OrderDetail::class)->name("user-order-detail");
+Route::get('/user-profile', Profile::class)->name("user-profile");
+Route::get('/user-address', Address::class)->name("user-address");
 Route::get('/login', LoginComponent::class)->name('login');
 Route::get('/register', RegisterComponent::class)->name('register');
+
 @include('admin.php');
