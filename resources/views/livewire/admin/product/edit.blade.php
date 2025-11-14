@@ -1408,8 +1408,8 @@
                             <div class=" card-body">
                                 <select name="status" class="form-control form-select @error('status') is-invalid @enderror"
                                     required="required" id="status-select-10813" wire:model="status">
-                                    <option {{$status == 1 ? 'selected' : ''}}value="published">Published</option>
-                                    <option {{$status == 0 ? 'selected' : ''}}value="draft">Draft</option>
+                                    <option {{$status == 1 ? 'selected' : ''}} value="published">Published</option>
+                                    <option {{$status == 0 ? 'selected' : ''}} value="draft">Draft</option>
                                 </select>
                                 @error('status')
                                 <div class="invalid-feedback">
