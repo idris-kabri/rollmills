@@ -7,6 +7,7 @@ use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\json;
 
@@ -70,6 +71,10 @@ class Edit extends Component
         try {
             $update_banner = Banner::find($this->id);
             if ($this->image instanceof \Illuminate\Http\UploadedFile) {
+                $current_image = $update_banner->image;
+                if ($current_image != null && $current_image != '') {
+                    Storage::disk('public')->delete($current_image);
+                }
                 $imagePath = $this->image->store('banner', 'public');
                 $update_banner->image = $imagePath;
             }

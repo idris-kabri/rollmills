@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads; 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Edit extends Component
 {
@@ -460,6 +461,10 @@ class Edit extends Component
                 $product->specifications = json_encode($this->specifications ?? []);
 
                 if ($this->featured_image instanceof \Illuminate\Http\UploadedFile && $this->featured_image) {
+                    $current_featured_image = $product->featured_image;
+                    if ($current_featured_image != null && $current_featured_image != '') {
+                        Storage::disk('public')->delete($current_featured_image);
+                    }
                     // Store the image in the 'product' folder under the 'public' disk
                     $imagePath = $this->featured_image->store('product', 'public');
                     $product->featured_image = $imagePath;
@@ -469,6 +474,15 @@ class Edit extends Component
                 // Handle gallery images - UPDATED VERSION
                 $existingImages = $this->default_gallery_images ?? [];
                 $newImages = [];
+
+                $old_gallery_images = json_decode($product->images);
+                if (!empty($old_gallery_images)) {
+                    foreach ($old_gallery_images as $image) {
+                        if (!in_array($image, $existingImages)) {
+                            Storage::disk('public')->delete($image);
+                        }
+                    }
+                }
 
                 if (!empty($this->gallery_images)) {
                     foreach ($this->gallery_images as $image) {

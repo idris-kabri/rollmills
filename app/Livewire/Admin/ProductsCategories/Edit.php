@@ -7,6 +7,7 @@ use App\Models\ProductCategoryRelation;
 use App\Traits\HasToastNotification;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class Edit extends Component
 {
@@ -66,10 +67,20 @@ class Edit extends Component
             $store_product_category = ProductCategory::find($this->id);
     
             if ($this->image instanceof \Illuminate\Http\UploadedFile) {
+                $current_image = $store_product_category->image;
+                if($current_image != null && $current_image != ''){
+                    $image_path = public_path('storage/'.$current_image);
+                    Storage::disk('public')->delete($current_image);
+                }
                 $imagePath = $this->image->store('product_category', 'public'); 
                 $store_product_category->image = $imagePath; 
             }
             if ($this->icon instanceof \Illuminate\Http\UploadedFile) {
+                $current_icon = $store_product_category->icon;
+                if($current_icon != null && $current_icon != ''){
+                    $icon_path = public_path('storage/'.$current_icon);
+                    Storage::disk('public')->delete($current_icon);
+                }
                 $iconPath = $this->icon->store('product_category_icon', 'public'); 
                 $store_product_category->icon = $iconPath; 
             }

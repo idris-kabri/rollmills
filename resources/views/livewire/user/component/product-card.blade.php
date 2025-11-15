@@ -110,7 +110,7 @@
             </div>
             @if ($get_sold == false)
                 <div class="add-cart">
-                    <a class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                    <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
                 </div>
             @endif
         </div>
@@ -123,7 +123,7 @@
                 </div>
                 <span class="font-xs text-heading"> Sold: 90/120</span>
             </div>
-            <a href="shop-cart.html" class="btn w-100 hover-up"><i class="fi-rs-shopping-cart mr-5"></i>Add To
+            <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="btn w-100 hover-up"><i class="fi-rs-shopping-cart mr-5"></i>Add To
                 Cart</a>
         @endif
     </div>

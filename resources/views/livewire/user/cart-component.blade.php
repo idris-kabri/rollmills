@@ -13,15 +13,9 @@
             <div class="col-lg-12 mb-40">
                 <div class="content mb-10">
                     <h1 class="title style-3 mb-20 text-center">Your Cart</h1>
-                    <h6 class="text-body text-center">There are <span class="text-brand">5</span> products in your cart
+                    <h6 class="text-body text-center">There are <span class="text-brand">{{ Cart::instance('cart')->count() }}</span> products in your cart
                     </h6>
-                    {{-- <h6 class="text-body"><a href="#" class="text-muted"><i class="fi-rs-trash mr-5"></i>Clear
-                            Cart</a></h6> --}}
                 </div>
-                {{-- <h1 class="heading-2 mb-10">Your Cart</h1>
-                <div class="d-flex justify-content-between">
-                    <h6 class="text-body">There are <span class="text-brand">3</span> products in your cart</h6>
-                </div> --}}
             </div>
         </div>
         <div class="row">
@@ -30,11 +24,6 @@
                     <table class="table table-wishlist mb-0">
                         <thead>
                             <tr class="main-heading">
-                                <th class="custome-checkbox start pl-30">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox11" value="">
-                                    <label class="form-check-label" for="exampleCheckbox11"></label>
-                                </th>
                                 <th scope="col" colspan="2">Product</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Quantity</th>
@@ -43,136 +32,65 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="pt-30">
-                                <td class="custome-checkbox pl-30">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox1" value="">
-                                    <label class="form-check-label" for="exampleCheckbox1"></label>
-                                </td>
-                                <td class="image product-thumbnail pt-40 position-relative"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/product-1-1.jpg') }}" alt="#">
-                                    <div class="display-visible-480 d-none">
-                                        <a href="#"
-                                            class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
-                                            <i class="fi-rs-trash text-white"></i></a>
-                                    </div>
-                                </td>
-                                <td class="product-des product-name">
-                                    <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                            href="/shop-detail">Field Roast Chao Cheese Creamy Original</a>
-                                    </h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width:90%">
+                            @foreach (Cart::instance('cart')->content() as $item)
+                                <tr class="pt-30">
+                                    <td class="image product-thumbnail pt-40 position-relative"><img
+                                            src="{{ asset('storage/' . $item->model->featured_image) }}" alt="#">
+                                        <div class="display-visible-480 d-none">
+                                            <a href="#"
+                                                class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
+                                                <i class="fi-rs-trash text-white"></i></a>
+                                        </div>
+                                    </td>
+                                    <td class="product-des product-name">
+                                        <h6 class="mb-5 ms-4"><a class="product-name mb-10 text-heading"
+                                                href="/shop-detail">{{ $item->model->name }}</a>
+                                        </h6>
+                                            @php
+                                                $reviews = \App\Models\ProductReview::where('status', 1)
+                                                    ->where('product_id', $item->model->id)
+                                                    ->get();
+
+                                                $reviews_count = $reviews->count();
+                                                $reviews_avg =
+                                                    $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
+                                                $reviews_percentage = ($reviews_avg / 5) * 100;
+                                            @endphp
+                                        <div class="product-rate-cover ms-4">
+                                            <div class="product-rate d-inline-block">
+                                                <div class="product-rating" style="width: {{ $reviews_percentage }}%">
+                                                </div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
+                                        </div>
+                                    </td>
+                                    <td class="price small-screen-table-td me-3" data-title="Price">
+                                        <h4 class="text-body small-screen-table-td-content">₹{{ number_format($item->model->price) }}</h4>
+                                    </td>
+                                    <td class="text-center detail-info" data-title="Stock">
+                                        <div class="detail-extralink mr-15 display-hide-480">
+                                            <div class="detail-qty border radius">
+                                                <a href="#" class="qty-down"><i
+                                                        class="fi-rs-angle-small-down"></i></a>
+                                                <span class="qty-val">{{$item->qty}}</span>
+                                                <a href="#" class="qty-up"><i
+                                                        class="fi-rs-angle-small-up"></i></a>
                                             </div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                    </div>
-                                </td>
-                                <td class="price small-screen-table-td" data-title="Price">
-                                    <h4 class="text-body small-screen-table-td-content">$2.51</h4>
-                                </td>
-                                <td class="text-center detail-info" data-title="Stock">
-                                    <div class="detail-extralink mr-15 display-hide-480">
-                                        <div class="detail-qty border radius">
-                                            <a href="#" class="qty-down"><i
-                                                    class="fi-rs-angle-small-down"></i></a>
-                                            <span class="qty-val">1</span>
-                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                        <div class="quantity d-none">
+                                            <input type="button" value="-" class="minus">
+                                            <input type="number" min="1" value="1" class="qty"
+                                                size="4" title="Qty">
+                                            <input type="button" value="+" class="plus">
                                         </div>
-                                    </div>
-                                    <div class="quantity d-none">
-                                        <input type="button" value="-" class="minus">
-                                        <input type="number" min="1" value="1" class="qty"
-                                            size="4" title="Qty">
-                                        <input type="button" value="+" class="plus">
-                                    </div>
-                                </td>
-                                <td class="price small-screen-table-td" data-title="Total Price">
-                                    <h4 class="text-brand small-screen-table-td-content">$2.51</h4>
-                                </td>
-                                <td class="action text-center small-screen-table-td remove-btn" data-title="Remove"><a
-                                        href="#" class="text-body"><i class="fi-rs-trash"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td class="custome-checkbox pl-30">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox2" value="">
-                                    <label class="form-check-label" for="exampleCheckbox2"></label>
-                                </td>
-                                <td class="image product-thumbnail"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/product-2-1.jpg') }}" alt="#">
-                                </td>
-                                <td class="product-des product-name">
-                                    <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                            href="shop-product-right.html">Blue Diamond Almonds Lightly Salted</a></h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width:90%">
-                                            </div>
-                                        </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                    </div>
-                                </td>
-                                <td class="price" data-title="Price">
-                                    <h4 class="text-body">$3.2 </h4>
-                                </td>
-                                <td class="text-center detail-info" data-title="Stock">
-                                    <div class="detail-extralink mr-15">
-                                        <div class="detail-qty border radius">
-                                            <a href="#" class="qty-down"><i
-                                                    class="fi-rs-angle-small-down"></i></a>
-                                            <span class="qty-val">1</span>
-                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="price" data-title="Price">
-                                    <h4 class="text-brand">$3.2 </h4>
-                                </td>
-                                <td class="action text-center" data-title="Remove"><a href="#"
-                                        class="text-body"><i class="fi-rs-trash"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td class="custome-checkbox pl-30">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox3" value="">
-                                    <label class="form-check-label" for="exampleCheckbox3"></label>
-                                </td>
-                                <td class="image product-thumbnail"><img
-                                        src="{{ asset('assets/frontend/imgs/shop/product-3-1.jpg') }}" alt="#">
-                                </td>
-                                <td class="product-des product-name">
-                                    <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                            href="shop-product-right.html">Fresh Organic Mustard Leaves Bell Pepper</a>
-                                    </h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width:90%">
-                                            </div>
-                                        </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                    </div>
-                                </td>
-                                <td class="price" data-title="Price">
-                                    <h4 class="text-body">$2.43 </h4>
-                                </td>
-                                <td class="text-center detail-info" data-title="Stock">
-                                    <div class="detail-extralink mr-15">
-                                        <div class="detail-qty border radius">
-                                            <a href="#" class="qty-down"><i
-                                                    class="fi-rs-angle-small-down"></i></a>
-                                            <span class="qty-val">1</span>
-                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="price" data-title="Price">
-                                    <h4 class="text-brand">$2.43 </h4>
-                                </td>
-                                <td class="action text-center" data-title="Remove"><a href="#"
-                                        class="text-body"><i class="fi-rs-trash"></i></a></td>
-                            </tr>
+                                    </td>
+                                    <td class="price small-screen-table-td" data-title="Total Price">
+                                        <h4 class="text-brand small-screen-table-td-content">₹{{ number_format($item->model->price * $item->qty) }}</h4>
+                                    </td>
+                                    <td class="action text-center small-screen-table-td remove-btn" data-title="Remove">
+                                        <a href="#" class="text-body"><i class="fi-rs-trash"></i></a></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

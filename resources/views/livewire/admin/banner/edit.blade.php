@@ -45,6 +45,7 @@
                                         <option value="top_side_banner">Top Side Banner</option>
                                         <option value="middle_page_banner">Middle Page Banner</option>
                                         <option value="daily_best_deals">Daily Best Deals</option>
+                                        <option value="user_looks_for">User looks for</option>
                                         <option value="shop_page_banner">Shop Page Banner</option>
                                     </select>
                                     @error('banner_type')
@@ -156,6 +157,8 @@
                                             <span class="text-danger">443 X 259px</span>
                                         @elseif($banner_type == 'daily_best_deals')
                                             <span class="text-danger">540 X 769px</span>
+                                        @elseif($banner_type == 'user_looks_for')
+                                            <span class="text-danger">540 X 769px</span>
                                         @elseif($banner_type == 'shop_page_banner')
                                             <span class="text-danger">1024 X 1076px</span>
                                         @endif
@@ -223,7 +226,7 @@
             <div class="text-start">
                 <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-between">
                     <div class="order-2 order-lg-1">
-                        Copyright 2025 © Fakhri Electric Store.
+                        Copyright 2025 © Roll Mills Store.
                     </div>
                 </div>
             </div>
