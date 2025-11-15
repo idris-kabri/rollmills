@@ -1,6 +1,6 @@
 /*===================================
 Author       : Web Amplifier.
-Template Name: Fakhri Electric Store
+Template Name: Roll Mills Store
 Version      : 1.4
 ===================================*/
 

@@ -157,7 +157,7 @@
                 <div
                     class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-between">
                     <div class="order-2 order-lg-1">
-                        Copyright 2025 © Fakhri Electric Store.
+                        Copyright 2025 © Roll Mills Store.
                     </div>
                 </div>
             </div>
