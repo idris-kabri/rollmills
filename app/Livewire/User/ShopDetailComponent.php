@@ -118,7 +118,7 @@ class ShopDetailComponent extends Component
             $this->check_user_can_review = OrderItems::whereHas('getOrder', function ($query) {
                 $query->where('logged_in_user_id', Auth::user()->id)->whereNotIn('status', [0, 4]);
             })
-                ->where('"item_id"', $id)
+                ->where("item_id", $id)
                 ->first();
         }
 
