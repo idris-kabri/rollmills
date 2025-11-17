@@ -226,7 +226,7 @@ class ShopDetailComponent extends Component
         $category_assign = ProductCategoryAssign::where('product_id', $this->mainProduct->id)->orderBy('category_id', 'asc')->get();
 
         $items = [];
-        $items[] = [
+        $item = [
             'item_id' => $this->mainProduct->id,
             'item_name' => $this->mainProduct->name,
             'affiliation' => '',
@@ -238,23 +238,25 @@ class ShopDetailComponent extends Component
 
         foreach ($category_assign as $key => $category) {
             if ($key == 0) {
-                $items['item_category'] = $category->category->name;
+                $item['item_category'] = $category->category->name;
             } else {
-                $items['item_category' . $key + 1] = $category->category->name;
+                $item['item_category' . $key + 1] = $category->category->name;
             }
         }
 
-        $items['item_list_id'] = '';
-        $items['item_list_name'] = '';
+        $item['item_list_id'] = '';
+        $item['item_list_name'] = '';
         if ($this->mainProduct->attributes_name != null) {
             $attributes = explode(',', $this->mainProduct->attributes_name);
             foreach ($attributes as $key => $attribute) {
-                $items['item_variant'] = $attribute;
+                $item['item_variant'] = $attribute;
             }
         }
-        $items['location_id'] = '';
-        $items['price'] = (float) $this->mainProduct->price;
-        $items['quantity'] = 1;
+        $item['location_id'] = '';
+        $item['price'] = (float) $this->mainProduct->price;
+        $item['quantity'] = 1;
+
+        $items[] = $item;
 
         $data = [
             'currency' => 'INR',
