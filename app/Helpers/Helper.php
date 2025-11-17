@@ -33,7 +33,7 @@ function razorPayPayment($amount, $user_id, $refrence_id, $refrence_table, $desc
         'receipt' => $store->id,
         'amount' => round($amount * 100),
         'currency' => 'INR',
-        'payment_capture' => 1
+        'payment_capture' => 1,
     ];
 
     $order = $api->order->create($orderData);
@@ -41,11 +41,11 @@ function razorPayPayment($amount, $user_id, $refrence_id, $refrence_table, $desc
     $store->payment_id = $order->id;
     $store->save();
 
-    return (object)[
+    return (object) [
         'id' => $order->id,
         'amount' => $order->amount,
         'transaction_id' => $store->id,
-        'description' => $store->description
+        'description' => $store->description,
     ];
 }
 
@@ -61,11 +61,11 @@ function returnUrl($transactionId, $razorpayPaymentId, $gift_tile = null, $name 
 
             if ($transaction->description == 'Top Up Wallet Balance') {
                 $user = User::find($transaction->user_id);
-                $user->wallet_balance = (float)$user->wallet_balance;
-                $user->wallet_balance += (float)$transaction->amount;
+                $user->wallet_balance = (float) $user->wallet_balance;
+                $user->wallet_balance += (float) $transaction->amount;
                 $user->save();
                 return true;
-            } else if ($transaction->refrence_table == 'gift_card_groups') {
+            } elseif ($transaction->refrence_table == 'gift_card_groups') {
                 $giftCardGroup = GiftCardGroup::findOrFail($transaction->refrence_id);
                 $gift_Item = new GiftCardItem();
                 $gift_Item->gift_card_group_id = $giftCardGroup->id;
@@ -95,22 +95,8 @@ function returnUrl($transactionId, $razorpayPaymentId, $gift_tile = null, $name 
                 $created_by = "You've received a special gift card From " . Auth::user()->name;
                 $receiver_by = "You've Send a special gift card To " . $name;
 
-                Mail::to($email)->send(new GiftCardPurchaseMail(
-                    $gift_tile,
-                    $name,
-                    $code,
-                    $gift_Item,
-                    $created_by,
-                    null,
-                ));
-                Mail::to(Auth::user()->email)->send(new GiftCardPurchaseMail(
-                    $gift_tile,
-                    Auth::user()->name,
-                    $code,
-                    $gift_Item,
-                    null,
-                    $receiver_by,
-                ));
+                Mail::to($email)->send(new GiftCardPurchaseMail($gift_tile, $name, $code, $gift_Item, $created_by, null));
+                Mail::to(Auth::user()->email)->send(new GiftCardPurchaseMail($gift_tile, Auth::user()->name, $code, $gift_Item, null, $receiver_by));
             } elseif ($transaction->refrence_table == 'orders') {
                 $another_found = Transaction::where('refrence_id', $transaction->refrence_id)->where('refrence_table', 'orders')->where('id', '!=', $transaction->id)->first();
                 if ($another_found) {
@@ -144,7 +130,7 @@ function returnUrl($transactionId, $razorpayPaymentId, $gift_tile = null, $name 
                 $token = generateShipRocketToken();
                 placeShipment($transaction->refrence_id, $token);
 
-                // Cart::instance('cart')->clear(); 
+                // Cart::instance('cart')->clear();
                 Cart::instance('cart')->destroy();
                 if (Auth::check()) {
                     Cart::instance('cart')->store(Auth::user()->email);
@@ -179,7 +165,7 @@ function finalAddToCart($product, $quantity, $type = null, $customPrice = null)
         }
     } else {
         $priceInfo = $customPrice ? ['price' => $customPrice] : getPrice($product->id);
-        Cart::instance('cart')->add($product->id, $product->name, $quantity, $priceInfo['price'])->associate("App\Models\Product");
+        Cart::instance('cart')->add($product->id, $product->name, $quantity, $priceInfo['price'])->associate('App\Models\Product');
         return true;
     }
 }
@@ -201,7 +187,7 @@ function finalAddToWhishlist($product)
         return false;
     } else {
         $priceInfo = getPrice($product->id);
-        Cart::instance('wishlist')->add($product->id, $product->name, 1, $priceInfo['price'])->associate("App\Models\Product");
+        Cart::instance('wishlist')->add($product->id, $product->name, 1, $priceInfo['price'])->associate('App\Models\Product');
         return true;
     }
 }
@@ -213,7 +199,6 @@ function finalRemoveWishlist($rowId)
     }
     return true;
 }
-
 
 function walletPayment($user, $refrence_id, $refrence_table, $amount, $payment_id, $description, $status = null)
 {
@@ -233,11 +218,11 @@ function walletPayment($user, $refrence_id, $refrence_table, $amount, $payment_i
 function updateWalletBalance($user_id, $type, $amount)
 {
     $user = User::find($user_id);
-    $wallet_balance = (float)$user->wallet_balance;
+    $wallet_balance = (float) $user->wallet_balance;
     if ($type == 'add') {
-        $user->wallet_balance = $wallet_balance + (float)$amount;
+        $user->wallet_balance = $wallet_balance + (float) $amount;
     } else {
-        $user->wallet_balance = $wallet_balance - (float)$amount;
+        $user->wallet_balance = $wallet_balance - (float) $amount;
     }
     $user->save();
 }
@@ -261,17 +246,17 @@ function getChannelId($token)
     try {
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $token
+            'Authorization' => 'Bearer ' . $token,
         ])->get('https://apiv2.shiprocket.in/v1/external/channels');
 
         if ($response->successful()) {
             return $response->json()['data'][0]['id'];
         } else {
-            Log::error("ChannelId Generation Error on " . now() . " : " . $response->json()['message']);
+            Log::error('ChannelId Generation Error on ' . now() . ' : ' . $response->json()['message']);
             return false;
         }
     } catch (\Exception $e) {
-        Log::error("ChannelId Generation Error on " . now() . " : " . $e->getMessage());
+        Log::error('ChannelId Generation Error on ' . now() . ' : ' . $e->getMessage());
         return false;
     }
 }
@@ -290,16 +275,16 @@ function placeShipment($order_id, $token)
 
         $items_array = [];
         foreach ($order_items as $order_item) {
-            $weight += (max((float)$order_item->getProduct->weight, 0.1) / 1000) * (int)$order_item->quantity;
-            $height += max((float)$order_item->getProduct->height, 1) * (int)$order_item->quantity;
-            $breadth += max((float)$order_item->getProduct->breadth, 1) * (int)$order_item->quantity;
-            $length += max((float)$order_item->getProduct->length, 1) * (int)$order_item->quantity;
+            $weight += (max((float) $order_item->getProduct->weight, 0.1) / 1000) * (int) $order_item->quantity;
+            $height += max((float) $order_item->getProduct->height, 1) * (int) $order_item->quantity;
+            $breadth += max((float) $order_item->getProduct->breadth, 1) * (int) $order_item->quantity;
+            $length += max((float) $order_item->getProduct->length, 1) * (int) $order_item->quantity;
             $items_array[$order_item->courier_id][] = [
                 'name' => $order_item->getProduct->name,
                 'sku' => $order_item->getProduct->SKU,
                 'units' => $order_item->quantity,
                 'selling_price' => $order_item->total,
-                'shipping_cost' => $order_item->overall_rate
+                'shipping_cost' => $order_item->overall_rate,
             ];
         }
 
@@ -312,58 +297,58 @@ function placeShipment($order_id, $token)
         foreach ($items_array as $key => $item) {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $token
+                'Authorization' => 'Bearer ' . $token,
             ])->post('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc', [
-                "order_id" => $order_id . "-" . $key,
-                "order_date" => Carbon::parse($order->created_at)->format('Y-m-d'),
-                "pickup_location" => "Home",
-                "comment" => "Near ICICI Bank Sagwara",
-                "reseller_name" => "Roll Mills Store",
-                "company_name" => "Roll Mills Store",
-                "billing_customer_name" => $billing_address['name'],
-                "billing_last_name" => $billing_last_name,
-                "billing_address" => $billing_address['address_line_1'],
-                "billing_address_2" => $billing_address['address_line_2'],
-                "billing_city" => $billing_address['city'],
-                "billing_pincode" => $billing_address['zipcode'],
-                "billing_state" => $billing_address['state'],
-                "billing_country" => "India",
-                "billing_email" => $billing_address['email'],
-                "billing_phone" => $billing_address['mobile'],
-                "shipping_is_billing" => false,
-                "shipping_customer_name" => $shipping_address['name'],
-                "shipping_last_name" => $shipping_last_name,
-                "shipping_address" => $shipping_address['address_line_1'],
-                "shipping_address_2" => $shipping_address['address_line_2'],
-                "shipping_city" => $shipping_address['city'],
-                "shipping_pincode" => $shipping_address['zipcode'],
-                "shipping_country" => "India",
-                "shipping_state" => $shipping_address['state'],
-                "shipping_email" => $shipping_address['email'],
-                "shipping_phone" => $shipping_address['mobile'],
-                "order_items" => $item,
-                "payment_method" => 'Prepaid',
-                "shipping_charges" => (float)$order->shipping_rate + (float)$order->shipping_bear_margin,
-                "giftwrap_charges" => "0",
-                "courier_company_id" => $key,
-                "transaction_charges" => "0",
-                "total_discount" => (float)$order->coupon_discount + (float)$order->offer_discount,
-                "sub_total" => $order->subtotal,
-                "length" => ceil($length),
-                "breadth" => ceil($breadth),
-                "height" => ceil($height),
-                "weight" => round($weight, 2)
+                'order_id' => $order_id . '-' . $key,
+                'order_date' => Carbon::parse($order->created_at)->format('Y-m-d'),
+                'pickup_location' => 'Home',
+                'comment' => 'Near ICICI Bank Sagwara',
+                'reseller_name' => 'Roll Mills Store',
+                'company_name' => 'Roll Mills Store',
+                'billing_customer_name' => $billing_address['name'],
+                'billing_last_name' => $billing_last_name,
+                'billing_address' => $billing_address['address_line_1'],
+                'billing_address_2' => $billing_address['address_line_2'],
+                'billing_city' => $billing_address['city'],
+                'billing_pincode' => $billing_address['zipcode'],
+                'billing_state' => $billing_address['state'],
+                'billing_country' => 'India',
+                'billing_email' => $billing_address['email'],
+                'billing_phone' => $billing_address['mobile'],
+                'shipping_is_billing' => false,
+                'shipping_customer_name' => $shipping_address['name'],
+                'shipping_last_name' => $shipping_last_name,
+                'shipping_address' => $shipping_address['address_line_1'],
+                'shipping_address_2' => $shipping_address['address_line_2'],
+                'shipping_city' => $shipping_address['city'],
+                'shipping_pincode' => $shipping_address['zipcode'],
+                'shipping_country' => 'India',
+                'shipping_state' => $shipping_address['state'],
+                'shipping_email' => $shipping_address['email'],
+                'shipping_phone' => $shipping_address['mobile'],
+                'order_items' => $item,
+                'payment_method' => 'Prepaid',
+                'shipping_charges' => (float) $order->shipping_rate + (float) $order->shipping_bear_margin,
+                'giftwrap_charges' => '0',
+                'courier_company_id' => $key,
+                'transaction_charges' => '0',
+                'total_discount' => (float) $order->coupon_discount + (float) $order->offer_discount,
+                'sub_total' => $order->subtotal,
+                'length' => ceil($length),
+                'breadth' => ceil($breadth),
+                'height' => ceil($height),
+                'weight' => round($weight, 2),
             ]);
             if ($response->successful()) {
                 $response->json()['data']['id'];
             } else {
-                Log::error("Shipment Creation Error on " . now() . " : " . $response->json()['message']);
+                Log::error('Shipment Creation Error on ' . now() . ' : ' . $response->json()['message']);
                 return false;
             }
         }
         return true;
     } catch (\Exception $e) {
-        Log::error("Shipment Creation Error on " . now() . " : " . $e->getMessage());
+        Log::error('Shipment Creation Error on ' . now() . ' : ' . $e->getMessage());
         return false;
     }
 }
@@ -375,15 +360,13 @@ function calculateRates($products, $token, $pincode)
     $shipping_bear_margin = 0;
     $checkout_condition_fail = false;
     foreach ($products as $cart_item) {
-
-        $weightInKg = (float)$cart_item->model->weight / 1000;
-        $response = Http::withToken($token)
-            ->get('https://apiv2.shiprocket.in/v1/external/courier/serviceability', [
-                'pickup_postcode' => '314025',
-                'delivery_postcode' => $pincode,
-                'cod' => 0,
-                'weight' => $weightInKg * $cart_item->qty,
-            ]);
+        $weightInKg = (float) $cart_item->model->weight / 1000;
+        $response = Http::withToken($token)->get('https://apiv2.shiprocket.in/v1/external/courier/serviceability', [
+            'pickup_postcode' => '314025',
+            'delivery_postcode' => $pincode,
+            'cod' => 0,
+            'weight' => $weightInKg * $cart_item->qty,
+        ]);
         // dd($response->json());
         if ($response->successful()) {
             $shippingData = $response->json();
@@ -398,15 +381,15 @@ function calculateRates($products, $token, $pincode)
                 $options['courier_id'] = $lowest['courier_company_id'];
                 $options['courier'] = $lowest['courier_name'];
                 $options['overall_rate'] = $lowest['rate'];
-                $options['rate'] = $lowest['rate'] - (((float)$cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty);
-                $options['shipping_margin_bear'] = ((float)$cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                $options['rate'] = $lowest['rate'] - ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                $options['shipping_margin_bear'] = ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
                 $options['etd'] = $lowest['etd'];
                 Cart::instance('cart')->update($cart_item->rowId, [
-                    'options' => $options
+                    'options' => $options,
                 ]);
 
-                $shippingCharge += $lowest['rate'] - (((float)$cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty);
-                $shipping_bear_margin += ((float)$cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                $shippingCharge += $lowest['rate'] - ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                $shipping_bear_margin += ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
 
                 foreach ($couriers as $courier) {
                     if (!empty($courier['etd'])) {
@@ -419,14 +402,24 @@ function calculateRates($products, $token, $pincode)
             }
         } else {
             logger()->error("Shiprocket API error for item {$cart_item->id}", [
-                'response' => $response->body()
+                'response' => $response->body(),
             ]);
             return false;
         }
     }
     session()->put('shipping_charge', $shippingCharge);
-    session()->put("latest_etd", $latestEtd);
+    session()->put('latest_etd', $latestEtd);
     session()->put('shipping_bear_margin', $shipping_bear_margin);
 
     return $checkout_condition_fail;
+}
+
+function isInCart($id)
+{
+    return Cart::instance('cart')->content()->where('id', $id)->count() > 0;
+}
+
+function isInWishlist($id)
+{
+    return Cart::instance('wishlist')->content()->where('id', $id)->count() > 0;
 }
