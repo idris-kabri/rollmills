@@ -318,9 +318,14 @@
 <script>
     window.addEventListener('item-view', (event) => {
         var data = event.detail[0];
-        if (typeof gtag === 'function') {
-            gtag('event', 'view_item', data);
-        }
+        console.log(data)
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: 'view_item',
+            ecommerce: {
+                items: data
+            }
+        });
     })
 </script>
 @stack('scripts')
