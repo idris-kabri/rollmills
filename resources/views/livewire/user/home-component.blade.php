@@ -1,4 +1,5 @@
 <main class="main">
+    @livewire('user.quick-view', ['id' => $selectedProductId, 'bindClose' => 'selectedProductId'], key($selectedProductId ?? time()))
     <section class="home-slider style-2 position-relative mb-3" wire:ignore>
         <div class="container">
             <div class="row">
@@ -50,7 +51,8 @@
                             $newSubHeadingSide = $top_side_banner->sub_heading;
                         }
                     @endphp
-                    <div class="banner-img style-3 animated animated" style="background: url({{ asset('storage/' . $top_side_banner->image) }}) no-repeat center bottom;">
+                    <div class="banner-img style-3 animated animated"
+                        style="background: url({{ asset('storage/' . $top_side_banner->image) }}) no-repeat center bottom;">
                         <div class="banner-text mt-50">
                             <h2 class="mb-50">
                                 {!! $newHeadingSide !!}
@@ -215,9 +217,9 @@
                 <div class="col-lg-9 col-md-12">
                     <div class="row">
                         @foreach ($sale_products as $sale_product)
-                        <div class="col-md-3 col-lg-3 col-6">
-                            @livewire('user.component.product-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . now()->timestamp))
-                        </div>
+                            <div class="col-md-3 col-lg-3 col-6">
+                                @livewire('user.component.product-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . now()->timestamp))
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -236,21 +238,27 @@
                 </a>
             </div>
             <div class="row">
-                @foreach ($deals_of_the_day_products as $deals_of_the_day_product) 
-                    @php  
-                        if($deals_of_the_day_product->slug){ 
-                            $deals_of_the_day_product_shop_detail_url = route('shop-detail', ['slug' => $deals_of_the_day_product->slug, 'id' => $deals_of_the_day_product->id]);
-                        } else { 
-                            $deals_of_the_day_product_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $deals_of_the_day_product->id]);
+                @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
+                    @php
+                        if ($deals_of_the_day_product->slug) {
+                            $deals_of_the_day_product_shop_detail_url = route('shop-detail', [
+                                'slug' => $deals_of_the_day_product->slug,
+                                'id' => $deals_of_the_day_product->id,
+                            ]);
+                        } else {
+                            $deals_of_the_day_product_shop_detail_url = route('shop-detail', [
+                                'slug' => 'no-slug',
+                                'id' => $deals_of_the_day_product->id,
+                            ]);
                         }
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-md-6 mb-20">
                         <div class="product-cart-wrap style-2">
                             <div class="product-img-action-wrap">
                                 <div class="product-img">
-                                    <a href="{{$deals_of_the_day_product_shop_detail_url}}">
+                                    <a href="{{ $deals_of_the_day_product_shop_detail_url }}">
                                         <img src="{{ asset('storage/' . $deals_of_the_day_product->featured_image) }}"
-                                            alt="{{$deals_of_the_day_product->seo_meta}}" />
+                                            alt="{{ $deals_of_the_day_product->seo_meta }}" />
                                     </a>
                                 </div>
                             </div>
@@ -261,78 +269,35 @@
                                     </div>
                                 </div>
                                 <div class="deals-content">
-                                    <h2><a href="{{$deals_of_the_day_product_shop_detail_url}}">{{ $deals_of_the_day_product->name }}</a>
-                                    </h2>
-                                <div class="product-rate-cover">
-                                    @php
-                                        $deals_of_the_day_product_reviews = \App\Models\ProductReview::where('status',1,)
-                                            ->where('product_id', $deals_of_the_day_product->id)
-                                            ->get();
-
-                                        $deals_of_the_day_product_reviews_count = $deals_of_the_day_product_reviews->count();
-                                        $deals_of_the_day_product_reviews_avg = $deals_of_the_day_product_reviews_count > 0 ? round( $deals_of_the_day_product_reviews->avg('ratings'),1,): 0;
-                                        $deals_of_the_day_product_reviews_percentage = ($deals_of_the_day_product_reviews_avg / 5) * 100;
-                                    @endphp
-
-                                    <div class="product-rate d-inline-block">
-                                        <div class="product-rating"
-                                            style="width: {{ $deals_of_the_day_product_reviews_percentage }}%;">
-                                        </div>
-                                    </div>
-                                    <span class="font-small ml-5 text-muted">
-                                        ({{ $deals_of_the_day_product_reviews_avg }})
-                                    </span>
-                                </div>
-                                    <div class="product-card-bottom">
-                                        <div class="product-price">
-                                            @if (
-                                                $deals_of_the_day_product->sale_price > 0 &&
-                                                    now() >= $deals_of_the_day_product->sale_start_date &&
-                                                    now() <= $deals_of_the_day_product->sale_end_date)
-                                                <span>₹{{ $deals_of_the_day_product->sale_price }}</span>
-                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
-                                            @elseif($deals_of_the_day_product->sale_default_price > 0)
-                                                <span>₹{{ $deals_of_the_day_product->sale_default_price }}</span>
-                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
-                                            @else
-                                                <span>₹{{ $deals_of_the_day_product->price }}</span>
-                                            @endif
-                                        </div>
-                                        <div class="add-cart">
-                                            <a class="add" href="shop-cart.html"><i
-                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-                @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
-                    <div class="col-xl-3 col-lg-4 col-md-6 mb-20">
-                        <div class="product-cart-wrap style-2">
-                            <div class="product-img-action-wrap">
-                                <div class="product-img">
-                                    <a href="shop-product-right.html">
-                                        <img src="{{ asset('storage/' . $deals_of_the_day_product->featured_image) }}"
-                                            alt="{{$deals_of_the_day_product->seo_meta}}" />
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="product-content-wrap">
-                                <div class="deals-countdown-wrap">
-                                    <div class="deals-countdown"
-                                        data-countdown="{{ \Carbon\Carbon::parse($deals_of_the_day_product->sale_to_date)->format('Y/m/d') }} 00:00:00">
-                                    </div>
-                                </div>
-                                <div class="deals-content">
-                                    <h2><a href="shop-product-right.html">{{ $deals_of_the_day_product->name }}</a>
+                                    <h2><a
+                                            href="{{ $deals_of_the_day_product_shop_detail_url }}">{{ $deals_of_the_day_product->name }}</a>
                                     </h2>
                                     <div class="product-rate-cover">
+                                        @php
+                                            $deals_of_the_day_product_reviews = \App\Models\ProductReview::where(
+                                                'status',
+                                                1,
+                                            )
+                                                ->where('product_id', $deals_of_the_day_product->id)
+                                                ->get();
+
+                                            $deals_of_the_day_product_reviews_count = $deals_of_the_day_product_reviews->count();
+                                            $deals_of_the_day_product_reviews_avg =
+                                                $deals_of_the_day_product_reviews_count > 0
+                                                    ? round($deals_of_the_day_product_reviews->avg('ratings'), 1)
+                                                    : 0;
+                                            $deals_of_the_day_product_reviews_percentage =
+                                                ($deals_of_the_day_product_reviews_avg / 5) * 100;
+                                        @endphp
+
                                         <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 90%"></div>
+                                            <div class="product-rating"
+                                                style="width: {{ $deals_of_the_day_product_reviews_percentage }}%;">
+                                            </div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
+                                        <span class="font-small ml-5 text-muted">
+                                            ({{ $deals_of_the_day_product_reviews_avg }})
+                                        </span>
                                     </div>
                                     <div class="product-card-bottom">
                                         <div class="product-price">
@@ -340,18 +305,26 @@
                                                 $deals_of_the_day_product->sale_price > 0 &&
                                                     now() >= $deals_of_the_day_product->sale_start_date &&
                                                     now() <= $deals_of_the_day_product->sale_end_date)
-                                                <span>₹{{ $deals_of_the_day_product->sale_price }}</span>
+                                                <span
+                                                    class="price-transition">₹{{ $deals_of_the_day_product->sale_price }}</span>
                                                 <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
                                             @elseif($deals_of_the_day_product->sale_default_price > 0)
-                                                <span>₹{{ $deals_of_the_day_product->sale_default_price }}</span>
+                                                <span
+                                                    class="price-transition">₹{{ $deals_of_the_day_product->sale_default_price }}</span>
                                                 <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
                                             @else
                                                 <span>₹{{ $deals_of_the_day_product->price }}</span>
                                             @endif
                                         </div>
                                         <div class="add-cart">
-                                            <a class="add" href="shop-cart.html"><i
-                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                            @if (!isInCart($deals_of_the_day_product->id))
+                                                <a class="add" href="#"
+                                                    wire:click.prevent="addToCart({{ $deals_of_the_day_product->id }})"><i
+                                                        class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                            @else
+                                                <a class="add" href="javascript:void(0);"><i
+                                                        class="fi-rs-shopping-cart mr-5"></i>Added </a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -375,9 +348,9 @@
                 <div class="col-lg-9 col-md-12">
                     <div class="row">
                         @foreach ($users_look_for as $user_look_for)
-                        <div class="col-md-3 col-lg-3 col-6">
-                            @livewire('user.component.product-card', ['product' => $user_look_for, 'parameter' => 'hot'], key($user_look_for->id . '-' . now()->timestamp))
-                        </div>
+                            <div class="col-md-3 col-lg-3 col-6">
+                                @livewire('user.component.product-card', ['product' => $user_look_for, 'parameter' => 'hot'], key($user_look_for->id . '-' . now()->timestamp))
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -403,36 +376,50 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0">
                     <h4 class="section-title style-1 mb-30 animated animated">Top Selling</h4>
                     <div class="product-list-small animated animated">
-                        @foreach ($top_selling as $product) 
-                            @php  
-                                if($product->slug){ 
-                                    $top_selling_shop_detail_url = route('shop-detail', ['slug' => $product->slug, 'id' => $product->id]);
-                                } else { 
-                                    $top_selling_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $product->id]);
+                        @foreach ($top_selling as $product)
+                            @php
+                                if ($product->slug) {
+                                    $top_selling_shop_detail_url = route('shop-detail', [
+                                        'slug' => $product->slug,
+                                        'id' => $product->id,
+                                    ]);
+                                } else {
+                                    $top_selling_shop_detail_url = route('shop-detail', [
+                                        'slug' => 'no-slug',
+                                        'id' => $product->id,
+                                    ]);
                                 }
                             @endphp
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{$top_selling_shop_detail_url}}"><img
+                                    <a href="{{ $top_selling_shop_detail_url }}"><img
                                             src="{{ asset('storage/' . $product->featured_image) }}"
-                                            alt="{{$product->seo_meta}}" /></a>
+                                            alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h6>
-                                        <a href="{{$top_selling_shop_detail_url}}">{{ $product->name }}</a>
+                                        <a href="{{ $top_selling_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover"> 
+                                    <div class="product-rate-cover">
                                         @php
-                                            $top_selling_reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $product->id)->get();
+                                            $top_selling_reviews = \App\Models\ProductReview::where('status', 1)
+                                                ->where('product_id', $product->id)
+                                                ->get();
 
                                             $top_selling_reviews_count = $top_selling_reviews->count();
-                                            $top_selling_reviews_avg = $top_selling_reviews_count > 0 ? round($top_selling_reviews->avg('ratings'), 1) : 0;
+                                            $top_selling_reviews_avg =
+                                                $top_selling_reviews_count > 0
+                                                    ? round($top_selling_reviews->avg('ratings'), 1)
+                                                    : 0;
                                             $top_selling_reviews_percentage = ($top_selling_reviews_avg / 5) * 100;
                                         @endphp
                                         <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: {{$top_selling_reviews_percentage}}%"></div>
+                                            <div class="product-rating"
+                                                style="width: {{ $top_selling_reviews_percentage }}%"></div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> ({{ $top_selling_reviews_avg }})</span>
+                                        <span class="font-small ml-5 text-muted">
+                                            ({{ $top_selling_reviews_avg }})
+                                        </span>
                                     </div>
                                     <div class="product-price">
                                         @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
@@ -453,36 +440,50 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-md-0">
                     <h4 class="section-title style-1 mb-30 animated animated">Trending Products</h4>
                     <div class="product-list-small animated animated">
-                        @foreach ($trending_products as $product) 
-                            @php  
-                                if($product->slug){ 
-                                    $trending_products_shop_detail_url = route('shop-detail', ['slug' => $product->slug, 'id' => $product->id]);
-                                } else { 
-                                    $trending_products_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $product->id]);
+                        @foreach ($trending_products as $product)
+                            @php
+                                if ($product->slug) {
+                                    $trending_products_shop_detail_url = route('shop-detail', [
+                                        'slug' => $product->slug,
+                                        'id' => $product->id,
+                                    ]);
+                                } else {
+                                    $trending_products_shop_detail_url = route('shop-detail', [
+                                        'slug' => 'no-slug',
+                                        'id' => $product->id,
+                                    ]);
                                 }
                             @endphp
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{$trending_products_shop_detail_url}}"><img
+                                    <a href="{{ $trending_products_shop_detail_url }}"><img
                                             src="{{ asset('storage/' . $product->featured_image) }}"
-                                            alt="{{$product->seo_meta}}" /></a>
+                                            alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h6>
-                                        <a href="{{$trending_products_shop_detail_url}}">{{ $product->name }}</a>
+                                        <a href="{{ $trending_products_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover"> 
+                                    <div class="product-rate-cover">
                                         @php
-                                            $trending_products_reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $product->id)->get();
+                                            $trending_products_reviews = \App\Models\ProductReview::where('status', 1)
+                                                ->where('product_id', $product->id)
+                                                ->get();
 
                                             $trending_products_reviews_count = $trending_products_reviews->count();
-                                            $trending_products_reviews_avg = $trending_products_reviews_count > 0 ? round($trending_products_reviews->avg('ratings'), 1) : 0;
-                                            $trending_products_reviews_percentage = ($trending_products_reviews_avg / 5) * 100;
+                                            $trending_products_reviews_avg =
+                                                $trending_products_reviews_count > 0
+                                                    ? round($trending_products_reviews->avg('ratings'), 1)
+                                                    : 0;
+                                            $trending_products_reviews_percentage =
+                                                ($trending_products_reviews_avg / 5) * 100;
                                         @endphp
                                         <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: {{$trending_products_reviews_percentage}}%"></div>
+                                            <div class="product-rating"
+                                                style="width: {{ $trending_products_reviews_percentage }}%"></div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> ({{$trending_products_reviews_avg}})</span>
+                                        <span class="font-small ml-5 text-muted">
+                                            ({{ $trending_products_reviews_avg }})</span>
                                     </div>
                                     <div class="product-price">
                                         @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
@@ -503,36 +504,50 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 d-none d-lg-block">
                     <h4 class="section-title style-1 mb-30 animated animated">Recently added</h4>
                     <div class="product-list-small animated animated">
-                        @foreach ($latest_products as $product) 
-                            @php  
-                                if($product->slug){ 
-                                    $latest_products_shop_detail_url = route('shop-detail', ['slug' => $product->slug, 'id' => $product->id]);
-                                } else { 
-                                    $latest_products_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $product->id]);
+                        @foreach ($latest_products as $product)
+                            @php
+                                if ($product->slug) {
+                                    $latest_products_shop_detail_url = route('shop-detail', [
+                                        'slug' => $product->slug,
+                                        'id' => $product->id,
+                                    ]);
+                                } else {
+                                    $latest_products_shop_detail_url = route('shop-detail', [
+                                        'slug' => 'no-slug',
+                                        'id' => $product->id,
+                                    ]);
                                 }
                             @endphp
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{$latest_products_shop_detail_url}}"><img
+                                    <a href="{{ $latest_products_shop_detail_url }}"><img
                                             src="{{ asset('storage/' . $product->featured_image) }}"
-                                            alt="{{$product->seo_meta}}" /></a>
+                                            alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h6>
-                                        <a href="{{$latest_products_shop_detail_url}}">{{ $product->name }}</a>
+                                        <a href="{{ $latest_products_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover"> 
+                                    <div class="product-rate-cover">
                                         @php
-                                            $latest_products_reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $product->id)->get();
+                                            $latest_products_reviews = \App\Models\ProductReview::where('status', 1)
+                                                ->where('product_id', $product->id)
+                                                ->get();
 
                                             $latest_products_reviews_count = $latest_products_reviews->count();
-                                            $latest_products_reviews_avg = $latest_products_reviews_count > 0 ? round($latest_products_reviews->avg('ratings'), 1) : 0;
-                                            $latest_products_reviews_percentage = ($latest_products_reviews_avg / 5) * 100;
+                                            $latest_products_reviews_avg =
+                                                $latest_products_reviews_count > 0
+                                                    ? round($latest_products_reviews->avg('ratings'), 1)
+                                                    : 0;
+                                            $latest_products_reviews_percentage =
+                                                ($latest_products_reviews_avg / 5) * 100;
                                         @endphp
                                         <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: {{$latest_products_reviews_percentage}}%"></div>
+                                            <div class="product-rating"
+                                                style="width: {{ $latest_products_reviews_percentage }}%"></div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> ({{$latest_products_reviews_avg}})</span>
+                                        <span class="font-small ml-5 text-muted">
+                                            ({{ $latest_products_reviews_avg }})</span>
                                     </div>
                                     <div class="product-price">
                                         @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
@@ -553,36 +568,50 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 d-none d-xl-block">
                     <h4 class="section-title style-1 mb-30 animated animated">Top Rated</h4>
                     <div class="product-list-small animated animated">
-                        @foreach ($top_rated_products as $product) 
-                            @php  
-                                if($product->slug){ 
-                                    $top_rated_products_shop_detail_url = route('shop-detail', ['slug' => $product->slug, 'id' => $product->id]);
-                                } else { 
-                                    $top_rated_products_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $product->id]);
+                        @foreach ($top_rated_products as $product)
+                            @php
+                                if ($product->slug) {
+                                    $top_rated_products_shop_detail_url = route('shop-detail', [
+                                        'slug' => $product->slug,
+                                        'id' => $product->id,
+                                    ]);
+                                } else {
+                                    $top_rated_products_shop_detail_url = route('shop-detail', [
+                                        'slug' => 'no-slug',
+                                        'id' => $product->id,
+                                    ]);
                                 }
                             @endphp
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{$top_rated_products_shop_detail_url}}"><img
+                                    <a href="{{ $top_rated_products_shop_detail_url }}"><img
                                             src="{{ asset('storage/' . $product->featured_image) }}"
-                                            alt="{{$product->seo_meta}}" /></a>
+                                            alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h6>
-                                        <a href="{{$top_rated_products_shop_detail_url}}">{{ $product->name }}</a>
+                                        <a href="{{ $top_rated_products_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover"> 
+                                    <div class="product-rate-cover">
                                         @php
-                                            $top_rated_products_reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $product->id)->get();
+                                            $top_rated_products_reviews = \App\Models\ProductReview::where('status', 1)
+                                                ->where('product_id', $product->id)
+                                                ->get();
 
                                             $top_rated_products_reviews_count = $top_rated_products_reviews->count();
-                                            $top_rated_products_reviews_avg = $top_rated_products_reviews_count > 0 ? round($top_rated_products_reviews->avg('ratings'), 1) : 0;
-                                            $top_rated_products_reviews_percentage = ($top_rated_products_reviews_avg / 5) * 100;
+                                            $top_rated_products_reviews_avg =
+                                                $top_rated_products_reviews_count > 0
+                                                    ? round($top_rated_products_reviews->avg('ratings'), 1)
+                                                    : 0;
+                                            $top_rated_products_reviews_percentage =
+                                                ($top_rated_products_reviews_avg / 5) * 100;
                                         @endphp
                                         <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: {{$top_rated_products_reviews_percentage}}%"></div>
+                                            <div class="product-rating"
+                                                style="width: {{ $top_rated_products_reviews_percentage }}%"></div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> ({{$top_rated_products_reviews_avg}})</span>
+                                        <span class="font-small ml-5 text-muted">
+                                            ({{ $top_rated_products_reviews_avg }})</span>
                                     </div>
                                     <div class="product-price">
                                         @if ($product->sale_price > 0 && now() >= $product->sale_start_date && now() <= $product->sale_end_date)
@@ -636,3 +665,19 @@
     </section>
     <!--End category slider-->
 </main>
+
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:load', function() {
+            const quickViewButtons = document.querySelectorAll('.quick-view');
+
+            quickViewButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    const productId = this.dataset.id;
+                    alert('Quick view button clicked for product with ID: ' + productId);
+                    console.log('Button clicked!', this);
+                });
+            })
+        })
+    </script>
+@endpush

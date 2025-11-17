@@ -24,7 +24,7 @@
                     <table class="table table-wishlist mb-0">
                         <thead>
                             <tr class="main-heading">
-                                <th scope="col" colspan="2">Product</th>
+                                <th scope="col" colspan="2" class="ps-2">Product</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Subtotal</th>
@@ -33,9 +33,9 @@
                         </thead>
                         <tbody>
                             @foreach (Cart::instance('cart')->content() as $item)
-                                <tr class="pt-30">
-                                    <td class="image product-thumbnail pt-40 position-relative"><img
-                                            src="{{ asset('storage/' . $item->model->featured_image) }}" alt="#">
+                                <tr class="pt-3">
+                                    <td class="image product-thumbnail pt-40 position-relative ps-2"><img
+                                            src="{{ asset('storage/' . $item->model->featured_image) }}" alt="{{ $item->model->seo_meta }}">
                                         <div class="display-visible-480 d-none">
                                             <a href="#"
                                                 class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
@@ -43,8 +43,8 @@
                                         </div>
                                     </td>
                                     <td class="product-des product-name">
-                                        <h6 class="mb-5 ms-4"><a class="product-name mb-10 text-heading"
-                                                href="/shop-detail">{{ $item->model->name }}</a>
+                                        <h6 class="mb-5"><a class="product-name mb-10 text-heading"
+                                                href="/shop-detail">{{ $item->model->name }} {{$item->id}}</a>
                                         </h6>
                                             @php
                                                 $reviews = \App\Models\ProductReview::where('status', 1)
@@ -56,7 +56,7 @@
                                                     $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
                                                 $reviews_percentage = ($reviews_avg / 5) * 100;
                                             @endphp
-                                        <div class="product-rate-cover ms-4">
+                                        <div class="product-rate-cover">
                                             <div class="product-rate d-inline-block">
                                                 <div class="product-rating" style="width: {{ $reviews_percentage }}%">
                                                 </div>
@@ -65,27 +65,27 @@
                                         </div>
                                     </td>
                                     <td class="price small-screen-table-td me-3" data-title="Price">
-                                        <h4 class="text-body small-screen-table-td-content">₹{{ number_format($item->model->price) }}</h4>
+                                        <h4 class="text-body small-screen-table-td-content">₹{{ number_format($item->price) }}</h4>
                                     </td>
                                     <td class="text-center detail-info" data-title="Stock">
                                         <div class="detail-extralink mr-15 display-hide-480">
                                             <div class="detail-qty border radius">
-                                                <a href="#" class="qty-down"><i
+                                                <a href="#" wire:click.prevent="decrementQuantity('{{ $item->rowId }}')" class="qty-down"><i
                                                         class="fi-rs-angle-small-down"></i></a>
                                                 <span class="qty-val">{{$item->qty}}</span>
-                                                <a href="#" class="qty-up"><i
+                                                <a href="#" wire:click.prevent="incrementQuantity('{{ $item->rowId }}')" class="qty-up"><i
                                                         class="fi-rs-angle-small-up"></i></a>
                                             </div>
                                         </div>
                                         <div class="quantity d-none">
-                                            <input type="button" value="-" class="minus">
-                                            <input type="number" min="1" value="1" class="qty"
-                                                size="4" title="Qty">
-                                            <input type="button" value="+" class="plus">
+                                            <button type="button" class="minus" wire:click.prevent="decrementQuantity('{{ $item->rowId }}')">-</button>
+                                            <input type="number" min="1" value="{{ $item->qty }}" class="qty"
+                                            size="4" title="Qty" wire:change="updateQuantity('{{ $item->rowId }}')" wire:model.lazy="quantities.{{ $item->rowId }}">
+                                            <button type="button" class="plus" wire:click.prevent="incrementQuantity('{{ $item->rowId }}')">+</button>
                                         </div>
                                     </td>
                                     <td class="price small-screen-table-td" data-title="Total Price">
-                                        <h4 class="text-brand small-screen-table-td-content">₹{{ number_format($item->model->price * $item->qty) }}</h4>
+                                        <h4 class="text-brand small-screen-table-td-content">₹{{ number_format($item->price * $item->qty) }}</h4>
                                     </td>
                                     <td class="action text-center small-screen-table-td remove-btn" data-title="Remove">
                                         <a href="#" class="text-body"><i class="fi-rs-trash"></i></a></td>
@@ -96,10 +96,8 @@
                 </div>
                 {{-- <div class="divider-2 mb-30"></div> --}}
                 <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
-                    <a class="btn d-flex align-items-center custom-pad"><i class="fi-rs-arrow-left mr-10"></i>Continue
+                    <a href="/shop" class="btn d-flex align-items-center custom-pad"><i class="fi-rs-arrow-left mr-10"></i>Continue
                         Shopping</a>
-                    <a class="btn d-flex align-items-center custom-pad"><i class="fi-rs-refresh mr-10"></i>Update
-                        Cart</a>
                 </div>
             </div>
             <div class="col-xl-3">
@@ -177,7 +175,7 @@
                                         <h6 class="text-muted">Subtotal</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">$12.31</h4>
+                                        <h4 class="text-brand text-end fs-16">₹{{ Cart::instance('cart')->subtotal() }}</h4>
                                     </td>
                                 </tr>
                                 <tr class="d-flex justify-content-between border-0">
@@ -201,7 +199,7 @@
                                         <h6 class="text-muted">Total</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">$12.31</h4>
+                                        <h4 class="text-brand text-end fs-16">₹{{ Cart::instance('cart')->total() }}</h4>
                                     </td>
                                 </tr>
                             </tbody>

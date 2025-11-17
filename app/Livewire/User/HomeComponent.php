@@ -7,6 +7,7 @@ use App\Models\Banner;
 use App\Models\ProductCategory;
 use App\Models\Product;
 use App\Models\ProductCategoryAssign;
+use App\Models\ProductAttributeAssign;
 use Carbon\Carbon;
 use App\Traits\HasToastNotification;
 
@@ -28,6 +29,9 @@ class HomeComponent extends Component
     public $top_rated_products = [];
     public $users_look_for = [];
     public $user_look_for_banner = [];
+    public $selectedProductId;
+
+    protected $listeners = ['quickView' => 'addPreviewProduct', 'closeQuickView' => 'handleCloseQuickView'];
 
     public function mount()
     {
@@ -37,9 +41,9 @@ class HomeComponent extends Component
         $this->best_deal_banner = Banner::where('status', 1)->where('banner_type', 'daily_best_deals')->first();
         $this->user_look_for_banner = Banner::where('status', 1)->where('banner_type', 'user_looks_for')->first();
         $this->popular_products = Product::where('status', 1)->where('is_featured', 1)->whereNull('parent_id')->inRandomOrder()->limit(15)->get();
-        $this->deals_of_the_day_products = Product::where('status', 1)->orderBy('sale_to_date', 'asc')->limit(4)->get();
+        $this->deals_of_the_day_products = Product::where('status', 1)->where('parent_id', null)->orderBy('sale_to_date', 'asc')->limit(8)->get();
         if ($this->deals_of_the_day_products->count() == 0) {
-            $this->deals_of_the_day_products = Product::where('status', 1)->inRandomOrder()->limit(4)->get();
+            $this->deals_of_the_day_products = Product::where('status', 1)->where('parent_id', null)->where('sale_default_price', '>', 0)->orderBy('created_at', 'desc')->inRandomOrder()->limit(8)->get();
         }
         $this->parentCategory = ProductCategory::where('parent_id', null)
             ->get()
@@ -68,6 +72,16 @@ class HomeComponent extends Component
     public function setPopularProductCategory($category)
     {
         $this->seleted_popular_product_category = $category;
+    }
+
+    public function handleCloseQuickView()
+    {
+        $this->selectedProductId = null;
+    }
+
+    public function addPreviewProduct($id)
+    {
+        $this->selectedProductId = $id;
     }
 
     public function setSaleProductCategory($category)
@@ -99,7 +113,7 @@ class HomeComponent extends Component
         // $product = Product::find($id);
         $defaultProduct = $this->getDefaultVariation($id);
 
-        $addToCart = finalAddToCart($defaultProduct, $this->quantity);
+        $addToCart = finalAddToCart($defaultProduct, 1);
         if ($addToCart == false) {
             $this->toastWarning('Already Exist In Your Cart!');
         } else {

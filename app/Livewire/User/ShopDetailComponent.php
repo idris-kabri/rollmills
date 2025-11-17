@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\OrderItems;
 use App\Models\Product;
 use App\Models\ProductAttributeAssign;
+use App\Models\ProductCategoryAssign;
 use App\Models\ProductRelation;
 use App\Models\ProductReview;
 use App\Models\Setting;
@@ -14,10 +15,11 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\WithFileUploads;
+use Carbon\Carbon;
 
 class ShopDetailComponent extends Component
-{ 
-    use WithFileUploads,HasToastNotification;
+{
+    use WithFileUploads, HasToastNotification;
     public $mainProduct;
     public $mainProduct_reviews;
     public $mainProduct_reviews_count;
@@ -41,7 +43,7 @@ class ShopDetailComponent extends Component
 
     protected $listeners = ['closeQuickView' => 'handleCloseQuickView'];
 
-    public function mount($slug = null,$id)
+    public function mount($slug = null, $id)
     {
         $this->id = $id;
         $this->selectedAttribute = [];
@@ -116,9 +118,11 @@ class ShopDetailComponent extends Component
             $this->check_user_can_review = OrderItems::whereHas('getOrder', function ($query) {
                 $query->where('logged_in_user_id', Auth::user()->id)->whereNotIn('status', [0, 4]);
             })
-                ->where('item_id', $id)
+                ->where('"item_id"', $id)
                 ->first();
         }
+
+        $this->jsonCreation();
     }
 
     public function reviewStore()
@@ -147,11 +151,11 @@ class ShopDetailComponent extends Component
                 $review->image = $path;
             }
             $review->save();
-            $this->toastSuccess('Thanks For Review This Product!'); 
-            if($this->mainProduct->slug){ 
+            $this->toastSuccess('Thanks For Review This Product!');
+            if ($this->mainProduct->slug) {
                 $url = '/shop-detail/' . $this->mainProduct->slug . $this->mainProduct->id;
-            }else{ 
-                $url = '/shop-detail/no-slug/'. $this->mainProduct->id;
+            } else {
+                $url = '/shop-detail/no-slug/' . $this->mainProduct->id;
             }
             $this->redirectWithDelay($url);
         } catch (ValidationException $e) {
@@ -181,6 +185,7 @@ class ShopDetailComponent extends Component
                 $this->quantity = 1;
             }
         }
+        $this->jsonCreation();
     }
 
     public function changeMainImage($image)
@@ -198,6 +203,66 @@ class ShopDetailComponent extends Component
         if ($this->quantity > 1) {
             $this->quantity--;
         }
+    }
+
+    public function jsonCreation()
+    {
+        $sale_price = 0;
+        $currentDate = Carbon::now();
+        $sale_from_date = Carbon::parse($this->mainProduct->sale_from_date);
+        $sale_to_date = Carbon::parse($this->mainProduct->sale_to_date);
+
+        if ($this->mainProduct->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+            $sale_price = $this->mainProduct->sale_price;
+        } else {
+            $sale_price = $this->mainProduct->sale_default_price;
+        }
+        $price = $this->mainProduct->price;
+        $discount = 0;
+        if ($sale_price > 0) {
+            $price = $sale_price;
+            $discount = $this->mainProduct->price > $sale_price ? round($this->mainProduct->price - $sale_price) : 0;
+        }
+        $category_assign = ProductCategoryAssign::where('product_id', $this->mainProduct->id)->orderBy('category_id', 'asc')->get();
+
+        $items = [];
+        $items[] = [
+            'item_id' => $this->mainProduct->id,
+            'item_name' => $this->mainProduct->name,
+            'affiliation' => '',
+            'coupon' => '',
+            'discount' => (float) $discount,
+            'index' => 0,
+            'item_brand' => 'Roll Mills',
+        ];
+
+        foreach ($category_assign as $key => $category) {
+            if ($key == 0) {
+                $items['item_category'] = $category->category->name;
+            } else {
+                $items['item_category' . $key + 1] = $category->category->name;
+            }
+        }
+
+        $items['item_list_id'] = '';
+        $items['item_list_name'] = '';
+        if ($this->mainProduct->attributes_name != null) {
+            $attributes = explode(',', $this->mainProduct->attributes_name);
+            foreach ($attributes as $key => $attribute) {
+                $items['item_variant'] = $attribute;
+            }
+        }
+        $items['location_id'] = '';
+        $items['price'] = (float) $this->mainProduct->price;
+        $items['quantity'] = 1;
+
+        $data = [
+            'currency' => 'INR',
+            'value' => (float) $price,
+            'items' => $items,
+        ];
+
+        $this->dispatch('item-view', $data);
     }
 
     public function addToCart()

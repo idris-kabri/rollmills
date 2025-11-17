@@ -1,27 +1,34 @@
 <div class="product-cart-wrap mb-30">
     <div class="product-img-action-wrap">
-        <div class="product-img product-img-zoom"> 
-           @php  
-                if($product->slug){ 
+        <div class="product-img product-img-zoom">
+            @php
+                if ($product->slug) {
                     $shop_detail_url = route('shop-detail', ['slug' => $product->slug, 'id' => $product->id]);
-                } else { 
-                    $shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $product->id]);
+                } else {
+                    $shop_detail_url = route('shop-detail', ['slug' => 'no-slug', 'id' => $product->id]);
                 }
             @endphp
 
-            <a href="{{$shop_detail_url}}">
-                <img class="default-img" src="{{ asset('storage/' . $product->featured_image) }}"  alt="{{$product->seo_meta}}" />
+            <a href="{{ $shop_detail_url }}">
+                <img class="default-img" src="{{ asset('storage/' . $product->featured_image) }}"
+                    alt="{{ $product->seo_meta }}" />
                 @php
                     $product_images = json_decode($product->images, true);
                 @endphp
-                <img class="hover-img" src="{{ asset('storage/' . $product_images[0]) }}"  alt="{{$product->seo_meta}}" />
+                <img class="hover-img" src="{{ asset('storage/' . $product_images[0]) }}" alt="{{ $product->seo_meta }}" />
             </a>
         </div>
         <div class="product-action-1">
-            <a aria-label="Add To Wishlist" class="action-btn" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-            <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-            <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i
+            @if (!isInWishlist($product->id))
+                <a aria-label="Add To Wishlist" class="action-btn" href="#"
+                    wire:click.prevent="addToWhishlist({{ $product->id }})"><i class="fi-rs-heart"></i></a>
+            @else
+                <a aria-label="Add To Wishlist" class="action-btn" href="javascript:void(0);"><i
+                        class="fi-rs-heart text-danger"></i></a>
+            @endif
+            <a aria-label="Quick view" class="action-btn quick-view" data-id="{{ $product->id }}"><i
                     class="fi-rs-eye"></i></a>
+            <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a>
         </div>
         <div class="product-badges product-badges-position product-badges-mrg">
             @if ($parameter)
@@ -78,7 +85,7 @@
         </div>
     </div>
     <div class="product-content-wrap mt-2">
-            <h2><a href="{{$shop_detail_url}}">{{ $product->name }}</a></h2>
+        <h2><a href="{{ $shop_detail_url }}">{{ $product->name }}</a></h2>
         <div class="product-rate-cover">
             @php
                 $reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $product->id)->get();
@@ -109,9 +116,16 @@
                 @endif
             </div>
             @if ($get_sold == false)
-                <div class="add-cart">
-                    <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                </div>
+                @if (!isInCart($product->id))
+                    <div class="add-cart">
+                        <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add"><i
+                                class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                    </div>
+                @else
+                    <div class="add-cart">
+                        <a href="javascript:void(0);" class="add"><i class="fi-rs-shopping-cart mr-5"></i>Added </a>
+                    </div>
+                @endif
             @endif
         </div>
         @if ($get_sold == true)
@@ -123,8 +137,14 @@
                 </div>
                 <span class="font-xs text-heading"> Sold: 90/120</span>
             </div>
-            <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="btn w-100 hover-up"><i class="fi-rs-shopping-cart mr-5"></i>Add To
-                Cart</a>
+            @if (!isInCart($product->id))
+                <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="btn w-100 hover-up"><i
+                        class="fi-rs-shopping-cart mr-5"></i>Add To
+                    Cart</a>
+            @else
+                <a href="javascript:void(0);" class="btn w-100 hover-up"><i
+                        class="fi-rs-shopping-cart mr-5"></i>Added</a>
+            @endif
         @endif
     </div>
 </div>

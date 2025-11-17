@@ -6,8 +6,12 @@ use Carbon\Carbon;
 
 function getPrice($id){ 
     $product = Product::findOrFail($id); 
-    $currentDate = Carbon::parse(now())->format('Y-m-d');  
-    $isOnSale = $product->sale_from_date <= $currentDate && $product->sale_to_date >= $currentDate;
+    $currentDate = Carbon::now();  
+    if($product->sale_from_date != null && $product->sale_to_date != null){
+        $isOnSale = $currentDate->between($product->sale_from_date, $product->sale_to_date);
+    }else{
+        $isOnSale = false;
+    }
 
     if($product->sale_price != 0 && $isOnSale){ 
 
