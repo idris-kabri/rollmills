@@ -253,18 +253,11 @@ class ShopDetailComponent extends Component
             }
         }
         $item['location_id'] = '';
-        $item['price'] = (float) $this->mainProduct->price;
+        $item['price'] = (float) $price;
         $item['quantity'] = 1;
 
         $items[] = $item;
-
-        $data = [
-            'currency' => 'INR',
-            'value' => (float) $price,
-            'items' => $items,
-        ];
-
-        $this->dispatch('item-view', $data);
+        $this->dispatch('item-view', $items);
     }
 
     public function addToCart()

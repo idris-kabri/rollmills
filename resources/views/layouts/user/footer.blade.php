@@ -323,6 +323,8 @@
         dataLayer.push({
             event: 'view_item',
             ecommerce: {
+                currency: 'INR',
+                value: data.price,
                 items: data
             }
         });
