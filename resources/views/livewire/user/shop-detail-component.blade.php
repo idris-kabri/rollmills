@@ -23,7 +23,45 @@
                 <div class="product-detail accordion-detail">
                     <div class="row mb-50 mt-30">
                         <div class="col-lg-6 col-sm-12 col-xs-12 mb-lg-0 mb-sm-5">
-                            <div class="detail-gallery">
+                            <div class="detail-gallery d-none d-xl-inline-block">
+                                <div class="row">
+                                    <div class="col-xl-2">
+                                        <!-- THUMBNAILS -->
+                                        <div class="product-slider-nav-thumbnails">
+                                            <div class="d-flex overflow-hidden img-card">
+                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-5.png') }}"
+                                                    alt="img" class="img-fluid" />
+                                            </div>
+                                            <div class="d-flex overflow-hidden img-card">
+                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-6.png') }}"
+                                                    alt="img" class="img-fluid" />
+                                            </div>
+                                            <div class="d-flex overflow-hidden img-card">
+                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-7.png') }}"
+                                                    alt="img" class="img-fluid" />
+                                            </div>
+                                            <div class="d-flex overflow-hidden img-card">
+                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-8.png') }}"
+                                                    alt="img" class="img-fluid" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-10 ps-xl-0">
+                                        <div class="product-img-fill">
+                                            <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                            <!-- MAIN SLIDES -->
+                                            <div class="product-image">
+                                                <figure class="border-radius-10 d-flex">
+                                                    <img src="{{ asset('assets\frontend\imgs\banner\banner-5.png') }}"
+                                                        alt="img" class="w-100" />
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="detail-gallery d-xl-none">
                                 @php
                                     $gallaryImages = json_decode($mainProduct->images, true);
                                 @endphp
