@@ -4,6 +4,7 @@ use App\Mail\GiftCardPurchaseMail;
 use App\Models\GiftCardGroup;
 use App\Models\GiftCardItem;
 use App\Models\Order;
+use App\Models\ProductCategoryAssign;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;

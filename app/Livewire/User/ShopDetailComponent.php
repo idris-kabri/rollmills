@@ -96,11 +96,8 @@ class ShopDetailComponent extends Component
             if (!in_array($assign->title, $this->groupedAttributes[$setIds]['items'])) {
                 $this->groupedAttributes[$setIds]['items'][] = $assign->title;
             }
-
-            foreach ($assignItems as $assignItem) {
-                if ($assign->is_default == 1 && $assignItem->name == $assign->title) {
-                    $this->handleAttributeClick($setIds, $assign->title);
-                }
+            if ($assign->is_default == 1) {
+                $this->handleAttributeClick($setIds, $assign->title);
             }
         }
 
@@ -118,7 +115,7 @@ class ShopDetailComponent extends Component
             $this->check_user_can_review = OrderItems::whereHas('getOrder', function ($query) {
                 $query->where('logged_in_user_id', Auth::user()->id)->whereNotIn('status', [0, 4]);
             })
-                ->where("item_id", $id)
+                ->where('item_id', $id)
                 ->first();
         }
 
@@ -263,6 +260,57 @@ class ShopDetailComponent extends Component
     public function addToCart()
     {
         $addToCart = finalAddToCart($this->mainProduct, $this->quantity, 'update-quantity');
+        $sale_price = 0;
+        $currentDate = Carbon::now();
+        $sale_from_date = Carbon::parse($this->mainProduct->sale_from_date);
+        $sale_to_date = Carbon::parse($this->mainProduct->sale_to_date);
+
+        if ($this->mainProduct->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+            $sale_price = $this->mainProduct->sale_price;
+        } else {
+            $sale_price = $this->mainProduct->sale_default_price;
+        }
+        $price = $this->mainProduct->price;
+        $discount = 0;
+        if ($sale_price > 0) {
+            $price = $sale_price;
+            $discount = $this->mainProduct->price > $sale_price ? round($this->mainProduct->price - $sale_price) : 0;
+        }
+        $category_assign = ProductCategoryAssign::where('product_id', $this->mainProduct->id)->orderBy('category_id', 'asc')->get();
+
+        $items = [];
+        $item = [
+            'item_id' => $this->mainProduct->id,
+            'item_name' => $this->mainProduct->name,
+            'affiliation' => '',
+            'coupon' => '',
+            'discount' => (float) $discount,
+            'index' => 0,
+            'item_brand' => 'Roll Mills',
+        ];
+
+        foreach ($category_assign as $key => $category) {
+            if ($key == 0) {
+                $item['item_category'] = $category->category->name;
+            } else {
+                $item['item_category' . $key + 1] = $category->category->name;
+            }
+        }
+
+        $item['item_list_id'] = '';
+        $item['item_list_name'] = '';
+        if ($this->mainProduct->attributes_name != null) {
+            $attributes = explode(',', $this->mainProduct->attributes_name);
+            foreach ($attributes as $key => $attribute) {
+                $item['item_variant'] = $attribute;
+            }
+        }
+        $item['location_id'] = '';
+        $item['price'] = (float) $price;
+        $item['quantity'] = $this->quantity;
+
+        $items[] = $item;
+        $this->dispatch('add-to-cart', $items);
         if ($addToCart) {
             $this->toastSuccess('Successfully Added In Your Cart!');
         } else {
@@ -274,6 +322,57 @@ class ShopDetailComponent extends Component
     {
         $product = Product::findOrFail($productId);
         $addToCart = finalAddToCart($product, 1, 'update-quantity');
+        $sale_price = 0;
+        $currentDate = Carbon::now();
+        $sale_from_date = Carbon::parse($product->sale_from_date);
+        $sale_to_date = Carbon::parse($product->sale_to_date);
+
+        if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+            $sale_price = $product->sale_price;
+        } else {
+            $sale_price = $product->sale_default_price;
+        }
+        $price = $product->price;
+        $discount = 0;
+        if ($sale_price > 0) {
+            $price = $sale_price;
+            $discount = $product->price > $sale_price ? round($product->price - $sale_price) : 0;
+        }
+        $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
+
+        $items = [];
+        $item = [
+            'item_id' => $product->id,
+            'item_name' => $product->name,
+            'affiliation' => '',
+            'coupon' => '',
+            'discount' => (float) $discount,
+            'index' => 0,
+            'item_brand' => 'Roll Mills',
+        ];
+
+        foreach ($category_assign as $key => $category) {
+            if ($key == 0) {
+                $item['item_category'] = $category->category->name;
+            } else {
+                $item['item_category' . $key + 1] = $category->category->name;
+            }
+        }
+
+        $item['item_list_id'] = '';
+        $item['item_list_name'] = '';
+        if ($product->attributes_name != null) {
+            $attributes = explode(',', $product->attributes_name);
+            foreach ($attributes as $key => $attribute) {
+                $item['item_variant'] = $attribute;
+            }
+        }
+        $item['location_id'] = '';
+        $item['price'] = (float) $price;
+        $item['quantity'] = 1;
+
+        $items[] = $item;
+        $this->dispatch('add-to-cart', $items);
         if ($addToCart) {
             $this->toastSuccess('Successfully Added In Your Cart!');
         } else {
@@ -285,6 +384,57 @@ class ShopDetailComponent extends Component
     {
         foreach ($this->linkedProducts as $linkedProduct) {
             $addToCart = finalAddToCart($linkedProduct, 1);
+            $sale_price = 0;
+            $currentDate = Carbon::now();
+            $sale_from_date = Carbon::parse($linkedProduct->sale_from_date);
+            $sale_to_date = Carbon::parse($linkedProduct->sale_to_date);
+
+            if ($linkedProduct->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+                $sale_price = $linkedProduct->sale_price;
+            } else {
+                $sale_price = $linkedProduct->sale_default_price;
+            }
+            $price = $linkedProduct->price;
+            $discount = 0;
+            if ($sale_price > 0) {
+                $price = $sale_price;
+                $discount = $linkedProduct->price > $sale_price ? round($linkedProduct->price - $sale_price) : 0;
+            }
+            $category_assign = ProductCategoryAssign::where('product_id', $linkedProduct->id)->orderBy('category_id', 'asc')->get();
+
+            $items = [];
+            $item = [
+                'item_id' => $linkedProduct->id,
+                'item_name' => $linkedProduct->name,
+                'affiliation' => '',
+                'coupon' => '',
+                'discount' => (float) $discount,
+                'index' => 0,
+                'item_brand' => 'Roll Mills',
+            ];
+
+            foreach ($category_assign as $key => $category) {
+                if ($key == 0) {
+                    $item['item_category'] = $category->category->name;
+                } else {
+                    $item['item_category' . $key + 1] = $category->category->name;
+                }
+            }
+
+            $item['item_list_id'] = '';
+            $item['item_list_name'] = '';
+            if ($linkedProduct->attributes_name != null) {
+                $attributes = explode(',', $linkedProduct->attributes_name);
+                foreach ($attributes as $key => $attribute) {
+                    $item['item_variant'] = $attribute;
+                }
+            }
+            $item['location_id'] = '';
+            $item['price'] = (float) $price;
+            $item['quantity'] = 1;
+
+            $items[] = $item;
+            $this->dispatch('add-to-cart', $items);
         }
         if ($addToCart) {
             $this->toastSuccess('Successfully Added In Your Cart!');
@@ -297,6 +447,57 @@ class ShopDetailComponent extends Component
     {
         $product = Product::findOrFail($productId);
         $addToWhishlist = finalAddToWhishlist($product);
+        $sale_price = 0;
+        $currentDate = Carbon::now();
+        $sale_from_date = Carbon::parse($product->sale_from_date);
+        $sale_to_date = Carbon::parse($product->sale_to_date);
+
+        if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+            $sale_price = $product->sale_price;
+        } else {
+            $sale_price = $product->sale_default_price;
+        }
+        $price = $product->price;
+        $discount = 0;
+        if ($sale_price > 0) {
+            $price = $sale_price;
+            $discount = $product->price > $sale_price ? round($product->price - $sale_price) : 0;
+        }
+        $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
+
+        $items = [];
+        $item = [
+            'item_id' => $product->id,
+            'item_name' => $product->name,
+            'affiliation' => '',
+            'coupon' => '',
+            'discount' => (float) $discount,
+            'index' => 0,
+            'item_brand' => 'Roll Mills',
+        ];
+
+        foreach ($category_assign as $key => $category) {
+            if ($key == 0) {
+                $item['item_category'] = $category->category->name;
+            } else {
+                $item['item_category' . $key + 1] = $category->category->name;
+            }
+        }
+
+        $item['item_list_id'] = '';
+        $item['item_list_name'] = '';
+        if ($product->attributes_name != null) {
+            $attributes = explode(',', $product->attributes_name);
+            foreach ($attributes as $key => $attribute) {
+                $item['item_variant'] = $attribute;
+            }
+        }
+        $item['location_id'] = '';
+        $item['price'] = (float) $price;
+        $item['quantity'] = 1;
+
+        $items[] = $item;
+        $this->dispatch('add-to-wishlist', $items);
         if ($addToWhishlist == true) {
             $this->toastSuccess('Successfully Added In Your Whishlist!');
         } else {
@@ -306,6 +507,57 @@ class ShopDetailComponent extends Component
     public function addToWhishlist()
     {
         $addToWhishlist = finalAddToWhishlist($this->mainProduct);
+        $sale_price = 0;
+        $currentDate = Carbon::now();
+        $sale_from_date = Carbon::parse($this->mainProduct->sale_from_date);
+        $sale_to_date = Carbon::parse($this->mainProduct->sale_to_date);
+
+        if ($this->mainProduct->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+            $sale_price = $this->mainProduct->sale_price;
+        } else {
+            $sale_price = $this->mainProduct->sale_default_price;
+        }
+        $price = $this->mainProduct->price;
+        $discount = 0;
+        if ($sale_price > 0) {
+            $price = $sale_price;
+            $discount = $this->mainProduct->price > $sale_price ? round($this->mainProduct->price - $sale_price) : 0;
+        }
+        $category_assign = ProductCategoryAssign::where('product_id', $this->mainProduct->id)->orderBy('category_id', 'asc')->get();
+
+        $items = [];
+        $item = [
+            'item_id' => $this->mainProduct->id,
+            'item_name' => $this->mainProduct->name,
+            'affiliation' => '',
+            'coupon' => '',
+            'discount' => (float) $discount,
+            'index' => 0,
+            'item_brand' => 'Roll Mills',
+        ];
+
+        foreach ($category_assign as $key => $category) {
+            if ($key == 0) {
+                $item['item_category'] = $category->category->name;
+            } else {
+                $item['item_category' . $key + 1] = $category->category->name;
+            }
+        }
+
+        $item['item_list_id'] = '';
+        $item['item_list_name'] = '';
+        if ($this->mainProduct->attributes_name != null) {
+            $attributes = explode(',', $this->mainProduct->attributes_name);
+            foreach ($attributes as $key => $attribute) {
+                $item['item_variant'] = $attribute;
+            }
+        }
+        $item['location_id'] = '';
+        $item['price'] = (float) $price;
+        $item['quantity'] = 1;
+
+        $items[] = $item;
+        $this->dispatch('add-to-wishlist', $items);
         if ($addToWhishlist == true) {
             $this->toastSuccess('Successfully Added In Your Whishlist!');
         } else {

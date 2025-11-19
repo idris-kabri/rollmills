@@ -324,7 +324,56 @@
             event: 'view_item',
             ecommerce: {
                 currency: 'INR',
-                value: data.price,
+                value: data[0].price,
+                items: data
+            }
+        });
+    })
+    window.addEventListener('add-to-cart', (event) => {
+        var data = event.detail[0];
+        console.log(data)
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: 'add_to_cart',
+            ecommerce: {
+                items: data
+            }
+        });
+    })
+    window.addEventListener('remove-from-cart', (event) => {
+        var data = event.detail[0];
+        console.log(data)
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: 'add_to_cart',
+            ecommerce: {
+                currency: 'INR',
+                value: data[0].price * data[0].quantity,
+                items: data
+            }
+        });
+    })
+    window.addEventListener('view-cart', (event) => {
+        var data = event.detail[0];
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: 'view_cart',
+            ecommerce: {
+                currency: 'INR',
+                value: data.total,
+                items: data.items
+            }
+        });
+    })
+    window.addEventListener('add-to-wishlist', (event) => {
+        var data = event.detail[0];
+        console.log(data)
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: 'add_to_wishlist',
+            ecommerce: {
+                currency: 'INR',
+                value: data[0].price,
                 items: data
             }
         });

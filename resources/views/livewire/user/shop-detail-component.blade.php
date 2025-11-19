@@ -29,68 +29,40 @@
                                         <!-- THUMBNAILS -->
                                         <div class="product-slider-nav-thumbnails">
                                             <div class="d-flex overflow-hidden img-card">
-                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-5.png') }}"
-                                                    alt="img" class="img-fluid" />
+                                                <a href="#" class="product_gallery_item"
+                                                        data-image="{{ asset('storage/' . $mainProduct->featured_image) }}"
+                                                        data-zoom-image="{{ asset('storage/' . $mainProduct->featured_image) }}">
+                                                        <img src="{{ asset('storage/' . $mainProduct->featured_image) }}" alt="img"
+                                                            class="img-fluid" />
+                                                    </a>
                                             </div>
-                                            <div class="d-flex overflow-hidden img-card">
-                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-6.png') }}"
-                                                    alt="img" class="img-fluid" />
-                                            </div>
-                                            <div class="d-flex overflow-hidden img-card">
-                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-7.png') }}"
-                                                    alt="img" class="img-fluid" />
-                                            </div>
-                                            <div class="d-flex overflow-hidden img-card">
-                                                <img src="{{ asset('assets\frontend\imgs\banner\banner-8.png') }}"
-                                                    alt="img" class="img-fluid" />
-                                            </div>
+                                            @php
+                                                $gallary_images = json_decode($mainProduct->images);
+                                            @endphp
+                                            @foreach ($gallary_images as $image)
+                                                <div class="d-flex overflow-hidden img-card">
+                                                    <a href="#" class="product_gallery_item"
+                                                        data-image="{{ asset('storage/' . $image) }}"
+                                                        data-zoom-image="{{ asset('storage/' . $image) }}">
+                                                        <img src="{{ asset('storage/' . $image) }}" alt="img"
+                                                            class="img-fluid" />
+                                                    </a>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="col-xl-10 ps-xl-0">
                                         <div class="product-img-fill">
-                                            <span class="zoom-icon"><i class="fi-rs-search"></i></span>
-                                            <!-- MAIN SLIDES -->
                                             <div class="product-image">
                                                 <figure class="border-radius-10 d-flex">
-                                                    <img src="{{ asset('assets\frontend\imgs\banner\banner-5.png') }}"
-                                                        alt="img" class="w-100" />
+                                                    <img src="{{ asset('storage/' . $mainProduct->featured_image) }}"
+                                                        alt="img" class="w-100" id="product_img" />
                                                 </figure>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="detail-gallery d-xl-none">
-                                @php
-                                    $gallaryImages = json_decode($mainProduct->images, true);
-                                @endphp
-                                <span class="zoom-icon"><i class="fi-rs-search"></i></span>
-                                <!-- MAIN SLIDES -->
-                                <div class="product-image-slider">
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset('storage/' . $mainProduct->featured_image) }}"
-                                            alt="{{ $mainProduct->seo_meta }}" />
-                                    </figure>
-                                    @foreach ($gallaryImages as $gallaryImage)
-                                        <figure class="border-radius-10">
-                                            <img src="{{ asset('storage/' . $gallaryImage) }}"
-                                                alt="{{ $mainProduct->seo_meta }}" />
-                                        </figure>
-                                    @endforeach
-                                </div>
-                                <!-- THUMBNAILS -->
-                                <div class="slider-nav-thumbnails">
-                                    <div><img src="{{ asset('storage/' . $mainProduct->featured_image) }}"
-                                            alt="{{ $mainProduct->seo_meta }}" /></div>
-                                    @foreach ($gallaryImages as $gallaryImage)
-                                        <div><img src="{{ asset('storage/' . $gallaryImage) }}"
-                                                alt="{{ $mainProduct->seo_meta }}" />
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <!-- End Gallery -->
                         </div>
                         <div class="col-lg-6 col-sm-12 col-xs-12">
                             @php
@@ -200,8 +172,7 @@
                                         <strong class="mr-10">{{ $attributes['name'] }} </strong>
                                         <ul class="list-filter size-filter font-small">
                                             @foreach ($attributes['items'] as $item)
-                                                <li><a href="#"
-                                                        class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}"
+                                                <li class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}"><a href="#"
                                                         wire:click.prevent="handleAttributeClick({{ $key }}, '{{ $item }}')">{{ $item }}</a>
                                                 </li>
                                             @endforeach
@@ -486,6 +457,24 @@
                             starIcon.classList.add('far');
                         }
                     });
+                });
+            });
+            const mainImage = document.getElementById("product_img");
+
+            document.querySelectorAll(".product_gallery_item").forEach(item => {
+                item.addEventListener("mouseover", function(e) {
+                    e.preventDefault();
+
+                    const newImage = this.getAttribute("data-image");
+                    const zoomImage = this.getAttribute("data-zoom-image");
+
+                    mainImage.src = newImage;
+                    mainImage.setAttribute("data-zoom-image", zoomImage);
+
+                    // active class handling
+                    document.querySelectorAll(".product_gallery_item").forEach(el => el.classList
+                        .remove("active"));
+                    this.classList.add("active");
                 });
             });
         });
