@@ -382,7 +382,7 @@ function calculateRates($products, $pincode)
         $response = Http::post('https://my.ithinklogistics.com/api_v3/rate/check.json', $wrappedPayload);
         if ($response->successful()) {
             $shippingData = $response->json();
-            if ($shippingData['status_code'] !== 200) {
+            if ($shippingData['status'] !== 'success') {
                 $checkout_condition_fail = true;
                 break;
             }
@@ -405,7 +405,8 @@ function calculateRates($products, $pincode)
 
                 foreach ($couriers as $courier) {
                     if (!empty($courier['delivery_tat'])) {
-                        $etdDate = Carbon::parse($courier['delivery_tat']);
+                        $now = Carbon::now();
+                        $etdDate = $now->copy()->addDays((int)$courier['delivery_tat']);
                         if (!$latestEtd || $etdDate->gt($latestEtd)) {
                             $latestEtd = Carbon::parse($etdDate)->format('d F Y');
                         }

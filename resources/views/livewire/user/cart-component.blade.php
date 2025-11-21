@@ -13,7 +13,8 @@
             <div class="col-lg-12 mb-40">
                 <div class="content mb-10">
                     <h1 class="title style-3 mb-20 text-center">Your Cart</h1>
-                    <h6 class="text-body text-center">There are <span class="text-brand">{{ Cart::instance('cart')->count() }}</span> products in your cart
+                    <h6 class="text-body text-center">There are <span
+                            class="text-brand">{{ Cart::instance('cart')->count() }}</span> products in your cart
                     </h6>
                 </div>
             </div>
@@ -33,29 +34,44 @@
                         </thead>
                         <tbody>
                             @foreach (Cart::instance('cart')->content() as $item)
+                                @php
+                                    if ($item->model->slug) {
+                                        $shop_detail_url = route('shop-detail', [
+                                            'slug' => $item->model->slug,
+                                            'id' => $item->model->id,
+                                        ]);
+                                    } else {
+                                        $shop_detail_url = route('shop-detail', [
+                                            'slug' => 'no-slug',
+                                            'id' => $item->model->id,
+                                        ]);
+                                    }
+                                @endphp
                                 <tr class="pt-3">
                                     <td class="image product-thumbnail pt-40 position-relative ps-2"><img
-                                            src="{{ asset('storage/' . $item->model->featured_image) }}" alt="{{ $item->model->seo_meta }}">
+                                            src="{{ asset('storage/' . $item->model->featured_image) }}"
+                                            alt="{{ $item->model->seo_meta }}">
                                         <div class="display-visible-480 d-none">
                                             <a href="#"
-                                                class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content" wire:click.prevent="removeFromCart('{{ $item->rowId }}')" wire:confirm="Are you sure you want to remove this item from your cart?">
+                                                class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
+                                                wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
+                                                wire:confirm="Are you sure you want to remove this item from your cart?">
                                                 <i class="fi-rs-trash text-white"></i></a>
                                         </div>
                                     </td>
                                     <td class="product-des product-name">
                                         <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                                href="/shop-detail">{{ $item->model->name }} {{$item->id}}</a>
+                                                href="{{ $shop_detail_url }}">{{ $item->model->name }} {{ $item->id }}</a>
                                         </h6>
-                                            @php
-                                                $reviews = \App\Models\ProductReview::where('status', 1)
-                                                    ->where('product_id', $item->model->id)
-                                                    ->get();
+                                        @php
+                                            $reviews = \App\Models\ProductReview::where('status', 1)
+                                                ->where('product_id', $item->model->id)
+                                                ->get();
 
-                                                $reviews_count = $reviews->count();
-                                                $reviews_avg =
-                                                    $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
-                                                $reviews_percentage = ($reviews_avg / 5) * 100;
-                                            @endphp
+                                            $reviews_count = $reviews->count();
+                                            $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
+                                            $reviews_percentage = ($reviews_avg / 5) * 100;
+                                        @endphp
                                         <div class="product-rate-cover">
                                             <div class="product-rate d-inline-block">
                                                 <div class="product-rating" style="width: {{ $reviews_percentage }}%">
@@ -65,30 +81,41 @@
                                         </div>
                                     </td>
                                     <td class="price small-screen-table-td me-3" data-title="Price">
-                                        <h4 class="text-body small-screen-table-td-content">₹{{ number_format($item->price) }}</h4>
+                                        <h4 class="text-body small-screen-table-td-content">
+                                            ₹{{ number_format($item->price) }}</h4>
                                     </td>
                                     <td class="text-center detail-info" data-title="Stock">
                                         <div class="detail-extralink mr-15 display-hide-480">
                                             <div class="detail-qty border radius">
-                                                <a href="#" wire:click.prevent="decrementQuantity('{{ $item->rowId }}')" class="qty-down"><i
-                                                        class="fi-rs-angle-small-down"></i></a>
-                                                <span class="qty-val">{{$item->qty}}</span>
-                                                <a href="#" wire:click.prevent="incrementQuantity('{{ $item->rowId }}')" class="qty-up"><i
-                                                        class="fi-rs-angle-small-up"></i></a>
+                                                <a href="#"
+                                                    wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
+                                                    class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                <span class="qty-val">{{ $item->qty }}</span>
+                                                <a href="#"
+                                                    wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
+                                                    class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                             </div>
                                         </div>
                                         <div class="quantity d-none">
-                                            <button type="button" class="minus" wire:click.prevent="decrementQuantity('{{ $item->rowId }}')">-</button>
-                                            <input type="number" min="1" value="{{ $item->qty }}" class="qty"
-                                            size="4" title="Qty" wire:change="updateQuantity('{{ $item->rowId }}')" wire:model.lazy="quantities.{{ $item->rowId }}">
-                                            <button type="button" class="plus" wire:click.prevent="incrementQuantity('{{ $item->rowId }}')">+</button>
+                                            <button type="button" class="minus"
+                                                wire:click.prevent="decrementQuantity('{{ $item->rowId }}')">-</button>
+                                            <input type="number" min="1" value="{{ $item->qty }}"
+                                                class="qty" size="4" title="Qty"
+                                                wire:change="updateQuantity('{{ $item->rowId }}')"
+                                                wire:model.lazy="quantities.{{ $item->rowId }}">
+                                            <button type="button" class="plus"
+                                                wire:click.prevent="incrementQuantity('{{ $item->rowId }}')">+</button>
                                         </div>
                                     </td>
                                     <td class="price small-screen-table-td" data-title="Total Price">
-                                        <h4 class="text-brand small-screen-table-td-content">₹{{ number_format($item->price * $item->qty) }}</h4>
+                                        <h4 class="text-brand small-screen-table-td-content">
+                                            ₹{{ number_format($item->price * $item->qty) }}</h4>
                                     </td>
                                     <td class="action text-center small-screen-table-td remove-btn" data-title="Remove">
-                                        <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')" wire:confirm="Are you sure you want to remove this item from your cart?" class="text-body"><i class="fi-rs-trash"></i></a></td>
+                                        <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
+                                            wire:confirm="Are you sure you want to remove this item from your cart?"
+                                            class="text-body"><i class="fi-rs-trash"></i></a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -96,7 +123,8 @@
                 </div>
                 {{-- <div class="divider-2 mb-30"></div> --}}
                 <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
-                    <a href="/shop" class="btn d-flex align-items-center custom-pad"><i class="fi-rs-arrow-left mr-10"></i>Continue
+                    <a href="/shop" class="btn d-flex align-items-center custom-pad"><i
+                            class="fi-rs-arrow-left mr-10"></i>Continue
                         Shopping</a>
                 </div>
             </div>
@@ -106,11 +134,12 @@
                     <h4 class="mb-10 underline pb-2">Calculate Shipping</h4>
                     {{-- <p class="mb-30"><span class="font-lg text-muted">Flat rate:</span><strong
                             class="text-brand">5%</strong></p> --}}
-                    <form class="field_form shipping_calculator mt-30" method="POST" wire:submit.prevent="pincodeCheckFunction">
+                    <form class="field_form shipping_calculator mt-30" method="POST"
+                        wire:submit.prevent="pincodeCheckFunction">
                         <div class="form-row row">
                             <div class="form-group col-lg-12">
-                                <input placeholder="PostCode / ZIP" name="name"
-                                    type="text" class="pl-15" wire:model="pincode">
+                                <input placeholder="PostCode / ZIP" name="name" type="text" class="pl-15"
+                                    wire:model="pincode">
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -178,7 +207,8 @@
                                         <h6 class="text-muted">Subtotal</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">₹{{ Cart::instance('cart')->subtotal() }}</h4>
+                                        <h4 class="text-brand text-end fs-16">
+                                            ₹{{ Cart::instance('cart')->subtotal() }}</h4>
                                     </td>
                                 </tr>
                                 <tr class="d-flex justify-content-between border-0">
@@ -186,7 +216,8 @@
                                         <h6 class="text-muted">Shipping</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16">Free</h4>
+                                        <h5 class="text-heading text-end fs-16">
+                                            {{ number_format(session('shipping_charge'), 2) }}</h4>
                                     </td>
                                 </tr>
                                 <tr class="d-flex justify-content-between border-0">
@@ -202,7 +233,8 @@
                                         <h6 class="text-muted">Total</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">₹{{ Cart::instance('cart')->total() }}</h4>
+                                        <h4 class="text-brand text-end fs-16">₹{{ Cart::instance('cart')->total() }}
+                                        </h4>
                                     </td>
                                 </tr>
                             </tbody>
