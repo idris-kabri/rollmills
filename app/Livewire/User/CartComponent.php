@@ -5,6 +5,7 @@ namespace App\Livewire\User;
 use Livewire\Component;
 use App\Traits\HasToastNotification;
 use App\Models\ProductCategoryAssign;
+use App\Models\Setting;
 use Cart;
 use Carbon\Carbon;
 
@@ -12,6 +13,7 @@ class CartComponent extends Component
 {
     use HasToastNotification;
     public $quantities = [];
+    public $pincode;
 
     public function mount()
     {
@@ -365,6 +367,84 @@ class CartComponent extends Component
         // $this->offerCheckEligibility();
         // $this->pincodeCheckFunction();
     }
+
+    public function pincodeCheckFunction()
+    {
+        $checkoutconditionFail = false;
+
+        if ($this->pincode == '') {
+            $this->toastError('Please Enter Pincode');
+        }
+        $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
+        if ($setting) {
+            $outOfDeliveryPincodes = explode(',', $setting->value);
+
+            if (in_array($this->pincode, $outOfDeliveryPincodes)) {
+                $this->free_shipping = true;
+                session()->put('free_shipping_pincode', $this->pincode);
+                session()->forget('show_deleviery_time');
+            } else {
+                $cart_items = Cart::instance('cart')->content();
+
+                $checkoutconditionFail = calculateRates($cart_items, $this->pincode);
+                if ($checkoutconditionFail) {
+                    $this->toastError('Sorry ! Delivery is currently unavailable to the selected pincode.');
+                } else {
+                    $this->free_shipping = false;
+                    session()->forget('free_shipping_pincode');
+                    session()->put('show_deleviery_time', true);
+                }
+            }
+            session()->put('shipping_pincode', $this->pincode);
+        }
+        if (!$checkoutconditionFail) {
+            $this->checkout_button = true;
+            $this->checkoutCondition();
+        } else {
+            $this->checkout_button = false;
+        }
+    }
+
+    public function checkoutCondition()
+    {
+        $this->out_of_stock_id = [];
+        $this->pincode_validation_id = [];
+        if ($this->pincode != null && $this->pincode != '') {
+            $items = Cart::instance('cart')->content();
+            foreach ($items as $item) {
+                $product = $item->model;
+                if ($product->out_of_stock == 1) {
+                    $this->checkout_button = false;
+                    $this->out_of_stock_id[] = $product->id;
+                }
+
+                if ($product->pincode_excluded != '' && $product->pincode_excluded != null) {
+                    $pincodes = explode(',', $product->pincode_excluded);
+                    if (count($pincodes) > 0) {
+                        if (in_array($this->pincode, $pincodes)) {
+                            $this->checkout_button = false;
+                            $this->pincode_validation_id[] = $product->id;
+                        }
+                    }
+                }
+            }
+
+            if (count($this->out_of_stock_id) <= 0 && count($this->pincode_validation_id) <= 0) {
+                $this->checkout_button = true;
+            } else {
+                if (count($this->out_of_stock_id) > 0) {
+                    $this->toastError('This product is currently out of stock.');
+                }
+                if (count($this->pincode_validation_id) > 0) {
+                    $this->toastError('Delivery is currently unavailable to the selected pincode.');
+                }
+                $this->checkout_button = false;
+            }
+        } else {
+            $this->checkout_button = false;
+        }
+    }
+
     public function render()
     {
         return view('livewire.user.cart-component')->layout('layouts.user.app');

@@ -38,7 +38,7 @@
                                             src="{{ asset('storage/' . $item->model->featured_image) }}" alt="{{ $item->model->seo_meta }}">
                                         <div class="display-visible-480 d-none">
                                             <a href="#"
-                                                class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
+                                                class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content" wire:click.prevent="removeFromCart('{{ $item->rowId }}')" wire:confirm="Are you sure you want to remove this item from your cart?">
                                                 <i class="fi-rs-trash text-white"></i></a>
                                         </div>
                                     </td>
@@ -88,7 +88,7 @@
                                         <h4 class="text-brand small-screen-table-td-content">₹{{ number_format($item->price * $item->qty) }}</h4>
                                     </td>
                                     <td class="action text-center small-screen-table-td remove-btn" data-title="Remove">
-                                        <a href="#" class="text-body"><i class="fi-rs-trash"></i></a></td>
+                                        <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')" wire:confirm="Are you sure you want to remove this item from your cart?" class="text-body"><i class="fi-rs-trash"></i></a></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -106,12 +106,15 @@
                     <h4 class="mb-10 underline pb-2">Calculate Shipping</h4>
                     {{-- <p class="mb-30"><span class="font-lg text-muted">Flat rate:</span><strong
                             class="text-brand">5%</strong></p> --}}
-                    <form class="field_form shipping_calculator mt-30">
+                    <form class="field_form shipping_calculator mt-30" method="POST" wire:submit.prevent="pincodeCheckFunction">
                         <div class="form-row row">
                             <div class="form-group col-lg-12">
-                                <input required="required" placeholder="PostCode / ZIP" name="name"
-                                    type="text" class="pl-15">
+                                <input placeholder="PostCode / ZIP" name="name"
+                                    type="text" class="pl-15" wire:model="pincode">
                             </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn">Update Zip Code</button>
                         </div>
                     </form>
                 </div>
