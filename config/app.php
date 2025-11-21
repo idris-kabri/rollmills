@@ -84,6 +84,10 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
+    "secret_key" => env('ITHINK_SECRET_KEY', ''),
+
+    "access_token" => env('ITHINK_ACCESS_TOKEN', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key

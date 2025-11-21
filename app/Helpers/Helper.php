@@ -161,6 +161,7 @@ function finalAddToCart($product, $quantity, $type = null, $customPrice = null)
                     Cart::instance('cart')->store(Auth::user()->email);
                 }
             }
+            return true;
         } else {
             return false;
         }
@@ -354,21 +355,33 @@ function placeShipment($order_id, $token)
     }
 }
 
-function calculateRates($products, $token, $pincode)
+function calculateRates($products, $pincode)
 {
+    Log::error('Hye');
     $latestEtd = null;
     $shippingCharge = 0;
     $shipping_bear_margin = 0;
     $checkout_condition_fail = false;
     foreach ($products as $cart_item) {
         $weightInKg = (float) $cart_item->model->weight / 1000;
-        $response = Http::withToken($token)->get('https://apiv2.shiprocket.in/v1/external/courier/serviceability', [
-            'pickup_postcode' => '314025',
-            'delivery_postcode' => $pincode,
-            'cod' => 0,
-            'weight' => $weightInKg * $cart_item->qty,
+        $boxLength = $cart_item->model->length * $cart_item->qty;
+        $boxWidth = $cart_item->model->width * $cart_item->qty;
+        $boxHeight = $cart_item->model->height * $cart_item->qty;
+
+        $response = Http::post('https://my.ithinklogistics.com/api_v3/rate/check.json', [
+            'from_pincode' => '314025',
+            'to_pincode' => $pincode,
+            'shipping_length_cms' => $boxLength,
+            'shipping_width_cms' => $boxWidth,
+            'shipping_height_cms' => $boxHeight,
+            'shipping_weight_kg' => $weightInKg,
+            'order_type' => 'forward',
+            'payment_method' => 'prepaid',
+            'product_mrp' => $cart_item->model->price * $cart_item->qty,
+            'access_token' => config('app.access_token'),
+            'secret_key' => config('app.secret_key'),
         ]);
-        // dd($response->json());
+        // dd($response, $response->getBody(), $weightInKg, $boxLength, $boxWidth, $boxHeight, ($cart_item->model->price * $cart_item->qty));
         if ($response->successful()) {
             $shippingData = $response->json();
             if ($shippingData['status'] == 404) {

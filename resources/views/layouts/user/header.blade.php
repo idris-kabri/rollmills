@@ -41,30 +41,7 @@
     {{-- flaticon icons --}}
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
-    <!-- Google Tag Manager -->
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-MDW5GGDD');
-    </script>
-    <!-- End Google Tag Manager -->
-
-
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MDW5GGDD" height="0" width="0"
-            style="display:none;visibility:hidden"></iframe></noscript>
-
+    
     <!-- Meta Pixel Code -->
     <script>
         ! function(f, b, e, v, n, t, s) {
@@ -91,6 +68,29 @@
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=1529828748194896&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MDW5GGDD');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MDW5GGDD" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+
     @livewireStyles
 </head>
 
