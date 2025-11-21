@@ -25,8 +25,8 @@
     <section class="featured section-padding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-md-4 mb-xl-0">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-1.svg') }}" alt="" />
                         </div>
@@ -36,8 +36,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-2.svg') }}" alt="" />
                         </div>
@@ -47,8 +47,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-3.svg') }}" alt="" />
                         </div>
@@ -58,8 +58,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-4.svg') }}" alt="" />
                         </div>

@@ -1,0 +1,11 @@
+@media (max-width: 576px) {
+    .banner-left-icon .banner-icon img {
+        width: 36px;
+    }
+    .banner-left-icon .banner-text h3 {
+        font-size: 14px;
+    }
+    .banner-left-icon .banner-text p {
+        font-size: 12px;
+    }
+}
