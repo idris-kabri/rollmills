@@ -33,6 +33,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $totalOfferDiscountedPrice = 0;
+                            @endphp
                             @foreach (Cart::instance('cart')->content() as $item)
                                 @php
                                     if ($item->model->slug) {
@@ -61,7 +64,8 @@
                                     </td>
                                     <td class="product-des product-name">
                                         <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                                href="{{ $shop_detail_url }}">{{ $item->model->name }} {{ $item->id }}</a>
+                                                href="{{ $shop_detail_url }}">{{ $item->model->name }}
+                                                {{ $item->id }}</a>
                                         </h6>
                                         @php
                                             $reviews = \App\Models\ProductReview::where('status', 1)
@@ -117,6 +121,12 @@
                                             class="text-body"><i class="fi-rs-trash"></i></a>
                                     </td>
                                 </tr>
+                                @php
+                                    if ($item->options && isset($item->options['discount_price'])) {
+                                        $totalOfferDiscountedPrice +=
+                                            $item->price * $item->qty - (($item->options ?? [])['discount_price'] ?? 0);
+                                    }
+                                @endphp
                             @endforeach
                         </tbody>
                     </table>
@@ -222,26 +232,55 @@
                                 </tr>
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Estimate for</h6>
+                                        <h6 class="text-muted">Etd</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16">United Kingdom</h4>
+                                        <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}</h4>
                                     </td>
                                 </tr>
+                                @php
+                                    $cartTotal = (float) str_replace(',', '', Cart::total());
+                                    $amountAfterDiscount = $cartTotal - $totalOfferDiscountedPrice;
+                                    $allCouponandOfferDiscount =
+                                        $cartTotal - $totalOfferDiscountedPrice - $mainDiscountAmount;
+                                @endphp
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Total</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">₹{{ Cart::instance('cart')->total() }}
-                                        </h4>
+                                        @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                            </h4>
+                                        @elseif($totalAfterDiscount != 0)
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                            </h4>
+                                        @elseif($totalOfferDiscountedPrice != 0)
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                            </h4>
+                                        @else
+                                            @php
+                                                $shippingCharge = (float) (session('shipping_charge') ?? 0);
+                                                $total =
+                                                    floatval(str_replace(',', '', Cart::total())) + $shippingCharge;
+                                            @endphp
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($total, 2) }}
+                                            </h4>
+                                        @endif
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <a href="#" class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
-                        To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                    @if ($checkout_button)
+                        <a href="#"
+                            class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
+                            To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -249,6 +288,7 @@
 </main>
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         function toggleCoupon(card) {
             document.querySelectorAll('.coupon-card-cart').forEach(c => {
@@ -258,5 +298,18 @@
             });
             card.classList.toggle('selected');
         }
+
+        function showCongratsOffer() {
+            confetti({
+                particleCount: 500,
+                spread: 100,
+                origin: {
+                    y: 0.6
+                }
+            });
+        }
+        window.addEventListener('coupon-applied', event => {
+            showCongratsOffer();
+        });
     </script>
 @endpush
