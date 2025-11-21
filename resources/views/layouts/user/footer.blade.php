@@ -320,6 +320,7 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ ecommerce: null });
         dataLayer.push({
             event: 'view_item',
             ecommerce: {
@@ -333,6 +334,7 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ ecommerce: null });
         dataLayer.push({
             event: 'add_to_cart',
             ecommerce: {
@@ -344,6 +346,7 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ ecommerce: null });
         dataLayer.push({
             event: 'add_to_cart',
             ecommerce: {
@@ -356,6 +359,7 @@
     window.addEventListener('view-cart', (event) => {
         var data = event.detail[0];
         window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ ecommerce: null });
         dataLayer.push({
             event: 'view_cart',
             ecommerce: {
@@ -369,6 +373,7 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
+        dataLayer.push({ ecommerce: null });
         dataLayer.push({
             event: 'add_to_wishlist',
             ecommerce: {
