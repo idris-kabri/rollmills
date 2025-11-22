@@ -22,16 +22,28 @@
     text-transform: capitalize;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
     .product-slider-nav-thumbnails {
         display: flex;
         height: fit-content;
-        width: 100%;
+        width: 150%;
+        overflow: overlay;
     }
 
     .product-slider-nav-thumbnails .img-card {
         width: 15%;
         margin-right: 20px;
+    }
+
+    .page-header.breadcrumb-wrap {
+        padding: 8px 20px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 992px) {
+    .shop-detail-page-main {
+        padding: 0 2rem;
     }
 }
 
