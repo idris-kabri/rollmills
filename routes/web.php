@@ -21,6 +21,7 @@ use App\Livewire\User\Order;
 use App\Livewire\User\OrderDetail;
 use App\Livewire\User\Profile;
 use App\Livewire\User\Address;
+use App\Http\Controllers\PaymentSuccessController;
 
 Route::get('/', HomeComponent::class)->name('home');
 Route::get('/about', AboutComponent::class)->name('about');
@@ -43,5 +44,7 @@ Route::get('/user-profile', Profile::class)->name("user-profile");
 Route::get('/user-address', Address::class)->name("user-address");
 Route::get('/login', LoginComponent::class)->name('login');
 Route::get('/register', RegisterComponent::class)->name('register');
+
+Route::match(['get','post'],'/get-payment',[PaymentSuccessController::class,'paymentSuccess'])->name('payment.success');
 
 @include('admin.php');

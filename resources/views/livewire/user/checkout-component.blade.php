@@ -35,12 +35,22 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-6">
+                                <input type="text" name="state" required="" placeholder="State *"
+                                    wire:model="billing_address.state">
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input type="text" name="city" required="" placeholder="City *"
+                                    wire:model="billing_address.city">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
                                 <input type="text" name="billing_address" required="" placeholder="Address *"
-                                    wire:model="billing_address.address_line_1">
+                                    wire:model="billing_address.billing_address1">
                             </div>
                             <div class="form-group col-lg-6">
                                 <input type="text" name="billing_address2" required="" placeholder="Address line2"
-                                    wire:model="billing_address.address_line_2">
+                                    wire:model="billing_address.billing_address2">
                             </div>
                         </div>
                         <div class="row">
@@ -50,7 +60,7 @@
                             </div>
                             <div class="form-group col-lg-6">
                                 <input required="" type="text" name="phone" placeholder="Phone *"
-                                    wire:model="billing_address.phone">
+                                    wire:model="billing_address.mobile">
                             </div>
                         </div>
                         <div class="form-group mb-30">
@@ -70,7 +80,7 @@
                                 </div>
                             </div>
 
-                            <div class="default-address-div">
+                            {{-- <div class="default-address-div">
                                 <a class="coupon-card-cart selected">
                                     <div class="coupon-header">
                                         <div class="d-flex coupon-code-section">
@@ -94,57 +104,40 @@
                                         </ul>
                                     </div>
                                 </a>
-
-                                <a class="coupon-card-cart">
-                                    <div class="coupon-header">
-                                        <div class="coupon-code-section">
-                                            <div class="coupon-code-cart">yahya japan</div>
-                                        </div>
-                                        <div class="check-circle">
-                                            <svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="coupon-description">
-                                        test description wil be placed here
-                                    </div>
-                                    <div class="coupon-footer">
-                                        <div class="discount-badge">60% OFF</div>
-                                        <div class="min-order">Valid till: 06/12/2025</div>
-                                    </div>
-                                </a>
-                            </div>
+                            </div> --}}
 
                             <div id="collapseAddress" class="different_address collapse in">
                                 <div class="row">
                                     <div class="form-group col-lg-6">
                                         <input type="text" required="" name="name" placeholder="Name *"
-                                            wire:model="shipping_address.name">
+                                            wire:model="ship_to_different_address.name">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <input type="text" name="billing_address" required=""
-                                            placeholder="Address *" wire:model="shipping_address.address_line_1">
+                                            placeholder="Address *"
+                                            wire:model="ship_to_different_address.address_line_1">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-6">
                                         <input type="text" name="billing_address2" required=""
-                                            placeholder="Address line2" wire:model="shipping_address.address_line_2">
+                                            placeholder="Address line2"
+                                            wire:model="ship_to_different_address.address_line_2">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <input required="" type="text" name="state" placeholder="State *"
-                                            wire:model="shipping_address.state">
+                                            wire:model="ship_to_different_address.state">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-6">
                                         <input required="" type="text" name="city"
-                                            placeholder="City / Town *" wire:model="shipping_address.city">
+                                            placeholder="City / Town *" wire:model="ship_to_different_address.city">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <input required="" type="text" name="zipcode"
-                                            placeholder="Postcode / ZIP *" wire:model="shipping_address.zipcode">
+                                            placeholder="Postcode / ZIP *"
+                                            wire:model="ship_to_different_address.zipcode" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -153,22 +146,37 @@
                 </div>
             </div>
             <div class="col-lg-5">
-                <div class="border p-40 cart-totals ml-30 mb-50">
+                <div class="border p-20 cart-totals ml-30 mb-3">
                     <div class="d-flex align-items-end justify-content-between mb-30">
-                        <h4>Your Order</h4>
+                        <h4 class="underline">Your Order</h4>
                         <h6 class="text-muted">Subtotal</h6>
                     </div>
-                    <div class="divider-2 mb-30"></div>
                     <div class="table-responsive order_table checkout">
                         <table class="table no-border">
                             <tbody>
+                                @php
+                                    $totalOfferDiscountedPrice = 0;
+                                @endphp
                                 @foreach (Cart::instance('cart')->content() as $item)
+                                    @php
+                                        if ($item->model->slug) {
+                                            $shop_detail_url = route('shop-detail', [
+                                                'slug' => $item->model->slug,
+                                                'id' => $item->model->id,
+                                            ]);
+                                        } else {
+                                            $shop_detail_url = route('shop-detail', [
+                                                'slug' => 'no-slug',
+                                                'id' => $item->model->id,
+                                            ]);
+                                        }
+                                    @endphp
                                     <tr>
                                         <td class="image product-thumbnail"><img
                                                 src="{{ asset('storage/' . $item->model->featured_image) }}"
                                                 alt="#"></td>
                                         <td>
-                                            <h6 class="w-160 mb-5"><a href="shop-product-full.html"
+                                            <h6 class="w-160 mb-5"><a href="{{ $shop_detail_url }}"
                                                     class="text-heading">{{ $item->model->name }}</a></h6></span>
                                             @php
                                                 $reviews = \App\Models\ProductReview::where('status', 1)
@@ -197,46 +205,123 @@
                                             </h4>
                                         </td>
                                     </tr>
+                                    @php
+                                        if ($item->options && isset($item->options['discount_price'])) {
+                                            $totalOfferDiscountedPrice +=
+                                                $item->price * $item->qty -
+                                                (($item->options ?? [])['discount_price'] ?? 0);
+                                        }
+                                    @endphp
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <div class="border p-20 cart-totals ml-30">
+                    <h4 class="mb-30 pb-2 underline">Details</h4>
+                    <div class="table-responsive">
+                        <table class="table no-border">
+                            <tbody>
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">Subtotal</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h4 class="text-brand text-end fs-16">
+                                            ₹{{ Cart::instance('cart')->subtotal() }}</h4>
+                                    </td>
+                                </tr>
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">Shipping</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h5 class="text-heading text-end fs-16">
+                                            {{ number_format(session('shipping_charge'), 2) }}</h4>
+                                    </td>
+                                </tr>
+                                @if (session('latest_etd') != null)
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start">
+                                            <h6 class="text-muted">Etd</h6>
+                                        </td>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}</h4>
+                                        </td>
+                                    </tr>
+                                @endif
+                                @php
+                                    $discount = $mainDiscountAmount;
+                                @endphp
+                                @if ($discount != 0)
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start">
+                                            <h6 class="text-muted">Discount</h6>
+                                        </td>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-heading text-end fs-16 text-success">
+                                                ₹{{ number_format($discount, 2) }}</h4>
+                                        </td>
+                                    </tr>
+                                @endif
+                                @php
+                                    $cartTotal = (float) str_replace(',', '', Cart::total());
+                                    $amountAfterDiscount = $cartTotal - $discount + (float) session('shipping_charge');
+                                @endphp
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">Total</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h4 class="text-brand text-end fs-16">
+                                            ₹{{ number_format($amountAfterDiscount, 2) }}
+                                        </h4>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="payment ml-30">
-                    <h4 class="mb-30">Payment</h4>
-                    <div class="payment_option">
-                        <div class="custome-radio">
-                            <input class="form-check-input" required="" type="radio" name="payment_option"
-                                id="exampleRadios3" checked="">
-                            <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse"
-                                data-target="#bankTranfer" aria-controls="bankTranfer">Direct Bank Transfer</label>
-                        </div>
-                        <div class="custome-radio">
-                            <input class="form-check-input" required="" type="radio" name="payment_option"
-                                id="exampleRadios4" checked="">
-                            <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
-                                data-target="#checkPayment" aria-controls="checkPayment">Cash on delivery</label>
-                        </div>
-                        <div class="custome-radio">
-                            <input class="form-check-input" required="" type="radio" name="payment_option"
-                                id="exampleRadios5" checked="">
-                            <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse"
-                                data-target="#paypal" aria-controls="paypal">Online Getway</label>
-                        </div>
-                    </div>
-                    <div class="payment-logo d-flex">
-                        <img class="mr-15" src="{{ asset('assets/frontend/imgs/theme/icons/payment-paypal.svg') }}"
-                            alt="">
-                        <img class="mr-15" src="{{ asset('assets/frontend/imgs/theme/icons/payment-visa.svg') }}"
-                            alt="">
-                        <img class="mr-15" src="{{ asset('assets/frontend/imgs/theme/icons/payment-master.svg') }}"
-                            alt="">
-                        <img src="{{ asset('assets/frontend/imgs/theme/icons/payment-zapper.svg') }}" alt="">
-                    </div>
-                    <a href="#" class="btn btn-fill-out btn-block mt-30">Place an Order<i
+                    <a href="#" class="btn btn-fill-out btn-block mt-20 w-100" wire:click.prevent="placeOrder()">Place an Order<i
                             class="fi-rs-sign-out ml-15"></i></a>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+@push('scripts')
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener('livewire:init', function() {
+        window.addEventListener('initiate-razorpay', function(event) {
+            const detail = event.detail[0] || event.detail;
+
+            var options = {
+                "key": '{{ config('app.razorpay_key_id') }}',
+                "amount": detail.amount,
+                "currency": "INR",
+                "name": "EFakhri Electric Store",
+                "description": detail.description,
+                "image": "https://example.com/logo.png",
+                "order_id": detail.razorpay_order_id,
+                "handler": function(response) {
+                    window.location.href =
+                        `${detail.success_url}?transaction_id=${detail.transaction_id}&payment_id=${response.razorpay_payment_id}&order_id=${detail.razorpay_order_id}&title=${detail.title}&customer_name=${detail.customer_name}&customer_email=${detail.customer_email}&type=order_payment`;
+                },
+                "prefill": {
+                    "name": detail.name,
+                    "email": detail.email
+                },
+                "theme": {
+                    "color": "#F37254"
+                }
+            };
+
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        });
+    });
+</script>
+@endpush

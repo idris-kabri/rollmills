@@ -15,7 +15,7 @@ use Carbon\Carbon;
 class CartComponent extends Component
 {
     use HasToastNotification;
-    public $checkout_button = true;
+    public $checkout_button = false;
     public $free_shipping = false;
     public $pincode = null;
     public $couponCode;
@@ -168,19 +168,19 @@ class CartComponent extends Component
 
         // If no eligible product found in cart for coupon categories
         if ($eligibleProductsTotal == 0) {
-            $this->toastWarning('No products in cart belong to the coupon category.');
+            $this->toastError('No products in cart belong to the coupon category.');
             return;
         }
 
         // Check minimum order value on eligible products total
         if ($eligibleProductsTotal < (float) $checkCuponCode->minimum_order_value) {
-            $this->toastWarning('Minimum order value must be ₹' . number_format($checkCuponCode->minimum_order_value) . ' for products in coupon category.');
+            $this->toastError('Minimum order value must be ₹' . number_format($checkCuponCode->minimum_order_value) . ' for products in coupon category.');
             return;
         }
 
         // Check coupon expiry date using Carbon
         if (!Carbon::parse($checkCuponCode->expiry_date)->gt(Carbon::now())) {
-            $this->toastWarning('This Coupon Is Expired!');
+            $this->toastError('This Coupon Is Expired!');
             return;
         }
 

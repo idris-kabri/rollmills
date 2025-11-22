@@ -36,6 +36,7 @@ class CheckoutComponent extends Component
     public $add_new_shipp_address = false;
     public $ship_to_different_address_enabled = false;
     public $gift_card_code;
+    public $mainDiscountAmount = 0;
 
     public function mount()
     {
@@ -62,6 +63,7 @@ class CheckoutComponent extends Component
         } else {
             $this->fetch_user_address = [];
         }
+        $this->mainDiscountAmount = (float) session('coupon_discount_amount');
         $this->checkBillingEmail();
     }
 
@@ -79,6 +81,7 @@ class CheckoutComponent extends Component
     }
     public function ship_to_different_address_function()
     {
+        $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
         $this->ship_to_different_address_enabled = !$this->ship_to_different_address_enabled;
     }
 
@@ -337,14 +340,7 @@ class CheckoutComponent extends Component
             if (empty($this->billing_address['name']) || empty($this->billing_address['email']) || empty($this->billing_address['mobile']) || empty($this->billing_address['billing_address1']) || empty($this->billing_address['city']) || empty($this->billing_address['state']) || empty($this->billing_address['zipcode'])) {
                 return $this->toastError('Billing Details Is Required!');
             }
-
-            if (!$this->payment_method) {
-                if (!Auth::check()) {
-                    $this->payment_method = 'upi';
-                } else {
-                    return $this->toastError('Please Select Payment Method!');
-                }
-            }
+            $this->payment_method = 'upi';
 
             // Create billing address
             if (!Auth::check()) {
