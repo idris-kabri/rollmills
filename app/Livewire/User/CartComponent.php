@@ -15,7 +15,7 @@ use Carbon\Carbon;
 class CartComponent extends Component
 {
     use HasToastNotification;
-    public $checkout_button = false;
+    public $checkout_button = true;
     public $free_shipping = false;
     public $pincode = null;
     public $couponCode;

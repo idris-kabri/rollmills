@@ -25,27 +25,32 @@
                     <form method="post">
                         <div class="row">
                             <div class="form-group col-lg-6">
-                                <input type="text" required="" name="name" placeholder="Name *" wire:model="billing_address.name">
+                                <input type="text" required="" name="name" placeholder="Name *"
+                                    wire:model="billing_address.name">
                             </div>
                             <div class="form-group col-lg-6">
-                                <input required="" type="text" name="email" placeholder="Email address *" wire:model="billing_address.email">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-lg-6">
-                                <input type="text" name="billing_address" required="" placeholder="Address *" wire:model="billing_address.address_line_1">
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input type="text" name="billing_address2" required=""
-                                    placeholder="Address line2" wire:model="billing_address.address_line_2">
+                                <input required="" type="text" name="email" placeholder="Email address *"
+                                    wire:model="billing_address.email">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-6">
-                                <input type="text" disabled name="zipcode" placeholder="Postcode / ZIP *" wire:model="billing_address.zipcode">
+                                <input type="text" name="billing_address" required="" placeholder="Address *"
+                                    wire:model="billing_address.address_line_1">
                             </div>
                             <div class="form-group col-lg-6">
-                                <input required="" type="text" name="phone" placeholder="Phone *" wire:model="billing_address.phone">
+                                <input type="text" name="billing_address2" required="" placeholder="Address line2"
+                                    wire:model="billing_address.address_line_2">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <input type="text" disabled name="zipcode" placeholder="Postcode / ZIP *"
+                                    wire:model="billing_address.zipcode">
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input required="" type="text" name="phone" placeholder="Phone *"
+                                    wire:model="billing_address.phone">
                             </div>
                         </div>
                         <div class="form-group mb-30">
@@ -64,11 +69,58 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="default-address-div">
+                                <a class="coupon-card-cart selected">
+                                    <div class="coupon-header">
+                                        <div class="d-flex coupon-code-section">
+                                            <span>Y</span>
+                                            <div class="coupon-code-cart">yahya japan</div>
+                                        </div>
+                                        <div class="check-circle">
+                                            <svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="coupon-description">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2 fw-500"><strong>Phone &nbsp; : &nbsp; </strong>
+                                                8290062652</li>
+                                            <li class="mb-2 fw-500"><strong>Email &nbsp; : &nbsp; </strong>
+                                                murtaza774@gmail.com</li>
+                                            <li class="mb-2 fw-500"><strong>Address &nbsp; : &nbsp; </strong>
+                                                Sagwara </li>
+                                        </ul>
+                                    </div>
+                                </a>
+
+                                <a class="coupon-card-cart">
+                                    <div class="coupon-header">
+                                        <div class="coupon-code-section">
+                                            <div class="coupon-code-cart">yahya japan</div>
+                                        </div>
+                                        <div class="check-circle">
+                                            <svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="coupon-description">
+                                        test description wil be placed here
+                                    </div>
+                                    <div class="coupon-footer">
+                                        <div class="discount-badge">60% OFF</div>
+                                        <div class="min-order">Valid till: 06/12/2025</div>
+                                    </div>
+                                </a>
+                            </div>
+
                             <div id="collapseAddress" class="different_address collapse in">
                                 <div class="row">
                                     <div class="form-group col-lg-6">
-                                        <input type="text" required="" name="name"
-                                            placeholder="Name *" wire:model="shipping_address.name">
+                                        <input type="text" required="" name="name" placeholder="Name *"
+                                            wire:model="shipping_address.name">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <input type="text" name="billing_address" required=""
@@ -81,8 +133,8 @@
                                             placeholder="Address line2" wire:model="shipping_address.address_line_2">
                                     </div>
                                     <div class="form-group col-lg-6">
-                                        <input required="" type="text" name="state"
-                                            placeholder="State *" wire:model="shipping_address.state">
+                                        <input required="" type="text" name="state" placeholder="State *"
+                                            wire:model="shipping_address.state">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -130,7 +182,8 @@
                                             @endphp
                                             <div class="product-rate-cover">
                                                 <div class="product-rate d-inline-block">
-                                                    <div class="product-rating" style="width: {{ $reviews_percentage }}%">
+                                                    <div class="product-rating"
+                                                        style="width: {{ $reviews_percentage }}%">
                                                     </div>
                                                 </div>
                                                 <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
@@ -140,7 +193,8 @@
                                             <h6 class="text-muted pl-20 pr-20">x {{ $item->qty }}</h6>
                                         </td>
                                         <td>
-                                            <h4 class="text-brand">₹{{ number_format($item->price * $item->qty) }}</h4>
+                                            <h4 class="text-brand">₹{{ number_format($item->price * $item->qty) }}
+                                            </h4>
                                         </td>
                                     </tr>
                                 @endforeach

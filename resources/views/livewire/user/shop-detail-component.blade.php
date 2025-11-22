@@ -23,9 +23,9 @@
                 <div class="product-detail accordion-detail">
                     <div class="row mb-50 mt-30">
                         <div class="col-lg-6 col-sm-12 col-xs-12 mb-lg-0 mb-sm-5">
-                            <div class="detail-gallery d-none d-xl-inline-block">
-                                <div class="row">
-                                    <div class="col-xl-2">
+                            <div class="detail-gallery d-xl-inline-block">
+                                <div class="d-flex flex-column-reverse flex-lg-row">
+                                    <div class="col-xl-2 mr-10" style='overflow-x: overlay;'>
                                         <!-- THUMBNAILS -->
                                         <div class="product-slider-nav-thumbnails">
                                             <div class="d-flex overflow-hidden img-card">

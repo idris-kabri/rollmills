@@ -1,3 +1,40 @@
+.default-address-div {
+    width: 100%;
+    max-width: 576px;
+}
+
+.default-address-div .coupon-code-section span {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    display: flex;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+    border: #dcaa15b7 solid 1px;
+    background-color: white;
+}
+
+.default-address-div .coupon-code-section .coupon-code-cart {
+    border: 0;
+    font-size: 1.6rem;
+    text-transform: capitalize;
+}
+
+@media (max-width: 992px) {
+    .product-slider-nav-thumbnails {
+        display: flex;
+        height: fit-content;
+        width: 100%;
+    }
+
+    .product-slider-nav-thumbnails .img-card {
+        width: 15%;
+        margin-right: 20px;
+    }
+}
+
 @media (max-width: 576px) {
     .banner-left-icon .banner-icon img {
         width: 36px;
