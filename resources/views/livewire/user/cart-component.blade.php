@@ -285,14 +285,6 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        function toggleCoupon(card) {
-            document.querySelectorAll('.coupon-card-cart').forEach(c => {
-                if (c !== card) {
-                    c.classList.remove('c');
-                }
-            });
-            card.classList.toggle('selected');
-        }
 
         function showCongratsOffer() {
             confetti({

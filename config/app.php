@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -84,9 +83,12 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
-    "secret_key" => env('ITHINK_SECRET_KEY', ''),
+    'secret_key' => env('ITHINK_SECRET_KEY', ''),
 
-    "access_token" => env('ITHINK_ACCESS_TOKEN', ''),
+    'access_token' => env('ITHINK_ACCESS_TOKEN', ''),
+
+    'razorpay_secret_key' => env('RAZORPAY_SECRET_KEY'),
+    'razorpay_key_id' => env('RAZORPAY_KEY_ID'),
 
     /*
     |--------------------------------------------------------------------------
@@ -103,11 +105,7 @@ return [
 
     'key' => env('APP_KEY'),
 
-    'previous_keys' => [
-        ...array_filter(
-            explode(',', (string) env('APP_PREVIOUS_KEYS', ''))
-        ),
-    ],
+    'previous_keys' => [...array_filter(explode(',', (string) env('APP_PREVIOUS_KEYS', '')))],
 
     /*
     |--------------------------------------------------------------------------
@@ -126,5 +124,4 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-
 ];
