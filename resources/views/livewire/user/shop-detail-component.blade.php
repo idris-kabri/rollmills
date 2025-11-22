@@ -30,11 +30,11 @@
                                         <div class="product-slider-nav-thumbnails">
                                             <div class="d-flex overflow-hidden img-card">
                                                 <a href="#" class="product_gallery_item"
-                                                        data-image="{{ asset('storage/' . $mainProduct->featured_image) }}"
-                                                        data-zoom-image="{{ asset('storage/' . $mainProduct->featured_image) }}">
-                                                        <img src="{{ asset('storage/' . $mainProduct->featured_image) }}" alt="img"
-                                                            class="img-fluid" />
-                                                    </a>
+                                                    data-image="{{ asset('storage/' . $mainProduct->featured_image) }}"
+                                                    data-zoom-image="{{ asset('storage/' . $mainProduct->featured_image) }}">
+                                                    <img src="{{ asset('storage/' . $mainProduct->featured_image) }}"
+                                                        alt="img" class="img-fluid" />
+                                                </a>
                                             </div>
                                             @php
                                                 $gallary_images = json_decode($mainProduct->images);
@@ -172,7 +172,8 @@
                                         <strong class="mr-10">{{ $attributes['name'] }} </strong>
                                         <ul class="list-filter size-filter font-small">
                                             @foreach ($attributes['items'] as $item)
-                                                <li class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}"><a href="#"
+                                                <li class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}"><a
+                                                        href="#"
                                                         wire:click.prevent="handleAttributeClick({{ $key }}, '{{ $item }}')">{{ $item }}</a>
                                                 </li>
                                             @endforeach
@@ -183,19 +184,42 @@
                                     class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start justify-content-center mb-50">
                                     @if ($mainProduct->out_of_stock == 0)
                                         <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
-                                            <a href="#" class="qty-down"><i
+                                            <a href="#" class="qty-down"
+                                                wire:click.prevent="decrementQuantity()"><i
                                                     class="fi-rs-angle-small-down"></i></a>
                                             <input type="text" name="quantity" class="qty-val fw-600 fs-18"
-                                                value="1" min="1">
-                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                value="1" min="1" wire:model.lazy="quantity">
+                                            <a href="#" class="qty-up" wire:click.prevent="incrementQuantity()"><i
+                                                    class="fi-rs-angle-small-up"></i></a>
                                         </div>
                                         <div class="product-extra-link2">
-                                            <button type="submit" class="button button-add-to-cart"><i
-                                                    class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                            @php
+                                                $cart = Cart::instance('cart')->search(function (
+                                                    $cartItem,
+                                                    $rowId,
+                                                ) use ($mainProduct) {
+                                                    return $cartItem->model->id === $mainProduct->id;
+                                                });
+                                                $wishlist = Cart::instance('wishlist')->search(function (
+                                                    $wishlistItem,
+                                                    $rowId,
+                                                ) use ($mainProduct) {
+                                                    return $wishlistItem->model->id === $mainProduct->id;
+                                                });
+                                            @endphp
+                                            @if ($cart->isNotEmpty())
+                                                <button type="button" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Added</button>
+                                            @else
+                                            <button type="button" class="button button-add-to-cart"
+                                                    wire:click="addToCart()"><i class="fi-rs-shopping-cart"></i>Add to
+                                                    cart</button>
+                                            @endif
+                                            @if($wishlist->isNotEmpty())
+                                            <a href="javascript:void(0);" aria-label="Add To Wishlist" class="action-btn hover-up wishlist-detail-active"><i class="fi-rs-heart"></i></a>
+                                            @else
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                            <a aria-label="Compare" class="action-btn hover-up"
-                                                href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                href="#" wire:click.prevent="addToWhishlist()"><i class="fi-rs-heart"></i></a>
+                                            @endif
                                         </div>
                                     @else
                                         <div class="product-extra-link2">

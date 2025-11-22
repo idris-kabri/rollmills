@@ -135,6 +135,11 @@
     background: var(--color-2);
 }
 
+.wishlist-detail-active {
+    background-color: #dca915 !important;
+    color: #fff !important;
+}
+
 /* ==================================================================== */
 /* Contact Us Css Start */
 /* ==================================================================== */
@@ -376,12 +381,10 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(255, 255, 255, 0.43),
-        transparent
-    );
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(255, 255, 255, 0.43),
+            transparent);
     animation: shimmer 2s infinite;
 }
 
@@ -389,6 +392,7 @@
     0% {
         transform: translateX(-100%) translateY(-100%) rotate(45deg);
     }
+
     100% {
         transform: translateX(100%) translateY(100%) rotate(45deg);
     }
@@ -445,11 +449,9 @@
 }
 
 .result-display {
-    background: linear-gradient(
-        135deg,
-        rgba(212, 175, 55, 0.1),
-        rgba(212, 175, 55, 0.05)
-    );
+    background: linear-gradient(135deg,
+            rgba(212, 175, 55, 0.1),
+            rgba(212, 175, 55, 0.05));
     border: 2px dashed var(--color-1);
     border-radius: 15px;
     padding: 15px;
@@ -466,12 +468,10 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(212, 175, 55, 0.1),
-        transparent
-    );
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(212, 175, 55, 0.1),
+            transparent);
     animation: shimmer 4s infinite;
 }
 
@@ -479,6 +479,7 @@
     0% {
         transform: translateX(-100%) translateY(-100%) rotate(45deg);
     }
+
     100% {
         transform: translateX(100%) translateY(100%) rotate(45deg);
     }
@@ -670,6 +671,7 @@
 /* ==================================================================== */
 
 .coupon-card-cart {
+    display: block;
     background: white;
     border-radius: 12px;
     padding: 20px;
@@ -752,10 +754,12 @@
 }
 
 @keyframes checkPop {
+
     0%,
     100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.2);
     }
@@ -802,6 +806,7 @@
     outline: 0;
     box-shadow: 0 0 0 1px rgba(220, 169, 21, 0.2);
 }
+
 .cart-checkbox-custom:checked {
     background-color: var(--color-1);
     border-color: var(--color-1);
@@ -876,7 +881,7 @@
     border: 1px solid var(--color-light-1);
 }
 
-.product-img-fill .product-image figure img{
+.product-img-fill .product-image figure img {
     padding: 3px;
 }
 
@@ -1054,8 +1059,7 @@
     }
 }
 
-@media (min-width: 576px) {
-}
+@media (min-width: 576px) {}
 
 @media (min-width: 768px) and (max-width: 991px) {
     .header-wrap.header-space-between {
@@ -1077,9 +1081,7 @@
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style
-        .mobile-header-wrapper-inner
-        .mobile-header-top {
+    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
@@ -1158,19 +1160,15 @@
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style
-        .mobile-header-wrapper-inner
-        .mobile-header-top {
+    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
 }
 
-@media (min-width: 1200px) {
-}
+@media (min-width: 1200px) {}
 
-@media (min-width: 1400px) {
-}
+@media (min-width: 1400px) {}
 
 /* ==================================================================== */
 /* Responsive Css End */

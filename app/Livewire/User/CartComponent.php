@@ -5,7 +5,10 @@ namespace App\Livewire\User;
 use Livewire\Component;
 use App\Traits\HasToastNotification;
 use App\Models\ProductCategoryAssign;
+use App\Models\Coupon;
 use App\Models\Setting;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Cart;
 use Carbon\Carbon;
 
@@ -36,6 +39,7 @@ class CartComponent extends Component
     public $to_be_applied_offer_id = [];
     public $offer_applied_cart_product_id = [];
     public $quantities = [];
+    public $global_coupons = [];
 
     public function mount()
     {
@@ -99,6 +103,8 @@ class CartComponent extends Component
             $this->pincodeCheckFunction();
         }
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
+
+        $this->global_coupons = Coupon::where('is_global', 1)->where('expiry_date', '>=', Carbon::now()->format('Y-m-d'))->get();
     }
 
     public function applyCoupon()
@@ -113,7 +119,7 @@ class CartComponent extends Component
         // Check if coupon exists
         if (!$checkCuponCode) {
             $this->toastError('This Coupon Code Not Exists!');
-            return;
+            return false;
         }
 
         // Count total usage of this coupon
@@ -121,7 +127,7 @@ class CartComponent extends Component
 
         if ((int) $checkCuponCode->total_usage <= $orderCount) {
             $this->toastError('This Coupon has been Expired!!!');
-            return;
+            return flase;
         }
 
         // Check logged in user's usage if user is logged in
@@ -133,7 +139,7 @@ class CartComponent extends Component
 
             if ((int) $checkCuponCode->usage_limit <= $orderUserCount) {
                 $this->toastError('Coupon Code Already Used');
-                return;
+                return false;
             }
         }
 
@@ -200,6 +206,8 @@ class CartComponent extends Component
         session()->put('coupon_code', $this->couponCode);
 
         $this->dispatch('coupon-applied');
+
+        return true;
     }
 
     public function incrementQuantity($rowId)
@@ -570,6 +578,14 @@ class CartComponent extends Component
             }
         } else {
             $this->checkout_button = false;
+        }
+    }
+
+    public function checkCoupon($coupon_code){
+        $this->couponCode = $coupon_code;
+        $response = $this->applyCoupon();
+        if(!$response){
+            $this->couponCode = '';
         }
     }
 

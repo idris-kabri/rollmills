@@ -1,4 +1,4 @@
-<div class="page-wrapper"> 
+<div class="page-wrapper">
     <div wire:loading.delay wire:target="update" class="loader-overlay" style="display: none !important;">
         <img src="{{ asset('assets/images/loading.gif') }}" alt="Loading..." class="loader-img">
     </div>
@@ -158,8 +158,8 @@
                                         <label class="form-label" for="seo_keyword">Max Discount Amount</label>
                                         <input
                                             class="form-control @error('maximum_discount_amount') is-invalid @enderror"
-                                            placeholder="Max Discount Amount" name="maximum_discount_amount" type="text"
-                                            wire:model="maximum_discount_amount">
+                                            placeholder="Max Discount Amount" name="maximum_discount_amount"
+                                            type="text" wire:model="maximum_discount_amount">
                                         @error('maximum_discount_amount')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -193,6 +193,17 @@
                                         @error('expiry_date')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-6 position-relative">
+                                        <label class="form-label" for="seo_keyword">Is Global</label>
+                                        <input class="" placeholder="Expiry Date" name="is_global"
+                                            type="checkbox" wire:model="is_global"
+                                            {{ $is_global == 1 ? 'checked' : '' }}>
+                                    </div>
+                                    <div class="mb-3 col-md-12 position-relative">
+                                        <label class="form-label" for="seo_keyword">Description</label>
+                                        <textarea name="description" id="description" wire:model="description" class="form-control" cols="30"
+                                            rows="5">{{$description}}</textarea>
                                     </div>
                                 </div>
                                 <button class="btn btn-primary" type="submit" value="apply" name="submitter">
