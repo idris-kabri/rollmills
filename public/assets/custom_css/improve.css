@@ -22,7 +22,58 @@
     text-transform: capitalize;
 }
 
+.shop-detail-page-main .detail-info {
+    padding: 0 30px;
+}
+
+.product-slider-main {
+    margin-right: 10px;
+}
+
+.shop-detail-page-main .attr-detail {
+    font-size: 16px;
+}
+
+.shop-detail-page-main .size-filter.list-filter li a {
+    border: 1px solid #dca915;
+}
+
+.product-delivery-icons div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+}
+
+/* .product-delivery-icons div:not(:last-child) {
+    margin-right: 10px;
+} */
+
+.product-delivery-icons img {
+    width: 42px;
+}
+.product-delivery-icons p {
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    width: 90px;
+    line-height: 1.2;
+    margin-top: 9px;
+}
+
+.footer-link-widget:not(:last-child) {
+    margin-right: 0px;
+}
+
 @media (max-width: 1200px) {
+    .shop-detail-page-main,
+    .footer-strip,
+    .footer-mid-inner,
+    .footer-lower {
+        padding: 0 2rem;
+    }
+
     .product-slider-nav-thumbnails {
         display: flex;
         height: fit-content;
@@ -32,6 +83,9 @@
 
     .product-slider-nav-thumbnails .img-card {
         width: 15%;
+    }
+
+    .product-slider-nav-thumbnails .img-card:not(:last-child) {
         margin-right: 20px;
     }
 
@@ -39,11 +93,39 @@
         padding: 8px 20px;
         font-size: 12px;
     }
+
+    .product-slider-main {
+        margin-right: 0;
+    }
+
+    .shop-detail-page-main .detail-info {
+        padding: 0px 10px;
+    }
+
+    .shop-detail-page-main .detail-info h2.title-detail {
+        font-size: 1.8em;
+    }
 }
 
 @media (max-width: 992px) {
-    .shop-detail-page-main {
-        padding: 0 2rem;
+    .product-delivery-icons img {
+        width: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-detail-page-main .detail-info {
+        padding: 0px;
+    }
+    .footer-mid .logo img {
+        max-width: 100px;
+    }
+    .logo.logo-width-1 a img {
+        width: 70px;
+        min-width: 70px;
+    }
+    .header-bottom {
+        height: 80px;
     }
 }
 
@@ -55,6 +137,26 @@
         font-size: 14px;
     }
     .banner-left-icon .banner-text p {
-        font-size: 12px;
+        font-size: 13px;
+    }
+
+    .product-delivery-icons img {
+        width: 28px;
+    }
+
+    .product-delivery-icons p {
+        font-size: 11px;
+        width: 80px;
+    }
+    .detail-info .product-price .current-price{
+        font-size: 40px;
+    }
+
+    .detail-info .product-price .old-price{
+        font-size: 20px;
+    }
+
+    .detail-info .product-price{
+        margin: 6px 0 20px;
     }
 }

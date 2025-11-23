@@ -17,14 +17,14 @@
             </div>
         </div>
     </div>
-    <div class="shop-detail-page-main container-lg mb-30">
+    <div class="shop-detail-page-main container-xl mb-30">
         <div class="m-auto">
             <div class="product-detail accordion-detail">
                 <div class="row mb-50 mt-30">
                     <div class="col-md-5 col-lg-6 col-sm-12 col-xs-12 mb-lg-0 mb-sm-5">
                         <div class="detail-gallery d-xl-inline-block">
                             <div class="d-flex flex-column-reverse flex-xl-row">
-                                <div class="col-xl-2 mr-10" style='overflow-x: overlay;'>
+                                <div class="col-xl-2 product-slider-main" style='overflow-x: overlay;'>
                                     <!-- THUMBNAILS -->
                                     <div class="product-slider-nav-thumbnails">
                                         <div class="d-flex overflow-hidden img-card">
@@ -85,7 +85,7 @@
                             $percentage =
                                 $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
                         @endphp
-                        <div class="detail-info pr-30 pl-30">
+                        <div class="detail-info">
                             @if ($mainProduct->out_of_stock == 0)
                                 @if ($check_type == 'sale_product')
                                     <span class="product-cart-componet-badge save">Save
@@ -164,7 +164,7 @@
                             </div>
                             @foreach ($groupedAttributes as $key => $attributes)
                                 <div class="attr-detail attr-size mb-30" wire:ignore>
-                                    <strong class="mr-10">{{ $attributes['name'] }} </strong>
+                                    <strong class="mr-10">{{ $attributes['name'] }}: </strong>
                                     <ul class="list-filter size-filter font-small">
                                         @foreach ($attributes['items'] as $item)
                                             <li class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}"><a
@@ -175,8 +175,7 @@
                                     </ul>
                                 </div>
                             @endforeach
-                            <div
-                                class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start justify-content-center mb-50">
+                            <div class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start mb-50">
                                 @if ($mainProduct->out_of_stock == 0)
                                     <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
                                         <a href="#" class="qty-down" wire:click.prevent="decrementQuantity()"><i
@@ -228,7 +227,9 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="font-xs">
+
+                            {{-- OLD SKU, warrenty etc section design --}}
+                            {{-- <div class="font-xs">
                                 <ul class="mr-50 float-start">
                                     <li class="mb-5 fw-600">Warranty: <span
                                             class="text-brand ms-2">{{ $mainProduct->product_waranty > 0 ? (int) $mainProduct->product_waranty / 365 . ' Year' : 'No Warranty' }}</span>
@@ -244,6 +245,35 @@
                                             class="text-brand ms-2">{{ $mainProduct->product_replacement_days > 0 ? (int) $mainProduct->product_replacement_days . ' Days' : 'No Repalcement Policy' }}</span>
                                     </li>
                                 </ul>
+                            </div> --}}
+
+                            {{-- New design section --}}
+                            <div class="d-flex flex-wrap product-delivery-icons">
+                                <div>
+                                    <img src="{{ asset('assets/frontend/imgs/theme/home-delivery.png') }}"
+                                        alt="">
+                                        <p>Home Delivery</p>
+                                </div>
+                                <div>
+                                    <img src="{{ asset('assets/frontend/imgs/theme/top-brands.png') }}"
+                                        alt="">
+                                        <p>Top Brands</p>
+                                </div>
+                                <div>
+                                    <img src="{{ asset('assets/frontend/imgs/theme/secure-transaction.png') }}"
+                                        alt="">
+                                        <p>Secure Transaction</p>
+                                </div>
+                                <div>
+                                    <img src="{{ asset('assets/frontend/imgs/theme/genuine-product.png') }}"
+                                        alt="">
+                                        <p>High Quality</p>
+                                </div>
+                                <div>
+                                    <img src="{{ asset('assets/frontend/imgs/theme/replacement.png') }}"
+                                        alt="">
+                                        <p>7 Day Replacement</p>
+                                </div>
                             </div>
                         </div>
                         <!-- Detail Info -->
