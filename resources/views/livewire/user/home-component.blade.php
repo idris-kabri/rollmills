@@ -227,117 +227,6 @@
         </div>
     </section>
 
-    <!--End Best Sales-->
-    <section class="section-padding pb-5 mt-25" wire:ignore>
-        <div class="container">
-            <div class="section-title">
-                <h3 class="">Deals Of The Day</h3>
-                <a class="show-all" href="shop-grid-right.html">
-                    All Deals
-                    <i class="fi-rs-angle-right"></i>
-                </a>
-            </div>
-            <div class="row">
-                @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
-                    @php
-                        if ($deals_of_the_day_product->slug) {
-                            $deals_of_the_day_product_shop_detail_url = route('shop-detail', [
-                                'slug' => $deals_of_the_day_product->slug,
-                                'id' => $deals_of_the_day_product->id,
-                            ]);
-                        } else {
-                            $deals_of_the_day_product_shop_detail_url = route('shop-detail', [
-                                'slug' => 'no-slug',
-                                'id' => $deals_of_the_day_product->id,
-                            ]);
-                        }
-                    @endphp
-                    <div class="col-xl-3 col-lg-4 col-md-6 mb-20">
-                        <div class="product-cart-wrap style-2">
-                            <div class="product-img-action-wrap">
-                                <div class="product-img">
-                                    <a href="{{ $deals_of_the_day_product_shop_detail_url }}">
-                                        <img src="{{ asset('storage/' . $deals_of_the_day_product->featured_image) }}"
-                                            alt="{{ $deals_of_the_day_product->seo_meta }}" />
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="product-content-wrap">
-                                <div class="deals-countdown-wrap">
-                                    <div class="deals-countdown"
-                                        data-countdown="{{ \Carbon\Carbon::parse($deals_of_the_day_product->sale_to_date)->format('Y/m/d') }} 00:00:00">
-                                    </div>
-                                </div>
-                                <div class="deals-content">
-                                    <h2><a
-                                            href="{{ $deals_of_the_day_product_shop_detail_url }}">{{ $deals_of_the_day_product->name }}</a>
-                                    </h2>
-                                    <div class="product-rate-cover">
-                                        @php
-                                            $deals_of_the_day_product_reviews = \App\Models\ProductReview::where(
-                                                'status',
-                                                1,
-                                            )
-                                                ->where('product_id', $deals_of_the_day_product->id)
-                                                ->get();
-
-                                            $deals_of_the_day_product_reviews_count = $deals_of_the_day_product_reviews->count();
-                                            $deals_of_the_day_product_reviews_avg =
-                                                $deals_of_the_day_product_reviews_count > 0
-                                                    ? round($deals_of_the_day_product_reviews->avg('ratings'), 1)
-                                                    : 0;
-                                            $deals_of_the_day_product_reviews_percentage =
-                                                ($deals_of_the_day_product_reviews_avg / 5) * 100;
-                                        @endphp
-
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating"
-                                                style="width: {{ $deals_of_the_day_product_reviews_percentage }}%;">
-                                            </div>
-                                        </div>
-                                        <span class="font-small ml-5 text-muted">
-                                            ({{ $deals_of_the_day_product_reviews_avg }})
-                                        </span>
-                                    </div>
-                                    <div class="product-card-bottom">
-                                        <div class="product-price">
-                                            @if (
-                                                $deals_of_the_day_product->sale_price > 0 &&
-                                                    now() >= $deals_of_the_day_product->sale_start_date &&
-                                                    now() <= $deals_of_the_day_product->sale_end_date)
-                                                <span
-                                                    class="price-transition">₹{{ $deals_of_the_day_product->sale_price }}</span>
-                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
-                                            @elseif($deals_of_the_day_product->sale_default_price > 0)
-                                                <span
-                                                    class="price-transition">₹{{ $deals_of_the_day_product->sale_default_price }}</span>
-                                                <span class="old-price">₹{{ $deals_of_the_day_product->price }}</span>
-                                            @else
-                                                <span>₹{{ $deals_of_the_day_product->price }}</span>
-                                            @endif
-                                        </div>
-                                        <div class="add-cart">
-                                            @if (!isInCart($deals_of_the_day_product->id))
-                                                <a class="add" href="#"
-                                                    wire:click.prevent="addToCart({{ $deals_of_the_day_product->id }})"><i
-                                                        class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                                            @else
-                                                <a class="add" href="javascript:void(0);"><i
-                                                        class="fi-rs-shopping-cart mr-5"></i>Added </a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    <!--End Deals-->
-
-
     <!--Daily Best Sells Tabs-->
     <section class="section-padding pb-25">
         <div class="container">
@@ -397,7 +286,7 @@
                                             alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
-                                    <h6>
+                                    <h6 class="two-liner-text">
                                         <a href="{{ $top_selling_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
                                     <div class="product-rate-cover">
@@ -461,7 +350,7 @@
                                             alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
-                                    <h6>
+                                    <h6 class="two-liner-text">
                                         <a href="{{ $trending_products_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
                                     <div class="product-rate-cover">
@@ -525,7 +414,7 @@
                                             alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
-                                    <h6>
+                                    <h6 class="two-liner-text">
                                         <a href="{{ $latest_products_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
                                     <div class="product-rate-cover">
@@ -589,7 +478,7 @@
                                             alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
-                                    <h6>
+                                    <h6 class="two-liner-text">
                                         <a href="{{ $top_rated_products_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
                                     <div class="product-rate-cover">

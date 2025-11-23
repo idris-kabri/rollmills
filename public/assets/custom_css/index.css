@@ -578,6 +578,34 @@
     overflow: visible;
 }
 
+.panel--search-result .panel__content {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.panel--search-result .panel__footer {
+    background: #fff;
+    border-top: 1px solid #eaeaea;
+    text-align: center;
+}
+
+.panel--search-result.active {
+    border: 1px solid #ced4da;
+    border-top: 0;
+}
+
+.panel--search-result .panel__footer a {
+    color: #ff324d;
+}
+
+.panel--search-result {
+    left: 0;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 9999;
+}
+
 @media (min-width: 481px) and (max-width: 1199px) {
     .table-responsive-custom {
         overflow-x: auto;

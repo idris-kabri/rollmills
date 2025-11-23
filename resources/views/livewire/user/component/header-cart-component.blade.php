@@ -1,4 +1,5 @@
 <div class="header-action-right ms-4">
+    @livewire('user.component.login-component')
     <div class="header-action-2">
         <div class="header-action-icon-2" wire:poll.750ms>
             <a href="/wishlist">
@@ -36,13 +37,15 @@
                                         src="{{ asset('storage/' . $item->model->featured_image) }}" /></a>
                             </div>
                             <div class="shopping-cart-title">
-                                <h4><a href="{{ $shop_detail_url }}">{{ Str::words($item->model->name, 2, ' ...') }}</a></h4>
+                                <h4><a href="{{ $shop_detail_url }}">{{ Str::words($item->model->name, 2, ' ...') }}</a>
+                                </h4>
                                 <h4 class="fs-14 text-secondary fw-500"><span>{{ $item->qty }} ×
                                         ₹{{ number_format($item->price) }}</span>
                                 </h4>
                             </div>
                             <div class="shopping-cart-delete">
-                                <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"><i class="fi-rs-cross-small"></i></a>
+                                <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"><i
+                                        class="fi-rs-cross-small"></i></a>
                             </div>
                         </li>
                     @endforeach
@@ -58,11 +61,22 @@
             </div>
         </div>
         <div class="header-action-icon-2">
-            <a href="{{ auth()->check() ? '/my-account' : '/' }}">
-                <img class="svgInject" alt="Nest"
-                    src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
-            </a>
-            <a href="/my-account"><span class="lable">Account</span></a>
+
+            @if (auth()->check())
+                <a href="/my-account">
+                    <img class="svgInject" alt="Nest"
+                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
+                </a>
+                <a href="/my-account"><span class="lable">Account</span></a>
+            @else
+<a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    <img class="svgInject" alt="Nest"
+                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
+                </a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"><span class="lable">Login</span></a>
+
+            @endif
+
         </div>
     </div>
 </div>
