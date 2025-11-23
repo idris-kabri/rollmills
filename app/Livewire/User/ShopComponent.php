@@ -20,7 +20,6 @@ class ShopComponent extends Component
 {
     use WithPagination, HasToastNotification;
     protected $paginationTheme = 'bootstrap';
-    public $paginationValue = 25;
     public $selectedBrands = [];
     public $finalBrands = [];
     public $sortBy = 'featured';
@@ -49,7 +48,7 @@ class ShopComponent extends Component
         $this->search = $request->search;
         $this->wishlistIds = Cart::instance('wishlist')->content()->pluck('id')->toArray();
         $this->cartIds = Cart::instance('cart')->content()->pluck('id')->toArray();
-        $this->new_products = Product::where('status', 1)->orderBy('created_at', 'desc')->limit(4)->get();
+        $this->new_products = Product::where('status', 1)->where('parent_id', null)->orderBy('created_at', 'desc')->limit(4)->get();
         $this->shop_page_banner = Banner::where('status', 1)->where('banner_type', 'shop_page_banner')->first();
         $this->deals_of_the_day_products = Product::where('status', 1)->orderBy('sale_to_date', 'desc')->limit(4)->get();
 
@@ -134,7 +133,7 @@ class ShopComponent extends Component
 
     public function paginationChange($value)
     {
-        $this->paginationValue = !empty($value) ? intval($value) : 25;
+        $this->limit = !empty($value) ? intval($value) : 25;
     }
 
     public function getDefaultVariation($parentId)
@@ -184,7 +183,13 @@ class ShopComponent extends Component
                 $query->where('is_featured', 1);
             })
             ->when($this->sortBy === 'new', function ($query) {
+                $query->orderBy('created_at', 'desc');
+            })
+            ->when($this->sortBy === 'price-low-to-high', function ($query) {
                 $query->orderBy('price', 'asc');
+            })
+            ->when($this->sortBy === 'price-high-to-low', function ($query) {
+                $query->orderBy('price', 'desc');
             })
             ->when(!empty($this->finalBrands), function ($query) {
                 $query->whereHas('brands', function ($q) {
@@ -205,7 +210,7 @@ class ShopComponent extends Component
                 $query->whereBetween('price', [$this->minPrice, $this->maxPrice]);
             })
             ->orderBy('id', 'desc')
-            ->paginate($this->paginationValue);
+            ->paginate($this->limit);
         return view('livewire.user.shop-component', compact('products', 'brands', 'productCategorys', 'productAttributes'))->layout('layouts.user.app');
     }
 }

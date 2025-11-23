@@ -86,11 +86,15 @@
                                         $ids = $subCategories->pluck('id')->toArray();
                                         $ids[] = $category->id;
                                     @endphp
-                                    <div class="pl-25 py-3{{ in_array($selectedCategory, $ids) ? ' d-block' : ' d-none' }}">
+                                    <div
+                                        class="pl-25 py-3{{ in_array($selectedCategory, $ids) ? ' d-block' : ' d-none' }}">
                                         @foreach ($subCategories as $sub_category)
-                                            <a href="#" wire:click.prevent="categoryWiseProduct({{ $sub_category->id }}, 'change')" class="form-check">
+                                            <a href="#"
+                                                wire:click.prevent="categoryWiseProduct({{ $sub_category->id }}, 'change')"
+                                                class="form-check">
                                                 <input class="form-check-input cart-checkbox-custom" type="checkbox"
-                                                    value="" id="flexCheckDefault1" {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
+                                                    value="" id="flexCheckDefault1"
+                                                    {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
                                                 <label class="form-check-label hover-a text-heading quicksand fw-600"
                                                     for="flexCheckDefault1">
                                                     {{ $sub_category->name }}
@@ -104,7 +108,7 @@
                     </div>
 
                     <!-- Filter By Price -->
-                    <div class="sidebar-widget range mb-30 d-none d-xl-block">
+                    {{-- <div class="sidebar-widget range mb-30 d-none d-xl-block" wire:ignore>
                         <h5 class="section-title style-1 mb-30">Filter by price</h5>
                         <div class="price-filter">
                             <div class="price-filter-inner">
@@ -124,7 +128,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Product sidebar Widget -->
                     <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10 d-none d-xl-block">
@@ -149,7 +153,7 @@
                                         alt="{{ $new_product->seo_meta }}" />
                                 </div>
                                 <div class="content pt-10">
-                                    <h5><a href="{{ $new_product_shop_detail_url }}">{{ $new_product->name }}</a></h5>
+                                    <h5><a href="{{ $new_product_shop_detail_url }}" class="two-liner-text">{{ $new_product->name }}</a></h5>
 
                                     <div class="product-price">
                                         @if ($new_product->sale_price > 0 && now() >= $new_product->sale_start_date && now() <= $new_product->sale_end_date)
@@ -242,12 +246,11 @@
                                 <div class="sort-by-dropdown">
                                     <ul>
                                         <li><a class="{{ $sortBy == 'featured' ? 'active' : '' }}" href="#"
-                                                wire:click.prevent="setsortBy('featured')">Featured</a></li>
-                                        <li><a href="#">Price: Low to High</a></li>
-                                        <li><a href="#">Price: High to Low</a></li>
+                                                wire:click.prevent="setSortBy('featured')">Featured</a></li>
+                                        <li><a href="#" class="{{ $sortBy == 'price-low-to-high' ? 'active' : '' }}" wire:click.prevent="setSortBy('price-low-to-high')">Price: Low to High</a></li>
+                                        <li><a href="#" class="{{ $sortBy == 'price-high-to-low' ? 'active' : '' }}" wire:click.prevent="setSortBy('price-high-to-low')">Price: High to Low</a></li>
                                         <li><a href="#" class="{{ $sortBy == 'new' ? 'active' : '' }}"
-                                                wire:click.prevent="setsortBy('new')">Release Date</a></li>
-                                        <li><a href="#">Avg. Rating</a></li>
+                                                wire:click.prevent="setSortBy('new')">Release Date</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -385,6 +388,19 @@
                         <h5 class="section-title style-1 mb-30 border-0">New products</h5>
                         <div class="row">
                             @foreach ($new_products as $new_product)
+                                @php
+                                    if ($new_product->slug) {
+                                        $shop_detail_url = route('shop-detail', [
+                                            'slug' => $new_product->slug,
+                                            'id' => $new_product->id,
+                                        ]);
+                                    } else {
+                                        $shop_detail_url = route('shop-detail', [
+                                            'slug' => 'no-slug',
+                                            'id' => $new_product->id,
+                                        ]);
+                                    }
+                                @endphp
                                 <div class="col-md-6">
                                     <div class="single-post clearfix mb-20">
                                         <div class="image">
@@ -392,11 +408,12 @@
                                                 alt="{{ $new_product->seo_meta }}" />
                                         </div>
                                         <div class="content pt-10">
-                                            <h5><a href="shop-product-detail.html">{{ $new_product->name }}</a></h5>
-                                            <p class="price mb-0 mt-5">₹{{ $new_product->price }}</p>
-                                            <div class="product-rate">
-                                                <div class="product-rating" style="width: 90%"></div>
-                                            </div>
+                                            <h5><a href="{{ $shop_detail_url }}" class="two-liner-text">{{ $new_product->name }}</a></h5>
+                                            <p class="price
+                                                    mb-0 mt-5">₹{{ $new_product->price }}</p>
+                                                    <div class="product-rate">
+                                                        <div class="product-rating" style="width: 90%"></div>
+                                                    </div>
                                         </div>
                                     </div>
                                 </div>
@@ -419,24 +436,46 @@
     </main>
     @push('scripts')
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-        <script>
+        {{-- <script>
             document.addEventListener("DOMContentLoaded", function() {
-                let minPrice = @json($minPrice);
-                let maxPrice = @json($maxPrice);
+                let componentMinPrice = @json($minPrice);
+                let componentMaxPrice = @json($maxPrice);
+
+                // Use the current component values for the slider handles' starting position
+                let initialMin = @json($minPrice);
+                let initialMax = @json($maxPrice);
+
+                // Ensure initial values fall within the min/max range,
+                // especially if you are using $minPrice and $maxPrice to hold the selected range.
+                // If $minPrice and $maxPrice hold the SELECTED range:
+                let initialValues = [initialMin, initialMax];
+
+                // If $minPrice and $maxPrice hold the GLOBAL min/max of ALL products, 
+                // you should decide what the starting SELECTED range is (e.g., [minPrice, maxPrice]):
+                // let initialValues = [componentMinPrice, componentMaxPrice]; 
+
 
                 $("#shop-slider-range").slider({
                     range: true,
-                    min: minPrice,
-                    max: maxPrice,
-                    values: [0, 1000],
+                    min: componentMinPrice,
+                    max: componentMaxPrice,
+                    // FIX: Use the component's current values for initial handle positions
+                    values: initialValues,
+
                     slide: function(event, ui) {
+                        // Update the display text
                         $("#shop-slider-range-value1").text(ui.values[0]);
                         $("#shop-slider-range-value2").text(ui.values[1]);
+                        // Update Livewire properties
+                        @this.set('minPrice', ui.values[0]);
+                        @this.set('maxPrice', ui.values[1]);
                     }
                 });
 
-                // Set initial text
+                // Set initial text based on the slider's starting values
                 $("#shop-slider-range-value1").text($("#shop-slider-range").slider("values", 0));
+                $("#shop-slider-range-value2").text($("#shop-slider-range").slider("values",
+                1)); // FIX: Added value 1 initialization
             });
-        </script>
+        </script> --}}
     @endpush
