@@ -83,18 +83,19 @@
                                 </li>
                                 @if ($subCategories->count() > 0)
                                     @php
-                                        
+                                        $ids = $subCategories->pluck('id')->toArray();
+                                        $ids[] = $category->id;
                                     @endphp
-                                    <div class=" pl-25 py-3{{ $selectedCategory == $category->id }}">
+                                    <div class="pl-25 py-3{{ in_array($selectedCategory, $ids) ? ' d-block' : ' d-none' }}">
                                         @foreach ($subCategories as $sub_category)
-                                            <div class="form-check">
+                                            <a href="#" wire:click.prevent="categoryWiseProduct({{ $sub_category->id }}, 'change')" class="form-check">
                                                 <input class="form-check-input cart-checkbox-custom" type="checkbox"
-                                                    value="" id="flexCheckDefault1">
+                                                    value="" id="flexCheckDefault1" {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
                                                 <label class="form-check-label hover-a text-heading quicksand fw-600"
                                                     for="flexCheckDefault1">
-                                                    Default checkbox
+                                                    {{ $sub_category->name }}
                                                 </label>
-                                            </div>
+                                            </a>
                                         @endforeach
                                     </div>
                                 @endif
