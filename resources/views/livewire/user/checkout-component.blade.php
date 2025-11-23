@@ -115,14 +115,14 @@
                                     <div class="form-group col-lg-6">
                                         <input type="text" name="billing_address" required=""
                                             placeholder="Address *"
-                                            wire:model="ship_to_different_address.address_line_1">
+                                            wire:model="ship_to_different_address.billing_address1">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-6">
                                         <input type="text" name="billing_address2" required=""
                                             placeholder="Address line2"
-                                            wire:model="ship_to_different_address.address_line_2">
+                                            wire:model="ship_to_different_address.billing_address2">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <input required="" type="text" name="state" placeholder="State *"

@@ -241,8 +241,8 @@ class CheckoutComponent extends Component
     {
         $ship_different_address = isset($this->ship_to_different_address['id']) ? Address::find($this->ship_to_different_address['id']) ?? new Address() : new Address();
         $ship_different_address->name = $this->ship_to_different_address['name'];
-        $ship_different_address->email = $this->ship_to_different_address['email'];
-        $ship_different_address->mobile = $this->ship_to_different_address['mobile'];
+        $ship_different_address->email = $this->billing_address['email'];
+        $ship_different_address->mobile = $this->billing_address['mobile'];
         $ship_different_address->address_line_1 = $this->ship_to_different_address['billing_address1'];
         $ship_different_address->address_line_2 = $this->ship_to_different_address['billing_address2'] ?? null;
         $ship_different_address->city = $this->ship_to_different_address['city'];
@@ -284,12 +284,12 @@ class CheckoutComponent extends Component
             $orderItem->sale_default_price = $item->model->sale_default_price ?? 0;
             $orderItem->sale_price_start_date = $item->model->sale_from_date;
             $orderItem->sale_price_end_date = $item->model->sale_to_date;
-            // $orderItem->courier_id = $item->options['courier_id'];
-            // $orderItem->courier = $item->options['courier'];
-            // $orderItem->overall_rate = $item->options['overall_rate'];
-            // $orderItem->rate = $item->options['rate'];
-            // $orderItem->shipping_margin_bear = $item->options['shipping_margin_bear'];
-            // $orderItem->etd = $item->options['etd'];
+            $orderItem->courier_id = $item->options['courier_id'];
+            $orderItem->courier = $item->options['courier'];
+            $orderItem->overall_rate = $item->options['overall_rate'];
+            $orderItem->rate = $item->options['rate'];
+            $orderItem->shipping_margin_bear = $item->options['shipping_margin_bear'];
+            $orderItem->etd = $item->options['etd'];
 
             $orderItem->subtotal = $item->qty * $productPrice['price'];
             $offerPrice = 0;
@@ -311,13 +311,13 @@ class CheckoutComponent extends Component
     public function userCreate()
     {
         $password = Str::random(8);
-        $user = User::where('email', $this->billing_address['email'])->first();
+        $user = User::where('mobile', $this->billing_address['mobile'])->first();
 
         if (!$user) {
             // Create new user
             $user = new User();
             $user->email = $this->billing_address['email'];
-            // $user->mobile = $this->billing_address['mobile'];
+            $user->mobile = $this->billing_address['mobile'];
             $user->password = Hash::make($password);
             $user->password_view = $password;
             $user->is_guest_user = 1;
@@ -325,6 +325,7 @@ class CheckoutComponent extends Component
 
         $user->name = $this->billing_address['name'];
         $user->role = 'User';
+        $user->email = $this->billing_address['email'];
         $user->save();
 
         return [
@@ -354,7 +355,7 @@ class CheckoutComponent extends Component
             $user_order = new Order();
 
             //ship to different address create
-            if (!empty($this->ship_to_different_address['name']) && !empty($this->ship_to_different_address['email']) && !empty($this->ship_to_different_address['mobile']) && !empty($this->ship_to_different_address['billing_address1']) && !empty($this->ship_to_different_address['city']) && !empty($this->ship_to_different_address['state']) && !empty($this->ship_to_different_address['zipcode'])) {
+            if (!empty($this->ship_to_different_address['name']) && !empty($this->ship_to_different_address['billing_address1']) && !empty($this->ship_to_different_address['city']) && !empty($this->ship_to_different_address['state']) && !empty($this->ship_to_different_address['zipcode'])) {
                 if (!Auth::check()) {
                     $shippingAddress = $this->createShippingAddress($nonAuthUser['id']);
                 } else {

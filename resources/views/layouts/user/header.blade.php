@@ -42,7 +42,7 @@
     {{-- flaticon icons --}}
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    
+
 
     <!-- Google Tag Manager -->
     <script>
@@ -71,6 +71,9 @@
 </head>
 
 <body>
+    @php
+        $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
+    @endphp
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
             <span>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</span>
@@ -83,25 +86,7 @@
                                 class="img-fluid" /></a>
                     </div>
                     <div class="header-right">
-                        <div class="search-style-2">
-                            <form action="#" class="border-1 rounded-pill overflow-hidden">
-                                <select class="select-active">
-                                    <option>All Categories</option>
-                                    <option>Milks and Dairies</option>
-                                    <option>Wines & Alcohol</option>
-                                    <option>Clothing & Beauty</option>
-                                    <option>Pet Foods & Toy</option>
-                                    <option>Fast food</option>
-                                    <option>Baking material</option>
-                                    <option>Vegetables</option>
-                                    <option>Fresh Seafood</option>
-                                    <option>Noodles & Rice</option>
-                                    <option>Ice cream</option>
-                                </select>
-                                <input type="text" placeholder="Search for items..."
-                                    class="placeholder-font-family-quicksand placeholder-style" />
-                            </form>
-                        </div>
+                        
                         @livewire('user.component.header-cart-component')
                     </div>
                 </div>
@@ -123,91 +108,44 @@
                             </a>
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                                 <div class="d-flex categori-dropdown-inner">
-                                    <ul>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-1.svg') }}"
-                                                    alt="" />Milks and Dairies</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-2.svg') }}"
-                                                    alt="" />Clothing & beauty</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-3.svg') }}"
-                                                    alt="" />Pet Foods & Toy</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-4.svg') }}"
-                                                    alt="" />Baking material</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-5.svg') }}"
-                                                    alt="" />Fresh Fruit</a>
-                                        </li>
-                                    </ul>
-                                    <ul class="end">
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-6.svg') }}"
-                                                    alt="" />Wines & Drinks</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-7.svg') }}"
-                                                    alt="" />Fresh Seafood</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-8.svg') }}"
-                                                    alt="" />Fast food</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-9.svg') }}"
-                                                    alt="" />Vegetables</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{{ asset('assets/frontend/imgs/theme/icons/category-10.svg') }}"
-                                                    alt="" />Bread and Juice</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="more_slide_open" style="display: none">
-                                    <div class="d-flex categori-dropdown-inner">
+                                    @php
+                                        $firstTen = $categories->take(10);
+                                        $remaining = $categories->skip(10);
+                                    @endphp
+                                    @foreach ($firstTen->split(2) as $chunk)
                                         <ul>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img
-                                                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-1.svg') }}"
-                                                        alt="" />Milks and Dairies</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img
-                                                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-2.svg') }}"
-                                                        alt="" />Clothing & beauty</a>
-                                            </li>
+                                            @foreach ($chunk as $category)
+                                                <li>
+                                                    {{-- Replace 'category.show' with your actual route name --}}
+                                                    <a href="#">
+                                                        <img src="{{ asset('storage/' . $category->image) }}"
+                                                            alt="{{ $category->name }}" />
+                                                        {{ $category->name }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
                                         </ul>
-                                        <ul class="end">
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img
-                                                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-3.svg') }}"
-                                                        alt="" />Wines & Drinks</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img
-                                                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-4.svg') }}"
-                                                        alt="" />Fresh Seafood</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    @endforeach
                                 </div>
-                                <div class="more_categories"><span class="icon"></span> <span
-                                        class="heading-sm-1">Show more...</span></div>
+                                @if ($categories->count() > 10)
+                                    <div class="more_slide_open" style="display: none">
+                                        <div class="d-flex categori-dropdown-inner">
+                                            @foreach($remaining->split(2) as $chunk)
+                                            <ul>
+                                                @foreach($chunk as $category)
+                                                <li>
+                                                    <a href="shop-grid-right.html"> <img
+                                                            src="{{ asset('storage/' . $category->icon) }}"
+                                                            alt="" />{{$category->name}}</a>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="more_categories"><span class="icon"></span> <span
+                                            class="heading-sm-1">Show more...</span></div>
+                                @endif
                             </div>
                         </div>
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">

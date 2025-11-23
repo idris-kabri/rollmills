@@ -183,6 +183,12 @@
     transform: scale(1);
 }
 
+.order_complete i {
+    color: #DCA916;
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
 .contact_style3 .contact_icon::before {
     content: "";
     position: absolute;
@@ -1059,7 +1065,18 @@
     }
 }
 
-@media (min-width: 576px) {}
+@media only screen and (max-width: 480px) {
+    .order_complete i {
+        font-size: 60px;
+        margin-bottom: 10px;
+    }
+}
+
+@media only screen and (max-width: 380px) {
+    .order_complete i {
+        font-size: 50px;
+    }
+}
 
 @media (min-width: 768px) and (max-width: 991px) {
     .header-wrap.header-space-between {
