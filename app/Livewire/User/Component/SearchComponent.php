@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Cache;
 class SearchComponent extends Component
 {
     public $is_search = false;
-    public $search = "";
+    public $search = '';
     public $products = [];
-    public $category = "";
+    public $category = '';
 
     public function serachFunction()
     {
@@ -21,18 +21,21 @@ class SearchComponent extends Component
         $product_query = Product::where('active_inactive_status', 1);
 
         if ($this->category != '' && $this->category != null) {
-            $product_query->whereHas('categoryAssigns', function ($query) {
-                $query->where('category_id', $this->category);
-            })->where("out_of_stock", 0);
+            $product_query
+                ->whereHas('categoryAssigns', function ($query) {
+                    $query->where('category_id', $this->category);
+                })
+                ->where('out_of_stock', 0);
         }
         if ($this->search != '' && $this->search != null) {
-            $product_query->where(function ($query) {
-                $query->where("name", "like", "%{$this->search}%");
-            })->where("out_of_stock", 0);
+            $product_query
+                ->where(function ($query) {
+                    $query->where('name', 'like', "%{$this->search}%");
+                })
+                ->where('out_of_stock', 0);
         }
 
-        // $this->products = Product::take(8)->get();
-        // dd($this->products);
+        $this->products = $product_query->orderBy('id', 'desc')->take(8)->get();
     }
 
     public function updatedSearch()
@@ -45,13 +48,11 @@ class SearchComponent extends Component
         $this->serachFunction();
     }
     public function render()
-    {        
+    {
         $categories = Cache::remember('product_categories', 3600, function () {
-            return ProductCategory::whereNull('parent_id')
-                ->get();
+            return ProductCategory::whereNull('parent_id')->get();
         });
-        $this->products = Product::take(8)->get();
 
-        return view('livewire.user.component.search-component', compact("categories"));
+        return view('livewire.user.component.search-component', compact('categories'));
     }
 }
