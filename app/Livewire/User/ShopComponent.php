@@ -41,6 +41,8 @@ class ShopComponent extends Component
     public $shop_page_banner = [];
     public $deals_of_the_day_products = [];
     public $new_products = [];
+    public $product_count = 0;
+    public $limit = 50;
 
     public function mount(Request $request)
     {
@@ -73,6 +75,18 @@ class ShopComponent extends Component
         $this->updateProductCount();
     }
 
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+        $this->updateProductCount();
+    }
+
+    public function setSortBy($sortby)
+    {
+        $this->sortBy = $sortby;
+        $this->updateProductCount();
+    }
+
     public function handleCloseQuickView()
     {
         $this->selectedProductId = null;
@@ -85,9 +99,9 @@ class ShopComponent extends Component
 
     private function updateProductCount()
     {
-        if ($this->sortby == 'featured') {
+        if ($this->sortBy == 'featured') {
             $this->product_count = Product::where('status', 1)->where('is_featured', 1)->where('parent_id', null)->count();
-        } elseif ($this->sortby == 'new') {
+        } elseif ($this->sortBy == 'new') {
             $this->product_count = Product::where('status', 1)->where('parent_id', null)->count();
         }
     }
@@ -122,41 +136,6 @@ class ShopComponent extends Component
     {
         $this->paginationValue = !empty($value) ? intval($value) : 25;
     }
-    public function productSorting($value)
-    {
-        $this->sortBy = $value;
-        $this->resetPage();
-    }
-
-    public function setBrands($id, $type = null)
-    {
-        if (in_array($id, $this->selectedBrands)) {
-            $this->selectedBrands = array_filter($this->selectedBrands, function ($brandId) use ($id) {
-                return $brandId != $id;
-            });
-        } else {
-            $this->selectedBrands[] = $id;
-        }
-
-        $this->finalBrands = $this->selectedBrands;
-        // $this->resetPage();
-
-        if (($type == 'change' && !empty($this->getBrandId)) || !empty($this->getCategoryId)) {
-            $this->dispatch('removeQueryParam', key: 'brand_id');
-            $this->dispatch('removeQueryParam', key: 'category_id');
-        }
-    }
-
-    public function setProductAttribute($id)
-    {
-        $id = intval($id);
-
-        if ($this->selectedProductAttribute === $id) {
-            $this->selectedProductAttribute = null;
-        } else {
-            $this->selectedProductAttribute = $id;
-        }
-    }
 
     public function getDefaultVariation($parentId)
     {
@@ -174,36 +153,6 @@ class ShopComponent extends Component
             return Product::where('parent_id', $parentId)->where('attributes_name', $attributeName)->first();
         } else {
             return Product::find($parentId);
-        }
-    }
-
-    public function addToCart($id)
-    {
-        // $product = Product::find($id);
-        $defaultProduct = $this->getDefaultVariation($id);
-
-        $addToCart = finalAddToCart($defaultProduct, $this->quantity);
-        if ($addToCart == false) {
-            $this->toastWarning('Already Exist In Your Cart!');
-        } else {
-            $this->toastSuccess('Successfully Added In Your Cart!');
-        }
-        if (!in_array($defaultProduct->id, $this->cartIds)) {
-            $this->cartIds[] = $defaultProduct->id;
-        }
-    }
-
-    public function addToWhishlist($id)
-    {
-        $product = Product::find($id);
-        $addToWhishlist = finalAddToWhishlist($product);
-        if ($addToWhishlist == true) {
-            $this->toastSuccess('Successfully Added In Your Whishlist!');
-        } else {
-            $this->toastWarning('Already Exist In Your Wishlist!');
-        }
-        if (!in_array($product->id, $this->wishlistIds)) {
-            $this->wishlistIds[] = $product->id;
         }
     }
 
@@ -231,14 +180,11 @@ class ShopComponent extends Component
                     $q->where('category_id', $this->selectedCategory);
                 });
             })
+            ->when($this->sortBy === 'featured', function ($query) {
+                $query->where('is_featured', 1);
+            })
             ->when($this->sortBy === 'new', function ($query) {
-                $query->orderBy('created_at', 'desc');
-            })
-            ->when($this->sortBy === 'price-low-to-high', function ($query) {
                 $query->orderBy('price', 'asc');
-            })
-            ->when($this->sortBy === 'price-high-to-low', function ($query) {
-                $query->orderBy('price', 'desc');
             })
             ->when(!empty($this->finalBrands), function ($query) {
                 $query->whereHas('brands', function ($q) {

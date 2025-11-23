@@ -66,25 +66,37 @@
                                     )->get();
                                 @endphp
                                 <li>
-                                    <a href="#" class="fw-600 quicksand">
+                                    <a href="#"
+                                        wire:click.prevent="categoryWiseProduct({{ $category->id }}, 'change')"
+                                        class="fw-600 quicksand">
+                                        @if ($subCategories->count() > 0)
+                                            @if ($selectedCategory == $category->id)
+                                                <span class="me-2"><i class="fi-rs-angle-small-up"></i></span>
+                                            @else
+                                                <span class="me-2"><i class="fi-rs-angle-small-down"></i></span>
+                                            @endif
+                                        @endif
                                         <img src="{{ asset('storage/' . $category->image) }}') }}"
                                             alt="" />{{ $category->name }}
                                     </a>
                                     <span class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
                                 </li>
-                                @if($subCategories->count() > 0)
-                                <div class=" pl-25 py-3">
-                                    @foreach ($subCategories as $sub_category)
-                                    <div class="form-check">
-                                        <input class="form-check-input cart-checkbox-custom" type="checkbox"
-                                            value="" id="flexCheckDefault1">
-                                        <label class="form-check-label hover-a text-heading quicksand fw-600"
-                                            for="flexCheckDefault1">
-                                            Default checkbox
-                                        </label>
+                                @if ($subCategories->count() > 0)
+                                    @php
+                                        
+                                    @endphp
+                                    <div class=" pl-25 py-3{{ $selectedCategory == $category->id }}">
+                                        @foreach ($subCategories as $sub_category)
+                                            <div class="form-check">
+                                                <input class="form-check-input cart-checkbox-custom" type="checkbox"
+                                                    value="" id="flexCheckDefault1">
+                                                <label class="form-check-label hover-a text-heading quicksand fw-600"
+                                                    for="flexCheckDefault1">
+                                                    Default checkbox
+                                                </label>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
-                                </div>
                                 @endif
                             @endforeach
                         </ul>
@@ -228,12 +240,12 @@
                                 </div>
                                 <div class="sort-by-dropdown">
                                     <ul>
-                                        <li><a class="{{ $sortby == 'featured' ? 'active' : '' }}" href="#"
-                                                wire:click.prevent="setSortBy('featured')">Featured</a></li>
+                                        <li><a class="{{ $sortBy == 'featured' ? 'active' : '' }}" href="#"
+                                                wire:click.prevent="setsortBy('featured')">Featured</a></li>
                                         <li><a href="#">Price: Low to High</a></li>
                                         <li><a href="#">Price: High to Low</a></li>
-                                        <li><a href="#" class="{{ $sortby == 'new' ? 'active' : '' }}"
-                                                wire:click.prevent="setSortBy('new')">Release Date</a></li>
+                                        <li><a href="#" class="{{ $sortBy == 'new' ? 'active' : '' }}"
+                                                wire:click.prevent="setsortBy('new')">Release Date</a></li>
                                         <li><a href="#">Avg. Rating</a></li>
                                     </ul>
                                 </div>
@@ -408,8 +420,8 @@
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                let minPrice = @json($minFilterPrice);
-                let maxPrice = @json($maxFilterPrice);
+                let minPrice = @json($minPrice);
+                let maxPrice = @json($maxPrice);
 
                 $("#shop-slider-range").slider({
                     range: true,

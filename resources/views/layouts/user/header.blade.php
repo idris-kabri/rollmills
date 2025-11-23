@@ -118,7 +118,7 @@
                                                 <li>
                                                     {{-- Replace 'category.show' with your actual route name --}}
                                                     <a href="#">
-                                                        <img src="{{ asset('storage/' . $category->image) }}"
+                                                        <img src="{{ asset('storage/' . $category->icon) }}"
                                                             alt="{{ $category->name }}" />
                                                         {{ $category->name }}
                                                     </a>
