@@ -83,10 +83,10 @@
                         <div class="card-2 wow animate__animated animate__fadeInUp"
                             data-wow-delay=".{{ $index + 1 }}s">
                             <figure class="img-hover-scale overflow-hidden w-100 h-100">
-                                <a href="/shop" class="w-100 h-100"><img
+                                <a href="/shop?category_id={{ $category->id }}" class="w-100 h-100"><img
                                         src="{{ asset('storage/' . $category->image) }}" alt="" /></a>
                             </figure>
-                            <h6><a href="/shop">{{ $category->name }}</a></h6>
+                            <h6><a href="/shop?category_id={{ $category->id }}">{{ $category->name }}</a></h6>
                             <span class="fw-600 fs-12 quicksand">{{ $category->product_sum }} items</span>
                         </div>
                     @endforeach
@@ -156,10 +156,6 @@
                     @endforeach
                 </ul>
                 <div class="d-flex justify-content-end d-xl-none">
-                    <a class="categories-button-active custom-dropdown-home gap-2" href="#">
-                        <span class="fi-rs-apps text-white fs-12"></span> All Categories
-                        <i class="fi-rs-angle-down fs-12"></i>
-                    </a>
                     <div
                         class="categories-dropdown-wrap categories-dropdown-active-large-2 categories-dropdown-active-large font-heading">
                         <div class="categori-dropdown-inner" wire:ignore.self>
@@ -527,10 +523,6 @@
             <div class="section-title">
                 <div class="title">
                     <h3>Shop by Categories</h3>
-                    <a class="show-all" href="shop-grid-right.html">
-                        All Categories
-                        <i class="fi-rs-angle-right"></i>
-                    </a>
                 </div>
                 <div class="slider-arrow slider-arrow-2 flex-right carausel-8-columns-arrow"
                     id="carausel-8-columns-arrows"></div>
@@ -540,11 +532,11 @@
                     @foreach ($parentCategory as $index => $category)
                         <div class="card-1">
                             <figure class="img-hover-scale overflow-hidden">
-                                <a href="shop-grid-right.html"><img src="{{ asset('storage/' . $category->image) }}"
+                                <a href="/shop?category_id={{ $category->id }}"><img src="{{ asset('storage/' . $category->image) }}"
                                         alt="" /></a>
                             </figure>
                             <h6>
-                                <a href="shop-grid-right.html">{{ $category->name }}</a>
+                                <a href="/shop?category_id={{ $category->id }}">{{ $category->name }}</a>
                             </h6>
                         </div>
                     @endforeach
