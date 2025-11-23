@@ -23,13 +23,13 @@
                 <div class="archive-header">
                     <div class="row align-items-center">
                         <div class="col-xl-3">
-                            <h1 class="mb-15">Snack</h1>
+                            <h1 class="mb-15">Shop</h1>
                             <div class="breadcrumb">
-                                <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                                <span></span> Shop <span></span> Snack
+                                <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                                <span></span> Shop
                             </div>
                         </div>
-                        <div class="col-xl-9 text-end d-none d-xl-block">
+                        {{-- <div class="col-xl-9 text-end d-none d-xl-block">
                             <ul class="tags-list">
                                 <li class="hover-up">
                                     <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Cabbage</a>
@@ -47,7 +47,7 @@
                                     <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Spinach</a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -57,52 +57,14 @@
                 <div class="col-xl-3 primary-sidebar">
                     <div class="sidebar-widget widget-category-2 mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">Category</h5>
-
-                        <div class="">
-                            <ul>
-                                <li>
-                                    <a href="#" class="fw-600 quicksand w-100">
-                                        {{-- Arrow Chnage Css in index.css // Line no. 814-820 --}}
-                                        <i class="fi fi-rr-angle-small-right d-flex align-items-center me-1"
-                                            style="margin-bottom: 2px"></i> Electronics
-                                        <span
-                                            class="count ms-auto d-flex justify-content-center align-items-center">22</span>
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <div class=" pl-25 py-3">
-                                <div class="form-check">
-                                    <input class="form-check-input cart-checkbox-custom" type="checkbox" value=""
-                                        id="flexCheckDefault1">
-                                    <label class="form-check-label hover-a text-heading quicksand fw-600"
-                                        for="flexCheckDefault1">
-                                        Default checkbox
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input cart-checkbox-custom" type="checkbox" value=""
-                                        id="flexCheckDefault2">
-                                    <label class="form-check-label hover-a text-heading quicksand fw-600"
-                                        for="flexCheckDefault2">
-                                        Default checkbox
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input cart-checkbox-custom" type="checkbox" value=""
-                                        id="flexCheckDefault3">
-                                    <label class="form-check-label hover-a text-heading quicksand fw-600"
-                                        for="flexCheckDefault3">
-                                        Default checkbox
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-
-
                         <ul>
-                            @foreach ($categories as $category)
+                            @foreach ($productCategorys as $category)
+                                @php
+                                    $subCategories = \App\Models\ProductCategory::where(
+                                        'parent_id',
+                                        $category->id,
+                                    )->get();
+                                @endphp
                                 <li>
                                     <a href="#" class="fw-600 quicksand">
                                         <img src="{{ asset('storage/' . $category->image) }}') }}"
@@ -110,6 +72,20 @@
                                     </a>
                                     <span class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
                                 </li>
+                                @if($subCategories->count() > 0)
+                                <div class=" pl-25 py-3">
+                                    @foreach ($subCategories as $sub_category)
+                                    <div class="form-check">
+                                        <input class="form-check-input cart-checkbox-custom" type="checkbox"
+                                            value="" id="flexCheckDefault1">
+                                        <label class="form-check-label hover-a text-heading quicksand fw-600"
+                                            for="flexCheckDefault1">
+                                            Default checkbox
+                                        </label>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @endif
                             @endforeach
                         </ul>
                     </div>
@@ -125,12 +101,12 @@
                                     <div class="">
                                         <strong class="text-muted fw-600 fs-17 me-1">From :</strong>
                                         <span id="shop-slider-range-value1"
-                                            class="text-brand fw-600 fs-17">{{ $minFilterPrice }}</span>
+                                            class="text-brand fw-600 fs-17">{{ $minPrice }}</span>
                                     </div>
                                     <div class="">
                                         <strong class="text-muted fw-600 fs-17 me-1">To :</strong>
                                         <span id="shop-slider-range-value2"
-                                            class="text-brand fw-600 fs-17">{{ $maxFilterPrice }}</span>
+                                            class="text-brand fw-600 fs-17">{{ $maxPrice }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -140,43 +116,60 @@
                     <!-- Product sidebar Widget -->
                     <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30">New products</h5>
-                        @foreach ($new_products as $new_product) 
-                            @php  
-                                if($new_product->slug){ 
-                                    $new_product_shop_detail_url = route('shop-detail', ['slug' => $new_product->slug, 'id' => $new_product->id]);
-                                } else { 
-                                    $new_product_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $new_product->id]);
+                        @foreach ($new_products as $new_product)
+                            @php
+                                if ($new_product->slug) {
+                                    $new_product_shop_detail_url = route('shop-detail', [
+                                        'slug' => $new_product->slug,
+                                        'id' => $new_product->id,
+                                    ]);
+                                } else {
+                                    $new_product_shop_detail_url = route('shop-detail', [
+                                        'slug' => 'no-slug',
+                                        'id' => $new_product->id,
+                                    ]);
                                 }
                             @endphp
                             <div class="single-post clearfix">
                                 <div class="image">
-                                    <img src="{{ asset('storage/' . $new_product->featured_image) }}" alt="{{$new_product->seo_meta}}" />
+                                    <img src="{{ asset('storage/' . $new_product->featured_image) }}"
+                                        alt="{{ $new_product->seo_meta }}" />
                                 </div>
                                 <div class="content pt-10">
-                                    <h5><a href="{{$new_product_shop_detail_url}}">{{ $new_product->name }}</a></h5> 
+                                    <h5><a href="{{ $new_product_shop_detail_url }}">{{ $new_product->name }}</a></h5>
 
                                     <div class="product-price">
                                         @if ($new_product->sale_price > 0 && now() >= $new_product->sale_start_date && now() <= $new_product->sale_end_date)
-                                            <span class="price-transition mb-0 mt-5">₹{{ $new_product->sale_price }}</span>
-                                            <span class="old-price mb-0 mt-5"> <del>₹{{ $new_product->price }}</del></span>
+                                            <span
+                                                class="price-transition mb-0 mt-5">₹{{ $new_product->sale_price }}</span>
+                                            <span class="old-price mb-0 mt-5">
+                                                <del>₹{{ $new_product->price }}</del></span>
                                         @elseif($new_product->sale_default_price > 0)
-                                            <span class="price-transition mb-0 mt-5">₹{{ $new_product->sale_default_price }}</span>
-                                            <span class="old-price mb-0 mt-5"> <del>₹{{ $new_product->price }}</del></span>
+                                            <span
+                                                class="price-transition mb-0 mt-5">₹{{ $new_product->sale_default_price }}</span>
+                                            <span class="old-price mb-0 mt-5">
+                                                <del>₹{{ $new_product->price }}</del></span>
                                         @else
                                             <span class="price-transition mb-0 mt-5">₹{{ $new_product->price }}</span>
-                                        @endif 
+                                        @endif
                                     </div>
 
                                     @php
-                                        $new_product_reviews = \App\Models\ProductReview::where('status', 1)->where('product_id', $new_product->id)->get();
+                                        $new_product_reviews = \App\Models\ProductReview::where('status', 1)
+                                            ->where('product_id', $new_product->id)
+                                            ->get();
 
                                         $new_product_reviews_count = $new_product_reviews->count();
-                                        $new_product_reviews_avg = $new_product_reviews_count > 0 ? round($new_product_reviews->avg('ratings'), 1) : 0;
+                                        $new_product_reviews_avg =
+                                            $new_product_reviews_count > 0
+                                                ? round($new_product_reviews->avg('ratings'), 1)
+                                                : 0;
                                         $new_product_reviews_percentage = ($new_product_reviews_avg / 5) * 100;
                                     @endphp
 
                                     <div class="product-rate">
-                                        <div class="product-rating" style="width: {{$new_product_reviews_percentage}}%"></div>
+                                        <div class="product-rating"
+                                            style="width: {{ $new_product_reviews_percentage }}%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -279,21 +272,27 @@
                             </a>
                         </div>
                         <div class="row">
-                            @foreach ($deals_of_the_day_products as $deals_of_the_day_product) 
-                                @php  
-                                    if($deals_of_the_day_product->slug){ 
-                                        $deals_of_the_day_product_shop_detail_url = route('shop-detail', ['slug' => $deals_of_the_day_product->slug, 'id' => $deals_of_the_day_product->id]);
-                                    } else { 
-                                        $deals_of_the_day_product_shop_detail_url = route('shop-detail', ['slug' => 'no-slug','id' => $deals_of_the_day_product->id]);
+                            @foreach ($deals_of_the_day_products as $deals_of_the_day_product)
+                                @php
+                                    if ($deals_of_the_day_product->slug) {
+                                        $deals_of_the_day_product_shop_detail_url = route('shop-detail', [
+                                            'slug' => $deals_of_the_day_product->slug,
+                                            'id' => $deals_of_the_day_product->id,
+                                        ]);
+                                    } else {
+                                        $deals_of_the_day_product_shop_detail_url = route('shop-detail', [
+                                            'slug' => 'no-slug',
+                                            'id' => $deals_of_the_day_product->id,
+                                        ]);
                                     }
                                 @endphp
                                 <div class="col-xl-3 col-lg-4 col-md-6">
                                     <div class="product-cart-wrap style-2">
                                         <div class="product-img-action-wrap">
                                             <div class="product-img">
-                                                <a href="{{$deals_of_the_day_product_shop_detail_url}}">
+                                                <a href="{{ $deals_of_the_day_product_shop_detail_url }}">
                                                     <img src="{{ asset('storage/' . $deals_of_the_day_product->featured_image) }}"
-                                                        alt="{{$deals_of_the_day_product->seo_meta}}" />
+                                                        alt="{{ $deals_of_the_day_product->seo_meta }}" />
                                                 </a>
                                             </div>
                                         </div>
@@ -305,7 +304,7 @@
                                             </div>
                                             <div class="deals-content">
                                                 <h2><a
-                                                        href="{{$deals_of_the_day_product_shop_detail_url}}">{{ $deals_of_the_day_product->name }}</a>
+                                                        href="{{ $deals_of_the_day_product_shop_detail_url }}">{{ $deals_of_the_day_product->name }}</a>
                                                 </h2>
                                                 <div class="product-rate-cover">
                                                     @php
@@ -377,7 +376,7 @@
                                     <div class="single-post clearfix mb-20">
                                         <div class="image">
                                             <img src="{{ asset('storage/' . $new_product->featured_image) }}"
-                                                alt="{{$new_product->seo_meta}}" />
+                                                alt="{{ $new_product->seo_meta }}" />
                                         </div>
                                         <div class="content pt-10">
                                             <h5><a href="shop-product-detail.html">{{ $new_product->name }}</a></h5>

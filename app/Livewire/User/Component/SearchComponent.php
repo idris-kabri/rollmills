@@ -3,6 +3,10 @@
 namespace App\Livewire\User\Component;
 
 use Livewire\Component;
+use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\ProductCategoryAssign;
+use Illuminate\Support\Facades\Cache;
 
 class SearchComponent extends Component
 {
@@ -27,7 +31,7 @@ class SearchComponent extends Component
             })->where("out_of_stock", 0);
         }
 
-        $this->products = $product_query->orderBy('id', 'desc')->take(8)->get();
+        $this->products = Product::all();
     }
 
     public function updatedSearch()
@@ -40,7 +44,13 @@ class SearchComponent extends Component
         $this->serachFunction();
     }
     public function render()
-    {
-        return view('livewire.user.component.search-component');
+    {        
+        $categories = Cache::remember('product_categories', 3600, function () {
+            return ProductCategory::whereNull('parent_id')
+                ->get();
+        });
+        // $products = Product::take(8)->get();
+
+        return view('livewire.user.component.search-component', compact("categories"));
     }
 }

@@ -86,7 +86,7 @@
                                 class="img-fluid" /></a>
                     </div>
                     <div class="header-right">
-                        
+                        @livewire('user.component.search-component')
                         @livewire('user.component.header-cart-component')
                     </div>
                 </div>
