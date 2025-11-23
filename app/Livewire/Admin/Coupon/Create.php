@@ -25,6 +25,8 @@ class Create extends Component
     public $total_usage;
     public $expiry_date;
     public $category = [];
+    public $is_global = 0;
+    public $description;
 
     public function mount()
     {
@@ -73,6 +75,8 @@ class Create extends Component
                 $coupon->total_usage = $this->total_usage;
                 $coupon->expiry_date = $this->expiry_date;
                 $coupon->category = implode(',', $this->category);
+                $coupon->is_global = $this->is_global;
+                $coupon->description = $this->description;
                 $coupon->save();
 
                 return redirect()->route("admin.coupon.index");

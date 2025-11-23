@@ -188,6 +188,16 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="mb-3 col-md-6 position-relative">
+                                        <label class="form-label" for="seo_keyword">Is Global</label>
+                                        <input class=""
+                                            placeholder="Expiry Date" name="is_global" type="checkbox"
+                                            wire:model="is_global" {{ $is_global == 1 ? "selected" : "" }}>
+                                    </div>
+                                    <div class="mb-3 col-md-12 position-relative">
+                                        <label class="form-label" for="seo_keyword">Description</label>
+                                        <textarea name="description" id="description" wire:model="description" class="form-control" cols="30" rows="5"></textarea>
+                                    </div>
                                 </div>
                                 <button class="btn btn-primary" type="submit" value="apply" name="submitter">
                                     Save

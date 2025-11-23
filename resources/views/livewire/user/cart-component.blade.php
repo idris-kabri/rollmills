@@ -33,6 +33,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $totalOfferDiscountedPrice = 0;
+                            @endphp
                             @foreach (Cart::instance('cart')->content() as $item)
                                 @php
                                     if ($item->model->slug) {
@@ -60,8 +63,9 @@
                                         </div>
                                     </td>
                                     <td class="product-des product-name">
-                                        <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                                href="{{ $shop_detail_url }}">{{ $item->model->name }} {{ $item->id }}</a>
+                                        <h6 class="mb-5 ms-4"><a class="product-name mb-10 text-heading"
+                                                href="{{ $shop_detail_url }}">{{ $item->model->name }}
+                                                {{ $item->id }}</a>
                                         </h6>
                                         @php
                                             $reviews = \App\Models\ProductReview::where('status', 1)
@@ -72,7 +76,7 @@
                                             $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
                                             $reviews_percentage = ($reviews_avg / 5) * 100;
                                         @endphp
-                                        <div class="product-rate-cover">
+                                        <div class="product-rate-cover ms-4">
                                             <div class="product-rate d-inline-block">
                                                 <div class="product-rating" style="width: {{ $reviews_percentage }}%">
                                                 </div>
@@ -117,6 +121,12 @@
                                             class="text-body"><i class="fi-rs-trash"></i></a>
                                     </td>
                                 </tr>
+                                @php
+                                    if ($item->options && isset($item->options['discount_price'])) {
+                                        $totalOfferDiscountedPrice +=
+                                            $item->price * $item->qty - (($item->options ?? [])['discount_price'] ?? 0);
+                                    }
+                                @endphp
                             @endforeach
                         </tbody>
                     </table>
@@ -149,16 +159,16 @@
                 </div>
                 <div class="p-20 border-radius-15 border mb-20">
                     <h4 class="mb-30 pb-2 underline">Apply Coupon</h4>
-                    <form action="#">
-                        <div class="d-flex justify-content-between mb-4">
-                            <input class="font-medium pl-15 mr-15 coupon" name="Coupon" placeholder="Enter Code">
-                            <button class="btn d-flex justify-content-center align-items-center"><i
-                                    class="fi-rs-label mr-10"></i>Apply</button>
-                        </div>
-                        <div class="coupon-card-cart" onclick="toggleCoupon(this)">
+                    <div class="d-flex justify-content-between mb-4">
+                        <input class="font-medium pl-15 mr-15 coupon" name="Coupon" placeholder="Enter Code" wire:model="couponCode">
+                        <button class="btn d-flex justify-content-center align-items-center" wire:click="applyCoupon"><i
+                                class="fi-rs-label mr-10"></i>Apply</button>
+                    </div>
+                    @foreach ($global_coupons as $global_coupon)
+                        <a class="coupon-card-cart {{ $couponCode == $global_coupon->coupon_code ? 'selected' : '' }}" wire:click.prevent="checkCoupon('{{ $global_coupon->coupon_code }}')">
                             <div class="coupon-header">
                                 <div class="coupon-code-section">
-                                    <div class="coupon-code-cart">SAVE20</div>
+                                    <div class="coupon-code-cart">{{ $global_coupon->coupon_code }}</div>
                                     {{-- <div class="discount-badge">20% OFF</div> --}}
                                 </div>
                                 <div class="check-circle">
@@ -168,34 +178,14 @@
                                 </div>
                             </div>
                             <div class="coupon-description">
-                                Get 20% instant discount on your first order. Valid on all products.
+                                {{ $global_coupon->description }}
                             </div>
                             <div class="coupon-footer">
-                                <div class="discount-badge">20% OFF</div>
-                                <div class="min-order">Valid till: Nov 30, 2025</div>
+                                <div class="discount-badge">{{ $global_coupon->discount_value }}% OFF</div>
+                                <div class="min-order">Valid till: {{ \Carbon\Carbon::parse($global_coupon->expiry_date)->format('M d, Y') }}</div>
                             </div>
-                        </div>
-                        <div class="coupon-card-cart selected" onclick="toggleCoupon(this)">
-                            <div class="coupon-header">
-                                <div class="coupon-code-section">
-                                    <div class="coupon-code-cart">FRESH50</div>
-                                    {{-- <div class="discount-badge">$5 OFF</div> --}}
-                                </div>
-                                <div class="check-circle">
-                                    <svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="coupon-description">
-                                Save $5 on fresh organic products. Perfect for your healthy lifestyle!
-                            </div>
-                            <div class="coupon-footer">
-                                <div class="discount-badge">50% OFF</div>
-                                <div class="min-order">Valid till: Nov 30, 2025</div>
-                            </div>
-                        </div>
-                    </form>
+                        </a>
+                    @endforeach
                 </div>
                 <div class="border p-20 cart-totals">
                     <h4 class="mb-30 pb-2 underline">Details</h4>
@@ -220,28 +210,72 @@
                                             {{ number_format(session('shipping_charge'), 2) }}</h4>
                                     </td>
                                 </tr>
+                                @if(session('latest_etd') != null)
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Estimate for</h6>
+                                        <h6 class="text-muted">Etd</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16">United Kingdom</h4>
+                                        <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}</h4>
                                     </td>
                                 </tr>
+                                @endif
+                                @php
+                                    $discount = $totalOfferDiscountedPrice + $mainDiscountAmount;
+                                @endphp
+                                @if($discount != 0)
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">Discount</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h5 class="text-heading text-end fs-16 text-success">₹{{ number_format($discount, 2) }}</h4>
+                                    </td>
+                                </tr>
+                                @endif
+                                @php
+                                    $cartTotal = (float) str_replace(',', '', Cart::total());
+                                    $amountAfterDiscount = $cartTotal - $totalOfferDiscountedPrice;
+                                    $allCouponandOfferDiscount =
+                                        $cartTotal - $totalOfferDiscountedPrice - $mainDiscountAmount;
+                                @endphp
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Total</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">₹{{ Cart::instance('cart')->total() }}
-                                        </h4>
+                                        @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                            </h4>
+                                        @elseif($totalAfterDiscount != 0)
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                            </h4>
+                                        @elseif($totalOfferDiscountedPrice != 0)
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                            </h4>
+                                        @else
+                                            @php
+                                                $shippingCharge = (float) (session('shipping_charge') ?? 0);
+                                                $total =
+                                                    floatval(str_replace(',', '', Cart::total())) + $shippingCharge;
+                                            @endphp
+                                            <h4 class="text-brand text-end fs-16">
+                                                ₹{{ number_format($total, 2) }}
+                                            </h4>
+                                        @endif
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <a href="#" class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
-                        To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                    @if ($checkout_button)
+                        <a href="/checkout"
+                            class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
+                            To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -249,14 +283,20 @@
 </main>
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        function toggleCoupon(card) {
-            document.querySelectorAll('.coupon-card-cart').forEach(c => {
-                if (c !== card) {
-                    c.classList.remove('selected');
+
+        function showCongratsOffer() {
+            confetti({
+                particleCount: 500,
+                spread: 100,
+                origin: {
+                    y: 0.6
                 }
             });
-            card.classList.toggle('selected');
         }
+        window.addEventListener('coupon-applied', event => {
+            showCongratsOffer();
+        });
     </script>
 @endpush

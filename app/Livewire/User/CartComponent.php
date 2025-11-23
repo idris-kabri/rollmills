@@ -5,15 +5,42 @@ namespace App\Livewire\User;
 use Livewire\Component;
 use App\Traits\HasToastNotification;
 use App\Models\ProductCategoryAssign;
+use App\Models\Product;
+use App\Models\Coupon;
 use App\Models\Setting;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Cart;
 use Carbon\Carbon;
 
 class CartComponent extends Component
 {
     use HasToastNotification;
+    public $checkout_button = false;
+    public $free_shipping = false;
+    public $pincode = null;
+    public $couponCode;
+    public $out_of_stock_id = [];
+    public $pincode_validation_id = [];
+    public $mainDiscountAmount = 0;
+    public $totalAfterDiscount = 0;
+    public $triger_offer_product_array = [];
+    public $triger_offer_brand_array = [];
+    public $triger_offer_category_array = [];
+    public $eligibleCategoryIds = [];
+    public $eligibleBrandIds = [];
+    public $eligibleProductIds = [];
+    public $brandOfferMessages = [];
+    public $getOfferTriggerButton = false;
+    public $getOfferproductName = '';
+    public $offerMessageKeys = [];
+    public $lowestCouriers = [];
+    public $latestEtd;
+    public $applied_offer_id = [];
+    public $to_be_applied_offer_id = [];
+    public $offer_applied_cart_product_id = [];
     public $quantities = [];
-    public $pincode;
+    public $global_coupons = [];
 
     public function mount()
     {
@@ -72,7 +99,116 @@ class CartComponent extends Component
 
             $items[] = $item;
         }
+        if (session()->has('shipping_pincode') && session('shipping_pincode') != null) {
+            $this->pincode = session('shipping_pincode');
+            $this->pincodeCheckFunction();
+        }
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
+
+        $this->global_coupons = Coupon::where('is_global', 1)->where('expiry_date', '>=', Carbon::now()->format('Y-m-d'))->get();
+    }
+
+    public function applyCoupon()
+    {
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $checkCuponCode = Coupon::where('coupon_code', $this->couponCode)->first();
+
+        session()->forget('coupon_discount_amount');
+        session()->forget('coupon_discount_id');
+        session()->forget('coupon_code');
+
+        // Check if coupon exists
+        if (!$checkCuponCode) {
+            $this->toastError('This Coupon Code Not Exists!');
+            return false;
+        }
+
+        // Count total usage of this coupon
+        $orderCount = Order::where('coupon_id', $checkCuponCode->id)->where('status', 1)->count();
+
+        if ((int) $checkCuponCode->total_usage <= $orderCount) {
+            $this->toastError('This Coupon has been Expired!!!');
+            return flase;
+        }
+
+        // Check logged in user's usage if user is logged in
+        if (Auth::check()) {
+            $orderUserCount = Order::where('logged_in_user_id', Auth::user()->id)
+                ->where('coupon_id', $checkCuponCode->id)
+                ->where('status', 1)
+                ->count();
+
+            if ((int) $checkCuponCode->usage_limit <= $orderUserCount) {
+                $this->toastError('Coupon Code Already Used');
+                return false;
+            }
+        }
+
+        // Parse coupon categories (comma separated values)
+        $couponCategoryIds = explode(',', $checkCuponCode->category);
+
+        // Calculate total price of eligible products in cart
+        $cartItems = Cart::instance('cart')->content();
+        $eligibleProductsTotal = 0;
+        $eligibleProductCount = 0;
+
+        foreach ($cartItems as $item) {
+            // Check if product belongs to coupon categories
+            if ($checkCuponCode->category != '' && $checkCuponCode->category != null) {
+                // Assume each product has categories relationship returning an array of category IDs
+                $productCategoryIds = ProductCategoryAssign::where('product_id', $item->model->id)->pluck('category_id')->toArray();
+                if (array_intersect($couponCategoryIds, $productCategoryIds)) {
+                    $eligibleProductsTotal += $item->price * $item->qty;
+                    $eligibleProductCount += $item->qty;
+                }
+            } else {
+                $eligibleProductsTotal += $item->price * $item->qty;
+                $eligibleProductCount += $item->qty;
+            }
+        }
+
+        // If no eligible product found in cart for coupon categories
+        if ($eligibleProductsTotal == 0) {
+            $this->toastError('No products in cart belong to the coupon category.');
+            return;
+        }
+
+        // Check minimum order value on eligible products total
+        if ($eligibleProductsTotal < (float) $checkCuponCode->minimum_order_value) {
+            $this->toastError('Minimum order value must be ₹' . number_format($checkCuponCode->minimum_order_value) . ' for products in coupon category.');
+            return;
+        }
+
+        // Check coupon expiry date using Carbon
+        if (!Carbon::parse($checkCuponCode->expiry_date)->gt(Carbon::now())) {
+            $this->toastError('This Coupon Is Expired!');
+            return;
+        }
+
+        // Calculate discount amount
+        if ($checkCuponCode->discount_type == 'Percentage') {
+            $discountAmount = ($eligibleProductsTotal * $checkCuponCode->discount_value) / 100;
+
+            // Cap it at maximum_discount_amount if applicable
+            if ($discountAmount > $checkCuponCode->maximum_discount_amount) {
+                $discountAmount = (float) $checkCuponCode->maximum_discount_amount;
+            }
+            $this->mainDiscountAmount = $discountAmount;
+            $this->totalAfterDiscount = $eligibleProductsTotal - $this->mainDiscountAmount;
+        } else {
+            $flatDiscount = min((float) $checkCuponCode->discount_value, (float) $checkCuponCode->maximum_discount_amount);
+            $this->mainDiscountAmount = $flatDiscount;
+            $this->totalAfterDiscount = $eligibleProductsTotal - $this->mainDiscountAmount;
+        }
+
+        // Save coupon info in session
+        session()->put('coupon_discount_amount', $this->mainDiscountAmount);
+        session()->put('coupon_discount_id', $checkCuponCode->id);
+        session()->put('coupon_code', $this->couponCode);
+
+        $this->dispatch('coupon-applied');
+
+        return true;
     }
 
     public function incrementQuantity($rowId)
@@ -142,12 +278,12 @@ class CartComponent extends Component
                 $items[] = $item;
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
-                // if ($this->pincode != null) {
-                //     $this->pincodeCheckFunction();
-                // }
-                // if (session('coupon_discount_id')) {
-                //     $this->applyCoupon();
-                // }
+                if ($this->pincode != null) {
+                    $this->pincodeCheckFunction();
+                }
+                if (session('coupon_discount_id')) {
+                    $this->applyCoupon();
+                }
             }
         }
     }
@@ -217,12 +353,12 @@ class CartComponent extends Component
                 $items[] = $item;
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
-                // if ($this->pincode != null) {
-                //     $this->pincodeCheckFunction();
-                // }
-                // if (session('coupon_discount_id')) {
-                //     $this->applyCoupon();
-                // }
+                if ($this->pincode != null) {
+                    $this->pincodeCheckFunction();
+                }
+                if (session('coupon_discount_id')) {
+                    $this->applyCoupon();
+                }
             }
         }
     }
@@ -294,12 +430,12 @@ class CartComponent extends Component
                 $items[] = $item;
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
-                // if ($this->pincode != null) {
-                //     $this->pincodeCheckFunction();
-                // }
-                // if (session('coupon_discount_id')) {
-                //     $this->applyCoupon();
-                // }
+                if ($this->pincode != null) {
+                    $this->pincodeCheckFunction();
+                }
+                if (session('coupon_discount_id')) {
+                    $this->applyCoupon();
+                }
             }
         }
     }
@@ -307,8 +443,8 @@ class CartComponent extends Component
     public function removeFromCart($rowId)
     {
         $qty = Cart::instance('cart')->get($rowId)->qty;
-        $removeCart = finalRemoveFromCart($rowId);
         $productId = Cart::instance('cart')->get($rowId)->model->id;
+        $removeCart = finalRemoveFromCart($rowId);
         $product = Product::find($productId);
         $sale_price = 0;
         $currentDate = Carbon::now();
@@ -365,7 +501,7 @@ class CartComponent extends Component
             $this->toastError('Product Remove Successfully From Your Cart!');
         }
         // $this->offerCheckEligibility();
-        // $this->pincodeCheckFunction();
+        $this->pincodeCheckFunction();
     }
 
     public function pincodeCheckFunction()
@@ -393,6 +529,7 @@ class CartComponent extends Component
                     $this->free_shipping = false;
                     session()->forget('free_shipping_pincode');
                     session()->put('show_deleviery_time', true);
+                    $this->toastSuccess('Charges Calculated Successfully!');
                 }
             }
             session()->put('shipping_pincode', $this->pincode);
@@ -442,6 +579,14 @@ class CartComponent extends Component
             }
         } else {
             $this->checkout_button = false;
+        }
+    }
+
+    public function checkCoupon($coupon_code){
+        $this->couponCode = $coupon_code;
+        $response = $this->applyCoupon();
+        if(!$response){
+            $this->couponCode = '';
         }
     }
 

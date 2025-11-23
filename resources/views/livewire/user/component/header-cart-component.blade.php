@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="header-action-icon-2">
-            <a href="/my-account">
+            <a href="{{ auth()->check() ? '/my-account' : '/' }}">
                 <img class="svgInject" alt="Nest"
                     src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
             </a>

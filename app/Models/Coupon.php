@@ -21,5 +21,7 @@ class Coupon extends Model
         "total_usage",
         "expiry_date",
         "category",
+        "is_global",
+        "description"
     ];
 }

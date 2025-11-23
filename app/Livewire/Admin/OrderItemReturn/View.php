@@ -43,7 +43,7 @@ class View extends Component
                 $transaction = Transaction::where('refrence_table','orders')->where('refrence_id',$fetchOrder->id)->orderBy('id','desc')->first();
                 $fetchUser->wallet_balance += $walletRefund;
                 $token = generateShipRocketToken();
-                placeShipment($transaction->refrence_id, $token);
+                placeShipment($transaction->refrence_id);
 
             }elseif($this->status == 4){ 
                 $orderItem->status = 4;

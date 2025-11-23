@@ -26,6 +26,8 @@ class Edit extends Component
     public $category = [];
     public $image;
     public $defaultImage;
+    public $is_global;
+    public $description;
 
     public function mount($id)
     {
@@ -42,6 +44,8 @@ class Edit extends Component
         $this->expiry_date = $coupon->expiry_date;
         $this->category = explode(',', $coupon->category);
         $this->defaultImage = $coupon->image;
+        $this->is_global = $coupon->is_global;
+        $this->description = $coupon->description;
     }
 
     public function update()
@@ -88,7 +92,8 @@ class Edit extends Component
             $coupon->total_usage = $this->total_usage;
             $coupon->expiry_date = $this->expiry_date;
             $coupon->category = implode(',', $this->category);
-
+            $coupon->is_global = $this->is_global;
+            $coupon->description = $this->description;
             $coupon->save();
 
             $this->toastSuccess('Coupon Edited Successfully!');

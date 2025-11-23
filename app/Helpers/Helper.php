@@ -127,9 +127,7 @@ function returnUrl($transactionId, $razorpayPaymentId, $gift_tile = null, $name 
                     $store->status = 1;
                     $store->save();
                 }
-
-                $token = generateShipRocketToken();
-                placeShipment($transaction->refrence_id, $token);
+                placeShipment($transaction->refrence_id);
 
                 // Cart::instance('cart')->clear();
                 Cart::instance('cart')->destroy();
@@ -263,7 +261,7 @@ function getChannelId($token)
     }
 }
 
-function placeShipment($order_id, $token)
+function placeShipment($order_id)
 {
     try {
         $order = Order::find($order_id);
@@ -276,18 +274,22 @@ function placeShipment($order_id, $token)
         $length = 0;
 
         $items_array = [];
+        $shipping_charges = [];
+        $courier_name = [];
         foreach ($order_items as $order_item) {
             $weight += (max((float) $order_item->getProduct->weight, 0.1) / 1000) * (int) $order_item->quantity;
             $height += max((float) $order_item->getProduct->height, 1) * (int) $order_item->quantity;
             $breadth += max((float) $order_item->getProduct->breadth, 1) * (int) $order_item->quantity;
             $length += max((float) $order_item->getProduct->length, 1) * (int) $order_item->quantity;
             $items_array[$order_item->courier_id][] = [
-                'name' => $order_item->getProduct->name,
-                'sku' => $order_item->getProduct->SKU,
-                'units' => $order_item->quantity,
-                'selling_price' => $order_item->total,
-                'shipping_cost' => $order_item->overall_rate,
+                'product_name' => $order_item->getProduct->name,
+                'product_sku' => $order_item->getProduct->SKU,
+                'product_quantity' => $order_item->quantity,
+                'product_price' => $order_item->total,
+                'product_img_url' => url('storage/' . $order_item->getProduct->featured_image),
             ];
+            $shipping_charges[$order_item->courier_id] += (float) $shipping_charges[$order_item->courier_id] + (float) $order_item->overall_rate;
+            $courier_name[$order_item->courier_id] = $order_item->courier;
         }
 
         $exploded_billing_name = explode(' ', $billing_address['name']);
@@ -296,50 +298,75 @@ function placeShipment($order_id, $token)
         $exploded_shipping_name = explode(' ', $shipping_address['name']);
         $shipping_last_name = $exploded_shipping_name[count($exploded_shipping_name) - 1] ?? '';
 
+        $shipments = [];
         foreach ($items_array as $key => $item) {
+            $total_amount = 0;
+            foreach ($item as $order_item) {
+                $total_amount += $order_item['product_price'];
+            }
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $token,
-            ])->post('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc', [
-                'order_id' => $order_id . '-' . $key,
-                'order_date' => Carbon::parse($order->created_at)->format('Y-m-d'),
-                'pickup_location' => 'Home',
-                'comment' => 'Near ICICI Bank Sagwara',
-                'reseller_name' => 'Roll Mills Store',
-                'company_name' => 'Roll Mills Store',
-                'billing_customer_name' => $billing_address['name'],
-                'billing_last_name' => $billing_last_name,
-                'billing_address' => $billing_address['address_line_1'],
-                'billing_address_2' => $billing_address['address_line_2'],
-                'billing_city' => $billing_address['city'],
-                'billing_pincode' => $billing_address['zipcode'],
-                'billing_state' => $billing_address['state'],
-                'billing_country' => 'India',
-                'billing_email' => $billing_address['email'],
-                'billing_phone' => $billing_address['mobile'],
-                'shipping_is_billing' => false,
-                'shipping_customer_name' => $shipping_address['name'],
-                'shipping_last_name' => $shipping_last_name,
-                'shipping_address' => $shipping_address['address_line_1'],
-                'shipping_address_2' => $shipping_address['address_line_2'],
-                'shipping_city' => $shipping_address['city'],
-                'shipping_pincode' => $shipping_address['zipcode'],
-                'shipping_country' => 'India',
-                'shipping_state' => $shipping_address['state'],
-                'shipping_email' => $shipping_address['email'],
-                'shipping_phone' => $shipping_address['mobile'],
-                'order_items' => $item,
-                'payment_method' => 'Prepaid',
-                'shipping_charges' => (float) $order->shipping_rate + (float) $order->shipping_bear_margin,
-                'giftwrap_charges' => '0',
-                'courier_company_id' => $key,
-                'transaction_charges' => '0',
-                'total_discount' => (float) $order->coupon_discount + (float) $order->offer_discount,
-                'sub_total' => $order->subtotal,
-                'length' => ceil($length),
-                'breadth' => ceil($breadth),
-                'height' => ceil($height),
-                'weight' => round($weight, 2),
+            ])->post('https://my.ithinklogistics.com/api_v3/order/add.json', [
+                'data' => [
+                    'shipments' => [
+                        [
+                            'order' => $order_id . '-' . $key,
+                            'order_date' => Carbon::parse($order->created_at)->format('Y-m-d'),
+                            'total_amount' => (string) $total_amount,
+                            'name' => $billing_address['name'],
+                            'add' => $billing_address['address_line_1'],
+                            'add2' => $billing_address['address_line_2'],
+                            'pin' => $billing_address['zipcode'],
+                            'city' => $billing_address['city'],
+                            'state' => $billing_address['state'],
+                            'country' => 'India',
+                            'phone' => $billing_address['mobile'],
+                            'email' => $billing_address['email'],
+                            'is_billing_same_as_shipping' => 'No',
+                            'billing_name' => $billing_address['name'],
+                            'billing_add' => $billing_address['address_line_1'],
+                            'billing_add2' => $billing_address['address_line_2'],
+                            'billing_pin' => $billing_address['zipcode'],
+                            'billing_city' => $billing_address['city'],
+                            'billing_state' => $billing_address['state'],
+                            'billing_country' => 'India',
+                            'billing_phone' => $billing_address['mobile'],
+                            'billing_email' => $billing_address['email'],
+                            'shipping_name' => $shipping_address['name'],
+                            'shipping_add' => $shipping_address['address_line_1'],
+                            'shipping_add2' => $shipping_address['address_line_2'],
+                            'shipping_pin' => $shipping_address['zipcode'],
+                            'shipping_city' => $shipping_address['city'],
+                            'shipping_state' => $shipping_address['state'],
+                            'shipping_country' => 'India',
+                            'shipping_phone' => $shipping_address['mobile'],
+                            'shipping_email' => $shipping_address['email'],
+                            'shipping_add' => $shipping_address['address_line_1'],
+                            'shipping_add2' => $shipping_address['address_line_2'],
+                            'shipping_pin' => $shipping_address['zipcode'],
+                            'shipping_city' => $shipping_address['city'],
+                            'shipping_state' => $shipping_address['state'],
+                            'shipping_country' => 'India',
+                            'shipping_email' => $shipping_address['email'],
+                            'shipping_phone' => $shipping_address['mobile'],
+                            'products' => $item, // Ensure $item is an array of arrays (List), not just a single object
+                            'shipment_length' => ceil($length),
+                            'shipment_width' => ceil($breadth),
+                            'shipment_height' => ceil($height),
+                            'weight' => round($weight, 2),
+                            'shipping_charges' => $shipping_charges[$key],
+                            'payment_mode' => 'Prepaid',
+                            'return_address_id' => 93192,
+                            'store_id' => 25642,
+                            'transaction_charges' => '0',
+                            'total_discount' => (float) $order->coupon_discount + (float) $order->offer_discount,
+                        ],
+                    ],
+                    'pickup_address_id' => '931912',
+                    'access_token' => config('app.access_token'),
+                    'secret_key' => config('app.secret_key'),
+                    'logistics' => $courier_name[$key],
+                ],
             ]);
             if ($response->successful()) {
                 $response->json()['data']['id'];
@@ -357,7 +384,6 @@ function placeShipment($order_id, $token)
 
 function calculateRates($products, $pincode)
 {
-    Log::error('Hye');
     $latestEtd = null;
     $shippingCharge = 0;
     $shipping_bear_margin = 0;
@@ -406,7 +432,7 @@ function calculateRates($products, $pincode)
                 foreach ($couriers as $courier) {
                     if (!empty($courier['delivery_tat'])) {
                         $now = Carbon::now();
-                        $etdDate = $now->copy()->addDays((int)$courier['delivery_tat']);
+                        $etdDate = $now->copy()->addDays((int) $courier['delivery_tat']);
                         if (!$latestEtd || $etdDate->gt($latestEtd)) {
                             $latestEtd = Carbon::parse($etdDate)->format('d F Y');
                         }

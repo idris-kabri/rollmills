@@ -23,10 +23,10 @@
         </div>
     </section> --}}
     <section class="featured section-padding">
-        <div class="container">
+        <div class="container-xl footer-strip">
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6 mb-md-4 mb-xl-0">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-1.svg') }}" alt="" />
                         </div>
@@ -36,19 +36,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-2.svg') }}" alt="" />
                         </div>
                         <div class="banner-text">
                             <h3 class="icon-box-title fw-700">User Satisfaction</h3>
-                            <p class="fw-500">24/7 amazing services</p>
+                            <p class="fw-500">24/7 services</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-3.svg') }}" alt="" />
                         </div>
@@ -58,8 +58,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow fadeIn animated">
+                <div class="col-lg-3 col-md-4 col-6">
+                    <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
                         <div class="banner-icon">
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-4.svg') }}" alt="" />
                         </div>
@@ -95,12 +95,12 @@
         </div>
     </section>
     <section class="section-padding footer-mid pt-0">
-        <div class="container pt-15 pb-20">
+        <div class="container-xl footer-mid-inner pt-15 pb-20">
             <div class="row">
                 <div class="col">
                     <div class="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0">
                         <div class="logo mb-30">
-                            <a href="index.html" class="mb-15"><img
+                            <a href="/" class="mb-15"><img
                                     src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo" /></a>
                             <p class="text-heading fw-600 quicksand text-secondary">Welcome to Roll Mills
                                 Your trusted destination for high quality Household And Decoration products and
@@ -133,17 +133,7 @@
                         <li><a href="/contact">Contact Us</a></li>
                     </ul>
                 </div>
-                <div class="footer-link-widget col">
-                    <h4 class="widget-title">Account</h4>
-                    <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="/login">Sign In</a></li>
-                        <li><a href="/cart">View Cart</a></li>
-                        <li><a href="/wishlist">My Wishlist</a></li>
-                        <li><a href="/my-account">Track My Order</a></li>
-                        <li><a href="/contact">Help Ticket</a></li>
-                        <li><a href="/compare">Compare products</a></li>
-                    </ul>
-                </div>
+
                 {{-- <div class="footer-link-widget col">
                     <h4 class="widget-title">Corporate</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
@@ -168,6 +158,18 @@
                         <li><a href="#">Cheese</a></li>
                     </ul>
                 </div>
+
+                <div class="footer-link-widget col">
+                    <h4 class="widget-title">Account</h4>
+                    <ul class="footer-list mb-sm-5 mb-md-0">
+                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/cart">View Cart</a></li>
+                        <li><a href="/wishlist">My Wishlist</a></li>
+                        <li><a href="/my-account">Track My Order</a></li>
+                        <li><a href="/contact">Help Ticket</a></li>
+                        <li><a href="/compare">Compare products</a></li>
+                    </ul>
+                </div>
                 {{-- <div class="footer-link-widget widget-install-app col">
                     <h4 class="widget-title">Install App</h4>
                     <p class="wow fadeIn animated">From App Store or Google Play</p>
@@ -184,7 +186,7 @@
             </div>
         </div>
     </section>
-    <div class="container pb-30">
+    <div class="container-xl footer-lower pb-30">
         <div class="row align-items-center">
             <div class="col-12 mb-30">
                 <div class="footer-bottom"></div>
@@ -320,7 +322,9 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ ecommerce: null });
+        dataLayer.push({
+            ecommerce: null
+        });
         dataLayer.push({
             event: 'view_item',
             ecommerce: {
@@ -334,7 +338,9 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ ecommerce: null });
+        dataLayer.push({
+            ecommerce: null
+        });
         dataLayer.push({
             event: 'add_to_cart',
             ecommerce: {
@@ -346,7 +352,9 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ ecommerce: null });
+        dataLayer.push({
+            ecommerce: null
+        });
         dataLayer.push({
             event: 'add_to_cart',
             ecommerce: {
@@ -359,7 +367,9 @@
     window.addEventListener('view-cart', (event) => {
         var data = event.detail[0];
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ ecommerce: null });
+        dataLayer.push({
+            ecommerce: null
+        });
         dataLayer.push({
             event: 'view_cart',
             ecommerce: {
@@ -373,7 +383,9 @@
         var data = event.detail[0];
         console.log(data)
         window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ ecommerce: null });
+        dataLayer.push({
+            ecommerce: null
+        });
         dataLayer.push({
             event: 'add_to_wishlist',
             ecommerce: {
