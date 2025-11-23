@@ -31,7 +31,8 @@ class SearchComponent extends Component
             })->where("out_of_stock", 0);
         }
 
-        $this->products = Product::all();
+        // $this->products = Product::take(8)->get();
+        // dd($this->products);
     }
 
     public function updatedSearch()
@@ -49,7 +50,7 @@ class SearchComponent extends Component
             return ProductCategory::whereNull('parent_id')
                 ->get();
         });
-        // $products = Product::take(8)->get();
+        $this->products = Product::take(8)->get();
 
         return view('livewire.user.component.search-component', compact("categories"));
     }

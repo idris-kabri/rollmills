@@ -10,72 +10,70 @@
             wire:model="search" />
     </form>
     {{-- @if ($search) --}}
-        <div class="panel--search-result custom-search rounded_input custom-width">
-            <div class="panel__content">
-                <div class="row mx-0">
-                    @foreach ($products as $query)
-                        <div
-                            class="col-12 px-1 px-md-2 py-1 product_wrap mb-0 border border-top-0 border-gray shadow-none rounded-0">
-                            <div class="row mx-md-2 gx-md-2 gx-1 justify-content-center align-items-center">
-                                <div class="col-xl-2 col-3">
-                                    <div class="product-img">
-                                        <a href="">
-                                            <img src="{{ '/storage/' . $query->featured_image }}"
-                                                alt="{{ '/storage/' . $query->featured_image }}" loading="lazy">
-                                        </a>
-                                    </div>
+    <div class="panel--search-result custom-search rounded_input custom-width">
+        <div class="panel__content">
+            <div class="row mx-0">
+                @foreach ($products as $query)
+                    <div
+                        class="col-12 px-1 px-md-2 py-1 product_wrap mb-0 border border-top-0 border-gray shadow-none rounded-0">
+                        <div class="row mx-md-2 gx-md-2 gx-1 justify-content-center align-items-center">
+                            <div class="col-xl-2 col-3">
+                                <div class="product-img">
+                                    <a href="">
+                                        <img src="{{ '/storage/' . $query->featured_image }}"
+                                            alt="{{ '/storage/' . $query->featured_image }}" loading="lazy">
+                                    </a>
                                 </div>
-                                <div class="col-xl-10 col-9">
-                                    <div class="product_info">
-                                        <div class="product_title"><a
-                                                href="#">{{ $query->name }}</a>
-                                        </div>
-                                        <div class="product_price">
-                                            @php
-                                                $priceInfo = getPrice($query->id);
-                                            @endphp
+                            </div>
+                            <div class="col-xl-10 col-9">
+                                <div class="product_info">
+                                    <div class="product_title"><a href="#">{{ $query->name }}</a>
+                                    </div>
+                                    <div class="product_price">
+                                        @php
+                                            $priceInfo = getPrice($query->id);
+                                        @endphp
 
-                                            <span class="price">₹{{ number_format($priceInfo['price']) }}</span>
+                                        <span class="price">₹{{ number_format($priceInfo['price']) }}</span>
 
-                                            @if ($priceInfo['original_price'])
-                                                <del>₹{{ number_format($priceInfo['original_price']) }}</del>
-                                            @endif
+                                        @if ($priceInfo['original_price'])
+                                            <del>₹{{ number_format($priceInfo['original_price']) }}</del>
+                                        @endif
 
-                                            @if ($priceInfo['discount'])
-                                                <div class="on_sale">
-                                                    <span>{{ $priceInfo['discount'] }}%
-                                                        Off</span>
-                                                </div>
-                                            @endif
-                                        </div>
+                                        @if ($priceInfo['discount'])
+                                            <div class="on_sale">
+                                                <span>{{ $priceInfo['discount'] }}%
+                                                    Off</span>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
-            @if (count($products) > 0)
-                <div class="panel__footer py-3 px-3 text-center">
-                    @if (!empty($category) && !empty($search))
-                        <a href="{{ url('shop?category=' . $category . '&search=' . $search) }}">See
-                            all
-                            results</a>
-                    @elseif(!empty($category))
-                        <a href="{{ url('shop?category_id=' . $category) }}">See all
-                            results</a>
-                    @elseif(!empty($search))
-                        <a href="{{ url('shop?search=' . $search) }}">See all
-                            results</a>
-                    @endif
-
-                </div>
-            @else
-                <div
-                    class="panel__content rounded_input custom-box-shadow py-2 px-2 row mx-0 bg-white w-100 text-center">
-                    <div class="text-center">No products found.</div>
-                </div>
-            @endif
         </div>
+        @if (count($products) > 0)
+            <div class="panel__footer py-3 px-3 text-center">
+                @if (!empty($category) && !empty($search))
+                    <a href="{{ url('shop?category=' . $category . '&search=' . $search) }}">See
+                        all
+                        results</a>
+                @elseif(!empty($category))
+                    <a href="{{ url('shop?category_id=' . $category) }}">See all
+                        results</a>
+                @elseif(!empty($search))
+                    <a href="{{ url('shop?search=' . $search) }}">See all
+                        results</a>
+                @endif
+
+            </div>
+        @else
+            <div class="panel__content rounded_input custom-box-shadow py-2 px-2 row mx-0 bg-white w-100 text-center">
+                <div class="text-center">No products found.</div>
+            </div>
+        @endif
+    </div>
     {{-- @endif --}}
 </div>
