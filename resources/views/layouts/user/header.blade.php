@@ -80,15 +80,15 @@
         </div>
         <div class="header-middle header-middle-ptb-1 d-none d-xl-block">
             <div class="container">
-                <div class="header-wrap">
+                <div class="header-wrap justify-content-between">
                     <div class="logo logo-width-1 ms-3">
                         <a href="/"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo"
                                 class="img-fluid" /></a>
                     </div>
-                    <div class="header-right">
+                    {{-- <div class="header-right"> --}}
                         @livewire('user.component.search-component')
                         @livewire('user.component.header-cart-component')
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>

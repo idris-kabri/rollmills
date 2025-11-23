@@ -29,7 +29,7 @@
                                 <div class="product_info">
                                     <div class="product_title"><a href="#">{{ $query->name }}</a>
                                     </div>
-                                    <div class="product_price">
+                                    <div class="product_price d-flex">
                                         @php
                                             $priceInfo = getPrice($query->id);
                                         @endphp

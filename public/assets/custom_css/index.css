@@ -630,6 +630,22 @@
     color: #ff324d;
 }
 
+.product_price span.price {
+    font-weight: 800;
+    font-size: 16px;
+    color: rgb(220, 169, 21);
+}
+
+.product_price del {
+    margin: 0 8px;
+}
+
+.product_price .on_sale {
+    font-size: 14px;
+    color: #388e3c;
+    font-weight: 700;
+}
+
 @media (min-width: 481px) and (max-width: 1199px) {
     .table-responsive-custom {
         overflow-x: auto;
