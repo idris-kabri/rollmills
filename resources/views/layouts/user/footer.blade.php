@@ -23,7 +23,7 @@
         </div>
     </section> --}}
     <section class="featured section-padding">
-        <div class="container-xl footer-strip">
+        <div class="container footer-strip">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
                     <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
@@ -95,7 +95,7 @@
         </div>
     </section>
     <section class="section-padding footer-mid pt-0">
-        <div class="container-xl footer-mid-inner pt-15 pb-20">
+        <div class="container footer-mid-inner pt-15 pb-20">
             <div class="row">
                 <div class="col">
                     <div class="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0">
@@ -186,7 +186,7 @@
             </div>
         </div>
     </section>
-    <div class="container-xl footer-lower pb-30">
+    <div class="container footer-lower pb-30">
         <div class="row align-items-center">
             <div class="col-12 mb-30">
                 <div class="footer-bottom"></div>

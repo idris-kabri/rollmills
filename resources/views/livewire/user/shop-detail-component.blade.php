@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="shop-detail-page-main container-xl mb-30">
+    <div class="shop-detail-page-main container mb-30">
         <div class="m-auto">
             <div class="product-detail accordion-detail">
                 <div class="row mb-50 mt-30">

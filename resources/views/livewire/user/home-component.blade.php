@@ -1,4 +1,4 @@
-<main class="main">
+<main class="main home-page-main">
     @livewire('user.quick-view', ['id' => $selectedProductId, 'bindClose' => 'selectedProductId'], key($selectedProductId ?? time()))
     <section class="home-slider style-2 position-relative mb-3" wire:ignore>
         <div class="container">
