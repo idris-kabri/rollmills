@@ -161,7 +161,7 @@
                                     <li>
                                         <a href="/shop">Shop </a>
                                     </li>
-                                    <li class="position-static">
+                                    {{-- <li class="position-static">
                                         <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
                                         <ul class="mega-menu">
                                             <li class="sub-mega-menu sub-mega-menu-width-22">
@@ -229,7 +229,7 @@
                                     </li>
                                     <li>
                                         <a href="/blog">Blog</a>
-                                    </li>
+                                    </li> --}}
                                     <li>
                                         <a href="/about">About Us</a>
                                     </li>
@@ -277,8 +277,8 @@
             </div>
             <div class="mobile-header-content-area">
                 <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="#">
-                        <input type="text" placeholder="Search for items…" />
+                    <form action="/shop" method="get">
+                        <input type="text" name="search" placeholder="Search for items…" />
                         <button type="submit"><i class="fi-rs-search"></i></button>
                     </form>
                 </div>
@@ -338,7 +338,7 @@
                                     <li><a href="vendor-guide.html">Vendor Guide</a></li>
                                 </ul>
                             </li> --}}
-                            <li class="menu-item-has-children">
+                            {{-- <li class="menu-item-has-children">
                                 <a href="#">Mega menu</a>
                                 <ul class="dropdown">
                                     <li class="menu-item-has-children">
@@ -372,7 +372,7 @@
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="/blog">Blogs</a>
-                                {{-- <ul class="dropdown">
+                                <ul class="dropdown">
                                     <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
                                     <li><a href="blog-category-list.html">Blog Category List</a></li>
                                     <li><a href="blog-category-big.html">Blog Category Big</a></li>
@@ -385,8 +385,8 @@
                                             <li><a href="blog-post-fullwidth.html">No Sidebar</a></li>
                                         </ul>
                                     </li>
-                                </ul> --}}
-                            </li>
+                                </ul>
+                            </li> --}}
                             <li class="menu-item-has-children">
                                 <a href="/about">About Us</a>
                             </li>
