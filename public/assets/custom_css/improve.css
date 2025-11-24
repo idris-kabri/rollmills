@@ -85,22 +85,28 @@
 
 /* LEFT SECTION */
 .left-box {
-    background: #0b1e39; /* Rollmills deep navy blue */
+    background: rgba(220, 169, 21, 0.32);
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .left-box .tagline {
-    font-size: 1.1rem;
+    font-size: 22px;
     opacity: 0.9;
+    margin: 14px 0 48px;
+    font-weight: 700;
+    color: black;
 }
 
 .feature-box {
     background: rgba(255, 255, 255, 0.1);
+    box-shadow: rgba(0, 0, 0, 0.26) 0px 2px 9px 0px inset;
     padding: 14px 18px;
     border-radius: 14px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 15px;
     backdrop-filter: blur(4px);
@@ -113,6 +119,23 @@
 
 .feature-box .emoji {
     font-size: 28px;
+}
+
+.feature-box h5 {
+    font-size: 15px;
+    text-align: center;
+    margin: 8px 0 12px;
+}
+
+.feature-box p {
+    font-size: 11px;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1;
+}
+
+#loginModal img {
+    width: 136px;
 }
 
 /* RIGHT SECTION */

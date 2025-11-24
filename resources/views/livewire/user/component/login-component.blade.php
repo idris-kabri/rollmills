@@ -1,39 +1,36 @@
 <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content rollmills-modal">
-
             <div class="row g-0">
-
                 <!-- LEFT SECTION -->
-                <div class="col-lg-6 p-4 left-box text-white">
-                    <h2 class="fw-bold">Welcome to Rollmills</h2>
-                    <p class="mt-2 mb-4 tagline">
-                        Smart solutions for logistics & supply chain excellence.
+                <div class="col-md-6 p-4 left-box text-white">
+                    <img class="img-fluid" src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="">
+                    <p class="tagline">
+                        Pay online & get FLAT 20% OFF.
                     </p>
 
-                    <div class="d-flex flex-column gap-3">
-
+                    <div class="d-flex gap-3">
                         <div class="feature-box">
                             <span class="emoji">🚛</span>
                             <div>
-                                <h5 class="fw-bold m-0">Fast Delivery</h5>
-                                <p class="m-0 small">Safe & reliable transportation</p>
+                                <h5 class="fw-bold ">Fast Delivery</h5>
+                                <p class=" small">Safe & reliable transportation</p>
                             </div>
                         </div>
 
                         <div class="feature-box">
                             <span class="emoji">📦</span>
                             <div>
-                                <h5 class="fw-bold m-0">Secure Handling</h5>
-                                <p class="m-0 small">Your goods, our responsibility</p>
+                                <h5 class="fw-bold ">Customer First</h5>
+                                <p class=" small">Your goods, our responsibility</p>
                             </div>
                         </div>
 
                         <div class="feature-box">
                             <span class="emoji">⭐</span>
                             <div>
-                                <h5 class="fw-bold m-0">Trusted Service</h5>
-                                <p class="m-0 small">Serving industries nationwide</p>
+                                <h5 class="fw-bold ">Quality Products</h5>
+                                <p class=" small">Provides hand picked products</p>
                             </div>
                         </div>
 
@@ -41,7 +38,7 @@
                 </div>
 
                 <!-- RIGHT SECTION -->
-                <div class="col-lg-6 p-4 bg-white right-box">
+                <div class="col-md-6 p-4 bg-white right-box">
 
                     <!-- STEP 1: MOBILE NUMBER -->
                     <div id="stepMobile">
@@ -82,32 +79,32 @@
 
                     <!-- STEP 2: OTP SCREEN -->
                     @if ($otp_section_show)
-                    <div id="stepOtp" class="d-none">
+                        <div id="stepOtp" class="d-none">
 
-                        <h4 class="fw-bold text-dark mb-3">Enter OTP</h4>
-                        <p class="text-muted">We have sent a 4-digit OTP to your WhatsApp number.</p>
+                            <h4 class="fw-bold text-dark mb-3">Enter OTP</h4>
+                            <p class="text-muted">We have sent a 4-digit OTP to your WhatsApp number.</p>
 
-                        <div class="d-flex gap-2 mb-3 otp-container">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.0">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.1">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.2">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.3">
+                            <div class="d-flex gap-2 mb-3 otp-container">
+                                <input type="text" maxlength="1" class="form-control otp-input"
+                                    wire:model.live="otp.0">
+                                <input type="text" maxlength="1" class="form-control otp-input"
+                                    wire:model.live="otp.1">
+                                <input type="text" maxlength="1" class="form-control otp-input"
+                                    wire:model.live="otp.2">
+                                <input type="text" maxlength="1" class="form-control otp-input"
+                                    wire:model.live="otp.3">
+                            </div>
+
+                            <button class="btn btn-login w-100 mb-3">Verify OTP</button>
+
+                            <p class="text-center small">
+                                Didn’t receive OTP?
+                                <a href="#" class="policy-link">Resend</a>
+                            </p>
                         </div>
-
-                        <button class="btn btn-login w-100 mb-3">Verify OTP</button>
-
-                        <p class="text-center small">
-                            Didn’t receive OTP?
-                            <a href="#" class="policy-link">Resend</a>
-                        </p>
-
-                    </div>
                     @endif
-
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>
