@@ -1,4 +1,4 @@
-<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true" wire:ignore>
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content rollmills-modal">
             <div class="row g-0">
@@ -51,15 +51,13 @@
                                 placeholder="Enter mobile number" maxlength="10" wire:model.live="mobile">
                         </div>
 
-                        @if ($password_section_show)
-                            <div class="form-group mb-20">
-                                <label for="" class="ps-2 fw-600 quicksand fs-16 mb-2">Enter Password</label>
-                                <input type="password" class="login-input" wire:model="password" />
-                                @error('password')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        @endif
+                        <div class="form-group mb-20" id="password-login">
+                            <label for="" class="ps-2 fw-600 quicksand fs-16 mb-2">Enter Password</label>
+                            <input type="password" class="login-input" wire:model="password" />
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="notifyCheck">
@@ -77,32 +75,25 @@
                         </p>
                     </div>
 
-                    <!-- STEP 2: OTP SCREEN -->
-                    @if ($otp_section_show)
-                        <div id="stepOtp" class="d-none">
+                    <div id="stepOtp" class="d-none">
 
-                            <h4 class="fw-bold text-dark mb-3">Enter OTP</h4>
-                            <p class="text-muted">We have sent a 4-digit OTP to your WhatsApp number.</p>
+                        <h4 class="fw-bold text-dark mb-3">Enter OTP</h4>
+                        <p class="text-muted">We have sent a 4-digit OTP to your WhatsApp number.</p>
 
-                            <div class="d-flex gap-2 mb-3 otp-container">
-                                <input type="text" maxlength="1" class="form-control otp-input"
-                                    wire:model.live="otp.0">
-                                <input type="text" maxlength="1" class="form-control otp-input"
-                                    wire:model.live="otp.1">
-                                <input type="text" maxlength="1" class="form-control otp-input"
-                                    wire:model.live="otp.2">
-                                <input type="text" maxlength="1" class="form-control otp-input"
-                                    wire:model.live="otp.3">
-                            </div>
-
-                            <button class="btn btn-login w-100 mb-3">Verify OTP</button>
-
-                            <p class="text-center small">
-                                Didn’t receive OTP?
-                                <a href="#" class="policy-link">Resend</a>
-                            </p>
+                        <div class="d-flex gap-2 mb-3 otp-container">
+                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.0">
+                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.1">
+                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.2">
+                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.3">
                         </div>
-                    @endif
+
+                        <button class="btn btn-login w-100 mb-3">Verify OTP</button>
+
+                        <p class="text-center small">
+                            Didn’t receive OTP?
+                            <a href="#" class="policy-link">Resend</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,19 +101,20 @@
 </div>
 
 
-<script>
-    document.getElementById("sendOtpBtn").addEventListener("click", function() {
-        document.getElementById("stepMobile").classList.add("d-none");
-        document.getElementById("stepOtp").classList.remove("d-none");
-    });
-
-    // Auto-move cursor for OTP fields
-    const inputs = document.querySelectorAll(".otp-input");
-    inputs.forEach((input, index) => {
-        input.addEventListener("input", () => {
-            if (input.value && index < inputs.length - 1) {
-                inputs[index + 1].focus();
-            }
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // The '?' prevents the crash if the element isn't found
+            document.getElementById('password-login')?.classList.add('d-none');
         });
-    });
-</script>
+        // Auto-move cursor for OTP fields
+        const inputs = document.querySelectorAll(".otp-input");
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", () => {
+                if (input.value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+        });
+    </script>
+@endpush

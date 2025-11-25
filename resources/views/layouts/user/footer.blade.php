@@ -395,6 +395,16 @@
             }
         });
     })
+    window.addEventListener('password-show', (event) => {
+        alert("Hye")
+        document.getElementById('password-login').classList.toggle('d-none');
+        // document.getElementById('stepOtp').classList.toggle('d-none');
+    });
+
+    window.addEventListener('otp-show', (event) => {
+        document.getElementById('password-login').classList.toggle('d-none');
+        document.getElementById('stepOtp').classList.toggle('d-none');
+    });
 </script>
 @stack('scripts')
 </body>

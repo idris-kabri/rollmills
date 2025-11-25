@@ -37,10 +37,12 @@ class LoginComponent extends Component
             if ($check_user) {
                 if ($check_user->role == 'admin') {
                     $this->password_section_show = true;
+                    $this->dispatch('password-show');
                 } else {
                     $check_user->otp = $otp;
                     $check_user->save();
                     $this->otp_section_show = true;
+                    $this->dispatch('otp-show');
                 }
             } else {
                 $user = new User();
@@ -49,6 +51,7 @@ class LoginComponent extends Component
                 $user->otp = $otp;
                 $user->save();
                 $this->otp_section_show = true;
+                $this->dispatch('otp-show');
             }
         } else {
             $this->otp_section_show = false;
