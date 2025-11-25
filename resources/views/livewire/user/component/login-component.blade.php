@@ -3,7 +3,7 @@
         <div class="modal-content rollmills-modal">
             <div class="row g-0">
                 <!-- LEFT SECTION -->
-                <div class="col-md-6 p-4 left-box text-white">
+                <div class="col-md-7 p-4 left-box text-white">
                     <img class="img-fluid" src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="">
                     <p class="tagline">
                         Pay online & get FLAT 20% OFF.
@@ -19,7 +19,7 @@
                         </div>
 
                         <div class="feature-box">
-                            <span class="emoji">📦</span>
+                            <span class="emoji">👱</span>
                             <div>
                                 <h5 class="fw-bold ">Customer First</h5>
                                 <p class=" small">Your goods, our responsibility</p>
@@ -38,7 +38,7 @@
                 </div>
 
                 <!-- RIGHT SECTION -->
-                <div class="col-md-6 p-4 bg-white right-box">
+                <div class="col-md-5 p-4 bg-white right-box">
 
                     <!-- STEP 1: MOBILE NUMBER -->
                     <div id="stepMobile">

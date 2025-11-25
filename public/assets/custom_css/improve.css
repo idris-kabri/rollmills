@@ -101,9 +101,10 @@
 }
 
 .feature-box {
-    background: rgba(255, 255, 255, 0.1);
+    /* background: rgba(255, 255, 255, 0.1); */
+    background: rgba(255, 216, 118, .1);
     box-shadow: rgba(0, 0, 0, 0.26) 0px 2px 9px 0px inset;
-    padding: 14px 18px;
+    padding: 28px 18px;
     border-radius: 14px;
     display: flex;
     flex-direction: column;
@@ -122,13 +123,13 @@
 }
 
 .feature-box h5 {
-    font-size: 15px;
+    font-size: 17px;
     text-align: center;
     margin: 8px 0 12px;
 }
 
 .feature-box p {
-    font-size: 11px;
+    font-size: 14px;
     text-align: center;
     font-weight: 700;
     line-height: 1;
@@ -162,6 +163,7 @@
     padding: 10px;
     border-radius: 10px;
     color: #000;
+    margin-top: 2.5rem;
 }
 
 .btn-login:hover {
@@ -231,6 +233,12 @@
     .home-page-main .container {
         padding: 0 2rem;
         max-width: 100%;
+    }
+}
+
+@media (min-width: 1200px) {
+    #loginModal .modal-xl {
+        max-width: 1020px;
     }
 }
 
