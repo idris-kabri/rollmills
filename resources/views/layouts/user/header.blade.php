@@ -428,7 +428,7 @@
                             Gopi Restaurant, Sagwara, India </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="/login"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                        <a href="/"><i class="fi-rs-user"></i>Log In / Sign Up </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="tel:+91 87647 66553"><i class="fi-rs-headphones"></i>+91 87647 66553</a>

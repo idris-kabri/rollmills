@@ -162,7 +162,7 @@
                 <div class="footer-link-widget col">
                     <h4 class="widget-title">Account</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/">Sign In</a></li>
                         <li><a href="/cart">View Cart</a></li>
                         <li><a href="/wishlist">My Wishlist</a></li>
                         <li><a href="/my-account">Track My Order</a></li>
@@ -396,13 +396,22 @@
         });
     })
     window.addEventListener('password-show', (event) => {
-        alert("Hye")
+        document.getElementById('mobileInput').disabled = true;
+        document.getElementById('send-otp-button').classList.toggle('d-none');
+        document.getElementById('login-button').classList.toggle('d-none');
         document.getElementById('password-login').classList.toggle('d-none');
-        // document.getElementById('stepOtp').classList.toggle('d-none');
+        if(!document.getElementById('stepOtp').classList.contains('d-none')){
+            document.getElementById('stepOtp').classList.toggle('d-none');
+        }
     });
 
     window.addEventListener('otp-show', (event) => {
-        document.getElementById('password-login').classList.toggle('d-none');
+        document.getElementById('mobileInput').disabled = true;
+        document.getElementById('send-otp-button').disabled = true;
+        document.getElementById('login-button').classList.toggle('d-none');
+        if(document.getElementById('password-login').classList.contains('d-none')){
+            document.getElementById('password-login').classList.toggle('d-none');
+        }
         document.getElementById('stepOtp').classList.toggle('d-none');
     });
 </script>

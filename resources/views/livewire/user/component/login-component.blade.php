@@ -59,20 +59,8 @@
                             @enderror
                         </div>
 
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="notifyCheck">
-                            <label class="form-check-label" for="notifyCheck">
-                                Notify me with offers & updates
-                            </label>
-                        </div>
-
-                        <button type="button" class="btn btn-login w-100 mb-3" wire:click="sendOTP">Send OTP</button>
-
-                        <p class="small text-muted text-center">
-                            By continuing, you agree to our
-                            <a href="#" class="policy-link">Privacy Policy</a> &
-                            <a href="#" class="policy-link">Terms & Conditions</a>.
-                        </p>
+                        <button type="button" class="btn btn-login w-100 mb-3" id="send-otp-button" wire:click="sendOTP">Send OTP</button>
+                        <button type="button" class="btn btn-login w-100 mb-3" id="login-button" wire:click="loginCheck">Login</button>
                     </div>
 
                     <div id="stepOtp" class="d-none">
@@ -87,7 +75,7 @@
                             <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.3">
                         </div>
 
-                        <button class="btn btn-login w-100 mb-3">Verify OTP</button>
+                        <button type="button" class="btn btn-login w-100 mb-3" wire:click="loginCheck">Verify OTP</button>
 
                         <p class="text-center small">
                             Didn’t receive OTP?
@@ -106,6 +94,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             // The '?' prevents the crash if the element isn't found
             document.getElementById('password-login')?.classList.add('d-none');
+            document.getElementById('login-button')?.classList.add('d-none');
         });
         // Auto-move cursor for OTP fields
         const inputs = document.querySelectorAll(".otp-input");

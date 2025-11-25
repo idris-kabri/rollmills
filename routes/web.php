@@ -43,7 +43,7 @@ Route::get('/user-order', Order::class)->name("user-order");
 Route::get('/user-order-detail', OrderDetail::class)->name("user-order-detail");
 Route::get('/user-profile', Profile::class)->name("user-profile");
 Route::get('/user-address', Address::class)->name("user-address");
-Route::get('/login', LoginComponent::class)->name('login');
+// Route::get('/login', LoginComponent::class)->name('login');
 Route::get('/register', RegisterComponent::class)->name('register');
 Route::get('/order-completed', OrderCompleted::class)->name('order-completed');
 
