@@ -23,7 +23,7 @@
         </div>
     </section> --}}
     <section class="featured section-padding">
-        <div class="container-xl footer-strip">
+        <div class="container footer-strip">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-6 mb-1 mb-lg-0">
                     <div class="banner-left-icon d-sm-flex align-items-center wow fadeIn animated">
@@ -95,7 +95,7 @@
         </div>
     </section>
     <section class="section-padding footer-mid pt-0">
-        <div class="container-xl footer-mid-inner pt-15 pb-20">
+        <div class="container footer-mid-inner pt-15 pb-20">
             <div class="row">
                 <div class="col">
                     <div class="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0">
@@ -162,7 +162,7 @@
                 <div class="footer-link-widget col">
                     <h4 class="widget-title">Account</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/">Sign In</a></li>
                         <li><a href="/cart">View Cart</a></li>
                         <li><a href="/wishlist">My Wishlist</a></li>
                         <li><a href="/my-account">Track My Order</a></li>
@@ -186,7 +186,7 @@
             </div>
         </div>
     </section>
-    <div class="container-xl footer-lower pb-30">
+    <div class="container footer-lower pb-30">
         <div class="row align-items-center">
             <div class="col-12 mb-30">
                 <div class="footer-bottom"></div>
@@ -395,6 +395,27 @@
             }
         });
     })
+    window.addEventListener('password-show', (event) => {
+        document.getElementById('mobileInput').disabled = true;
+        document.getElementById('send-otp-button').classList.toggle('d-none');
+        document.getElementById('login-button').classList.toggle('d-none');
+        document.getElementById('password-login').classList.toggle('d-none');
+        if(!document.getElementById('stepOtp').classList.contains('d-none')){
+            document.getElementById('stepOtp').classList.toggle('d-none');
+        }
+    });
+
+    window.addEventListener('otp-show', (event) => {
+        document.getElementById('mobileInput').disabled = true;
+        document.getElementById('send-otp-button').classList.toggle('d-none');
+        if(!document.getElementById('login-button').classList.contains('d-none')){
+            document.getElementById('login-button').classList.toggle('d-none');
+        }
+        if(!document.getElementById('password-login').classList.contains('d-none')){
+            document.getElementById('password-login').classList.toggle('d-none');
+        }
+        document.getElementById('stepOtp').classList.toggle('d-none');
+    });
 </script>
 @stack('scripts')
 </body>

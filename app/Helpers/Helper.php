@@ -132,7 +132,7 @@ function returnUrl($transactionId, $razorpayPaymentId, $gift_tile = null, $name 
                 // Cart::instance('cart')->clear();
                 Cart::instance('cart')->destroy();
                 if (Auth::check()) {
-                    Cart::instance('cart')->store(Auth::user()->email);
+                    Cart::instance('cart')->store(Auth::user()->mobile);
                 }
             }
         }
@@ -151,12 +151,12 @@ function finalAddToCart($product, $quantity, $type = null, $customPrice = null)
             if ($customPrice != null) {
                 Cart::instance('cart')->update($cart->first()->rowId, $quantity, $customPrice);
                 if (Auth::check()) {
-                    Cart::instance('cart')->store(Auth::user()->email);
+                    Cart::instance('cart')->store(Auth::user()->mobile);
                 }
             } else {
                 Cart::instance('cart')->update($cart->first()->rowId, $quantity);
                 if (Auth::check()) {
-                    Cart::instance('cart')->store(Auth::user()->email);
+                    Cart::instance('cart')->store(Auth::user()->mobile);
                 }
             }
             return true;
@@ -173,7 +173,7 @@ function finalRemoveFromCart($rowId)
 {
     Cart::instance('cart')->remove($rowId);
     if (Auth::check()) {
-        Cart::instance('cart')->store(Auth::user()->email);
+        Cart::instance('cart')->store(Auth::user()->mobile);
     }
     return true;
 }
@@ -195,7 +195,7 @@ function finalRemoveWishlist($rowId)
 {
     Cart::instance('wishlist')->remove($rowId);
     if (Auth::check()) {
-        Cart::instance('wishlist')->store(Auth::user()->email);
+        Cart::instance('wishlist')->store(Auth::user()->mobile);
     }
     return true;
 }

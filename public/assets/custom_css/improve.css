@@ -66,7 +66,7 @@
     margin-right: 0px;
 }
 
-.two-liner-text{
+.two-liner-text {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -78,99 +78,124 @@
 /* login css start here */
 
 .rollmills-modal {
-  border-radius: 18px;
-  overflow: hidden;
-  border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    border: none;
 }
 
 /* LEFT SECTION */
 .left-box {
-  background: #0b1e39; /* Rollmills deep navy blue */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    background: rgba(220, 169, 21, 0.32);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .left-box .tagline {
-  font-size: 1.1rem;
-  opacity: 0.9;
+    font-size: 22px;
+    opacity: 0.9;
+    margin: 14px 0 48px;
+    font-weight: 700;
+    color: black;
 }
 
 .feature-box {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 14px 18px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  backdrop-filter: blur(4px);
-  transition: 0.3s;
+    /* background: rgba(255, 255, 255, 0.1); */
+    background: rgba(255, 216, 118, .1);
+    box-shadow: rgba(0, 0, 0, 0.26) 0px 2px 9px 0px inset;
+    padding: 28px 18px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    backdrop-filter: blur(4px);
+    transition: 0.3s;
 }
 
 .feature-box:hover {
-  background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .feature-box .emoji {
-  font-size: 28px;
+    font-size: 28px;
+}
+
+.feature-box h5 {
+    font-size: 17px;
+    text-align: center;
+    margin: 8px 0 12px;
+}
+
+.feature-box p {
+    font-size: 14px;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1;
+}
+
+#loginModal img {
+    width: 136px;
 }
 
 /* RIGHT SECTION */
 .right-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .input-group-text {
-  background: #0b1e39;
-  color: #fff;
-  border: none;
+    background: #0b1e39;
+    color: #fff;
+    border: none;
 }
 
 .form-control:focus {
-  border-color: #e0b200;
-  box-shadow: 0 0 0 0.2rem rgba(224, 178, 0, 0.35);
+    border-color: #e0b200;
+    box-shadow: 0 0 0 0.2rem rgba(224, 178, 0, 0.35);
 }
 
 .btn-login {
-  background: #e0b200; /* Rollmills golden yellow */
-  font-weight: 600;
-  padding: 10px;
-  border-radius: 10px;
-  color: #000;
+    background: #e0b200; /* Rollmills golden yellow */
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 10px;
+    color: #000;
+    margin-top: 2.5rem;
 }
 
 .btn-login:hover {
-  background: #cfa000;
+    background: #cfa000;
 }
 
 .policy-link {
-  color: #0b1e39;
-  font-weight: 600;
+    color: #0b1e39;
+    font-weight: 600;
 }
 
 .otp-container input {
-  height: 55px;
-  text-align: center;
-  font-size: 22px;
-  font-weight: bold;
+    height: 55px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 .otp-input:focus {
-  border-color: #e0b200 !important;
-  box-shadow: 0 0 0 0.2rem rgba(224, 178, 0, 0.35);
+    border-color: #e0b200 !important;
+    box-shadow: 0 0 0 0.2rem rgba(224, 178, 0, 0.35);
 }
-
 
 /* login css end here */
 
 @media (max-width: 1200px) {
-    .shop-detail-page-main,
-    .footer-strip,
-    .footer-mid-inner,
-    .footer-lower {
+    .container.shop-detail-page-main,
+    .container.footer-strip,
+    .container.footer-mid-inner,
+    .container.footer-lower {
         padding: 0 2rem;
+        max-width: 100%;
     }
 
     .product-slider-nav-thumbnails {
@@ -203,6 +228,17 @@
 
     .shop-detail-page-main .detail-info h2.title-detail {
         font-size: 1.8em;
+    }
+
+    .home-page-main .container {
+        padding: 0 2rem;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1200px) {
+    #loginModal .modal-xl {
+        max-width: 1020px;
     }
 }
 
@@ -247,15 +283,15 @@
         font-size: 11px;
         width: 80px;
     }
-    .detail-info .product-price .current-price{
+    .detail-info .product-price .current-price {
         font-size: 40px;
     }
 
-    .detail-info .product-price .old-price{
+    .detail-info .product-price .old-price {
         font-size: 20px;
     }
 
-    .detail-info .product-price{
+    .detail-info .product-price {
         margin: 6px 0 20px;
     }
 }

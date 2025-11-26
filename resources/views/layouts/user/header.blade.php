@@ -80,15 +80,15 @@
         </div>
         <div class="header-middle header-middle-ptb-1 d-none d-xl-block">
             <div class="container">
-                <div class="header-wrap">
+                <div class="header-wrap justify-content-between">
                     <div class="logo logo-width-1 ms-3">
                         <a href="/"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo"
                                 class="img-fluid" /></a>
                     </div>
-                    <div class="header-right">
+                    {{-- <div class="header-right"> --}}
                         @livewire('user.component.search-component')
                         @livewire('user.component.header-cart-component')
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>
@@ -117,7 +117,7 @@
                                             @foreach ($chunk as $category)
                                                 <li>
                                                     {{-- Replace 'category.show' with your actual route name --}}
-                                                    <a href="#">
+                                                    <a href="{{ route('shop') }}?category_id={{ $category->id }}">
                                                         <img src="{{ asset('storage/' . $category->icon) }}"
                                                             alt="{{ $category->name }}" />
                                                         {{ $category->name }}
@@ -161,7 +161,7 @@
                                     <li>
                                         <a href="/shop">Shop </a>
                                     </li>
-                                    <li class="position-static">
+                                    {{-- <li class="position-static">
                                         <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
                                         <ul class="mega-menu">
                                             <li class="sub-mega-menu sub-mega-menu-width-22">
@@ -229,7 +229,7 @@
                                     </li>
                                     <li>
                                         <a href="/blog">Blog</a>
-                                    </li>
+                                    </li> --}}
                                     <li>
                                         <a href="/about">About Us</a>
                                     </li>
@@ -277,8 +277,8 @@
             </div>
             <div class="mobile-header-content-area">
                 <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="#">
-                        <input type="text" placeholder="Search for items…" />
+                    <form action="/shop" method="get">
+                        <input type="text" name="search" placeholder="Search for items…" />
                         <button type="submit"><i class="fi-rs-search"></i></button>
                     </form>
                 </div>
@@ -338,7 +338,7 @@
                                     <li><a href="vendor-guide.html">Vendor Guide</a></li>
                                 </ul>
                             </li> --}}
-                            <li class="menu-item-has-children">
+                            {{-- <li class="menu-item-has-children">
                                 <a href="#">Mega menu</a>
                                 <ul class="dropdown">
                                     <li class="menu-item-has-children">
@@ -372,7 +372,7 @@
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="/blog">Blogs</a>
-                                {{-- <ul class="dropdown">
+                                <ul class="dropdown">
                                     <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
                                     <li><a href="blog-category-list.html">Blog Category List</a></li>
                                     <li><a href="blog-category-big.html">Blog Category Big</a></li>
@@ -385,8 +385,8 @@
                                             <li><a href="blog-post-fullwidth.html">No Sidebar</a></li>
                                         </ul>
                                     </li>
-                                </ul> --}}
-                            </li>
+                                </ul>
+                            </li> --}}
                             <li class="menu-item-has-children">
                                 <a href="/about">About Us</a>
                             </li>
@@ -428,7 +428,7 @@
                             Gopi Restaurant, Sagwara, India </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="/login"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                        <a href="/"><i class="fi-rs-user"></i>Log In / Sign Up </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="tel:+91 87647 66553"><i class="fi-rs-headphones"></i>+91 87647 66553</a>

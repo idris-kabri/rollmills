@@ -1,15 +1,26 @@
 <div class="search-style-2">
-    <form action="#" class="border-1 rounded-pill overflow-hidden">
-        <select class="select-active">
+    <form action="#" class="border-1 rounded-pill overflow-hidden" wire:ignore>
+        <select class="select-active" id="category-search">
             <option value="">All Categories</option>
-            @foreach ($categories as $item)
-                <option value="{{ $item->id }}">{{ $item->name }}</option>
+            @foreach ($categories as $product_category)
+                <option value="{{ $product_category->id }}">
+                    {{ $product_category->name }}</option>
+
+                @php
+                    $sub_categories = App\Models\ProductCategory::where('parent_id', $product_category->id)->get();
+                @endphp
+
+                @foreach ($sub_categories as $sub_category)
+                    <option value="{{ $sub_category->id }}">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $sub_category->name }}
+                    </option>
+                @endforeach
             @endforeach
         </select>
-        <input type="text" placeholder="Search for items..." class="placeholder-font-family-quicksand placeholder-style"
-            wire:model="search" />
+        <input type="text" placeholder="Search for items..."
+            class="placeholder-font-family-quicksand placeholder-style" wire:model.live="search" />
     </form>
-    {{-- @if ($search) --}}
+    @if ($search)
         <div class="panel--search-result custom-search rounded_input custom-width">
             <div class="panel__content">
                 <div class="row mx-0">
@@ -27,10 +38,9 @@
                                 </div>
                                 <div class="col-xl-10 col-9">
                                     <div class="product_info">
-                                        <div class="product_title"><a
-                                                href="#">{{ $query->name }}</a>
+                                        <div class="product_title"><a href="#">{{ $query->name }}</a>
                                         </div>
-                                        <div class="product_price">
+                                        <div class="product_price d-flex">
                                             @php
                                                 $priceInfo = getPrice($query->id);
                                             @endphp
@@ -77,5 +87,18 @@
                 </div>
             @endif
         </div>
-    {{-- @endif --}}
+    @endif
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            // Or for Livewire 2: window.livewire.hook('message.processed', () => { ... });
+
+            // Attach the change event handler
+            $('#category-search').on('change', function() {
+                @this.set('category', this.value);
+            });
+        });
+    </script>
+@endpush

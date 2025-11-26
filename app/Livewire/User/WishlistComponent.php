@@ -75,7 +75,7 @@ class WishlistComponent extends Component
         } else {
             Cart::instance('wishlist')->remove($rowId);
             if (Auth::check()) {
-                Cart::instance('wishlist')->store(Auth::user()->email);
+                Cart::instance('wishlist')->store(Auth::user()->mobile);
             }
             $this->toastSuccess('Product Successfully Added In Cart!');
         }

@@ -80,13 +80,13 @@ class LoginComponent extends Component
                 if ($user) {
                     Auth::login($user);
                     
-                    // $get_all_whislist = Cart::instance('wishlist')->content();
-                    // Cart::instance('wishlist')->restore(Auth::user()->email);
-                    // Cart::instance('wishlist')->store(Auth::user()->email);
+                    $get_all_whislist = Cart::instance('wishlist')->content();
+                    Cart::instance('wishlist')->restore(Auth::user()->mobile);
+                    Cart::instance('wishlist')->store(Auth::user()->mobile);
                     
-                    // $get_all_cart = Cart::instance('cart')->content();
-                    // Cart::instance('cart')->restore(Auth::user()->email);
-                    // Cart::instance('cart')->store(Auth::user()->email);
+                    $get_all_cart = Cart::instance('cart')->content();
+                    Cart::instance('cart')->restore(Auth::user()->mobile);
+                    Cart::instance('cart')->store(Auth::user()->mobile);
 
                     return redirect("/");
                 } else {
