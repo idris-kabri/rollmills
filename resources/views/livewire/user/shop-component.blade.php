@@ -76,7 +76,7 @@
                                                 <span class="me-2"><i class="fi-rs-angle-small-down"></i></span>
                                             @endif
                                         @endif
-                                        <img src="{{ asset('storage/' . $category->image) }}') }}"
+                                        <img src="{{ asset('storage/' . $category->icon) }} }}"
                                             alt="" />{{ $category->name }}
                                     </a>
                                     <span class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
