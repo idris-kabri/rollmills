@@ -51,7 +51,7 @@ class LoginComponent extends Component
                 $user->otp = $otp;
                 $user->save();
                 $this->otp_section_show = true;
-                $this->dispatch('otp-show');
+                $this->dispatch('');
             }
         } else {
             $this->otp_section_show = false;
@@ -83,12 +83,12 @@ class LoginComponent extends Component
                     Auth::login($user);
 
                     $get_all_whislist = Cart::instance('wishlist')->content();
-                    Cart::instance('wishlist')->restore(Auth::user()->email);
-                    Cart::instance('wishlist')->store(Auth::user()->email);
+                    Cart::instance('wishlist')->restore(Auth::user()->mobile);
+                    Cart::instance('wishlist')->store(Auth::user()->mobile);
 
                     $get_all_cart = Cart::instance('cart')->content();
-                    Cart::instance('cart')->restore(Auth::user()->email);
-                    Cart::instance('cart')->store(Auth::user()->email);
+                    Cart::instance('cart')->restore(Auth::user()->mobile);
+                    Cart::instance('cart')->store(Auth::user()->mobile);
 
                     return redirect('/');
                 } else {
@@ -98,6 +98,16 @@ class LoginComponent extends Component
         } catch (\Exception $e) {
             $this->toastError($e->getMessage());
         }
+    }
+    public function resend()
+    {
+        $check_user = User::where('mobile', $this->mobile)->first();
+        $otp = rand(1000, 9999);
+        $check_user->otp = $otp;
+        $check_user->save();
+
+        $this->toastSuccess('OTP Resend Successfully!');
+        $this->dispatch('resend-otp');
     }
     public function render()
     {

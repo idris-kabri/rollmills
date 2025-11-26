@@ -407,9 +407,11 @@
 
     window.addEventListener('otp-show', (event) => {
         document.getElementById('mobileInput').disabled = true;
-        document.getElementById('send-otp-button').disabled = true;
-        document.getElementById('login-button').classList.toggle('d-none');
-        if(document.getElementById('password-login').classList.contains('d-none')){
+        document.getElementById('send-otp-button').classList.toggle('d-none');
+        if(!document.getElementById('login-button').classList.contains('d-none')){
+            document.getElementById('login-button').classList.toggle('d-none');
+        }
+        if(!document.getElementById('password-login').classList.contains('d-none')){
             document.getElementById('password-login').classList.toggle('d-none');
         }
         document.getElementById('stepOtp').classList.toggle('d-none');

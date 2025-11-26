@@ -1,8 +1,7 @@
-<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true" wire:ignore>
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content rollmills-modal">
             <div class="row g-0">
-                <!-- LEFT SECTION -->
                 <div class="col-md-7 p-4 left-box text-white">
                     <img class="img-fluid" src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="">
                     <p class="tagline">
@@ -33,77 +32,137 @@
                                 <p class=" small">Provides hand picked products</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-                <!-- RIGHT SECTION -->
                 <div class="col-md-5 p-4 bg-white right-box">
 
-                    <!-- STEP 1: MOBILE NUMBER -->
-                    <div id="stepMobile">
-                        <h4 class="fw-bold text-dark mb-3">Login to Continue</h4>
+                    @if(!$otp_section_show)
+                        <div id="stepMobile">
+                            <h4 class="fw-bold text-dark mb-3">Login to Continue</h4>
 
-                        <label class="form-label fw-semibold">Mobile Number (WhatsApp)</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">🇮🇳 +91</span>
-                            <input type="tel" id="mobileInput" class="form-control"
-                                placeholder="Enter mobile number" maxlength="10" wire:model.live="mobile">
+                            <label class="form-label fw-semibold">Mobile Number (WhatsApp)</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">🇮🇳 +91</span>
+                                <input type="tel" id="mobileInput" class="form-control"
+                                    placeholder="Enter mobile number" maxlength="10" wire:model.live="mobile">
+                            </div>
+                            @error('mobile') <span class="text-danger small d-block mb-2">{{ $message }}</span> @enderror
+
+                            @if($password_section_show)
+                                <div class="form-group mb-20" id="password-login">
+                                    <label for="" class="ps-2 fw-600 quicksand fs-16 mb-2">Enter Password</label>
+                                    <input type="password" class="form-control" wire:model="password" />
+                                    @error('password')
+                                        <span class="text-danger small">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <button type="button" class="btn btn-login w-100 mb-3 mt-3" wire:click="loginCheck">
+                                    <span wire:loading.remove wire:target="loginCheck">Login</span>
+                                    <span wire:loading wire:target="loginCheck">Logging in...</span>
+                                </button>
+                            @else
+                                <button type="button" class="btn btn-login w-100 mb-3" wire:click="sendOTP">
+                                    <span wire:loading.remove wire:target="sendOTP">Send OTP</span>
+                                    <span wire:loading wire:target="sendOTP">Sending...</span>
+                                </button>
+                            @endif
                         </div>
+                    @endif
 
-                        <div class="form-group mb-20" id="password-login">
-                            <label for="" class="ps-2 fw-600 quicksand fs-16 mb-2">Enter Password</label>
-                            <input type="password" class="login-input" wire:model="password" />
-                            @error('password')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                    @if($otp_section_show)
+                        <div id="stepOtp">
+                            <h4 class="fw-bold text-dark mb-3">Enter OTP</h4>
+                            
+                            <p class="text-muted">
+                                We have sent a 4-digit OTP to <br>
+                                <span class="fw-bold text-dark">+91 {{ $mobile }}</span>
+                                <a href="#" wire:click.prevent="$set('otp_section_show', false)" class="text-primary text-decoration-none small ms-2" title="Wrong number? Click to edit">
+                                    (Edit)
+                                </a>
+                            </p>
 
-                        <button type="button" class="btn btn-login w-100 mb-3" id="send-otp-button" wire:click="sendOTP">Send OTP</button>
-                        <button type="button" class="btn btn-login w-100 mb-3" id="login-button" wire:click="loginCheck">Login</button>
-                    </div>
+                            <div class="d-flex gap-2 mb-3 otp-container">
+                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.0">
+                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.1">
+                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.2">
+                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.3">
+                            </div>
+                            @error('otp') <span class="text-danger small d-block mb-2">{{ $message }}</span> @enderror
 
-                    <div id="stepOtp" class="d-none">
+                            <button type="button" class="btn btn-login w-100 mb-3" wire:click="loginCheck">
+                                <span wire:loading.remove wire:target="loginCheck">Verify OTP</span>
+                                <span wire:loading wire:target="loginCheck">Verifying...</span>
+                            </button>
 
-                        <h4 class="fw-bold text-dark mb-3">Enter OTP</h4>
-                        <p class="text-muted">We have sent a 4-digit OTP to your WhatsApp number.</p>
+                            <div x-data="{ 
+                                timeLeft: 60, 
+                                canResend: false,
+                                timer: null,
+                                startTimer() {
+                                    this.timeLeft = 60;
+                                    this.canResend = false;
+                                    if (this.timer) clearInterval(this.timer);
+                                    this.timer = setInterval(() => {
+                                        this.timeLeft--;
+                                        if (this.timeLeft <= 0) {
+                                            clearInterval(this.timer);
+                                            this.canResend = true;
+                                        }
+                                    }, 1000);
+                                }
+                            }"
+                            x-init="startTimer()" 
+                            @resend-otp.window="startTimer()"
+                            class="text-center small mt-3">
 
-                        <div class="d-flex gap-2 mb-3 otp-container">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.0">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.1">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.2">
-                            <input type="text" maxlength="1" class="form-control otp-input" wire:model.live="otp.3">
-                        </div>
+                                <span x-show="!canResend" class="text-muted">
+                                    Didn’t receive OTP? Resend in <span class="fw-bold text-dark" x-text="timeLeft"></span>s
+                                </span>
 
-                        <button type="button" class="btn btn-login w-100 mb-3" wire:click="loginCheck">Verify OTP</button>
+                                <a href="#" 
+                                   x-show="canResend" 
+                                   wire:click.prevent="resend" 
+                                   class="policy-link fw-bold"
+                                   style="display: none;">
+                                   Resend OTP
+                                </a>
+                            </div>
+                            </div>
+                    @endif
 
-                        <p class="text-center small">
-                            Didn’t receive OTP?
-                            <a href="#" class="policy-link">Resend</a>
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
 @push('scripts')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // The '?' prevents the crash if the element isn't found
-            document.getElementById('password-login')?.classList.add('d-none');
-            document.getElementById('login-button')?.classList.add('d-none');
-        });
         // Auto-move cursor for OTP fields
-        const inputs = document.querySelectorAll(".otp-input");
-        inputs.forEach((input, index) => {
-            input.addEventListener("input", () => {
-                if (input.value && index < inputs.length - 1) {
+        // Using event delegation so it works even after Livewire DOM updates
+        document.addEventListener('input', function (e) {
+            if (e.target.classList.contains('otp-input')) {
+                const inputs = document.querySelectorAll(".otp-input");
+                const index = Array.from(inputs).indexOf(e.target);
+                
+                // Move to next input if value entered
+                if (e.target.value && index < inputs.length - 1) {
                     inputs[index + 1].focus();
                 }
-            });
+            }
+        });
+
+        // Optional: Handle Backspace to move previous
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Backspace' && e.target.classList.contains('otp-input')) {
+                const inputs = document.querySelectorAll(".otp-input");
+                const index = Array.from(inputs).indexOf(e.target);
+                
+                if (!e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            }
         });
     </script>
 @endpush

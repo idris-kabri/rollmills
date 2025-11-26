@@ -449,7 +449,7 @@ class CheckoutComponent extends Component
 
                     Cart::instance('cart')->destroy();
                     if (Auth::check()) {
-                        Cart::instance('cart')->store(Auth::user()->email);
+                        Cart::instance('cart')->store(Auth::user()->mobile);
                     }
 
                     return redirect('/')->with('success', 'Order successful, and the details have been sent to ' . $billingAddress['name'] . ' email address.');
