@@ -25,12 +25,22 @@
             <div class="panel__content">
                 <div class="row mx-0">
                     @foreach ($products as $query)
+                        @php
+                            if ($query->slug) {
+                                $shop_detail_url = route('shop-detail', [
+                                    'slug' => $query->slug,
+                                    'id' => $query->id,
+                                ]);
+                            } else {
+                                $shop_detail_url = route('shop-detail', ['slug' => 'no-slug', 'id' => $query->id]);
+                            }
+                        @endphp
                         <div
                             class="col-12 px-1 px-md-2 py-1 product_wrap mb-0 border border-top-0 border-gray shadow-none rounded-0">
                             <div class="row mx-md-2 gx-md-2 gx-1 justify-content-center align-items-center">
                                 <div class="col-xl-2 col-3">
                                     <div class="product-img">
-                                        <a href="">
+                                        <a href="{{ $shop_detail_url }}">
                                             <img src="{{ '/storage/' . $query->featured_image }}"
                                                 alt="{{ '/storage/' . $query->featured_image }}" loading="lazy">
                                         </a>
@@ -38,7 +48,7 @@
                                 </div>
                                 <div class="col-xl-10 col-9">
                                     <div class="product_info">
-                                        <div class="product_title"><a href="#">{{ $query->name }}</a>
+                                        <div class="product_title"><a href="{{ $shop_detail_url }}">{{ $query->name }}</a>
                                         </div>
                                         <div class="product_price d-flex">
                                             @php
