@@ -26,15 +26,13 @@
                 <a aria-label="Add To Wishlist" class="action-btn" href="javascript:void(0);"><i
                         class="fi-rs-heart text-danger"></i></a>
             @endif
-            <a aria-label="Quick view" class="action-btn quick-view" data-id="{{ $product->id }}"><i
+            {{-- <a aria-label="Quick view" class="action-btn quick-view" data-id="{{ $product->id }}"><i
                     class="fi-rs-eye"></i></a>
-            <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a>
+            <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a> --}}
         </div>
         <div class="product-badges product-badges-position product-badges-mrg">
             @if ($parameter)
-                @if ($parameter == 'hot')
-                    <span class="product-cart-componet-badge hot">Hot</span>
-                @elseif($parameter == 'sale')
+                @if ($parameter == 'sale')
                     @php
                         $original_price = $product->price;
                         $sale_price = 0;
@@ -51,6 +49,8 @@
                             $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
                     @endphp
                     <span class="product-cart-componet-badge save">Save {{ number_format($percentage) }}%</span>
+                @elseif ($parameter == 'hot')
+                    <span class="product-cart-componet-badge hot">Hot</span>
                 @endif
             @else
                 @php
@@ -65,11 +65,11 @@
                     if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
                         $sale_price = $product->sale_price;
                         $check_type = 'sale_product';
-                    } elseif ($product->is_featured == 1 && $check_type == '') {
-                        $check_type = 'featured_product';
-                    } else {
+                    } elseif ($product->sale_default_price > 0) {
                         $sale_price = $product->sale_default_price;
                         $check_type = 'sale_default_product';
+                    } elseif ($product->is_featured == 1 && $check_type == '') {
+                        $check_type = 'featured_product';
                     }
                     $percentage = $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
                 @endphp

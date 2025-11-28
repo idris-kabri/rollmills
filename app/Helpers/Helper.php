@@ -413,6 +413,7 @@ function calculateRates($products, $pincode)
                 break;
             }
             $couriers = $shippingData['data'] ?? [];
+            Log::error($couriers);
             $lowest = collect($couriers)->where('rate', '>', 0)->sortBy('rate')->first();
             if ($lowest) {
                 $options = $cart_item->options->all();

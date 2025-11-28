@@ -118,8 +118,11 @@
                                     alt="" /><strong>Email:</strong> <a class="hover-a"
                                     href="mailto:info@rollmillsstore.com">info@rollmillsstore.com</a></li>
                             {{-- <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-clock.svg') }}"
-                                    alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li> --}}
+                                        alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li> --}}
                         </ul>
+                        <p class="mb-20 mt-30">Secured Payment Gateways</p>
+                        <img class="wow fadeIn animated"
+                            src="{{ asset('assets/frontend/imgs/theme/payment-method.png') }}" alt="" />
                     </div>
                 </div>
                 <div class="footer-link-widget col">
@@ -179,9 +182,7 @@
                         <a href="#" class="hover-up mb-sm-2"><img
                                 src="{{ asset('assets/frontend/imgs/theme/google-play.jpg') }}" alt="" /></a>
                     </div>
-                    <p class="mb-20">Secured Payment Gateways</p>
-                    <img class="wow fadeIn animated"
-                        src="{{ asset('assets/frontend/imgs/theme/payment-method.png') }}" alt="" />
+
                 </div> --}}
             </div>
         </div>
@@ -400,7 +401,7 @@
         document.getElementById('send-otp-button').classList.toggle('d-none');
         document.getElementById('login-button').classList.toggle('d-none');
         document.getElementById('password-login').classList.toggle('d-none');
-        if(!document.getElementById('stepOtp').classList.contains('d-none')){
+        if (!document.getElementById('stepOtp').classList.contains('d-none')) {
             document.getElementById('stepOtp').classList.toggle('d-none');
         }
     });
@@ -408,10 +409,10 @@
     window.addEventListener('otp-show', (event) => {
         document.getElementById('mobileInput').disabled = true;
         document.getElementById('send-otp-button').classList.toggle('d-none');
-        if(!document.getElementById('login-button').classList.contains('d-none')){
+        if (!document.getElementById('login-button').classList.contains('d-none')) {
             document.getElementById('login-button').classList.toggle('d-none');
         }
-        if(!document.getElementById('password-login').classList.contains('d-none')){
+        if (!document.getElementById('password-login').classList.contains('d-none')) {
             document.getElementById('password-login').classList.toggle('d-none');
         }
         document.getElementById('stepOtp').classList.toggle('d-none');

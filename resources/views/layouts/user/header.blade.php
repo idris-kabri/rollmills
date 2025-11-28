@@ -393,31 +393,6 @@
                             <li class="menu-item-has-children">
                                 <a href="/contact">Contact Us</a>
                             </li>
-
-                            {{-- <li class="menu-item-has-children">
-                                <a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="page-contact.html">Contact</a></li>
-                                    <li><a href="page-account.html">My Account</a></li>
-                                    <li><a href="page-login.html">Login</a></li>
-                                    <li><a href="page-register.html">Register</a></li>
-                                    <li><a href="page-forgot-password.html">Forgot password</a></li>
-                                    <li><a href="page-reset-password.html">Reset password</a></li>
-                                    <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
-                                    <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
-                                    <li><a href="page-terms.html">Terms of Service</a></li>
-                                    <li><a href="page-404.html">404 Page</a></li>
-                                </ul>
-                            </li> --}}
-                            {{-- <li class="menu-item-has-children">
-                                <a href="#">Language</a>
-                                <ul class="dropdown">
-                                    <li><a href="#">English</a></li>
-                                    <li><a href="#">French</a></li>
-                                    <li><a href="#">German</a></li>
-                                    <li><a href="#">Spanish</a></li>
-                                </ul>
-                            </li> --}}
                         </ul>
                     </nav>
                     <!-- mobile menu end -->

@@ -2,7 +2,7 @@
      <div class="page-header breadcrumb-wrap">
          <div class="container">
              <div class="breadcrumb">
-                 <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                 <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                  <span></span> <a href="/my-account">My Account</a> <span></span> Profile
              </div>
          </div>
@@ -50,13 +50,6 @@
                                                  class="ps-1 text-muted fw-600 quicksand fs-16 mb-1">Mobile
                                                  Number</label>
                                              <input type="text" value="+91 93584 73253" class="login-input2" />
-                                         </div>
-                                     </div>
-                                     <div class="col-md-6">
-                                         <div class="form-group mb-20">
-                                             <label for=""
-                                                 class="ps-1 text-muted fw-600 quicksand fs-16 mb-1">Password</label>
-                                             <input type="password" value="RollMillsPassword" class="login-input2" />
                                          </div>
                                      </div>
                                  </div>

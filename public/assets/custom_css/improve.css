@@ -231,7 +231,7 @@
     }
 
     .home-page-main .container {
-        padding: 0 2rem;
+        /* padding: 0 2rem; */
         max-width: 100%;
     }
 }
