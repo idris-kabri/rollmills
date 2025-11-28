@@ -19,6 +19,7 @@ class Coupon extends Model
         "maximum_discount_amount",
         "usage_limit",
         "total_usage",
+        "order_id",
         "expiry_date",
         "category",
         "is_global",

@@ -187,9 +187,9 @@
                          <p>If you have any questions about these Terms and Conditions, You can contact us:</p>
                          <ul>
                              <li>
-                                 <p>By email: <a href="mailto:info@rollmillsstore.com" rel="external nofollow noopener"
+                                 <p>By email: <a href="mailto:rollmills.rm@gmail.com" rel="external nofollow noopener"
                                          target="_blank">
-                                         info@rollmillsstore.com</a></p>
+                                         rollmills.rm@gmail.com</a></p>
                              </li>
                              <li>
                                  <p>By visiting this page on our website: <a href="http://www.rollmills.com/contact"

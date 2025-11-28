@@ -31,8 +31,8 @@
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-1.svg') }}" alt="" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title fw-700">Best prices & offers</h3>
-                            <p class="fw-500">Orders $50 or more</p>
+                            <h3 class="icon-box-title fw-700">Fast Delivery</h3>
+                            <p class="fw-500">Safe & reliable transportation</p>
                         </div>
                     </div>
                 </div>
@@ -42,8 +42,8 @@
                             <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-2.svg') }}" alt="" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title fw-700">User Satisfaction</h3>
-                            <p class="fw-500">24/7 services</p>
+                            <h3 class="icon-box-title fw-700">Customer First</h3>
+                            <p class="fw-500">Your goods, our responsibility</p>
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                                     href="tel:+91 87647 66553">+91 87647 66553</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-email-2.svg') }}"
                                     alt="" /><strong>Email:</strong> <a class="hover-a"
-                                    href="mailto:info@rollmillsstore.com">info@rollmillsstore.com</a></li>
+                                    href="mailto:rollmills.rm@gmail.com">rollmills.rm@gmail.com</a></li>
                             {{-- <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-clock.svg') }}"
                                         alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li> --}}
                         </ul>
@@ -152,25 +152,29 @@
                 <div class="footer-link-widget col">
                     <h4 class="widget-title">Popular</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="#">Milk & Flavoured Milk</a></li>
-                        <li><a href="#">Butter and Margarine</a></li>
-                        <li><a href="#">Eggs Substitutes</a></li>
-                        <li><a href="#">Marmalades</a></li>
-                        <li><a href="#">Sour Cream and Dips</a></li>
-                        <li><a href="#">Tea & Kombucha</a></li>
-                        <li><a href="#">Cheese</a></li>
+                        @php
+                            $categories = \App\Models\ProductCategory::where('status', 1)
+                                ->where('parent_id', null)
+                                ->get();
+                        @endphp
+                        @foreach ($categories as $category)
+                            <li><a
+                                    href="{{ route('shop') }}?category_id={{ $category->id }}">{{ $category->name }}</a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
 
                 <div class="footer-link-widget col">
                     <h4 class="widget-title">Account</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="/">Sign In</a></li>
+                        @if (Auth::check())
+                            <li><a href="/my-account">My Account</a></li>
+                        @else
+                            <li><a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a></li>
+                        @endif
                         <li><a href="/cart">View Cart</a></li>
                         <li><a href="/wishlist">My Wishlist</a></li>
-                        <li><a href="/my-account">Track My Order</a></li>
-                        <li><a href="/contact">Help Ticket</a></li>
-                        <li><a href="/compare">Compare products</a></li>
                     </ul>
                 </div>
                 {{-- <div class="footer-link-widget widget-install-app col">
@@ -203,29 +207,31 @@
                 </div> --}}
                 <div class="hotline d-lg-inline-flex" style="width: 250px">
                     <img src="{{ asset('assets/frontend/imgs/theme/icons/phone-call.svg') }}" alt="hotline" />
-                    <p>+91 87647 66553</p>
+                    <p><a href="tel:+918764766553">+91 87647 66553</a></p>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-6 col-md-6 text-end d-none d-md-block">
                 <div class="mobile-social-icon">
                     <h6>Follow Us</h6>
-                    <a href="#"><img
+                    {{-- <a href="#"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-facebook-white.svg') }}"
                             alt="" /></a>
+
                     <a href="#"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-twitter-white.svg') }}"
-                            alt="" /></a>
-                    <a href="#"><img
+                            alt="" /></a> --}}
+
+                    <a href="https://www.instagram.com/roll.mills/"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-instagram-white.svg') }}"
                             alt="" /></a>
-                    <a href="#"><img
+
+                    {{-- <a href="#"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-pinterest-white.svg') }}"
                             alt="" /></a>
                     <a href="#"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-youtube-white.svg') }}"
-                            alt="" /></a>
+                            alt="" /></a> --}}
                 </div>
-                <p class="font-sm">Up to 15% discount on your first subscribe</p>
             </div>
         </div>
     </div>

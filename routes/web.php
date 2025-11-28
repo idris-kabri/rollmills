@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Admin\LogoutController;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\LoginComponent;
 use App\Livewire\Auth\RegisterComponent;

@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/plugins/slider-range.css') }}" />
     <!-- Custom New CSS -->
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
+    @if(Request::is('coupon-claim'))
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
+    @endif
     <link rel="stylesheet" href="{{ asset('assets/custom_css/improve.css') }}" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -86,8 +89,8 @@
                                 class="img-fluid" /></a>
                     </div>
                     {{-- <div class="header-right"> --}}
-                        @livewire('user.component.search-component')
-                        @livewire('user.component.header-cart-component')
+                    @livewire('user.component.search-component')
+                    @livewire('user.component.header-cart-component')
                     {{-- </div> --}}
                 </div>
             </div>
@@ -130,16 +133,16 @@
                                 @if ($categories->count() > 10)
                                     <div class="more_slide_open" style="display: none">
                                         <div class="d-flex categori-dropdown-inner">
-                                            @foreach($remaining->split(2) as $chunk)
-                                            <ul>
-                                                @foreach($chunk as $category)
-                                                <li>
-                                                    <a href="shop-grid-right.html"> <img
-                                                            src="{{ asset('storage/' . $category->icon) }}"
-                                                            alt="" />{{$category->name}}</a>
-                                                </li>
-                                                @endforeach
-                                            </ul>
+                                            @foreach ($remaining->split(2) as $chunk)
+                                                <ul>
+                                                    @foreach ($chunk as $category)
+                                                        <li>
+                                                            <a href="shop-grid-right.html"> <img
+                                                                    src="{{ asset('storage/' . $category->icon) }}"
+                                                                    alt="" />{{ $category->name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
                                             @endforeach
                                         </div>
                                     </div>
@@ -151,15 +154,16 @@
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                             <nav>
                                 <ul>
-                                    <li class="hot-deals"><img
+                                    {{-- <li class="hot-deals"><img
                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-hot.svg') }}"
-                                            alt="hot deals" /><a href="shop-grid-right.html">Deals</a></li>
+                                            alt="hot deals" /><a href="shop-grid-right.html">Deals</a>
+                                    </li> --}}
                                     <li>
-                                        <a class="active" href="/">Home</a>
+                                        <a class="{{ Request::is('/') ? 'active' : '' }}" href="/">Home</a>
                                     </li>
 
                                     <li>
-                                        <a href="/shop">Shop </a>
+                                        <a href="/shop" class="{{ Request::is('shop') ? 'active' : '' }}">Shop </a>
                                     </li>
                                     {{-- <li class="position-static">
                                         <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
@@ -231,10 +235,12 @@
                                         <a href="/blog">Blog</a>
                                     </li> --}}
                                     <li>
-                                        <a href="/about">About Us</a>
+                                        <a href="/about" class="{{ Request::is('about') ? 'active' : '' }}">About
+                                            Us</a>
                                     </li>
                                     <li>
-                                        <a href="/contact">Contact Us</a>
+                                        <a href="/contact"
+                                            class="{{ Request::is('contact') ? 'active' : '' }}">Contact Us</a>
                                     </li>
                                 </ul>
                             </nav>

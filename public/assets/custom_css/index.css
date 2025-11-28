@@ -98,6 +98,18 @@
     color: #543606 !important;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 :root {
     --color-1: #dca915;
     --color-2: #a36f02;
@@ -387,12 +399,10 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(255, 255, 255, 0.43),
-        transparent
-    );
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(255, 255, 255, 0.43),
+            transparent);
     animation: shimmer 2s infinite;
 }
 
@@ -457,11 +467,9 @@
 }
 
 .result-display {
-    background: linear-gradient(
-        135deg,
-        rgba(212, 175, 55, 0.1),
-        rgba(212, 175, 55, 0.05)
-    );
+    background: linear-gradient(135deg,
+            rgba(212, 175, 55, 0.1),
+            rgba(212, 175, 55, 0.05));
     border: 2px dashed var(--color-1);
     border-radius: 15px;
     padding: 15px;
@@ -478,12 +486,10 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(212, 175, 55, 0.1),
-        transparent
-    );
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(212, 175, 55, 0.1),
+            transparent);
     animation: shimmer 4s infinite;
 }
 
@@ -828,6 +834,7 @@
 }
 
 @keyframes checkPop {
+
     0%,
     100% {
         transform: scale(1);
@@ -958,7 +965,7 @@
     padding: 3px;
 }
 
-.select2-dropdown{
+.select2-dropdown {
     z-index: 9999 !important;
 }
 
@@ -1169,9 +1176,7 @@
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style
-        .mobile-header-wrapper-inner
-        .mobile-header-top {
+    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
@@ -1250,19 +1255,15 @@
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style
-        .mobile-header-wrapper-inner
-        .mobile-header-top {
+    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
 }
 
-@media (min-width: 1200px) {
-}
+@media (min-width: 1200px) {}
 
-@media (min-width: 1400px) {
-}
+@media (min-width: 1400px) {}
 
 /* ==================================================================== */
 /* Responsive Css End */
