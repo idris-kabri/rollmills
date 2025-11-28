@@ -40,7 +40,7 @@ Route::get('/shop-detail/{slug?}/{id}', ShopDetailComponent::class)->name('shop-
 Route::get('/wishlist', WishlistComponent::class)->name('wishlist');
 Route::get('/coupon-claim', CouponClaim::class)->name("coupon.claim");
 Route::get('/user-order', OrderComponent::class)->name("user-order");
-Route::get('/user-order-detail', OrderDetail::class)->name("user-order-detail");
+Route::get('/user-order-detail/{id}', OrderDetail::class)->name("user-order-detail");
 Route::get('/user-profile', Profile::class)->name("user-profile");
 Route::get('/user-address', Address::class)->name("user-address");
 // Route::get('/login', LoginComponent::class)->name('login');

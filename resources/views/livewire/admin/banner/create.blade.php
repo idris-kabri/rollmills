@@ -46,6 +46,7 @@
                                         <option value="daily_best_deals">Daily Best Deals</option>
                                         <option value="user_looks_for">User looks for</option>
                                         <option value="shop_page_banner">Shop Page Banner</option>
+                                        <option value="order_page_banner">Order Page Banner</option>
                                     </select>
                                     @error('banner_type')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -153,6 +154,8 @@
                                         @elseif($banner_type == 'user_looks_for')
                                             <span class="text-danger">540 X 769px</span>
                                         @elseif($banner_type == 'shop_page_banner')
+                                            <span class="text-danger">1024 X 1076px</span>
+                                        @elseif($banner_type == 'order_page_banner')
                                             <span class="text-danger">1024 X 1076px</span>
                                         @endif
                                         <br />
