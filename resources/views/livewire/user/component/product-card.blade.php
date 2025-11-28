@@ -26,9 +26,9 @@
                 <a aria-label="Add To Wishlist" class="action-btn" href="javascript:void(0);"><i
                         class="fi-rs-heart text-danger"></i></a>
             @endif
-            <a aria-label="Quick view" class="action-btn quick-view" data-id="{{ $product->id }}"><i
+            {{-- <a aria-label="Quick view" class="action-btn quick-view" data-id="{{ $product->id }}"><i
                     class="fi-rs-eye"></i></a>
-            <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a>
+            <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a> --}}
         </div>
         <div class="product-badges product-badges-position product-badges-mrg">
             @if ($parameter)
