@@ -8,6 +8,6 @@ class DeliveryInformationComponent extends Component
 {
     public function render()
     {
-        return view('livewire.user.delivery-information-component');
+        return view('livewire.user.delivery-information-component')->layout('layouts.user.app');
     }
 }
