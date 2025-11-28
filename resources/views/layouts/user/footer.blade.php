@@ -129,7 +129,7 @@
                     <h4 class="widget-title">Company</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
                         <li><a href="/about">About Us</a></li>
-                        <li><a href="/my-acount">Delivery Information</a></li>
+                        <li><a href="/delivery-information">Delivery Information</a></li>
                         <li><a href="/privacy-policy">Privacy Policy</a></li>
                         <li><a href="/return-policy">Return Policy</a></li>
                         <li><a href="/terms">Terms &amp; Conditions</a></li>
