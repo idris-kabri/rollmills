@@ -12941,6 +12941,15 @@ footer .hotline img {
 
 /*small phone*/
 @media only screen and (max-width: 480px) {
+    .tab-content.shop_info_tab {
+        margin-top: 20px;
+    }
+
+    .comment-form {
+        padding-top: 0px;
+        margin-bottom: 20px;
+    }
+
     .quantity .minus,
     .quantity .plus {
         padding: 2px;
@@ -13471,7 +13480,7 @@ footer .hotline img {
     }
 
     .section-padding {
-        padding-bottom: 0px !important; 
+        padding-bottom: 0px !important;
     }
 
     .section-title .title {
