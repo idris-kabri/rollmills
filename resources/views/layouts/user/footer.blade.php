@@ -221,7 +221,7 @@
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-twitter-white.svg') }}"
                             alt="" /></a> --}}
 
-                    <a href="https://www.instagram.com/roll.mills/"><img
+                    <a href="https://www.instagram.com/roll.mills/" target="_blank"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-instagram-white.svg') }}"
                             alt="" /></a>
 

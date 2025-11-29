@@ -13,7 +13,7 @@ class AccountComponent extends Component
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
-        return redirect()->route('home');
+        return redirect()->route('login');
     }
     public function render()
     {
