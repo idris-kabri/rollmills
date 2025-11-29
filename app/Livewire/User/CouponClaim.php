@@ -116,7 +116,7 @@ class CouponClaim extends Component
     {
         $user_orders = "";
         if ($this->step == 3 && $this->user_id) {
-            $user_orders = Order::where('logged_in_user_id', $this->user_id)->whhere("is_coupon_avail", 0)
+            $user_orders = Order::where('logged_in_user_id', $this->user_id)->where("is_coupon_avail", 0)
                 ->where('status', '!=', 0)
                 ->orderBy('id', 'desc')
                 ->get();
