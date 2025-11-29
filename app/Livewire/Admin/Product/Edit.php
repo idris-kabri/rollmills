@@ -514,6 +514,7 @@ class Edit extends Component
 
                         // Set common properties
                         $product_variation->name = $this->name;
+                        $product_variation->slug = Str::slug($product_variation->name, '-');
                         $product_variation->description = $option['details']['description'] ?? $this->main_description;
                         $product_variation->short_description = $this->short_description;
                         $product_variation->youtube_video_link = $this->youtube_link;
@@ -604,6 +605,7 @@ class Edit extends Component
                         $product_variation->name = $this->name . " " . $name;
                         $product_variation->attribute_id = implode(',', $attributes);
                         $product_variation->attributes_name = implode(',', $attributes_name);
+                        $product_variation->slug = Str::slug($product_variation->name. '-');
                         $product_variation->save();
                     }
                 }

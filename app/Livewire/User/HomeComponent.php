@@ -49,12 +49,26 @@ class HomeComponent extends Component
             ->get()
             ->map(function ($item) {
                 $product_sum = 0;
-                $product_sum += $item->getProductCategoryAssign->count();
-                $subcategroy = ProductCategory::where('parent_id', $item->id)->get();
-                foreach ($subcategroy as $sub) {
-                    $product_sum += $sub->getProductCategoryAssign->count();
+
+                $product_sum += $item->getProductCategoryAssign()
+                    ->whereHas('product', function ($q) {
+                        $q->whereNull('parent_id');
+                    })
+                    ->count();
+
+                $subcategories = ProductCategory::where('parent_id', $item->id)->get();
+
+                foreach ($subcategories as $sub) {
+
+                    $product_sum += $sub->getProductCategoryAssign()
+                        ->whereHas('product', function ($q) {
+                            $q->whereNull('parent_id');
+                        })
+                        ->count();
                 }
+
                 $item->product_sum = $product_sum;
+
                 return $item;
             });
         $today = Carbon::now();

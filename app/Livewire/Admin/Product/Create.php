@@ -15,7 +15,7 @@ use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
-use Livewire\WithFileUploads; 
+use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
 
 class Create extends Component
@@ -59,7 +59,7 @@ class Create extends Component
     public $discount_start_date;
     public $discount_end_date;
     public $product_warranty = 0;
-    public $is_featured = 0; 
+    public $is_featured = 0;
     public $is_active;
     public $openAccordions = [];
     public $related_products = [];
@@ -77,7 +77,8 @@ class Create extends Component
         $this->brands = Brand::all();
     }
 
-    public function updatedName($value){ 
+    public function updatedName($value)
+    {
         $this->slug = Str::slug($value, '-');
     }
 
@@ -216,12 +217,12 @@ class Create extends Component
             }
 
             $this->selectedVariationOption[$compositeKey]['details'] = [
-                'gallery_images' => [],   
+                'gallery_images' => [],
                 'weight' => $this->weight,
                 'length' => $this->length,
                 'width' => $this->width,
                 'height' => $this->height,
-                'is_active' => 1, 
+                'is_active' => 1,
                 'shipping_margin_br' => 0
             ];
         }
@@ -323,7 +324,7 @@ class Create extends Component
                 $product->length = $this->length;
                 $product->width = $this->width;
                 $product->height = $this->height;
-                $product->extra_shipping_margin = $this->shipping_margin; 
+                $product->extra_shipping_margin = $this->shipping_margin;
                 $product->shipping_margin_br = $this->shipping_margin_br;
                 $product->pincode_excluded = $this->pincode_excluded;
                 $product->product_waranty = $this->product_warranty;
@@ -333,7 +334,7 @@ class Create extends Component
                 $product->seo_meta = $this->seo_meta;
                 $product->seo_description = $this->seo_description;
                 $product->status = $this->status == 'published' ? 1 : 0;
-                $product->is_featured = $this->is_featured; 
+                $product->is_featured = $this->is_featured;
                 if ($this->is_active == false) {
                     $product->active_inactive_status = 0;
                 } else {
@@ -387,7 +388,7 @@ class Create extends Component
                         $product_variation->length = $option['details']['length'] ?? $this->length;
                         $product_variation->width = $option['details']['width'] ?? $this->width;
                         $product_variation->height = $option['details']['height'] ?? $this->height;
-                        $product_variation->extra_shipping_margin = $this->shipping_margin; 
+                        $product_variation->extra_shipping_margin = $this->shipping_margin;
                         $product_variation->shipping_margin_br = $option['details']['shipping_margin_br'] ?? $this->shipping_margin_br;
                         $product_variation->pincode_excluded = $this->pincode_excluded;
                         $product_variation->product_waranty = $this->product_warranty;
@@ -426,7 +427,7 @@ class Create extends Component
                         $keys_array = explode('|', $key);
                         $name = '';
                         foreach ($keys_array as $value) {
-                            $value_array = explode(',', $value); 
+                            $value_array = explode(',', $value);
                             $attributeId = $value_array[0];
                             $itemIndex = $value_array[1];
                             if (
@@ -441,7 +442,7 @@ class Create extends Component
                                 $attributes_assign = new ProductAttributeAssign;
                                 $attributes_assign->product_id = $product_variation->id;
                                 $attributes_assign->product_set_id = $value_array[0];
-                                $attributes_assign->title = $this->selectedOptions[$value_array[0]]['items'][$value_array[1]]; 
+                                $attributes_assign->title = $this->selectedOptions[$value_array[0]]['items'][$value_array[1]];
                                 $attributes_assign->is_default = $isDefault ? 1 : 0;
                                 $attributes_assign->save();
 
@@ -452,6 +453,7 @@ class Create extends Component
                         $product_variation->name = $this->name . " " . $name;
                         $product_variation->attribute_id = implode(',', $attributes);
                         $product_variation->attributes_name = implode(',', $attributes_names);
+                        $product_variation->slug = Str::slug($product_variation->name. '-');
                         $product_variation->save();
                     }
                 }
