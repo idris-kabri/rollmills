@@ -131,11 +131,11 @@
                                                     {{ $user_order->created_at->format('d M Y') }}</p>
                                             </td>
                                             @if ($user_order->is_coupon_avail == 0)
-                                                <td class="text-right">
-                                                    <button wire:click="applyCoupon({{ $user_order->id }})"
-                                                        class="btn btn-sm custom-btn-table-responsive">Avail
-                                                        Coupon</button>
-                                                </td>
+                                                <button type="button"
+                                                    wire:click.prevent="applyCoupon({{ $user_order->id }})"
+                                                    class="btn btn-sm custom-btn-table-responsive">
+                                                    Avail Coupon
+                                                </button>
                                             @else
                                                 <td class="text-right">
                                                     <button class="btn btn-sm custom-btn-table-responsive">Coupon
@@ -493,5 +493,37 @@
                 }, 2000);
             });
         }
+    </script>
+    <script>
+        document.addEventListener('click', function(event) {
+            // Check if the clicked element has the ID 'copyCodeBtn'
+            if (event.target && event.target.id === 'copyCodeBtn') {
+
+                const copyBtn = event.target;
+                const couponText = document.getElementById('couponCode');
+
+                if (couponText) {
+                    let code = couponText.innerText.trim();
+
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(code).then(() => {
+                        // UI Feedback
+                        const originalText = copyBtn.innerText;
+                        copyBtn.innerText = "Copied!";
+
+                        // Optional: Change color using Bootstrap class or style
+                        copyBtn.classList.add('text-success');
+
+                        setTimeout(() => {
+                            copyBtn.innerText = "Copy Code";
+                            copyBtn.classList.remove('text-success');
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        alert("Failed to copy. Please copy manually.");
+                    });
+                }
+            }
+        });
     </script>
 @endpush

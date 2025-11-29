@@ -90,20 +90,29 @@ class CouponClaim extends Component
         }
         $user = User::find($this->user_id);
         $settings = Setting::all();
-        $tags = ['VIP', 'GOLD', 'PRIME', 'MEGA', 'STAR', 'EXC', 'PLUS', 'PRO', 'FEST', 'WOW'];
-        $randomTag = $tags[array_rand($tags)];
-        $randomNumber = rand(10, 99);
-        $couponCode = strtoupper($user->name) . "-" . $randomTag . "-" . $randomNumber;
+
+
+        // Get first name only
+        $nameParts = preg_split('/\s+/', trim($user->name));
+        $firstName = $nameParts[0]; // only first name
+
+        $randomNumber = rand(10, 200);
+
+        // Build coupon code with first name only
+        $couponCode = $firstName . $randomNumber;
+
+
         $coupon = new Coupon;
         $coupon->title = "Coupon for Order #" . $order->id;
         $coupon->coupon_code = $couponCode;
-        $coupon->minimum_order_value = $settings->where('key', 'coupon_min_order_value')->first()->value ?? 0;
-        $coupon->discount_type = $settings->where('key', 'coupon_discount_type')->first()->value ?? 0;
-        $coupon->discount_value = $settings->where('key', 'discount_value')->first()->value ?? 0;
-        $coupon->maximum_discount_amount = $settings->where('key', 'coupon_max_discount')->first()->value ?? 0;
+        $coupon->minimum_order_value = $settings->where('label', 'coupon_min_order_value')->first()->value ?? 0;
+        $coupon->discount_type = $settings->where('label', 'coupon_discount_type')->first()->value ?? 0;
+        $coupon->discount_value = $settings->where('label', 'discount_value')->first()->value ?? 0;
+        $coupon->maximum_discount_amount = $settings->where('label', 'coupon_max_discount')->first()->value ?? 0;
         $coupon->usage_limit = 1;
         $coupon->total_usage = 1;
-        $coupon->expiry_date = $settings->where('key', 'coupon_expiry')->first()->value ?? 0;
+        $coupon->category = "";
+        $coupon->expiry_date = $settings->where('label', 'coupon_expiry')->first()->value ?? 0;
         $coupon->order_id = $order->id;
         $coupon->save();
 
