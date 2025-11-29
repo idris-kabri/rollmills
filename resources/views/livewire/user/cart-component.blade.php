@@ -19,13 +19,51 @@
                 </div>
             </div>
         </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-md-5 mb-4">
+                        <div class="gift-progress-container">
+                            <div class="gift-text-measure">
+                                <div class="progress-title">Grab Your Offer Now!!</div>
+                                {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
+                                <p class="quicksand fw-500">Shop ₹500 and get exclusive offer only on RollMills. Let the
+                                    offers Roll-In !!</p>
+                            </div>
+                            <div class="gift-scroll-bar">
+                                <div class="progress-bar-cart" id="" data-width="100">
+                                    <div class="bar-circle">
+                                        <i class="fa-solid fa-gift"></i>
+                                    </div>
+                                </div>
+                                <div class="milestone-marker">
+                                    <img src="{{ asset('assets/frontend/imgs/shop/istockphoto-2172206741-612x612-removebg-preview__1_-removebg-preview.png') }}"
+                                        alt="" class="img-fluid">
+                                </div>
+                                <div class="milestone-marker-open">
+                                    <img src="{{ asset('assets/frontend/imgs/shop/surprise-gift-box-vector-with-white-bow-suitable-for-use-on-birthday-party-new-year-and-marry-christmas-2R4YDP3-removebg-preview__1_-removebg-preview.png') }}"
+                                        alt="" class="img-fluid">
+                                </div>
+                            </div>
+                            <div class="content">
+                                <p class="text-center mt-4 fs-20 fw-500">
+                                    You are ₹200 away from your gift &nbsp;<a href="/shop">Shop Now </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-xl-9">
                 <div class="table-responsive shopping-summery table-responsive-custom">
                     <table class="table table-wishlist mb-0">
                         <thead>
                             <tr class="main-heading">
-                                <th scope="col" colspan="2" class="ps-2">Product</th>
+                                <th scope="col" colspan="2" class="ps-3">Product</th>
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Subtotal</th>
@@ -51,7 +89,7 @@
                                     }
                                 @endphp
                                 <tr class="pt-3">
-                                    <td class="image product-thumbnail pt-40 position-relative ps-2"><img
+                                    <td class="image product-thumbnail pt-40 position-relative ps-3"><img
                                             src="{{ asset('storage/' . $item->model->featured_image) }}"
                                             alt="{{ $item->model->seo_meta }}">
                                         <div class="display-visible-480 d-none">
@@ -63,7 +101,7 @@
                                         </div>
                                     </td>
                                     <td class="product-des product-name">
-                                        <h6 class="mb-5 ms-4"><a class="product-name mb-10 text-heading"
+                                        <h6 class="mb-5"><a class="product-name mb-10 text-heading"
                                                 href="{{ $shop_detail_url }}">{{ $item->model->name }}
                                                 {{ $item->id }}</a>
                                         </h6>
@@ -76,7 +114,7 @@
                                             $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
                                             $reviews_percentage = ($reviews_avg / 5) * 100;
                                         @endphp
-                                        <div class="product-rate-cover ms-4">
+                                        <div class="product-rate-cover">
                                             <div class="product-rate d-inline-block">
                                                 <div class="product-rating" style="width: {{ $reviews_percentage }}%">
                                                 </div>
@@ -115,7 +153,8 @@
                                         <h4 class="text-brand small-screen-table-td-content">
                                             ₹{{ number_format($item->price * $item->qty) }}</h4>
                                     </td>
-                                    <td class="action text-center small-screen-table-td remove-btn" data-title="Remove">
+                                    <td class="action text-center small-screen-table-td remove-btn"
+                                        data-title="Remove">
                                         <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
                                             wire:confirm="Are you sure you want to remove this item from your cart?"
                                             class="text-body"><i class="fi-rs-trash"></i></a>
@@ -160,12 +199,14 @@
                 <div class="p-20 border-radius-15 border mb-20">
                     <h4 class="mb-30 pb-2 underline">Apply Coupon</h4>
                     <div class="d-flex justify-content-between mb-4">
-                        <input class="font-medium pl-15 mr-15 coupon" name="Coupon" placeholder="Enter Code" wire:model="couponCode">
-                        <button class="btn d-flex justify-content-center align-items-center" wire:click="applyCoupon"><i
-                                class="fi-rs-label mr-10"></i>Apply</button>
+                        <input class="font-medium pl-15 mr-15 coupon" name="Coupon" placeholder="Enter Code"
+                            wire:model="couponCode">
+                        <button class="btn d-flex justify-content-center align-items-center"
+                            wire:click="applyCoupon"><i class="fi-rs-label mr-10"></i>Apply</button>
                     </div>
                     @foreach ($global_coupons as $global_coupon)
-                        <a class="coupon-card-cart {{ $couponCode == $global_coupon->coupon_code ? 'selected' : '' }}" wire:click.prevent="checkCoupon('{{ $global_coupon->coupon_code }}')">
+                        <a class="coupon-card-cart {{ $couponCode == $global_coupon->coupon_code ? 'selected' : '' }}"
+                            wire:click.prevent="checkCoupon('{{ $global_coupon->coupon_code }}')">
                             <div class="coupon-header">
                                 <div class="coupon-code-section">
                                     <div class="coupon-code-cart">{{ $global_coupon->coupon_code }}</div>
@@ -182,7 +223,8 @@
                             </div>
                             <div class="coupon-footer">
                                 <div class="discount-badge">{{ $global_coupon->discount_value }}% OFF</div>
-                                <div class="min-order">Valid till: {{ \Carbon\Carbon::parse($global_coupon->expiry_date)->format('M d, Y') }}</div>
+                                <div class="min-order">Valid till:
+                                    {{ \Carbon\Carbon::parse($global_coupon->expiry_date)->format('M d, Y') }}</div>
                             </div>
                         </a>
                     @endforeach
@@ -210,28 +252,29 @@
                                             {{ number_format(session('shipping_charge'), 2) }}</h4>
                                     </td>
                                 </tr>
-                                @if(session('latest_etd') != null)
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Etd</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}</h4>
-                                    </td>
-                                </tr>
+                                @if (session('latest_etd') != null)
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start">
+                                            <h6 class="text-muted">Etd</h6>
+                                        </td>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}</h4>
+                                        </td>
+                                    </tr>
                                 @endif
                                 @php
                                     $discount = $totalOfferDiscountedPrice + $mainDiscountAmount;
                                 @endphp
-                                @if($discount != 0)
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Discount</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16 text-success">₹{{ number_format($discount, 2) }}</h4>
-                                    </td>
-                                </tr>
+                                @if ($discount != 0)
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start">
+                                            <h6 class="text-muted">Discount</h6>
+                                        </td>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-heading text-end fs-16 text-success">
+                                                ₹{{ number_format($discount, 2) }}</h4>
+                                        </td>
+                                    </tr>
                                 @endif
                                 @php
                                     $cartTotal = (float) str_replace(',', '', Cart::total());
@@ -285,7 +328,6 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-
         function showCongratsOffer() {
             confetti({
                 particleCount: 500,
@@ -295,6 +337,60 @@
                 }
             });
         }
+        window.addEventListener('coupon-applied', event => {
+            showCongratsOffer();
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const bar = document.querySelector(".progress-bar-cart");
+            const markerClosed = document.querySelector(".milestone-marker");
+            const markerOpen = document.querySelector(".milestone-marker-open");
+
+            let finalWidth = parseInt(bar.getAttribute("data-width"));
+
+            // Start bar animation (0 -> finalWidth)
+            bar.style.width = finalWidth + "%";
+
+            // When the width animation finishes
+            bar.addEventListener("transitionend", function() {
+
+                let reachedWidth = parseInt(bar.style.width);
+
+                if (reachedWidth >= 100) {
+                    showCongratsOffer();
+                    // Show open box
+                    setTimeout(() => {
+                        if (markerClosed) markerClosed.style.display = "none";
+                        if (markerOpen) markerOpen.style.display = "block";
+                    }, 800);
+
+                    // 🎉 Trigger confetti here
+                } else {
+                    // Show closed box
+                    if (markerClosed) markerClosed.style.display = "block";
+                    if (markerOpen) markerOpen.style.display = "none";
+                }
+
+            });
+
+        });
+
+        // Your confetti code
+        function showCongratsOffer() {
+            confetti({
+                particleCount: 800,
+                spread: 200,
+                origin: {
+                    y: 0.6
+                }
+            });
+        }
+
+        // Optional: fire from Livewire event also
         window.addEventListener('coupon-applied', event => {
             showCongratsOffer();
         });
