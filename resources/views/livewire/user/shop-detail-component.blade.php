@@ -272,7 +272,11 @@
                                 <div>
                                     <img src="{{ asset('assets/frontend/imgs/theme/replacement.png') }}"
                                         alt="">
-                                        <p>7 Day Replacement</p>
+                                        @if($mainProduct->product_replacement_days > 0)
+                                        <p>{{ $mainProduct->product_replacement_days }} Day Replacement</p>
+                                        @else
+                                        <p>No Replacement Policy</p>
+                                        @endif
                                 </div>
                             </div>
                         </div>

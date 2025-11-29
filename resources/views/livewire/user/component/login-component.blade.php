@@ -45,14 +45,14 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text">🇮🇳 +91</span>
                                 <input type="tel" id="mobileInput" class="form-control"
-                                    placeholder="Enter mobile number" maxlength="10" wire:model.live="mobile">
+                                    placeholder="Enter mobile number" maxlength="10" wire:model.live="mobile" wire:keydown.enter="sendOTP ">
                             </div>
                             @error('mobile') <span class="text-danger small d-block mb-2">{{ $message }}</span> @enderror
 
                             @if($password_section_show)
                                 <div class="form-group mb-20" id="password-login">
                                     <label for="" class="ps-2 fw-600 quicksand fs-16 mb-2">Enter Password</label>
-                                    <input type="password" class="form-control" wire:model="password" />
+                                    <input type="password" class="form-control" wire:model="password" wire:keydown.enter="loginCheck" />
                                     @error('password')
                                         <span class="text-danger small">{{ $message }}</span>
                                     @enderror
@@ -83,10 +83,10 @@
                             </p>
 
                             <div class="d-flex gap-2 mb-3 otp-container">
-                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.0">
-                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.1">
-                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.2">
-                                <input type="text" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.3">
+                                <input type="number" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.0">
+                                <input type="number" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.1">
+                                <input type="number" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.2">
+                                <input type="number" maxlength="1" class="form-control otp-input text-center" wire:model.live="otp.3" wire:keydown.enter="loginCheck">
                             </div>
                             @error('otp') <span class="text-danger small d-block mb-2">{{ $message }}</span> @enderror
 

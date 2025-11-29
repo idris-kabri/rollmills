@@ -101,7 +101,7 @@
                         <p>If you have any questions regarding your delivery, please contact us:</p>
                         <ul>
                             <li>
-                                <p>By email: <a href="mailto:info@rollmillsstore.com">info@rollmillsstore.com</a></p>
+                                <p>By email: <a href="mailto:rollmills.rm@gmail.com">rollmills.rm@gmail.com</a></p>
                             </li>
                             <li>
                                 <p>By phone: <a href="tel:+918764766553">+91 87647 66553</a></p>

@@ -1,0 +1,323 @@
+  /* Scoped styles for the Premium Modal Design */
+  #giftCouponModal {
+      --color-1: #dca915 !important;
+      --color-2: #a36f02 !important;
+      --color-3: #543606 !important;
+      --color-light-1: #dcaa15b7 !important;
+      --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 0 20px rgba(220, 169, 21, 0.2);
+  }
+
+  /* Modal Wrapper Fixes to support your design */
+  #giftCouponModal .modal-content {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+  }
+
+  /* --- Your Premium Design Classes --- */
+  .rollmills-modal {
+      display: flex;
+      width: 100%;
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      animation: slideUp 0.7s ease;
+      min-height: 550px;
+      /* Ensure height consistency */
+  }
+
+  .left-box {
+      flex: 1;
+      background: linear-gradient(135deg, var(--color-3) 0%, var(--color-2) 100%);
+      color: #fff;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+  }
+
+  /* Floating circle animation */
+  .left-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 300px;
+      height: 300px;
+      background: rgba(220, 169, 21, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+  }
+
+  .left-box-content {
+      position: relative;
+      z-index: 2;
+      animation: slideRight 0.8s ease;
+  }
+
+  .left-box h1 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 12px;
+      font-weight: 700;
+  }
+
+  .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      margin-top: 20px;
+  }
+
+  .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.9);
+      animation: slideUp 0.8s ease;
+  }
+
+  .feature-emoji {
+      font-size: 18px;
+      animation: floatEmoji 3s ease-in-out infinite;
+  }
+
+  .right-box {
+      flex: 1.2;
+      /* Give form slightly more space */
+      background: #fff;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+  }
+
+  /* Form Elements */
+  .form-header {
+      margin-bottom: 30px;
+      animation: slideUp 0.6s ease;
+  }
+
+  .form-header h2 {
+      font-size: 22px;
+      color: var(--color-3);
+      margin-bottom: 8px;
+      font-weight: 600;
+  }
+
+  .custom-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      animation: slideUp 0.7s ease;
+  }
+
+  .phone-prefix {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8f8f8;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 2px solid #e8e8e8;
+      font-weight: 600;
+      color: var(--color-3);
+  }
+
+  .phone-input {
+      flex: 1;
+      padding: 14px 16px;
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #f8f8f8;
+  }
+
+  .phone-input:focus {
+      outline: none;
+      border-color: var(--color-1);
+      background: #fff;
+      box-shadow: 0 0 12px rgba(220, 169, 21, 0.15);
+  }
+
+  .btn-brand {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--color-1);
+      color: #fff;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+  }
+
+  .btn-brand:hover {
+      background: var(--color-2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+  }
+
+  /* OTP & Timer */
+  .otp-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 30px 0;
+  }
+
+  .otp-input {
+      padding: 0px;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      background: #f8f8f8;
+  }
+
+  .otp-input:focus {
+      border-color: var(--color-1);
+      background: #fff;
+      transform: scale(1.05);
+  }
+
+  .edit-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-1);
+      cursor: pointer;
+      margin-bottom: 20px;
+  }
+
+  .timer-container {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+  }
+
+  /* Offer Card */
+  .offer-card {
+      text-align: center;
+      animation: slideUp 0.8s ease;
+  }
+
+  .offer-discount {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+  }
+
+  .coupon-box {
+      background: #f8f8f8;
+      border: 2px dashed var(--color-1);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .copy-tag {
+      background: var(--color-1);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+  }
+
+  /* Animations */
+  @keyframes float {
+
+      0%,
+      100% {
+          transform: translate(0, 0);
+      }
+
+      50% {
+          transform: translate(20px, 20px);
+      }
+  }
+
+  @keyframes slideUp {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  @keyframes slideRight {
+      from {
+          opacity: 0;
+          transform: translateX(-20px);
+      }
+
+      to {
+          opacity: 1;
+          transform: translateX(0);
+      }
+  }
+
+  @keyframes floatEmoji {
+
+      0%,
+      100% {
+          transform: translateY(0px);
+      }
+
+      50% {
+          transform: translateY(-10px);
+      }
+  }
+
+  /* Visibility Helpers */
+  .form-step {
+      display: none;
+  }
+
+  .form-step.active {
+      display: block;
+      animation: slideUp 0.5s ease;
+  }
+
+  @media (max-width: 768px) {
+      .rollmills-modal {
+          flex-direction: column;
+      }
+
+      .left-box {
+          min-height: 200px;
+          padding: 30px 20px;
+      }
+
+      .right-box {
+          padding: 30px 20px;
+      }
+  }

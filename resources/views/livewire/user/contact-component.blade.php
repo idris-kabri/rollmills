@@ -88,8 +88,8 @@
                                      <div class="contact_text">
                                          <span>Email Address</span>
                                          <a class="fs-16 fw-600 text-muted hover-a"
-                                             href="mailto: info@rollmillsstore.com">
-                                             info@rollmillsstore.com
+                                             href="mailto: rollmills.rm@gmail.com">
+                                             rollmills.rm@gmail.com
                                          </a>
                                      </div>
                                  </div>
