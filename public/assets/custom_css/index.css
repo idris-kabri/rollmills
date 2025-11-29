@@ -99,14 +99,14 @@
 }
 
 /* Chrome, Safari, Edge, Opera */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
     -moz-appearance: textfield;
 }
 
@@ -399,10 +399,12 @@ input[type=number] {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(45deg,
-            transparent,
-            rgba(255, 255, 255, 0.43),
-            transparent);
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.43),
+        transparent
+    );
     animation: shimmer 2s infinite;
 }
 
@@ -467,9 +469,11 @@ input[type=number] {
 }
 
 .result-display {
-    background: linear-gradient(135deg,
-            rgba(212, 175, 55, 0.1),
-            rgba(212, 175, 55, 0.05));
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.1),
+        rgba(212, 175, 55, 0.05)
+    );
     border: 2px dashed var(--color-1);
     border-radius: 15px;
     padding: 15px;
@@ -486,10 +490,12 @@ input[type=number] {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(45deg,
-            transparent,
-            rgba(212, 175, 55, 0.1),
-            transparent);
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(212, 175, 55, 0.1),
+        transparent
+    );
     animation: shimmer 4s infinite;
 }
 
@@ -834,7 +840,6 @@ input[type=number] {
 }
 
 @keyframes checkPop {
-
     0%,
     100% {
         transform: scale(1);
@@ -1127,6 +1132,14 @@ input[type=number] {
     .form-group input {
         height: 55px;
     }
+
+    .small-screen-padding {
+        padding: 0px 8px !important;
+    }
+
+    .mb-30 {
+        margin-bottom: 24px !important;
+    }
 }
 
 @media (max-width: 575.98px) {
@@ -1176,7 +1189,9 @@ input[type=number] {
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
+    .mobile-header-wrapper-style
+        .mobile-header-wrapper-inner
+        .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
@@ -1225,7 +1240,7 @@ input[type=number] {
         display: inline-block;
         padding: 6px 20px 6px 20px;
         border-radius: 4px;
-        background-color: #def9ec;
+        background-color: var(--color-1);
         font-size: 14px;
         font-weight: 700;
         width: 100%;
@@ -1255,15 +1270,19 @@ input[type=number] {
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
+    .mobile-header-wrapper-style
+        .mobile-header-wrapper-inner
+        .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
 }
 
-@media (min-width: 1200px) {}
+@media (min-width: 1200px) {
+}
 
-@media (min-width: 1400px) {}
+@media (min-width: 1400px) {
+}
 
 /* ==================================================================== */
 /* Responsive Css End */
