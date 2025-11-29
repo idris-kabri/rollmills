@@ -8,6 +8,7 @@ use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 
 class Create extends Component
@@ -25,17 +26,25 @@ class Create extends Component
     public $seo_description = "";
     public $parent_categories = [];
     public $parent_category_id = '';
+    public $slug;
 
     public function mount()
     {
         $this->parent_categories = ProductCategory::all();
     }
+
+    public function updatedName($value)
+    {
+        $this->slug = Str::slug($value, '-');
+    }
+
     // store
     public function store()
     {
         // validate
         $this->validate([
             "name" => "required",
+            'slug' => 'required',
             "description" => "required",
             "status" => "required",
             "image" => "required",
@@ -61,6 +70,7 @@ class Create extends Component
             }
             $store_product_category = new ProductCategory;
             $store_product_category->name = $this->name;
+            $store_product_category->slug = $this->slug;
             $store_product_category->description = $this->description;
             $store_product_category->status = $this->status;
             $store_product_category->image = $imagePath;

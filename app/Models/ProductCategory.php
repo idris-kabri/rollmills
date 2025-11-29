@@ -11,6 +11,7 @@ class ProductCategory extends Model
     protected $table = "product_categories";
     protected $fillable = [
         "name",
+        "slug",
         "description",
         "status",
         "image",
@@ -22,11 +23,13 @@ class ProductCategory extends Model
         'parent_id'
     ];
 
-    public function getParentProductCategory(){
+    public function getParentProductCategory()
+    {
         return $this->belongsTo(ProductCategory::class, 'parent_id', 'id');
     }
-    
-    public function getProductCategoryAssign(){
+
+    public function getProductCategoryAssign()
+    {
         return $this->hasMany(ProductCategoryAssign::class, 'category_id', 'id');
     }
 }

@@ -1,4 +1,4 @@
-<div class="page-wrapper"> 
+<div class="page-wrapper">
     <div wire:loading.delay wire:target="store" class="loader-overlay" style="display: none !important;">
         <img src="{{ asset('assets/images/loading.gif') }}" alt="Loading..." class="loader-img">
     </div>
@@ -41,9 +41,23 @@
                                 <div class="mb-3 position-relative">
                                     <label class="form-label" for="name">Name</label>
                                     <input class="form-control @error('name') is-invalid @enderror" placeholder="Name"
-                                        name="name" type="text" wire:model="name">
+                                        name="name" type="text" wire:model.live="name">
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 position-relative">
+                                    <label class="form-label form-label required" for="slug">
+                                        Slug
+                                    </label>
+                                    <input class="form-control @error('slug') is-invalid @enderror" data-counter="250"
+                                        placeholder="Slug" name="slug" wire:model='slug' type="text"
+                                        id="slug" readonly>
+                                    @error('slug')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
 
@@ -52,7 +66,8 @@
                                     <select
                                         class="select-search-full form-select select2 @error('parrent_category_id') is-invalid @enderror"
                                         data-allow-clear="false" id="parent_id-select-34415"
-                                        wire:model="parent_category_id" onchange="callFunction()" data-placeholder="Select Parent Category">
+                                        wire:model="parent_category_id" onchange="callFunction()"
+                                        data-placeholder="Select Parent Category">
                                         <option value="">Selecty Parent Category</option>
                                         @foreach ($parent_categories as $parent_category)
                                             <option value="{{ $parent_category->id }}">{{ $parent_category->name }}
@@ -112,9 +127,9 @@
                                             </div>
                                         @endif
 
-                                        <a data-bb-toggle="image-picker-choose" data-target="popup" data-result="image"
-                                            data-action="select-image" data-allow-thumb="1" href="javascript:void(0)"
-                                            id="chooseImage" onclick="openImage()">
+                                        <a data-bb-toggle="image-picker-choose" data-target="popup"
+                                            data-result="image" data-action="select-image" data-allow-thumb="1"
+                                            href="javascript:void(0)" id="chooseImage" onclick="openImage()">
                                             Choose image
                                         </a>
                                         <input type="file" id="imageInput" wire:model="image" accept="image/*"
@@ -156,10 +171,10 @@
                                             Choose Icon
                                         </a>
                                         <input type="file" id="iconInput" wire:model="icon" accept="image/png"
-                                            style="display: none;" /> 
-                                        <br/> 
+                                            style="display: none;" />
+                                        <br />
                                         <span class="text-danger">22 X 22px</span>
-                                        <br/> 
+                                        <br />
                                     </div>
                                     @error('icon')
                                         <div class="invalid-feedback">{{ $message }}</div>
