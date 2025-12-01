@@ -24,7 +24,7 @@
                                              alt="" class="img-fluid mx-auto">
                                      </div>
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">Your Orders</h5>
+                                         <h5 class="underline text-start mb-2 justify-content-start">Your Orders</h5>
                                          <p class="fw-500 text-secondary text-start">Track, return, or buy things again
                                          </p>
                                      </div>
@@ -40,7 +40,7 @@
                                              alt="" class="img-fluid mx-auto">
                                      </div>
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">My Profile</h5>
+                                         <h5 class="underline text-start mb-2 justify-content-start">My Profile</h5>
                                          <p class="fw-500 text-secondary text-start">Edit profile name, and mobile
                                              number.
                                          </p>
@@ -57,7 +57,7 @@
                                              alt="" class="img-fluid mx-auto">
                                      </div>
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">Your Addresses</h5>
+                                         <h5 class="underline text-start mb-2 justify-content-start">Your Addresses</h5>
                                          <p class="fw-500 text-secondary text-start">Edit addresses for orders and gifts
                                          </p>
                                      </div>
@@ -66,15 +66,15 @@
                          </div>
                          <div class="col-lg-4 col-md-6 col-12 mb-30">
                              <div class="my-account-cards">
-                                 <a href="https://wa.me/918764766553?text=Hello,%20I%20need%20assistance%20regarding%20my%20account.
-"
+                                 <a href="https://wa.me/918764766553?text=Hello,%20I%20need%20assistance%20regarding%20my%20account."
                                      class="card px-4 d-flex flex-row py-4 rounded-15 shadow-sm text-center border border-2">
                                      <div class="img-section me-4">
                                          <img src="{{ asset('assets/frontend/imgs/icon&images/whatsapp.png') }}"
                                              alt="" class="img-fluid mx-auto">
                                      </div>
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">Chat Us On WhatsApp</h5>
+                                         <h5 class="underline text-start mb-2 justify-content-start">Chat Us On WhatsApp
+                                         </h5>
                                          <p class="fw-500 text-secondary text-start">Get help through WhatsApp chat</p>
                                      </div>
                                  </a>
@@ -89,7 +89,7 @@
                                              alt="" class="img-fluid mx-auto">
                                      </div>
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">Call Us</h5>
+                                         <h5 class="underline text-start mb-2 justify-content-start">Call Us</h5>
                                          <p class="fw-500 text-secondary text-start">Reach our support team by phone</p>
                                      </div>
                                  </a>
@@ -104,7 +104,7 @@
                                              alt="" class="img-fluid mx-auto">
                                      </div>
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">Email Us</h5>
+                                         <h5 class="underline text-start mb-2 justify-content-start">Email Us</h5>
                                          <p class="fw-500 text-secondary text-start">Send us an email for assistance</p>
                                      </div>
                                  </a>
@@ -112,30 +112,56 @@
                          </div>
                          <div class="col-lg-4 col-md-6 col-12 mb-30">
                              <div class="my-account-cards">
-
-                                 <a href="#" wire:confirm="Are you sure you want to logout?" wire:click.prevent="logoutUser"
+                                 <a href="#" data-bs-toggle="modal" data-bs-target="#ConfirmActionModal"
+                                     {{-- wire:click.prevent="logoutUser" --}}
                                      class="card px-4 d-flex flex-row py-4 rounded-15 shadow-sm text-center border border-2">
-
                                      <div class="img-section me-4">
-                                         <img src="{{ asset('assets/frontend/imgs/icon&images/de072167-48fd-4d29-9074-ac4453a330be-removebg-preview.png') }}"
+                                         <img src="{{ asset('assets/frontend/imgs/icon&images/layoff.png') }}"
                                              alt="Logout" class="img-fluid mx-auto">
                                      </div>
-
                                      <div class="content">
-                                         <h5 class="underline text-start mb-2">Logout</h5>
+                                         <h5 class="underline text-start mb-2 justify-content-start">Logout</h5>
                                          <p class="fw-500 text-secondary text-start">Securely sign out of your account
                                          </p>
                                      </div>
-
                                  </a>
-
                              </div>
                          </div>
-
-
                      </div>
                  </div>
              </div>
          </div>
      </div>
+     {{-- Logout Model Start --}}
+     <div class="modal fade" id="ConfirmActionModal" tabindex="-1" aria-labelledby="ConfirmActionModal"
+         aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+             <div class="modal-content-custom w-100">
+                 <div class="mb-4">
+                     <div class="d-flex justify-content-center">
+                         {{-- <img src="{{ asset('assets/frontend/imgs/icon&images/complain.png') }}" alt=""
+                             class="img-fluid mb-3 mt-4 modal-logo" style="width: 80px; height: 80px" /> --}}
+                         <img src="{{ asset('assets/frontend/imgs/icon&images/de072167-48fd-4d29-9074-ac4453a330be-removebg-preview.png') }}"
+                             alt="" class="img-fluid mb-3 mt-4 modal-logo" />
+                     </div>
+                     <div class="modal-body p-0 d-flex justify-content-center text-center">
+                         <h1 class="fs-3 mb-2">Are you Sure?</h1>
+                     </div>
+                     <p class="fs-6 mx-auto text-center w-md-75 w-75 quicksand">
+                         Are you Sure you want to Logout? This Action cannot be Undone.
+                     </p>
+                 </div>
+                 <div class="pb-4 d-flex flex-column justify-content-center">
+                     <button type="submit" class="btn mb-3 w-90-per pt-10 pb-10" wire:click.prevent="logoutUser">
+                         Logout
+                     </button>
+                     <button type="button" class="btn btn-brand-outline mx-auto pt-10 pb-10 w-90-per"
+                         data-bs-dismiss="modal" id="close-confirm-action-btn">
+                         Cancel
+                     </button>
+                 </div>
+             </div>
+         </div>
+     </div>
+     {{-- Logout Model End --}}
  </main>
