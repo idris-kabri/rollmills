@@ -4,7 +4,6 @@ namespace App\Livewire\User;
 
 use App\Models\Address;
 use App\Models\Coupon;
-use App\Models\GiftCardGroup;
 use App\Models\GiftCardItem;
 use App\Models\Order;
 use App\Models\OrderItems;
@@ -57,13 +56,24 @@ class CheckoutComponent extends Component
         $this->couponDiscount = (float) (session('coupon_discount_amount') ?? 0);
         $this->coupon_discount_id = (int) session('coupon_discount_id');
         $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount + (float) session('shipping_charge');
+        $this->mainDiscountAmount = (float) session('coupon_discount_amount');
 
         if (Auth::check()) {
             $this->fetch_user_address = Address::where('user_id', Auth::user()->id)->get();
+            $this->billing_address['email'] = Auth::user()->email;
+            
+            // Auto-select the first address if available
+            if ($this->fetch_user_address->count() > 0) {
+                $this->storeAddressInToBilling($this->fetch_user_address->first()->id);
+                $this->add_new_address = false;
+            } else {
+                $this->add_new_address = true;
+            }
         } else {
-            $this->fetch_user_address = [];
+            $this->fetch_user_address = collect([]);
+            $this->add_new_address = true;
         }
-        $this->mainDiscountAmount = (float) session('coupon_discount_amount');
+        
         $this->checkBillingEmail();
     }
 
@@ -72,17 +82,41 @@ class CheckoutComponent extends Component
         $this->add_new_address = true;
         $this->billing_address = [];
         $this->billing_address['zipcode'] = session('shipping_pincode');
+        if (Auth::check()) {
+            $this->billing_address['email'] = Auth::user()->email;
+        }
     }
+
+    public function cancelNewAddress()
+    {
+        $this->add_new_address = false;
+        // Re-select first address to prevent empty array state if needed
+        if ($this->fetch_user_address->count() > 0) {
+            $this->storeAddressInToBilling($this->fetch_user_address->first()->id);
+        }
+    }
+
     public function addNewShipAddress()
     {
         $this->add_new_shipp_address = true;
         $this->ship_to_different_address = [];
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
     }
+
+    public function cancelNewShipAddress()
+    {
+        $this->add_new_shipp_address = false;
+    }
+
     public function ship_to_different_address_function()
     {
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
         $this->ship_to_different_address_enabled = !$this->ship_to_different_address_enabled;
+        
+        // Reset shipping address state when toggled
+        if($this->ship_to_different_address_enabled) {
+             $this->add_new_shipp_address = false;
+        }
     }
 
     public function storeAddressInToBilling($address_id)
@@ -103,6 +137,7 @@ class CheckoutComponent extends Component
                 'is_user_logged_in_user' => $address->is_user_logged_in_user,
                 'user_id' => $address->user_id,
             ];
+            $this->add_new_address = false; // Close form view
         }
         $this->checkBillingEmail();
     }
@@ -122,12 +157,13 @@ class CheckoutComponent extends Component
                 'state' => $address->state,
                 'zipcode' => $address->zipcode,
             ];
+            $this->add_new_shipp_address = false; // Close form view
         }
     }
 
     public function checkBillingEmail()
     {
-        if ($this->billing_address['email'] != '') {
+        if (isset($this->billing_address['email']) && $this->billing_address['email'] != '') {
             $email = $this->billing_address['email'];
             $gift_card_item_query = GiftCardItem::where('customer_email', $email)
                 ->where('used_at', null)
@@ -146,14 +182,17 @@ class CheckoutComponent extends Component
                 $coupon_id = session()->get('coupon_discount_id');
                 if ($coupon_id) {
                     $coupon_get = Coupon::find($coupon_id);
-                    $order_count = Order::where('logged_in_user_id', $user->id)->where('coupon_id', $coupon_id)->where('status', 1)->count();
-                    if ($coupon_get->usage_limit <= $order_count) {
-                        session()->forget('coupon_discount_amount');
-                        session()->forget('coupon_discount_id');
-                        session()->forget('coupon_code');
+                    // Check if coupon exists before accessing properties to prevent crash
+                    if($coupon_get){
+                        $order_count = Order::where('logged_in_user_id', $user->id)->where('coupon_id', $coupon_id)->where('status', 1)->count();
+                        if ($coupon_get->usage_limit <= $order_count) {
+                            session()->forget('coupon_discount_amount');
+                            session()->forget('coupon_discount_id');
+                            session()->forget('coupon_code');
 
-                        $this->toastError('This coupon code usage limit is exceeded!');
-                        $this->couponDiscount = 0;
+                            $this->toastError('This coupon code usage limit is exceeded!');
+                            $this->couponDiscount = 0;
+                        }
                     }
                 }
             }
@@ -161,10 +200,13 @@ class CheckoutComponent extends Component
             $this->gift_cards_items = [];
         }
     }
+    
+    // ... [Rest of your existing methods: applyGiftCard, createBillingAddress, createShippingAddress, createOrderItem, userCreate, placeOrder, render] ...
+    
     public function applyGiftCard($gift_card_item_id = null)
     {
         if ($this->gift_card_code && $gift_card_item_id == null) {
-            if ($this->billing_address['email'] != '') {
+            if (isset($this->billing_address['email']) && $this->billing_address['email'] != '') {
                 $this->gift_card_item = GiftCardItem::where('gift_code', $this->gift_card_code)->first();
             } else {
                 $this->toastError('Please fill the Billing Details Email field!');
@@ -174,9 +216,14 @@ class CheckoutComponent extends Component
             $this->gift_card_item = GiftCardItem::find($gift_card_item_id);
         }
 
+        if(!$this->gift_card_item) {
+             $this->toastError('Invalid Gift Card Code');
+             return;
+        }
+
         $order_find = Order::where('gift_card_item_id', $this->gift_card_item->id)->count();
         if ($order_find > 0) {
-            $this->toastError('Please fill the Billing Details Email field!');
+            $this->toastError('This Gift Card has already been used.');
             return;
         }
 
@@ -241,8 +288,8 @@ class CheckoutComponent extends Component
     {
         $ship_different_address = isset($this->ship_to_different_address['id']) ? Address::find($this->ship_to_different_address['id']) ?? new Address() : new Address();
         $ship_different_address->name = $this->ship_to_different_address['name'];
-        $ship_different_address->email = $this->billing_address['email'];
-        $ship_different_address->mobile = $this->billing_address['mobile'];
+        $ship_different_address->email = $this->ship_to_different_address['email'] ?? $this->billing_address['email'];
+        $ship_different_address->mobile = $this->ship_to_different_address['mobile'] ?? $this->billing_address['mobile'];
         $ship_different_address->address_line_1 = $this->ship_to_different_address['billing_address1'];
         $ship_different_address->address_line_2 = $this->ship_to_different_address['billing_address2'] ?? null;
         $ship_different_address->city = $this->ship_to_different_address['city'];
@@ -284,12 +331,12 @@ class CheckoutComponent extends Component
             $orderItem->sale_default_price = $item->model->sale_default_price ?? 0;
             $orderItem->sale_price_start_date = $item->model->sale_from_date;
             $orderItem->sale_price_end_date = $item->model->sale_to_date;
-            $orderItem->courier_id = $item->options['courier_id'];
-            $orderItem->courier = $item->options['courier'];
-            $orderItem->overall_rate = $item->options['overall_rate'];
-            $orderItem->rate = $item->options['rate'];
-            $orderItem->shipping_margin_bear = $item->options['shipping_margin_bear'];
-            $orderItem->etd = $item->options['etd'];
+            // $orderItem->courier_id = $item->options['courier_id'];
+            // $orderItem->courier = $item->options['courier'];
+            // $orderItem->overall_rate = $item->options['overall_rate'];
+            // $orderItem->rate = $item->options['rate'];
+            // $orderItem->shipping_margin_bear = $item->options['shipping_margin_bear'];
+            // $orderItem->etd = $item->options['etd'];
 
             $orderItem->subtotal = $item->qty * $productPrice['price'];
             $offerPrice = 0;

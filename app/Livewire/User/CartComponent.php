@@ -40,7 +40,10 @@ class CartComponent extends Component
     public $to_be_applied_offer_id = [];
     public $offer_applied_cart_product_id = [];
     public $quantities = [];
-    public $global_coupons = [];
+    public $display_coupons = [];
+    public $surprise_gift_amount = 0;
+    public $surprise_gift_product_id = null;
+    public $productCategoryIds = [];
 
     public function mount()
     {
@@ -78,6 +81,7 @@ class CartComponent extends Component
             ];
 
             foreach ($category_assign as $key => $category) {
+                $this->productCategoryIds[] = $category->category_id;
                 if ($key == 0) {
                     $item['item_category'] = $category->category->name;
                 } else {
@@ -103,9 +107,12 @@ class CartComponent extends Component
             $this->pincode = session('shipping_pincode');
             $this->pincodeCheckFunction();
         }
+        $this->productCategoryIds = array_unique($this->productCategoryIds);
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
-
-        $this->global_coupons = Coupon::where('is_global', 1)->where('expiry_date', '>=', Carbon::now()->format('Y-m-d'))->get();
+        $this->surprise_gift_amount = (int) Setting::where('label', 'surprise_gift_minimum_amount')->first()->value;
+        $this->surprise_gift_product_id = Setting::where('label', 'surprise_gift_product_id')->first();
+        $this->getDisplayCoupons();
+        $this->checkSurpriseGift('no');
     }
 
     public function applyCoupon()
@@ -128,7 +135,7 @@ class CartComponent extends Component
 
         if ((int) $checkCuponCode->total_usage <= $orderCount) {
             $this->toastError('This Coupon has been Expired!!!');
-            return flase;
+            return false;
         }
 
         // Check logged in user's usage if user is logged in
@@ -211,6 +218,172 @@ class CartComponent extends Component
         return true;
     }
 
+    public function getDisplayCoupons()
+    {
+        $cartTotal = (float) str_replace(',', '', Cart::total());
+        $display_coupons = [];
+        $currentDate = Carbon::now()->format('Y-m-d');
+
+        // First Condition: Global Coupons
+        $global_coupons = Coupon::where('is_global', 1)->where('expiry_date', '>', $currentDate)->get();
+
+        foreach ($global_coupons as $coupon) {
+            // Check total usage limit
+            $totalUsage = Order::where('coupon_id', $coupon->id)->count();
+            if ($totalUsage >= $coupon->total_usage) {
+                dd($coupon, $coupon->total_usage, $totalUsage);
+                continue;
+            }
+
+            // Check user-specific usage if logged in
+            if (Auth::check() && $coupon->usage_limit > 0) {
+                $userUsage = Order::where('coupon_id', $coupon->id)->where('logged_in_user_id', Auth::id())->count();
+                if ($userUsage >= $coupon->usage_limit) {
+                    continue;
+                }
+            }
+
+            $display_coupons[] = $coupon;
+        }
+
+        // Second Condition: User-Specific Coupons
+        if (Auth::check()) {
+            $user_coupons = Coupon::where('is_global', 0)->whereNotNull('order_id')->where('expiry_date', '>', $currentDate)->join('orders', 'coupons.order_id', '=', 'orders.id')->where('orders.logged_in_user_id', Auth::id())->get();
+
+            foreach ($user_coupons as $coupon) {
+                // Check total usage limit
+                $totalUsage = Order::where('coupon_id', $coupon->id)->count();
+                if ($totalUsage >= $coupon->total_usage) {
+                    continue;
+                }
+
+                // Check user-specific usage
+                $userUsage = Order::where('coupon_id', $coupon->id)->where('logged_in_user_id', Auth::id())->count();
+                if ($userUsage >= $coupon->usage_limit) {
+                    continue;
+                }
+
+                $display_coupons[] = $coupon;
+            }
+        }
+        // New Code
+        $non_global_coupons = Coupon::where('is_global', 0)
+            ->whereNull('order_id')
+            ->where('expiry_date', '>', $currentDate)
+            ->where(function ($query) {
+                // 1. Allow coupons defined for ALL categories (null)
+                $query->whereNull('category');
+
+                // 2. Loop through every category in the cart and check if it matches the coupon
+                if (!empty($this->productCategoryIds)) {
+                    $query->orWhere(function ($subQuery) {
+                        foreach ($this->productCategoryIds as $id) {
+                            // Check if this specific ID exists in the comma-separated DB column
+                            $subQuery->orWhereRaw('FIND_IN_SET(?, category)', [$id]);
+                        }
+                    });
+                }
+            })
+            ->get();
+
+        foreach ($non_global_coupons as $coupon) {
+            // Check minimum order value
+            if ($cartTotal < $coupon->minimum_order_value) {
+                continue;
+            }
+
+            // Check total usage limit
+            $totalUsage = Order::where('coupon_id', $coupon->id)->count();
+            if ($totalUsage >= $coupon->total_usage) {
+                continue;
+            }
+
+            // Check user-specific usage
+            if (Auth::check() && $coupon->usage_limit > 0) {
+                $userUsage = Order::where('coupon_id', $coupon->id)->where('logged_in_user_id', Auth::id())->count();
+                if ($userUsage >= $coupon->usage_limit) {
+                    continue;
+                }
+            }
+
+            $display_coupons[] = $coupon;
+        }
+
+        $this->display_coupons = $display_coupons;
+    }
+
+    public function checkSurpriseGift($value = 'yes')
+    {
+        // 1. Validate that the setting exists and has a value
+        if (!$this->surprise_gift_product_id || empty($this->surprise_gift_product_id->value)) {
+            return;
+        }
+
+        $giftProductId = $this->surprise_gift_product_id->value;
+        $threshold = $this->surprise_gift_amount;
+
+        // 2. Calculate Current Cart Total (Excluding the gift itself)
+        $currentCartTotal = 0;
+        $existingGiftRowId = null;
+
+        foreach (Cart::instance('cart')->content() as $item) {
+            // Check if this specific row is our automated gift
+            if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
+                $existingGiftRowId = $item->rowId;
+                continue; // Do not add the gift value to the total calculation
+            }
+
+            // Calculate total of normal items
+            $currentCartTotal += $item->price * $item->qty;
+        }
+
+        // 3. Compare Total vs Threshold
+        if ($currentCartTotal >= $threshold) {
+            // User is ELIGIBLE for the gift
+            if (!$existingGiftRowId) {
+                // Fetch the product details from DB
+                $product = \App\Models\Product::find($giftProductId);
+
+                if ($product) {
+                    Cart::instance('cart')
+                        ->add(
+                            $product->id,
+                            $product->name,
+                            1, // Quantity
+                            0, // Price
+                            [
+                                'is_gift_product' => true,
+                                'featured_image' => $product->featured_image,
+                                'discount_price' => 0,
+                            ],
+                        )
+                        ->associate('App\Models\Product');
+                }
+            }
+            $total = floatval(str_replace(',', '', Cart::total()));
+            $remain_amount = 0;
+            if ($total > $this->surprise_gift_amount) {
+                $percentage = 100;
+                $remain_amount = 0;
+            } else {
+                $percentage = ($total / $this->surprise_gift_amount) * 100;
+                $remain_amount = $this->surprise_gift_amount - $total;
+            }
+            if ($value == 'yes') {
+                $this->dispatch('surprise-gift');
+            }
+        } else {
+            // User is NOT ELIGIBLE (Total is too low)
+            if ($existingGiftRowId) {
+                // Remove the gift if it exists
+                Cart::instance('cart')->remove($existingGiftRowId);
+            }
+            if ($value == 'yes') {
+                $this->dispatch('surprise-gift');
+            }
+        }
+    }
+
     public function incrementQuantity($rowId)
     {
         if ($rowId) {
@@ -286,6 +459,8 @@ class CartComponent extends Component
                 }
             }
         }
+        $this->checkSurpriseGift();
+        $this->getDisplayCoupons();
     }
 
     public function updateQuantity($rowId)
@@ -361,6 +536,8 @@ class CartComponent extends Component
                 }
             }
         }
+        $this->checkSurpriseGift();
+        $this->getDisplayCoupons();
     }
 
     public function decrementQuantity($rowId)
@@ -438,6 +615,8 @@ class CartComponent extends Component
                 }
             }
         }
+        $this->checkSurpriseGift();
+        $this->getDisplayCoupons();
     }
 
     public function removeFromCart($rowId)
@@ -502,13 +681,15 @@ class CartComponent extends Component
         }
         // $this->offerCheckEligibility();
         $this->pincodeCheckFunction();
+        $this->checkSurpriseGift();
+        $this->getDisplayCoupons();
     }
 
-    public function pincodeCheckFunction()
+    public function pincodeCheckFunction($show_toast = 'no')
     {
         $checkoutconditionFail = false;
 
-        if ($this->pincode == '') {
+        if ($this->pincode == '' && $show_toast == 'yes') {
             $this->toastError('Please Enter Pincode');
         }
         $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
@@ -521,16 +702,22 @@ class CartComponent extends Component
                 session()->forget('show_deleviery_time');
             } else {
                 $cart_items = Cart::instance('cart')->content();
+                $flat_rate = Setting::where('label', 'Flat Rate')->first()->value;
+                session()->put('shipping_charge', (int) $flat_rate);
+                session()->put('latest_etd', '5 to 7 days');
+                session()->put('shipping_bear_margin', 0);
 
-                $checkoutconditionFail = calculateRates($cart_items, $this->pincode);
-                if ($checkoutconditionFail) {
-                    $this->toastError('Sorry ! Delivery is currently unavailable to the selected pincode.');
-                } else {
-                    $this->free_shipping = false;
-                    session()->forget('free_shipping_pincode');
-                    session()->put('show_deleviery_time', true);
+                // $checkoutconditionFail = calculateRates($cart_items, $this->pincode);
+                // if ($checkoutconditionFail) {
+                //     $this->toastError('Sorry ! Delivery is currently unavailable to the selected pincode.');
+                // } else {
+                //     $this->free_shipping = false;
+                session()->forget('free_shipping_pincode');
+                session()->put('show_deleviery_time', true);
+                if ($show_toast == 'yes') {
                     $this->toastSuccess('Charges Calculated Successfully!');
                 }
+                // }
             }
             session()->put('shipping_pincode', $this->pincode);
         }
@@ -582,10 +769,11 @@ class CartComponent extends Component
         }
     }
 
-    public function checkCoupon($coupon_code){
+    public function checkCoupon($coupon_code)
+    {
         $this->couponCode = $coupon_code;
         $response = $this->applyCoupon();
-        if(!$response){
+        if (!$response) {
             $this->couponCode = '';
         }
     }

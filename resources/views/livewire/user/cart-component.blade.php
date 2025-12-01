@@ -1,4 +1,37 @@
 <main class="main">
+    <style>
+        .gift-row {
+            background: linear-gradient(90deg, #fffbf0 0%, #ffffff 100%);
+            border: 1px solid #f7e3a6;
+            border-left: 5px solid #ffbc0d;
+            /* Gold left border */
+        }
+
+        .gift-badge {
+            background-color: #ffbc0d;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .price-free {
+            color: #25b579;
+            /* Success Green */
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .gift-icon-container {
+            color: #ffbc0d;
+            font-size: 20px;
+            margin-right: 5px;
+        }
+    </style>
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
@@ -8,6 +41,18 @@
             </div>
         </div>
     </div>
+    @php
+        $shippingCharge = (float) (session('shipping_charge') ?? 0);
+        $total = floatval(str_replace(',', '', Cart::total()));
+        $remain_amount = 0;
+        if ($total > $surprise_gift_amount) {
+            $percentage = 100;
+            $remain_amount = 0;
+        } else {
+            $percentage = ($total / $surprise_gift_amount) * 100;
+            $remain_amount = $surprise_gift_amount - $total;
+        }
+    @endphp
     <div class="container mb-80 mt-50">
         <div class="row">
             <div class="col-lg-12 mb-40">
@@ -15,12 +60,13 @@
                     <h1 class="title style-3 mb-20 text-center">Your Cart</h1>
                     <h6 class="text-body text-center">There are <span
                             class="text-brand">{{ Cart::instance('cart')->count() }}</span> products in your cart
+                        {{ $remain_amount }}
                     </h6>
                 </div>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container" wire:ignore>
             <div class="row">
                 <div class="col-12">
                     <div class="mb-md-5 mb-4">
@@ -28,11 +74,13 @@
                             <div class="gift-text-measure">
                                 <div class="progress-title">Grab Your Offer Now!!</div>
                                 {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
-                                <p class="quicksand fw-500">Shop ₹500 and get exclusive offer only on RollMills. Let the
+                                <p class="quicksand fw-500">Shop ₹{{ $surprise_gift_amount }} and get exclusive surprise
+                                    gift
+                                    only on RollMills. Let the
                                     offers Roll-In !!</p>
                             </div>
                             <div class="gift-scroll-bar">
-                                <div class="progress-bar-cart" id="" data-width="100">
+                                <div class="progress-bar-cart" id="" data-width="{{ $percentage }}">
                                     <div class="bar-circle">
                                         <i class="fa-solid fa-gift"></i>
                                     </div>
@@ -48,7 +96,13 @@
                             </div>
                             <div class="content">
                                 <p class="text-center mt-4 fs-20 fw-500">
-                                    You are ₹200 away from your gift &nbsp;<a href="/shop">Shop Now </a>
+
+                                    @if ($remain_amount > 0)
+                                        You are ₹{{ $remain_amount }} away from your gift &nbsp;<a href="/shop">Shop
+                                            Now </a>
+                                    @else
+                                        Your Surprise gift has been successfully added to your cart
+                                    @endif
                                 </p>
                             </div>
                         </div>
@@ -76,6 +130,9 @@
                             @endphp
                             @foreach (Cart::instance('cart')->content() as $item)
                                 @php
+                                    // Check if this is the gift product
+                                    $isGift = $item->options['is_gift_product'] ?? false;
+
                                     if ($item->model->slug) {
                                         $shop_detail_url = route('shop-detail', [
                                             'slug' => $item->model->slug,
@@ -88,28 +145,45 @@
                                         ]);
                                     }
                                 @endphp
-                                <tr class="pt-3">
-                                    <td class="image product-thumbnail pt-40 position-relative ps-3"><img
-                                            src="{{ asset('storage/' . $item->model->featured_image) }}"
+
+                                {{-- Add 'gift-row' class if it is a gift --}}
+                                <tr class="pt-3 {{ $isGift ? 'gift-row' : '' }}">
+
+                                    {{-- IMAGE COLUMN --}}
+                                    <td class="image product-thumbnail pt-40 position-relative ps-3">
+                                        <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                             alt="{{ $item->model->seo_meta }}">
-                                        <div class="display-visible-480 d-none">
-                                            <a href="#"
-                                                class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
-                                                wire:confirm="Are you sure you want to remove this item from your cart?">
-                                                <i class="fi-rs-trash text-white"></i></a>
-                                        </div>
+
+                                        {{-- Mobile Remove Button (Hide if Gift) --}}
+                                        @if (!$isGift)
+                                            <div class="display-visible-480 d-none">
+                                                <a href="#"
+                                                    class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
+                                                    wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
+                                                    wire:confirm="Are you sure you want to remove this item from your cart?">
+                                                    <i class="fi-rs-trash text-white"></i></a>
+                                            </div>
+                                        @endif
                                     </td>
+
+                                    {{-- NAME COLUMN --}}
                                     <td class="product-des product-name">
-                                        <h6 class="mb-5"><a class="product-name mb-10 text-heading"
-                                                href="{{ $shop_detail_url }}">{{ $item->model->name }}
-                                                {{ $item->id }}</a>
+                                        @if ($isGift)
+                                            <span class="gift-badge"><i class="fi-rs-gift mr-5"></i> Surprise
+                                                Gift</span>
+                                        @endif
+
+                                        <h6 class="mb-5">
+                                            <a class="product-name mb-10 text-heading" href="{{ $shop_detail_url }}">
+                                                {{ $item->model->name }}
+                                            </a>
                                         </h6>
+
+                                        {{-- Rating (Only show for real products, maybe hide for gift if desired, keeping it for now) --}}
                                         @php
                                             $reviews = \App\Models\ProductReview::where('status', 1)
                                                 ->where('product_id', $item->model->id)
                                                 ->get();
-
                                             $reviews_count = $reviews->count();
                                             $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
                                             $reviews_percentage = ($reviews_avg / 5) * 100;
@@ -121,45 +195,85 @@
                                             </div>
                                             <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
                                         </div>
+                                        @if ($isGift)
+                                            <p class="font-xs text-muted mt-1">Free gift added automatically!</p>
+                                        @endif
                                     </td>
+
+                                    {{-- PRICE COLUMN --}}
                                     <td class="price small-screen-table-td me-3" data-title="Price">
-                                        <h4 class="text-body small-screen-table-td-content">
-                                            ₹{{ number_format($item->price) }}</h4>
+                                        @if ($isGift)
+                                            <h4 class="text-body small-screen-table-td-content">
+                                                <del
+                                                    class="text-muted fs-6">₹{{ number_format($item->model->price) }}</del><br>
+                                                <span class="price-free">FREE</span>
+                                            </h4>
+                                        @else
+                                            <h4 class="text-body small-screen-table-td-content">
+                                                ₹{{ number_format($item->price) }}</h4>
+                                        @endif
                                     </td>
+
+                                    {{-- QUANTITY COLUMN --}}
                                     <td class="text-center detail-info" data-title="Stock">
-                                        <div class="detail-extralink mr-15 display-hide-480">
-                                            <div class="detail-qty border radius">
-                                                <a href="#"
-                                                    wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
-                                                    class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                <span class="qty-val">{{ $item->qty }}</span>
-                                                <a href="#"
-                                                    wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
-                                                    class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                        @if ($isGift)
+                                            {{-- Lock Quantity for Gift --}}
+                                            <div class="detail-qty border radius bg-light disabled"
+                                                style="cursor: not-allowed; opacity: 0.7;">
+                                                <span class="qty-val">1</span>
                                             </div>
-                                        </div>
-                                        <div class="quantity d-none">
-                                            <button type="button" class="minus"
-                                                wire:click.prevent="decrementQuantity('{{ $item->rowId }}')">-</button>
-                                            <input type="number" min="1" value="{{ $item->qty }}"
-                                                class="qty" size="4" title="Qty"
-                                                wire:change="updateQuantity('{{ $item->rowId }}')"
-                                                wire:model.lazy="quantities.{{ $item->rowId }}">
-                                            <button type="button" class="plus"
-                                                wire:click.prevent="incrementQuantity('{{ $item->rowId }}')">+</button>
-                                        </div>
+                                        @else
+                                            {{-- Normal Quantity Controls --}}
+                                            <div class="detail-extralink mr-15 display-hide-480">
+                                                <div class="detail-qty border radius">
+                                                    <a href="#"
+                                                        wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
+                                                        class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                    <span class="qty-val">{{ $item->qty }}</span>
+                                                    <a href="#"
+                                                        wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
+                                                        class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="quantity d-none">
+                                                <button type="button" class="minus"
+                                                    wire:click.prevent="decrementQuantity('{{ $item->rowId }}')">-</button>
+                                                <input type="number" min="1" value="{{ $item->qty }}"
+                                                    class="qty" size="4" title="Qty"
+                                                    wire:change="updateQuantity('{{ $item->rowId }}')"
+                                                    wire:model.lazy="quantities.{{ $item->rowId }}">
+                                                <button type="button" class="plus"
+                                                    wire:click.prevent="incrementQuantity('{{ $item->rowId }}')">+</button>
+                                            </div>
+                                        @endif
                                     </td>
+
+                                    {{-- SUBTOTAL COLUMN --}}
                                     <td class="price small-screen-table-td" data-title="Total Price">
-                                        <h4 class="text-brand small-screen-table-td-content">
-                                            ₹{{ number_format($item->price * $item->qty) }}</h4>
+                                        @if ($isGift)
+                                            <h4 class="price-free small-screen-table-td-content">₹0</h4>
+                                        @else
+                                            <h4 class="text-brand small-screen-table-td-content">
+                                                ₹{{ number_format($item->price * $item->qty) }}</h4>
+                                        @endif
                                     </td>
+
+                                    {{-- REMOVE COLUMN --}}
                                     <td class="action text-center small-screen-table-td remove-btn"
                                         data-title="Remove">
-                                        <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
-                                            wire:confirm="Are you sure you want to remove this item from your cart?"
-                                            class="text-body"><i class="fi-rs-trash"></i></a>
+                                        @if ($isGift)
+                                            {{-- Hide Remove button for gift, or show lock icon --}}
+                                            <span class="text-muted" title="Automatic Gift"><i
+                                                    class="fi-rs-lock"></i></span>
+                                        @else
+                                            <a href="#"
+                                                wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
+                                                wire:confirm="Are you sure you want to remove this item from your cart?"
+                                                class="text-body"><i class="fi-rs-trash"></i></a>
+                                        @endif
                                     </td>
                                 </tr>
+
                                 @php
                                     if ($item->options && isset($item->options['discount_price'])) {
                                         $totalOfferDiscountedPrice +=
@@ -184,11 +298,11 @@
                     {{-- <p class="mb-30"><span class="font-lg text-muted">Flat rate:</span><strong
                             class="text-brand">5%</strong></p> --}}
                     <form class="field_form shipping_calculator mt-30" method="POST"
-                        wire:submit.prevent="pincodeCheckFunction">
+                        wire:submit.prevent="pincodeCheckFunction('yes')">
                         <div class="form-row row">
                             <div class="form-group col-lg-12">
                                 <input placeholder="PostCode / ZIP" name="name" type="text" class="pl-15"
-                                    wire:model="pincode">
+                                    wire:model="pincode" wire:keydown.enter="pincodeCheckFunction('yes')">
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -204,7 +318,7 @@
                         <button class="btn d-flex justify-content-center align-items-center"
                             wire:click="applyCoupon"><i class="fi-rs-label mr-10"></i>Apply</button>
                     </div>
-                    @foreach ($global_coupons as $global_coupon)
+                    @foreach ($display_coupons as $global_coupon)
                         <a class="coupon-card-cart {{ $couponCode == $global_coupon->coupon_code ? 'selected' : '' }}"
                             wire:click.prevent="checkCoupon('{{ $global_coupon->coupon_code }}')">
                             <div class="coupon-header">
@@ -300,13 +414,8 @@
                                                 ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                                             </h4>
                                         @else
-                                            @php
-                                                $shippingCharge = (float) (session('shipping_charge') ?? 0);
-                                                $total =
-                                                    floatval(str_replace(',', '', Cart::total())) + $shippingCharge;
-                                            @endphp
                                             <h4 class="text-brand text-end fs-16">
-                                                ₹{{ number_format($total, 2) }}
+                                                ₹{{ number_format($total + (session('shipping_charge') ?? 0), 2) }}
                                             </h4>
                                         @endif
                                     </td>

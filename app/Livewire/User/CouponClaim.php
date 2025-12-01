@@ -17,6 +17,7 @@ class CouponClaim extends Component
     public $otp = ['', '', '', '']; // Array for 4 digits
     public $user_id;
     public $couponCode;
+    public $coupon;
 
     // Validation rules
     protected $rules = [
@@ -60,11 +61,6 @@ class CouponClaim extends Component
         if ($user) {
             $this->user_id = $user->id;
             $this->step = 3;
-
-            // LOGIN USER (Optional: If you want to actually log them in via Laravel)
-            // auth()->login($user); 
-
-            // DISPATCH EVENT TO CLOSE MODAL
             $this->dispatch('close-modal');
         } else {
             $this->addError('otp', 'Invalid OTP. Please try again.');
@@ -112,9 +108,11 @@ class CouponClaim extends Component
         $coupon->usage_limit = 1;
         $coupon->total_usage = 1;
         $coupon->category = "";
-        $coupon->expiry_date = $settings->where('label', 'coupon_expiry')->first()->value ?? 0;
+        $coupon->expiry_date = Carbon::now()->addDays($settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
         $coupon->order_id = $order->id;
         $coupon->save();
+
+        $this->coupon = $coupon;
 
         $this->couponCode = $couponCode;
         $this->step = 4;

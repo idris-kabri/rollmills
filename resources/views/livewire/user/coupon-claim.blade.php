@@ -10,20 +10,29 @@
                                 <h2 class="offer-title text-uppercase mt-35 text-center">Roll into Savings with <br>
                                     <span class="fw-900">Roll Mills!</span>
                                 </h2>
+
+                                {{-- DYNAMIC DISCOUNT MESSAGE --}}
                                 <div class="discount-amount fw-600 text-secondary mt-2 fs-18 mb-4">
-                                    Congratulations! You've unlocked a ₹200 discount on your next purchase. <br>
+                                    Congratulations! You've unlocked a
+                                    @if ($coupon->discount_type == 'Percentage')
+                                        {{ $coupon->discount_value }}%
+                                    @else
+                                        ₹{{ $coupon->discount_value }}
+                                    @endif
+                                    discount on your next purchase. <br>
                                     <span>Keep the savings rolling with Roll Mills!</span>
                                 </div>
+
                                 <div class="result-display mt-0">
                                     <p id="copyCodeBtn" class="position-absolute end-0 top-0 fs-12 copy-code">Copy Code
                                     </p>
                                     <p id="couponCode" class="result-numbers">{{ $couponCode }}</p>
                                 </div>
 
-                                <p class="discount-amount fw-600 text-secondary mt-4 fs-16 fst-italic">Use this code on
-                                    checkout
-                                    and
-                                    let the deals roll your way!</p>
+                                <p class="discount-amount fw-600 text-secondary mt-4 fs-16 fst-italic">
+                                    Use this code on checkout and let the deals roll your way!
+                                </p>
+
                                 <div class="row">
                                     <div class="col-12">
                                         <h5 class="mt-3 fs-24 text-brand">Terms & Conditions</h5>
@@ -31,16 +40,33 @@
                                     <div class="col-lg-6">
                                         <ul class="terms-list text-muted small text-start mt-3 mx-auto">
                                             <li>Valid only on Roll Mills’ official website.</li>
-                                            <li>Coupon code ROLL200 must be applied at checkout.</li>
-                                            <li>Minimum purchase of ₹1000 required to avail discount.</li>
 
+                                            {{-- DYNAMIC COUPON CODE IN T&C --}}
+                                            <li>Coupon code <strong>{{ $couponCode }}</strong> must be applied at
+                                                checkout.</li>
+
+                                            {{-- DYNAMIC MINIMUM ORDER VALUE --}}
+                                            @if ($coupon->minimum_order_value > 0)
+                                                <li>Minimum purchase of ₹{{ $coupon->minimum_order_value }} required to
+                                                    avail discount.</li>
+                                            @else
+                                                <li>No minimum purchase required.</li>
+                                            @endif
                                         </ul>
                                     </div>
                                     <div class="col-lg-6">
                                         <ul class="terms-list text-muted small text-start mt-lg-3 mt-0 mx-auto">
+                                            {{-- DYNAMIC MAX DISCOUNT (Usually for percentages) --}}
+                                            @if ($coupon->maximum_discount_amount > 0)
+                                                <li>Maximum discount capped at ₹{{ $coupon->maximum_discount_amount }}.
+                                                </li>
+                                            @endif
 
                                             <li>Non-transferable and cannot be redeemed for cash.</li>
+
+                                            {{-- OPTIONAL: DYNAMIC EXPIRY DATE (If you have it) --}}
                                             <li>Offer valid till 30 November 2025 or while stocks last.</li>
+
                                             <li>Roll Mills reserves the right to modify or cancel the offer anytime.
                                             </li>
                                         </ul>
@@ -58,11 +84,7 @@
                 <div class="row">
                     <div class="col-xl-11 col-lg-12 m-auto">
                         <div class="content mb-50">
-                            <h1 class="title style-3 mb-20 text-center">Your Order List</h1>
-                            <h6 class="text-body text-center">There are <span class="text-brand">5</span> products in
-                                this
-                                list
-                            </h6>
+                            <h1 class="title style-3 mb-20 text-center">Your Orders</h1>
                         </div>
                         <div class="table-responsive shopping-summery table-responsive-custom">
                             <table class="table table-wishlist mb-0">
@@ -125,17 +147,20 @@
                                             <td class="price small-screen-table-td" data-title="Price">
                                                 <h3 class="text-brand small-screen-table-td-content">
                                                     ₹{{ $user_order->total }}</h3>
-                                                z
+                                            </td>
                                             <td class="detail-info small-screen-table-td" data-title="Date Purchased">
                                                 <p class="fs-17 fw-700 small-screen-table-td-content">
                                                     {{ $user_order->created_at->format('d M Y') }}</p>
                                             </td>
                                             @if ($user_order->is_coupon_avail == 0)
-                                                <button type="button"
-                                                    wire:click.prevent="applyCoupon({{ $user_order->id }})"
-                                                    class="btn btn-sm custom-btn-table-responsive">
-                                                    Avail Coupon
-                                                </button>
+                                                <td class="text-right">
+                                                    <button type="button"
+                                                        wire:click="applyCoupon({{ $user_order->id }})"
+                                                        wire:confirm="Are you sure you want to avail coupon for these Order?"
+                                                        class="btn btn-sm custom-btn-table-responsive">
+                                                        Avail Coupon
+                                                    </button>
+                                                </td>
                                             @else
                                                 <td class="text-right">
                                                     <button class="btn btn-sm custom-btn-table-responsive">Coupon
@@ -299,31 +324,6 @@
 
 @push('scripts')
     <script>
-        // // --- 1. Auto-Open Modal on Page Load ---
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     var modalElement = document.getElementById('giftCouponModal');
-        //     if (modalElement) {
-        //         var myModal = new bootstrap.Modal(modalElement);
-        //         myModal.show();
-        //     }
-        // });
-
-        // document.addEventListener('livewire:initialized', () => {
-        //     Livewire.on('close-modal', () => {
-        //         // Get the modal element
-        //         const modalEl = document.getElementById('giftCouponModal');
-
-        //         // Get the existing Bootstrap instance
-        //         const modalInstance = bootstrap.Modal.getInstance(modalEl);
-
-        //         if (modalInstance) {
-        //             // Option A: Close Immediately
-        //             modalInstance.hide();
-        //         }
-        //     });
-        // });
-
-
         // --- 1. Auto-Open Modal on Page Load ---
         document.addEventListener('DOMContentLoaded', function() {
             var modalElement = document.getElementById('giftCouponModal');

@@ -28,7 +28,7 @@ class OrderComponent extends Component
             ->orderBy('id', 'desc')
             ->get();
         $productCategorys = ProductCategory::where('parent_id', null)->get();
-        $previously_order_items = collect(); // Placeholder for render
+        $previously_order_items = collect(); 
         $banner = Banner::where('status', 1)->where('banner_type', 'order_page_banner')->first();
 
         return view('livewire.user.order-component', compact('user_orders', 'productCategorys', 'previously_order_items', 'banner'))->layout('layouts.user.app');
@@ -36,7 +36,6 @@ class OrderComponent extends Component
 
     public function openReviewModalForOrder($order_id)
     {
-        
         $this->reset(['rating', 'remarks', 'review_images', 'target_product_ids']);
 
         $order = Order::with('getOrderItems')->find($order_id);
@@ -46,8 +45,6 @@ class OrderComponent extends Component
                 ->pluck('item_id')
                 ->unique()
                 ->toArray();
-
-                dd($this->target_product_ids);
 
             $this->dispatch('open-review-modal');
         }
@@ -59,7 +56,7 @@ class OrderComponent extends Component
             'rating' => 'required|integer|min:1|max:5',
             'remarks' => 'required|string|max:5000',
             'review_images.*' => 'nullable|image|max:2048',
-            'target_product_ids' => 'required|array|min:1' // Ensure we have products to review
+            'target_product_ids' => 'required|array|min:1' 
         ]);
 
         $user = Auth::user();
@@ -68,28 +65,36 @@ class OrderComponent extends Component
         if ($this->review_images) {
             $imagePaths = [];
             foreach ($this->review_images as $image) {
+                // Fix: Ensure storage folder exists or uses correct disk
                 $imagePaths[] = $image->store('reviews', 'public');
             }
             $imageString = implode(',', $imagePaths);
         }
 
         foreach ($this->target_product_ids as $productId) {
-
-            $review = new ProductReview();
-            $review->product_id = $productId; // Specific Product ID
-            $review->user_id    = $user->id;
-            $review->name       = $user->name;
-            $review->email      = $user->email;
-            $review->ratings    = $this->rating; // Same rating for all
-            $review->remarks    = $this->remarks; // Same remark for all
-            $review->image      = $imageString;   // Same images for all
-            $review->status     = 1;
-            $review->save();
+            // Optional: Check if review already exists to prevent duplicates
+            $exists = ProductReview::where('user_id', $user->id)
+                ->where('product_id', $productId)
+                ->exists();
+            
+            if(!$exists) {
+                $review = new ProductReview();
+                $review->product_id = $productId; 
+                $review->user_id    = $user->id;
+                $review->name       = $user->name;
+                $review->email      = $user->email;
+                $review->ratings    = $this->rating; 
+                $review->remarks    = $this->remarks; 
+                $review->image      = $imageString;   
+                $review->status     = 1; // Assuming 1 is active/approved, adjust as needed
+                $review->save();
+            }
         }
 
         $this->reset(['rating', 'remarks', 'review_images', 'target_product_ids']);
         $this->dispatch('close-review-modal');
 
+        // Assuming you have a standard flash message component
         session()->flash('message', 'Reviews submitted for all products in this order!');
     }
 }

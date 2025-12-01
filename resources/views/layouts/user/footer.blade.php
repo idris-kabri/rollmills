@@ -355,6 +355,9 @@
             }
         });
     })
+    window.addEventListener('surprise-gift', (event) => {
+        window.location.reload();
+    })
     window.addEventListener('remove-from-cart', (event) => {
         var data = event.detail[0];
         console.log(data)

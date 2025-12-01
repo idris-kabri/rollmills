@@ -1031,7 +1031,7 @@ input[type="number"] {
     display: flex;
     align-items: center;
     justify-content: end;
-    z-index: 999;
+    z-index: 99;
 
     background-image: linear-gradient(
         135deg,
@@ -1093,7 +1093,7 @@ input[type="number"] {
     position: absolute;
     right: -15px;
     bottom: -18px;
-    z-index: 99999;
+    z-index: 100;
     display: block;  
 
 }
@@ -1105,7 +1105,7 @@ input[type="number"] {
 
 .milestone-marker-open {
     display: none;   
-    z-index: 99999;
+    z-index: 100;
     position: absolute;
     right: -10px;
     bottom: -20px;
