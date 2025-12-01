@@ -236,6 +236,15 @@
         </div>
     </div>
 </footer>
+
+{{-- Whatsapp Logo --}}
+<div class="whatsapp-logo-contact">
+    <a href="https://wa.me/918949428750?text=Hi%20RollMills%20Store.">
+        <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" alt=""
+            class="img-fluid">
+    </a>
+</div>
+
 <!-- Preloader Start -->
 <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
@@ -243,7 +252,7 @@
             {{-- <div class="text-center">
                 <img src="{{ asset('assets/frontend/imgs/theme/loading.gif') }}" alt="" />
             </div> --}}
-            <div class="loader-new"></div> 
+            <div class="loader-new"></div>
         </div>
     </div>
 </div>
