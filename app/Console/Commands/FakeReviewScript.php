@@ -23,52 +23,7 @@ class FakeReviewScript extends Command
      */
     protected $description = 'Command description';
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
-    {
-        // 1. Create Fake Users (agar pehle se nahi hain toh)
-        // Aapne 100-200 reviews bola hai, toh hum users badha dete hain.
-        for ($i = 0; $i < 30; $i++) {
-            User::factory()->create([
-                "name"    => fake('en_IN')->name(),
-                "is_fake" => 1,
-                "email"   => fake()->unique()->safeEmail(),
-                "mobile"  => "9" . fake()->numberBetween(100000000, 999999999),
-                "role"    => "user",
-            ]);
-        }
-
-        $products = Product::inRandomOrder()->get();
-
-        foreach ($products as $product) {
-            // Har product ke liye 15-20 reviews
-            $count = rand(10, 20);
-            $fakeUsers = User::where('is_fake', 1)->inRandomOrder()->limit($count)->get();
-
-            foreach ($fakeUsers as $user) {
-                // Sirf 4 ya 5 star rating
-                $rating = fake()->numberBetween(4, 5);
-
-                // Helper function se lamba review generate karein
-                $remarks = $this->generateLongReview($rating);
-
-                ProductReview::create([
-                    'product_id' => $product->id,
-                    'user_id'    => $user->id,
-                    "name"       => $user->name,
-                    "email"      => $user->email,
-                    'ratings'    => $rating,
-                    'remarks'    => $remarks,
-                    'status'     => 1,
-                ]);
-            }
-        }
-
-        $this->info("Fake reviews generated successfully!");
-    }
-    private function generateEnglishReview($rating)
+        public function generateEnglishReview($rating)
     {
         if ($rating == 5) {
             // 5 STAR - EXCELLENT
@@ -205,4 +160,51 @@ class FakeReviewScript extends Command
 
         return "$part1 $part2 $part3";
     }
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        // 1. Create Fake Users (agar pehle se nahi hain toh)
+        // Aapne 100-200 reviews bola hai, toh hum users badha dete hain.
+        for ($i = 0; $i < 30; $i++) {
+            User::factory()->create([
+                "name"    => fake('en_IN')->name(),
+                "is_fake" => 1,
+                "email"   => fake()->unique()->safeEmail(),
+                "mobile"  => "9" . fake()->numberBetween(100000000, 999999999),
+                "role"    => "user",
+            ]);
+        }
+
+        $products = Product::inRandomOrder()->get();
+
+        foreach ($products as $product) {
+            // Har product ke liye 15-20 reviews
+            $count = rand(10, 20);
+            $fakeUsers = User::where('is_fake', 1)->inRandomOrder()->limit($count)->get();
+
+            foreach ($fakeUsers as $user) {
+                // Sirf 4 ya 5 star rating
+                $rating = fake()->numberBetween(4, 5);
+
+                // Helper function se lamba review generate karein
+                $remarks = $this->generateEnglishReview($rating);
+
+                ProductReview::create([
+                    'product_id' => $product->id,
+                    'user_id'    => $user->id,
+                    "name"       => $user->name,
+                    "email"      => $user->email,
+                    'ratings'    => $rating,
+                    'remarks'    => $remarks,
+                    'status'     => 1,
+                ]);
+            }
+        }
+
+        $this->info("Fake reviews generated successfully!");
+    }
+
 }
