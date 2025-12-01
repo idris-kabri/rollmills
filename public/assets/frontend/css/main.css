@@ -10462,26 +10462,30 @@ footer .hotline img {
 }
 
 #scrollUp {
-    width: 32px;
-    height: 32px;
-    color: #253d4e;
-    right: 30px;
-    bottom: 30px;
+    width: 40px;
+    height: 40px;
+    color: var(--color-1);
+    right: 40px;
+    bottom: 40px;
     border-radius: 30px;
     text-align: center;
     overflow: hidden;
     z-index: 999 !important;
-    border: 2px solid #253d4e;
+    border: 2px solid var(--color-light-1);
     background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #scrollUp i {
     display: block;
-    line-height: 32px !important;
+    /* line-height: 32px !important; */
     font-size: 25px;
 }
 
 #scrollUp:hover {
+    border: 2px solid var(--color-2);
     -webkit-transform: translateY(-5px);
     transform: translateY(-5px);
 }

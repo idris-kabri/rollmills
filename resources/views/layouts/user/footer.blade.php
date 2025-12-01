@@ -239,7 +239,7 @@
 
 {{-- Whatsapp Logo --}}
 <div class="whatsapp-logo-contact">
-    <a href="https://wa.me/918949428750?text=Hi%20RollMills%20Store.">
+    <a href="https://wa.me/918764766553?text=Hi%20RollMills%20Store.">
         <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" alt=""
             class="img-fluid">
     </a>
