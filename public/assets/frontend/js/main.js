@@ -1,13 +1,27 @@
 (function ($) {
     ("use strict");
     // Page loading
+    // $(window).on("load", function () {
+    //     $("#preloader-active").delay(0).fadeOut("slow");
+    //     $("body").delay(0).css({
+    //         overflow: "visible",
+    //     });
+    //     $("#onloadModal").modal("show");
+    // });
     $(window).on("load", function () {
-        $("#preloader-active").delay(0).fadeOut("slow");
-        $("body").delay(0).css({
-            overflow: "visible",
-        });
-        $("#onloadModal").modal("show");
+        let modalShown = localStorage.getItem("triggeredModal");
+
+        if (!modalShown) {
+            $("#preloader-active").delay(0).fadeOut("slow");
+            $("body").delay(0).css({ overflow: "visible" });
+            $("#onloadModal").modal("show");
+            localStorage.setItem("triggeredModal", "true");
+        } else {
+            $("#preloader-active").delay(0).fadeOut("slow");
+            $("body").delay(0).css({ overflow: "visible" });
+        }
     });
+
     /*-----------------
         Menu Stick
     -----------------*/
@@ -188,7 +202,6 @@
             appendArrows: appendArrowsClassName,
         });
     });
-
 
     // // /*Carausel 4 columns*/
     // $(".carausel-4-coumns").each(function (key, item) {
