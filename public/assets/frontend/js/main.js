@@ -18,7 +18,8 @@
             localStorage.setItem("triggeredModal", "true");
         } else {
             $("#preloader-active").delay(0).fadeOut("slow");
-            $("body").delay(0).css({ overflow: "visible" });
+            // $("body").delay(0).css({ overflow: "visible" });
+            $("#onloadModal").toggleClass("d-none");
         }
     });
 

@@ -327,9 +327,9 @@
                     </div>
 
                     <!-- Filter By Price -->
-                    {{-- <div class="sidebar-widget range mb-30 d-none d-xl-block" wire:ignore>
-                        <h5 class="section-title style-1 mb-30">Filter by price</h5>
-                        <div class="price-filter">
+                    <div class="sidebar-widget range mb-30 d-none d-xl-block">
+                        <h5 class="section-title style-1 mb-20">Filter by price</h5>
+                        {{-- <div class="price-filter">
                             <div class="price-filter-inner">
                                 <div id="shop-slider-range" class="mb-20"></div>
 
@@ -346,8 +346,32 @@
                                     </div>
                                 </div>
                             </div>
+                        </div> --}}
+
+                        <!-- Slider Container -->
+                        <div class="range-slider">
+                            <div class="slider-track"></div>
+                            <div class="slider-range"></div>
+                            <div class="slider-handle handle-min" data-type="min"></div>
+                            <div class="slider-handle handle-max" data-type="max"></div>
                         </div>
-                    </div> --}}
+
+                        <!-- Input fields for manual entry -->
+                        <div class="inputs">
+                            <div class="input-group-price">
+                                <label for="min-input">Min:</label>
+                                <input type="number" class="quicksand" id="min-input" wire:model.live="minPrice"
+                                    value="0" min="0" max="10000" />
+                            </div>
+
+                            <div class="input-group-price">
+                                <label for="max-input">Max:</label>
+                                <input type="number" class="quicksand" id="max-input" wire:model.live="maxPrice"
+                                    value="10000" min="0" max="10000" />
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- Product sidebar Widget -->
                     <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10 d-none d-xl-block">
