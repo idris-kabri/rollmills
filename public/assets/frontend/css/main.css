@@ -3533,6 +3533,15 @@ table .product-thumbnail img {
     border-radius: 25px;
     padding: 40px;
     border: 1px solid #dcaa15b7;
+    background: url("/assets/frontend/imgs/icon&images/gz8vNxZFT9MVn9vG3u0ndFVc4AmtvKeplrme23EK-removebg-preview (4).png");
+    background-size: contain;
+    background-position: 0 bottom;
+    background-repeat: no-repeat;
+}
+
+.background-none {
+    background-color: none !important;
+    background: none !important;
 }
 
 .custom-modal .modal-dialog .btn-close {
