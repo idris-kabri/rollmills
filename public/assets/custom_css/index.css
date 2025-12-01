@@ -1155,6 +1155,14 @@ input[type="number"] {
     }
 }
 
+/* ==================================================================== */
+/* Loader New Css End */
+/* ==================================================================== */
+
+/* ==================================================================== */
+/* Action Confirm Modal Css Start */
+/* ==================================================================== */
+
 .whatsapp-logo-contact {
     position: fixed;
     z-index: 1000;
@@ -1165,13 +1173,51 @@ input[type="number"] {
     display: flex;
 }
 
-.whatsapp-logo-contact a{
+.whatsapp-logo-contact a {
     display: flex;
     align-items: center;
 }
 
+.modal-content-custom {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid var(--color-light-1);
+    border-radius: 20px;
+    outline: 0;
+    box-shadow: 0 3px 3px rgba(220, 169, 21, 0.2);
+}
+
+.w-90-per {
+    width: 90%;
+    margin: auto;
+}
+
+.btn-brand-outline {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 15px 40px;
+    color: #ffffff;
+    border: none;
+    background-color: #fff;
+    border: 1px solid var(--color-1);
+    border-radius: 10px;
+    color: var(--color-1);
+}
+
+.btn-brand-outline:hover {
+    background-color: var(--color-2);
+    border: 1px solid var(--color-2);
+    border-radius: 10px;
+    color: #fff;
+}
+
 /* ==================================================================== */
-/* Loader New Css End */
+/* Action Confirm Modal New Css End */
 /* ==================================================================== */
 
 /* ==================================================================== */
@@ -1179,6 +1225,10 @@ input[type="number"] {
 /* ==================================================================== */
 
 @media (max-width: 767px) {
+    .w-md-75 {
+        width: 100% !important;
+    }
+
     .title.style-3 {
         font-size: 38px;
         padding-bottom: 20px;

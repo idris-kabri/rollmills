@@ -16,4 +16,13 @@ class InteractionController extends Controller
             "message" => "Data store successfully"
         ]);
     }
+
+    public function verify($platform, Request $request)
+    {
+        $data = $request->all();
+
+        $hub_challenge = $data['hub_challenge'] ?? '';
+
+        return $hub_challenge;
+    }
 }
