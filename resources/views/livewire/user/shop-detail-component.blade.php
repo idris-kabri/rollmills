@@ -347,8 +347,13 @@
                                                             <div class="user d-flex" style="width: 100%;">
                                                                 <div class="text-center me-5">
                                                                     <div class="">
-                                                                        <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
-                                                                            alt="">
+                                                                        @if ($mainProduct_review->getUsers->profile_image != null)
+                                                                            <img src="{{ asset('storage/' . $mainProduct_review->getUsers->profile_image) }}"
+                                                                                alt="">
+                                                                        @else
+                                                                            <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
+                                                                                alt="">
+                                                                        @endif
                                                                     </div>
                                                                     <a href="#"
                                                                         class="font-heading text-brand">{{ $mainProduct_review->name }}</a>
