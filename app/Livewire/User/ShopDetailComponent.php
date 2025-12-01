@@ -48,6 +48,30 @@ class ShopDetailComponent extends Component
         $this->id = $id;
         $this->selectedAttribute = [];
         $this->mainProduct = Product::findOrFail($id);
+
+        // --- START CHANGE: Dispatch Open Graph Tags ---
+        $ogImage = $this->mainProduct->image
+            ? asset('storage/' . $this->mainProduct->image)
+            : asset('assets/frontend/imgs/theme/logo.png');
+
+        $this->dispatch('update-og-tags', [
+            'title' => $this->mainProduct->name,
+            'type'  => 'product',
+            'url'   => request()->url(),
+            'image' => $ogImage,
+        ]);
+
+        $ogImage = $this->mainProduct->image
+            ? asset('storage/' . $this->mainProduct->image)
+            : asset('assets/frontend/imgs/theme/logo.png');
+
+        // Prepare the data to pass to the layout
+        $layoutData = [
+            'og_title' => $this->mainProduct->name,
+            'og_type'  => 'product',
+            'og_url'   => request()->url(),
+            'og_image' => $ogImage,
+        ];
         $this->mainProduct_reviews = ProductReview::where('status', 1)->where('product_id', $id)->get();
         $this->mainProduct_reviews_count = ProductReview::where('status', 1)->where('product_id', $id)->count();
 
@@ -58,9 +82,9 @@ class ShopDetailComponent extends Component
         $relatedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Related')->pluck('related_product_id')->toArray();
         $linkedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Linked')->pluck('related_product_id')->toArray();
 
-        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where("parent_id",null)->take(8)->get();
+        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where("parent_id", null)->take(8)->get();
         $this->linkedProducts = Product::whereIn('id', $linkedProduct)->get();
-        
+
         if (count($this->relatedProducts) <= 0) {
             $categoryIds = $this->mainProduct->categoryAssigns->pluck('category_id')->unique();
 
@@ -391,6 +415,22 @@ class ShopDetailComponent extends Component
 
     public function render()
     {
-        return view('livewire.user.shop-detail-component')->layout('layouts.user.app');
+        // Define the OG Image
+        // Check if mainProduct has an image, otherwise fallback to logo
+        $ogImage = $this->mainProduct->image
+            ? asset('storage/' . $this->mainProduct->image)
+            : asset('assets/frontend/imgs/theme/logo.png');
+
+        // Prepare the data to pass to the layout
+        $layoutData = [
+            'og_title' => $this->mainProduct->name,
+            'og_type'  => 'product',
+            'og_url'   => request()->url(),
+            'og_image' => $ogImage,
+        ];
+
+        // Pass $layoutData as the second argument
+        return view('livewire.user.shop-detail-component')
+            ->layout('layouts.user.app', $layoutData);
     }
 }

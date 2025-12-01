@@ -8,7 +8,7 @@
 
             <h2 class="d-block d-lg-none navbar-brand navbar-brand-autodark">
                 <a href="/admin">
-                    <img src="{{asset('assets/frontend/imgs/theme/logo.png')}}" style="max-height: 32px; height: auto"
+                    <img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" style="max-height: 32px; height: auto"
                         alt="Roll mills" class="navbar-brand-image" />
                 </a>
             </h2>
@@ -68,13 +68,12 @@
                     <li
                         class="nav-item dropdown {{ Request::is('admin/contact-us*') || Request::is('admin/banner*') || Request::is('admin/settings*') ? 'active' : '' }}">
                         <a class="nav-link dropdown-toggle nav-priority-120" href="#cms-plugins-contact"
-                            id="cms-plugins-contact" data-bs-toggle="dropdown" data-bs-auto-close="false"
-                            role="button" aria-expanded="false" title="Masters">
+                            id="cms-plugins-contact" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                            aria-expanded="false" title="Masters">
                             <span class="nav-link-icon d-md-none d-lg-inline-block" title="Contact">
-                                <svg class="icon svg-icon-ti-ti-mail" xmlns="http://www.w3.org/2000/svg"
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                                <svg class="icon svg-icon-ti-ti-mail" xmlns="http://www.w3.org/2000/svg" width="24"
+                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path
                                         d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
@@ -144,7 +143,7 @@
                         </div>
                     </li>
                     <li
-                        class="nav-item dropdown {{ Request::is('admin/offer*') || Request::is('admin/coupon*') || Request::is('admin/product*') || Request::is('admin/products-categories*') || Request::is('admin/product-attributes*') || Request::is('admin/brand*') || Request::is('admin/gift-cards*') || Request::is('admin/customer*') || Request::is('admin/transaction*') || Request::is('admin/orders*') || Request::is('admin/order-return*') || Request::is('admin/reviews*') || Request::is('admin/gift-card-items*')    ? 'active' : '' }}">
+                        class="nav-item dropdown {{ Request::is('admin/offer*') || Request::is('admin/coupon*') || Request::is('admin/product*') || Request::is('admin/products-categories*') || Request::is('admin/product-attributes*') || Request::is('admin/brand*') || Request::is('admin/gift-cards*') || Request::is('admin/customer*') || Request::is('admin/transaction*') || Request::is('admin/orders*') || Request::is('admin/order-return*') || Request::is('admin/reviews*') || Request::is('admin/gift-card-items*') ? 'active' : '' }}">
                         <a class="nav-link dropdown-toggle nav-priority-0" href="#cms-plugins-ecommerce"
                             id="cms-plugins-ecommerce" data-bs-toggle="dropdown" data-bs-auto-close="false"
                             role="button" aria-expanded="false" title="Ecommerce">
@@ -169,7 +168,7 @@
                         </a>
 
                         <div class="dropdown-menu animate slideIn dropdown-menu-start">
-                            {{--<a class="dropdown-item nav-priority-0" href="#" id="cms-plugins-ecommerce-report"
+                            {{-- <a class="dropdown-item nav-priority-0" href="#" id="cms-plugins-ecommerce-report"
                                 title="Report">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block" title="Report">
                                     <svg class="icon svg-icon-ti-ti-report-analytics" xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +187,7 @@
                                 </span>
 
                                 <span class="nav-link-title text-truncate"> Report </span>
-                            </a>--}}
+                            </a> --}}
 
                             <!-- product categories  -->
                             <a class="dropdown-item nav-priority-90 {{ Request::is('admin/products-categories*') ? 'active' : '' }}"
@@ -335,7 +334,8 @@
 
                             <!-- gift cards  -->
                             <a class="dropdown-item nav-priority-160 {{ Request::is('admin/gift-cards*') ? 'active' : '' }}"
-                                href="{{ url('/admin/gift-cards') }}" id="cms-ecommerce-giftcard" title="Gift Cards">
+                                href="{{ url('/admin/gift-cards') }}" id="cms-ecommerce-giftcard"
+                                title="Gift Cards">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block" title="Gift Cards">
                                     <svg class="icon svg-icon-ti-ti-star" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -353,8 +353,8 @@
                             </a>
 
                             <!-- orders  -->
-                            <a class="dropdown-item nav-priority-10" href="{{url('admin/orders/')}}" id="cms-plugins-ecommerce-order"
-                                title="Orders">
+                            <a class="dropdown-item nav-priority-10" href="{{ url('admin/orders/') }}"
+                                id="cms-plugins-ecommerce-order" title="Orders">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block" title="Orders">
                                     <svg class="icon svg-icon-ti-ti-truck-delivery" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -377,7 +377,7 @@
                             </a>
 
                             <!-- order returns  -->
-                            <a class="dropdown-item nav-priority-30" href="{{url('admin/order-return')}}"
+                            <a class="dropdown-item nav-priority-30" href="{{ url('admin/order-return') }}"
                                 id="cms-plugins-ecommerce-order-return" title="Order Returns">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block" title="Order returns">
                                     <svg class="icon svg-icon-ti-ti-basket-down" xmlns="http://www.w3.org/2000/svg"
@@ -403,7 +403,7 @@
                                 </span>
                             </a>
 
-                            {{--<a class="dropdown-item nav-priority-40" href="#"
+                            {{-- <a class="dropdown-item nav-priority-40" href="#"
                                 id="cms-plugins-ecommerce-shipping-shipments" title="Shipments">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block" title="Shipments">
                                     <svg class="icon svg-icon-ti-ti-truck-loading" xmlns="http://www.w3.org/2000/svg"
@@ -422,7 +422,7 @@
                                 <span class="nav-link-title text-truncate">
                                     Shipments
                                 </span>
-                            </a>--}}
+                            </a> --}}
 
                             <!-- reviews  -->
                             <a class="dropdown-item nav-priority-160 {{ Request::is('admin/reviews*') ? 'active' : '' }}"
@@ -443,7 +443,7 @@
                                 </span>
                             </a>
 
-                            {{--<a class="dropdown-item nav-priority-180" href="#"
+                            {{-- <a class="dropdown-item nav-priority-180" href="#"
                                 id="cms-plugins-ecommerce-discount" title="Discounts">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block" title="Discounts">
                                     <svg class="icon svg-icon-ti-ti-discount" xmlns="http://www.w3.org/2000/svg"
@@ -461,7 +461,7 @@
                                 <span class="nav-link-title text-truncate">
                                     Discounts
                                 </span>
-                            </a>--}}
+                            </a> --}}
 
                             <!-- customers  -->
                             <a class="dropdown-item nav-priority-190 {{ Request::is('admin/customer*') ? 'active' : '' }}"
@@ -504,18 +504,40 @@
                                         data-url="#" style="display: none"></span>
                                 </span>
                             </a>
+
+                            <!-- trnsactions  -->
+                            <a class="dropdown-item nav-priority-0 {{ Request::is('admin/post*') ? 'active' : '' }}"
+                                href="{{ route('admin.post.index') }}" id="cms-plugins-payments-all" title="Posts">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block" title="Posts">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z" />
+                                        <path
+                                            d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
+                                    </svg>
+                                </span>
+
+                                <span class="nav-link-title text-truncate">
+                                    Posts
+                                    <span
+                                        class="badge badge-sm bg-primary text-primary-fg badge-pill menu-item-count pending-payments"
+                                        data-url="#" style="display: none"></span>
+                                </span>
+                            </a>
                         </div>
                     </li>
 
                     <li class="nav-item {{ Request::is('admin/user-quotation*') ? 'active' : '' }}">
                         <a class="nav-link nav-priority--9999 show {{ Request::is('admin/user-quotation*') ? 'active' : '' }}"
-                            href="{{ route('admin.user-quotation.index') }}" id="cms-core-dashboard" title="User Quotation">
+                            href="{{ route('admin.user-quotation.index') }}" id="cms-core-dashboard"
+                            title="User Quotation">
                             <span class="nav-link-icon d-md-none d-lg-inline-block" title="Dashboard">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 11.5a8.38 8.38 0 0 1-1.9 5.4 8.5 8.5 0 0 1-6.6 3.1 8.38 8.38 0 0 1-5.4-1.9L3 21l2.9-4.1a8.38 8.38 0 0 1-1.9-5.4 8.5 8.5 0 0 1 3.1-6.6A8.38 8.38 0 0 1 11.5 3h1a8.5 8.5 0 0 1 8.5 8.5z" />
+                                    <path
+                                        d="M21 11.5a8.38 8.38 0 0 1-1.9 5.4 8.5 8.5 0 0 1-6.6 3.1 8.38 8.38 0 0 1-5.4-1.9L3 21l2.9-4.1a8.38 8.38 0 0 1-1.9-5.4 8.5 8.5 0 0 1 3.1-6.6A8.38 8.38 0 0 1 11.5 3h1a8.5 8.5 0 0 1 8.5 8.5z" />
                                     <path d="M9 10h.01" />
                                     <path d="M15 10h.01" />
                                     <path d="M8 14c1 1 3 1 4 0" />

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InteractionPlatform;
+use App\Models\PostPlatform;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -14,6 +16,26 @@ class InteractionController extends Controller
         $data = $request->all();
         Log::error('Insta Store: ');
         Log::error($request->all());
+
+        $user_id = 123;
+        $user_name = "Hatim Rustam";
+        $post_id = 1;
+        $description = 1;
+
+        $store = new InteractionPlatform();
+        $store->user_id = $user_id;
+        $store->user_name = $user_name;
+        $store->type = "Comment";
+        $store->description = $description;
+        $store->save();
+
+
+        $lowercase_desc = strtolower($description);
+
+        $match = PostPlatform::where("keyword", "like", "%$lowercase_desc%")
+            ->first();
+
+
 
         $response = Http::post("https://graph.facebook.com/v21.0/18165448510388010/replies", [
             'message' => "Thanks for your comment! Here's the link you requested 😊",

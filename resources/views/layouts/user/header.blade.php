@@ -7,10 +7,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:title" content="" />
-    <meta property="og:type" content="" />
-    <meta property="og:url" content="" />
-    <meta property="og:image" content="{{ asset('assets/frontend/imgs/theme/logo.png') }}" />
+    <meta property="og:title" content="{{ $og_title ?? 'RollMills' }}" />
+    <meta property="og:type" content="{{ $og_type ?? 'website' }}" />
+    <meta property="og:url" content="{{ $og_url ?? url()->current() }}" />
+    <meta property="og:image" content="{{ $og_image ?? asset('assets/frontend/imgs/theme/logo.png') }}" />
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/frontend/imgs/theme/logo.png') }}" />
     <!-- Template CSS -->
@@ -19,8 +19,8 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/plugins/slider-range.css') }}" />
     <!-- Custom New CSS -->
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
-    @if(Request::is('coupon-claim'))
-    <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
+    @if (Request::is('coupon-claim'))
+        <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
     @endif
     <link rel="stylesheet" href="{{ asset('assets/custom_css/improve.css') }}" />
     <!-- Font Awesome -->
@@ -120,7 +120,8 @@
                                             @foreach ($chunk as $category)
                                                 <li>
                                                     {{-- Replace 'category.show' with your actual route name --}}
-                                                    <a href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
+                                                    <a
+                                                        href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
                                                         <img src="{{ asset('storage/' . $category->icon) }}"
                                                             alt="{{ $category->name }}" />
                                                         {{ $category->name }}
