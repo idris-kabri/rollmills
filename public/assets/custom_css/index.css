@@ -1022,7 +1022,7 @@ input[type="number"] {
 }
 
 .progress-bar-cart {
-    width: 0%;  
+    width: 0%;
     background: var(--color-light-1);
     border-radius: 50px;
     height: 30px;
@@ -1042,9 +1042,8 @@ input[type="number"] {
 
     background-size: 200% 100%;
     animation: waveMove 3s linear infinite;
-    transition: width 1.5s ease-out; 
+    transition: width 1.5s ease-out;
 }
-
 
 @keyframes waveMove {
     0% {
@@ -1061,7 +1060,7 @@ input[type="number"] {
     }
     to {
         width: 100%;
-    } 
+    }
 }
 
 .progress-bar-cart .bar-circle {
@@ -1094,8 +1093,7 @@ input[type="number"] {
     right: -15px;
     bottom: -18px;
     z-index: 100;
-    display: block;  
-
+    display: block;
 }
 
 .milestone-marker img {
@@ -1104,7 +1102,7 @@ input[type="number"] {
 }
 
 .milestone-marker-open {
-    display: none;   
+    display: none;
     z-index: 100;
     position: absolute;
     right: -10px;
@@ -1152,6 +1150,47 @@ input[type="number"] {
 
 /* ==================================================================== */
 /* Cart Page Css End */
+/* ==================================================================== */
+
+/* ==================================================================== */
+/* Loader New Css Start */
+/* ==================================================================== */
+
+.loader-new {
+    /* --c: no-repeat linear-gradient(orange 0 0); */
+    --c: no-repeat linear-gradient(var(--color-1) 0 0);
+    background: var(--c), var(--c), var(--c), var(--c), var(--c), var(--c),
+        var(--c), var(--c), var(--c);
+    background-size: 16px 16px;
+    animation: l32-1 1.5s infinite, l32-2 1.5s infinite;
+}
+@keyframes l32-1 {
+    0%,
+    100% {
+        width: 45px;
+        height: 45px;
+    }
+    35%,
+    65% {
+        width: 65px;
+        height: 65px;
+    }
+}
+@keyframes l32-2 {
+    0%,
+    40% {
+        background-position: 0 0, 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%,
+            100% 0, 50% 0, 50% 50%;
+    }
+    60%,
+    100% {
+        background-position: 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%,
+            100% 0, 50% 0, 0 0, 50% 50%;
+    }
+}
+
+/* ==================================================================== */
+/* Loader New Css End */
 /* ==================================================================== */
 
 /* ==================================================================== */

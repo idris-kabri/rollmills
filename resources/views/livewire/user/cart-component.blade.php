@@ -72,7 +72,7 @@
                     <div class="mb-md-5 mb-4">
                         <div class="gift-progress-container">
                             <div class="gift-text-measure">
-                                <div class="progress-title">Grab Your Offer Now!!</div>
+                                <div class="progress-title">Grab Your Gift Now!!</div>
                                 {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
                                 <p class="quicksand fw-500">Shop ₹{{ $surprise_gift_amount }} and get exclusive surprise
                                     gift
@@ -462,7 +462,11 @@
             let finalWidth = parseInt(bar.getAttribute("data-width"));
 
             // Start bar animation (0 -> finalWidth)
-            bar.style.width = finalWidth + "%";
+            if (finalWidth == 0) {
+                bar.style.width = "3%";
+            } else {
+                bar.style.width = finalWidth + "%";
+            }
 
             // When the width animation finishes
             bar.addEventListener("transitionend", function() {
