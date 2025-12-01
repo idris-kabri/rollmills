@@ -10,7 +10,8 @@ class InteractionController extends Controller
     public function store($platform, Request $request)
     {
         $data = $request->all();
-        Log::error("Verify Store: " . $request->all());
+        Log::error("Insta Store: " . $request->all());
+        Log::error($request->all());
         return response()->json([
             'data' => $data,
             'platform' => $platform,
@@ -21,7 +22,8 @@ class InteractionController extends Controller
 
     public function verify($platform, Request $request)
     {
-        Log::error("Verify Route: " . $request->all());
+        Log::error("Insta Verify: " . $request->all());
+        Log::error($request->all());
         $data = $request->all();
 
         $hub_challenge = $data['hub_challenge'] ?? '';
