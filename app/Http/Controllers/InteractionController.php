@@ -10,7 +10,7 @@ class InteractionController extends Controller
     public function store($platform, Request $request)
     {
         $data = $request->all();
-        Log::error("Insta Store: " . $request->all());
+        Log::error("Insta Store: ");
         Log::error($request->all());
         return response()->json([
             'data' => $data,
@@ -22,7 +22,7 @@ class InteractionController extends Controller
 
     public function verify($platform, Request $request)
     {
-        Log::error("Insta Verify: " . $request->all());
+        Log::error("Insta Verify: ");
         Log::error($request->all());
         $data = $request->all();
 
