@@ -58,7 +58,7 @@ class ShopDetailComponent extends Component
         $relatedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Related')->pluck('related_product_id')->toArray();
         $linkedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Linked')->pluck('related_product_id')->toArray();
 
-        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->take(8)->get();
+        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where("parent_id",null)->take(8)->get();
         $this->linkedProducts = Product::whereIn('id', $linkedProduct)->get();
         
         if (count($this->relatedProducts) <= 0) {

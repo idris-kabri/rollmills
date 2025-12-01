@@ -1,6 +1,6 @@
 <main class="main home-page-main">
     @livewire('user.quick-view', ['id' => $selectedProductId, 'bindClose' => 'selectedProductId'], key($selectedProductId ?? time()))
-    <section class="home-slider style-2 position-relative mb-3" wire:ignore>
+    <section class="home-slider style-2 position-relative mb-md-3" wire:ignore>
         <div class="container">
             <div class="row">
                 <div class="col-xl-8 col-lg-12">
@@ -133,7 +133,7 @@
     <!--End banners-->
 
     <!-- Popular Products Section  -->
-    <section class="product-tabs section-padding position-relative">
+    <section class="product-tabs section-padding position-relative pt-md-4 pt-0">
         <div class="container" wire:ignore.self>
             <div class="section-title style-2">
                 <h3>Popular Products</h3>
@@ -179,7 +179,7 @@
             <div class="row product-grid-4">
                 @if (count($popular_products) > 0)
                     @foreach ($popular_products as $popular_product)
-                        <div class="col-lg-1-5 col-md-4 col-6">
+                        <div class="col-lg-1-5 col-md-4 col-6 small-screen-padding">
                             @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
                         </div>
                     @endforeach
@@ -193,13 +193,13 @@
 
 
     <!--Daily Best Sells Tabs-->
-    <section class="section-padding pb-5">
+    <section class="section-padding pb-5 pt-md-4 pt-0">
         <div class="container">
             <div class="section-title">
                 <h3 class="">Daily Best Sells</h3>
             </div>
             <div class="row">
-                <div class="col-lg-3 d-none d-lg-flex">
+                <div class="col-xl-3 d-none d-xl-flex">
                     <div class="banner-img style-2"
                         style="background: url('{{ asset('storage/' . $best_deal_banner->image) }}');">
                         <div class="banner-text">
@@ -210,10 +210,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9 col-md-12">
+                <div class="col-xl-9 col-md-12">
                     <div class="row">
                         @foreach ($sale_products as $sale_product)
-                            <div class="col-md-3 col-lg-3 col-6">
+                            <div class="col-md-3 col-lg-3 col-6 small-screen-padding">
                                 @livewire('user.component.product-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . now()->timestamp))
                             </div>
                         @endforeach
@@ -224,22 +224,22 @@
     </section>
 
     <!--Daily Best Sells Tabs-->
-    <section class="section-padding pb-25">
+    <section class="section-padding pb-25 pt-md-4 pt-0">
         <div class="container">
             <div class="section-title">
                 <h3 class="">Product Users look for</h3>
             </div>
             <div class="row">
-                <div class="col-lg-9 col-md-12">
+                <div class="col-xl-9 col-md-12">
                     <div class="row">
                         @foreach ($users_look_for as $user_look_for)
-                            <div class="col-md-3 col-lg-3 col-6">
+                            <div class="col-md-3 col-lg-3 col-6 small-screen-padding">
                                 @livewire('user.component.product-card', ['product' => $user_look_for, 'parameter' => 'hot'], key($user_look_for->id . '-' . now()->timestamp))
                             </div>
                         @endforeach
                     </div>
                 </div>
-                <div class="col-lg-3 d-none d-lg-flex">
+                <div class="col-xl-3 d-none d-xl-flex">
                     <div class="banner-img style-2"
                         style="background: url('{{ asset('storage/' . $user_look_for_banner->image) }}');">
                         <div class="banner-text">
@@ -255,7 +255,7 @@
     </section>
 
 
-    <section class="section-padding mb-30" wire:ignore>
+    <section class="section-padding mb-30 pt-md-4 pt-0" wire:ignore>
         <div class="container">
             <div class="row">
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0">
@@ -276,12 +276,12 @@
                                 }
                             @endphp
                             <article class="row align-items-center hover-up">
-                                <figure class="col-md-4 mb-0">
+                                <figure class="col-sm-3 col-md-4 mb-0">
                                     <a href="{{ $top_selling_shop_detail_url }}"><img
                                             src="{{ asset('storage/' . $product->featured_image) }}"
                                             alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
-                                <div class="col-md-8 mb-0">
+                                <div class="col-sm-9 col-md-8 mb-0">
                                     <h6 class="two-liner-text">
                                         <a href="{{ $top_selling_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
@@ -340,12 +340,12 @@
                                 }
                             @endphp
                             <article class="row align-items-center hover-up">
-                                <figure class="col-md-4 mb-0">
+                                <figure class="col-sm-3 col-md-4 mb-0">
                                     <a href="{{ $trending_products_shop_detail_url }}"><img
                                             src="{{ asset('storage/' . $product->featured_image) }}"
                                             alt="{{ $product->seo_meta }}" /></a>
                                 </figure>
-                                <div class="col-md-8 mb-0">
+                                <div class="col-sm-9 col-md-8 mb-0">
                                     <h6 class="two-liner-text">
                                         <a href="{{ $trending_products_shop_detail_url }}">{{ $product->name }}</a>
                                     </h6>
@@ -517,8 +517,9 @@
             </div>
         </div>
     </section>
+
     <!--End 4 columns-->
-    <section class="popular-categories section-padding" wire:ignore>
+    <section class="popular-categories section-padding pt-md-4 pt-0" wire:ignore>
         <div class="container">
             <div class="section-title">
                 <div class="title">

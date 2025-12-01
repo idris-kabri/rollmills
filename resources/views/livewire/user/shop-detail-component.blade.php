@@ -28,7 +28,7 @@
                                     <!-- THUMBNAILS -->
                                     <div class="product-slider-nav-thumbnails">
                                         <div class="d-flex overflow-hidden img-card">
-                                            <a href="#" class="product_gallery_item"
+                                            <a href="#" class="product_gallery_item d-flex"
                                                 data-image="{{ asset('storage/' . $mainProduct->featured_image) }}"
                                                 data-zoom-image="{{ asset('storage/' . $mainProduct->featured_image) }}">
                                                 <img src="{{ asset('storage/' . $mainProduct->featured_image) }}"
@@ -40,7 +40,7 @@
                                         @endphp
                                         @foreach ($gallary_images as $image)
                                             <div class="d-flex overflow-hidden img-card">
-                                                <a href="#" class="product_gallery_item"
+                                                <a href="#" class="product_gallery_item d-flex"
                                                     data-image="{{ asset('storage/' . $image) }}"
                                                     data-zoom-image="{{ asset('storage/' . $image) }}">
                                                     <img src="{{ asset('storage/' . $image) }}" alt="img"
@@ -248,7 +248,7 @@
                             </div> --}}
 
                             {{-- New design section --}}
-                            <div class="d-flex flex-wrap product-delivery-icons">
+                            <div class="d-flex flex-wrap product-delivery-icons gap-3">
                                 <div>
                                     <img src="{{ asset('assets/frontend/imgs/theme/home-delivery.png') }}"
                                         alt="">
@@ -272,11 +272,15 @@
                                 <div>
                                     <img src="{{ asset('assets/frontend/imgs/theme/replacement.png') }}"
                                         alt="">
-                                        @if($mainProduct->product_replacement_days > 0)
+                                        @if($mainProduct->product_return_days > 0)
+                                        <p>{{ $mainProduct->product_return_days }} Day Return</p>
+                                        @elseif($mainProduct->product_replacement_days > 0)
                                         <p>{{ $mainProduct->product_replacement_days }} Day Replacement</p>
                                         @else
-                                        <p>No Replacement Policy</p>
+                                        <p>No Return And Replacement Policy</p>
                                         @endif
+                                        
+                                        
                                 </div>
                             </div>
                         </div>
@@ -466,14 +470,14 @@
                     </div>
                 </div>
                 @if ($relatedProducts->count() > 0)
-                    <div class="row mt-60">
+                    <div class="row mt-md-5 mt-4">
                         <div class="col-12">
                             <h2 class="section-title style-1 mb-30">Related products</h2>
                         </div>
                         <div class="col-12">
                             <div class="row related-products">
                                 @foreach ($relatedProducts as $relatedProduct)
-                                    <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                    <div class="col-lg-3 col-md-4 col-6 col-sm-6 small-screen-padding">
                                         @livewire('user.component.product-card', ['product' => $relatedProduct], key($relatedProduct->id . '-' . now()->timestamp))
                                     </div>
                                 @endforeach

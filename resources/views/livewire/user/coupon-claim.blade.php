@@ -10,20 +10,29 @@
                                 <h2 class="offer-title text-uppercase mt-35 text-center">Roll into Savings with <br>
                                     <span class="fw-900">Roll Mills!</span>
                                 </h2>
+
+                                {{-- DYNAMIC DISCOUNT MESSAGE --}}
                                 <div class="discount-amount fw-600 text-secondary mt-2 fs-18 mb-4">
-                                    Congratulations! You've unlocked a ₹200 discount on your next purchase. <br>
+                                    Congratulations! You've unlocked a
+                                    @if ($coupon->discount_type == 'Percentage')
+                                        {{ $coupon->discount_value }}%
+                                    @else
+                                        ₹{{ $coupon->discount_value }}
+                                    @endif
+                                    discount on your next purchase. <br>
                                     <span>Keep the savings rolling with Roll Mills!</span>
                                 </div>
+
                                 <div class="result-display mt-0">
                                     <p id="copyCodeBtn" class="position-absolute end-0 top-0 fs-12 copy-code">Copy Code
                                     </p>
                                     <p id="couponCode" class="result-numbers">{{ $couponCode }}</p>
                                 </div>
 
-                                <p class="discount-amount fw-600 text-secondary mt-4 fs-16 fst-italic">Use this code on
-                                    checkout
-                                    and
-                                    let the deals roll your way!</p>
+                                <p class="discount-amount fw-600 text-secondary mt-4 fs-16 fst-italic">
+                                    Use this code on checkout and let the deals roll your way!
+                                </p>
+
                                 <div class="row">
                                     <div class="col-12">
                                         <h5 class="mt-3 fs-24 text-brand">Terms & Conditions</h5>
@@ -31,16 +40,33 @@
                                     <div class="col-lg-6">
                                         <ul class="terms-list text-muted small text-start mt-3 mx-auto">
                                             <li>Valid only on Roll Mills’ official website.</li>
-                                            <li>Coupon code ROLL200 must be applied at checkout.</li>
-                                            <li>Minimum purchase of ₹1000 required to avail discount.</li>
 
+                                            {{-- DYNAMIC COUPON CODE IN T&C --}}
+                                            <li>Coupon code <strong>{{ $couponCode }}</strong> must be applied at
+                                                checkout.</li>
+
+                                            {{-- DYNAMIC MINIMUM ORDER VALUE --}}
+                                            @if ($coupon->minimum_order_value > 0)
+                                                <li>Minimum purchase of ₹{{ $coupon->minimum_order_value }} required to
+                                                    avail discount.</li>
+                                            @else
+                                                <li>No minimum purchase required.</li>
+                                            @endif
                                         </ul>
                                     </div>
                                     <div class="col-lg-6">
                                         <ul class="terms-list text-muted small text-start mt-lg-3 mt-0 mx-auto">
+                                            {{-- DYNAMIC MAX DISCOUNT (Usually for percentages) --}}
+                                            @if ($coupon->maximum_discount_amount > 0)
+                                                <li>Maximum discount capped at ₹{{ $coupon->maximum_discount_amount }}.
+                                                </li>
+                                            @endif
 
                                             <li>Non-transferable and cannot be redeemed for cash.</li>
+
+                                            {{-- OPTIONAL: DYNAMIC EXPIRY DATE (If you have it) --}}
                                             <li>Offer valid till 30 November 2025 or while stocks last.</li>
+
                                             <li>Roll Mills reserves the right to modify or cancel the offer anytime.
                                             </li>
                                         </ul>
@@ -58,11 +84,7 @@
                 <div class="row">
                     <div class="col-xl-11 col-lg-12 m-auto">
                         <div class="content mb-50">
-                            <h1 class="title style-3 mb-20 text-center">Your Order List</h1>
-                            <h6 class="text-body text-center">There are <span class="text-brand">5</span> products in
-                                this
-                                list
-                            </h6>
+                            <h1 class="title style-3 mb-20 text-center">Your Orders</h1>
                         </div>
                         <div class="table-responsive shopping-summery table-responsive-custom">
                             <table class="table table-wishlist mb-0">
@@ -132,8 +154,12 @@
                                             </td>
                                             @if ($user_order->is_coupon_avail == 0)
                                                 <td class="text-right">
-                                                    <button wire:click="applyCoupon({{ $user_order->id }})" class="btn btn-sm custom-btn-table-responsive">Avail
-                                                        Coupon</button>
+                                                    <button type="button"
+                                                        wire:click="applyCoupon({{ $user_order->id }})"
+                                                        wire:confirm="Are you sure you want to avail coupon for these Order?"
+                                                        class="btn btn-sm custom-btn-table-responsive">
+                                                        Avail Coupon
+                                                    </button>
                                                 </td>
                                             @else
                                                 <td class="text-right">
@@ -162,15 +188,22 @@
 
                     <div class="left-box">
                         <div class="left-box-content">
-                            <h1>✨ Unlock Exclusive Deals</h1>
-                            <p>Sign in now and get access to premium offers</p>
-                            <div class="feature-list">
-                                <div class="feature-item"><span class="feature-emoji">🎁</span><span>Instant discounts
-                                        on your first order</span></div>
-                                <div class="feature-item"><span class="feature-emoji">🚀</span><span>Fast & secure
-                                        WhatsApp verification</span></div>
-                                <div class="feature-item"><span class="feature-emoji">💎</span><span>Join our exclusive
-                                        member community</span></div>
+                            <h1 class="text-left">Roll into Rewards with Rollmills!</h1>
+                            <p class="quicksand text-light">Enter your number → Get your OTP → Claim your exclusive
+                                coupon.</p>
+                            <div class="feature-list mt-4">
+                                <div class="feature-item">
+                                    <span class="feature-emoji">✓</span>
+                                    <span class="quicksand">Spin great deals your way</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-emoji">✓</span>
+                                    <span class="quicksand">Quick & secure WhatsApp verification</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-emoji">✓</span>
+                                    <span class="quicksand">Unlock savings that truly thrill</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -181,8 +214,9 @@
                         @if ($step === 1)
                             <div class="form-step active">
                                 <div class="form-header">
-                                    <h2>Login to Continue</h2>
-                                    <p>Enter your WhatsApp mobile number</p>
+                                    {{-- <h2>Enter Your mobile Number</h2> --}}
+                                    <h2>Your code is now few step away!!</h2>
+                                    <p>Enter your WhatsApp mobile number to get OTP.</p>
                                 </div>
 
                                 <form wire:submit.prevent="sendOTP">
@@ -190,15 +224,16 @@
                                         <div class="phone-prefix">
                                             <span>🇮🇳</span><span>+91</span>
                                         </div>
-                                        <input type="text" class="phone-input @error('mobile') is-invalid @enderror"
+                                        <input type="text"
+                                            class="phone-input @error('mobile') is-invalid @enderror quicksand"
                                             wire:model="mobile" placeholder="Enter mobile number" maxlength="10"
                                             inputmode="numeric">
                                     </div>
                                     @error('mobile')
-                                        <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger quicksand">{{ $message }} !!</span>
                                     @enderror
 
-                                    <button type="submit" class="btn-brand">
+                                    <button type="submit" class="btn-brand w-100  text-center mt-3 quicksand">
                                         <span wire:loading.remove wire:target="sendOTP">Send OTP</span>
                                         <span wire:loading wire:target="sendOTP">Sending...</span>
                                     </button>
@@ -233,13 +268,21 @@
                             }" x-init="startTimer()">
                                 <div class="form-header">
                                     <h2>Enter OTP</h2>
-                                    <p>We've sent a code to +91 {{ $mobile }}</p>
+                                    <p class="position-relative">We've sent a code to
+                                        <span class="color-1 fw-500">
+                                            +91 {{ $mobile }}
+                                        </span>
+                                        <span class="edit-link d-inline-block fs-10 position-relative mb-0"
+                                            style="top: -3px" wire:click="$set('step', 1)">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </span>
+                                    </p>
                                 </div>
 
-                                <div class="edit-link" wire:click="$set('step', 1)">
+                                {{-- <div class="edit-link" wire:click="$set('step', 1)">
                                     <span>📱</span><span>+91 {{ $mobile }}</span>
                                     <span style="color: var(--color-1); font-weight: 600;">(Edit)</span>
-                                </div>
+                                </div> --}}
 
                                 <form wire:submit.prevent="verifyOTP">
                                     <div class="otp-container">
@@ -253,7 +296,8 @@
                                         @endforeach
                                     </div>
                                     @error('otp')
-                                        <div class="text-center"><span class="text-danger">{{ $message }}</span>
+                                        <div class="text-center"><span
+                                                class="text-danger quicksand fw-500">{{ $message }} !!</span>
                                         </div>
                                     @enderror
 
@@ -264,7 +308,7 @@
                                             style="cursor:pointer; color:var(--color-1);">Resend OTP</a>
                                     </div>
 
-                                    <button type="submit" class="btn-brand">
+                                    <button type="submit" class="btn-brand w-100 text-center">
                                         <span wire:loading.remove wire:target="verifyOTP">Verify OTP</span>
                                         <span wire:loading wire:target="verifyOTP">Verifying...</span>
                                     </button>
@@ -277,31 +321,58 @@
         </div>
     </div>
 </main>
+
 @push('scripts')
     <script>
         // --- 1. Auto-Open Modal on Page Load ---
         document.addEventListener('DOMContentLoaded', function() {
             var modalElement = document.getElementById('giftCouponModal');
+
             if (modalElement) {
-                var myModal = new bootstrap.Modal(modalElement);
+                var myModal = new bootstrap.Modal(modalElement, {
+                    backdrop: 'static', // Prevent close on outside click
+                    keyboard: false // Prevent ESC close
+                });
+
                 myModal.show();
             }
         });
 
+        // --- 2. Livewire Close Modal Trigger ---
         document.addEventListener('livewire:initialized', () => {
             Livewire.on('close-modal', () => {
-                // Get the modal element
                 const modalEl = document.getElementById('giftCouponModal');
-
-                // Get the existing Bootstrap instance
                 const modalInstance = bootstrap.Modal.getInstance(modalEl);
 
                 if (modalInstance) {
-                    // Option A: Close Immediately
-                    modalInstance.hide();
+                    modalInstance.hide(); // Allowed close
                 }
             });
         });
+
+        // --- 3. Extra Protection: Block Any Forced Closing ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalEl = document.getElementById('giftCouponModal');
+
+            modalEl.addEventListener('hide.bs.modal', function(event) {
+                // Allow closing ONLY if triggered by Livewire event
+                if (!modalEl.dataset.allowClose) {
+                    event.preventDefault(); // Block accidental close
+                } else {
+                    modalEl.dataset.allowClose = "";
+                }
+            });
+
+            // When Livewire wants to close it
+            Livewire.on('close-modal', () => {
+                const modalEl = document.getElementById('giftCouponModal');
+                modalEl.dataset.allowClose = "true"; // Allow close once
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                modalInstance.hide();
+            });
+        });
+
+
 
         // --- 2. Modal Logic (Steps, Timer, etc.) ---
         let currentStep = 1;
@@ -422,5 +493,37 @@
                 }, 2000);
             });
         }
+    </script>
+    <script>
+        document.addEventListener('click', function(event) {
+            // Check if the clicked element has the ID 'copyCodeBtn'
+            if (event.target && event.target.id === 'copyCodeBtn') {
+
+                const copyBtn = event.target;
+                const couponText = document.getElementById('couponCode');
+
+                if (couponText) {
+                    let code = couponText.innerText.trim();
+
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(code).then(() => {
+                        // UI Feedback
+                        const originalText = copyBtn.innerText;
+                        copyBtn.innerText = "Copied!";
+
+                        // Optional: Change color using Bootstrap class or style
+                        copyBtn.classList.add('text-success');
+
+                        setTimeout(() => {
+                            copyBtn.innerText = "Copy Code";
+                            copyBtn.classList.remove('text-success');
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        alert("Failed to copy. Please copy manually.");
+                    });
+                }
+            }
+        });
     </script>
 @endpush

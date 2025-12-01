@@ -1,4 +1,4 @@
-<div class="page-wrapper"> 
+<div class="page-wrapper">
     <div wire:loading.delay wire:target="update" class="loader-overlay" style="display: none !important;">
         <img src="{{ asset('assets/images/loading.gif') }}" alt="Loading..." class="loader-img">
     </div>
@@ -41,9 +41,23 @@
                                 <div class="mb-3 position-relative">
                                     <label class="form-label" for="name">Name</label>
                                     <input class="form-control @error('name') is-invalid @enderror" placeholder="Name"
-                                        name="name" type="text" wire:model="name">
+                                        name="name" type="text" wire:model.live="name">
                                     @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 position-relative">
+                                    <label class="form-label form-label required" for="slug">
+                                        Slug
+                                    </label>
+                                    <input class="form-control @error('slug') is-invalid @enderror" data-counter="250"
+                                        placeholder="Slug" name="slug" wire:model='slug' type="text"
+                                        id="slug">
+                                    @error('slug')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
                                     @enderror
                                 </div>
 
@@ -52,17 +66,18 @@
                                     <select
                                         class="select-search-full form-select @error('parent_id') is-invalid @enderror"
                                         data-allow-clear="false" id="parent_id-select-34415"
-                                        wire:model="parent_category_id" onchange="callFunction()" data-placeholder="Select Parent Category">
+                                        wire:model="parent_category_id" onchange="callFunction()"
+                                        data-placeholder="Select Parent Category">
                                         <option value="">Selecty Parent Category</option>
                                         @foreach ($parent_categories as $parent_category)
-                                        <option value="{{ $parent_category->id }}"
-                                            {{ $parent_category->id == $this->parent_category_id ? 'selected' : '' }}>
-                                            {{ $parent_category->name }}
-                                        </option>
+                                            <option value="{{ $parent_category->id }}"
+                                                {{ $parent_category->id == $this->parent_category_id ? 'selected' : '' }}>
+                                                {{ $parent_category->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('parent_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -72,7 +87,7 @@
                                         rows="4" placeholder="Write Description" id="description" name="description" cols="50"
                                         wire:model="description"></textarea>
                                     @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -84,7 +99,7 @@
                                         <option value="2">Pending</option>
                                     </select>
                                     @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -95,24 +110,24 @@
                                             <input class="image-data" name="images" multiple type="hidden"
                                                 value="" />
                                             @if (!$image && $defaultImage)
-                                            <div style="width: 8rem" class="preview-image-wrapper mb-1">
-                                                <div class="preview-image-inner">
-                                                    <img class="preview-image default-image"
-                                                        data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
-                                                        src="{{ asset('storage/' . $defaultImage) }}"
-                                                        alt="Preview image" />
-                                                    <span class="image-picker-backdrop"></span>
+                                                <div style="width: 8rem" class="preview-image-wrapper mb-1">
+                                                    <div class="preview-image-inner">
+                                                        <img class="preview-image default-image"
+                                                            data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
+                                                            src="{{ asset('storage/' . $defaultImage) }}"
+                                                            alt="Preview image" />
+                                                        <span class="image-picker-backdrop"></span>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             @elseif($image)
-                                            <div style="width: 8rem" class="preview-image-wrapper mb-1">
-                                                <div class="preview-image-inner">
-                                                    <img class="preview-image default-image"
-                                                        data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
-                                                        src="{{ $image->temporaryUrl() }}" alt="Preview image" />
-                                                    <span class="image-picker-backdrop"></span>
+                                                <div style="width: 8rem" class="preview-image-wrapper mb-1">
+                                                    <div class="preview-image-inner">
+                                                        <img class="preview-image default-image"
+                                                            data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
+                                                            src="{{ $image->temporaryUrl() }}" alt="Preview image" />
+                                                        <span class="image-picker-backdrop"></span>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             @endif
 
 
@@ -126,7 +141,7 @@
                                         </div>
                                     </div>
                                     @error('images')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -138,24 +153,24 @@
                                             <input class="image-data" name="images" multiple type="hidden"
                                                 value="" />
                                             @if (!$icon && $defaultIcon)
-                                            <div style="width: 8rem" class="preview-image-wrapper mb-1">
-                                                <div class="preview-image-inner">
-                                                    <img class="preview-image default-image"
-                                                        data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
-                                                        src="{{ asset('storage/' . $defaultIcon) }}"
-                                                        alt="Preview image" />
-                                                    <span class="image-picker-backdrop"></span>
+                                                <div style="width: 8rem" class="preview-image-wrapper mb-1">
+                                                    <div class="preview-image-inner">
+                                                        <img class="preview-image default-image"
+                                                            data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
+                                                            src="{{ asset('storage/' . $defaultIcon) }}"
+                                                            alt="Preview image" />
+                                                        <span class="image-picker-backdrop"></span>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             @elseif($icon)
-                                            <div style="width: 8rem" class="preview-image-wrapper mb-1">
-                                                <div class="preview-image-inner">
-                                                    <img class="preview-image default-image"
-                                                        data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
-                                                        src="{{ $icon->temporaryUrl() }}" alt="Preview image" />
-                                                    <span class="image-picker-backdrop"></span>
+                                                <div style="width: 8rem" class="preview-image-wrapper mb-1">
+                                                    <div class="preview-image-inner">
+                                                        <img class="preview-image default-image"
+                                                            data-default="{{ asset('vendor/core/core/base/images/placeholder.png') }}"
+                                                            src="{{ $icon->temporaryUrl() }}" alt="Preview image" />
+                                                        <span class="image-picker-backdrop"></span>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             @endif
 
 
@@ -172,7 +187,7 @@
                                         </div>
                                     </div>
                                     @error('icon')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -192,7 +207,7 @@
                                         placeholder="SEO Title" name="seo_title" type="text"
                                         wire:model="seo_title">
                                     @error('seo_title')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -202,7 +217,7 @@
                                         placeholder="Seo Keyword" name="seo_keyword" type="text"
                                         wire:model="seo_keyword">
                                     @error('seo_keyword')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -212,7 +227,7 @@
                                         rows="4" placeholder="Write your Seo Description" id="seo_description" name="seo_description"
                                         cols="50" wire:model="seo_description"></textarea>
                                     @error('seo_description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -242,61 +257,61 @@
 </div>
 
 @section('scripts')
-<script>
-    function openImage() {
-        $('#imageInput').click();
-    }
+    <script>
+        function openImage() {
+            $('#imageInput').click();
+        }
 
-    function callFunction() {
-        var element = $('#parent_id-select-34415');
-        @this.set('parent_category_id', element.val());
-    }
+        function callFunction() {
+            var element = $('#parent_id-select-34415');
+            @this.set('parent_category_id', element.val());
+        }
 
-    function openIcon() {
-        $('#iconInput').click();
-    }
-</script>
-<script type="module">
-    import {
-        ClassicEditor,
-        Essentials,
-        Paragraph,
-        Bold,
-        Italic,
-        Font
-    } from 'ckeditor5';
+        function openIcon() {
+            $('#iconInput').click();
+        }
+    </script>
+    <script type="module">
+        import {
+            ClassicEditor,
+            Essentials,
+            Paragraph,
+            Bold,
+            Italic,
+            Font
+        } from 'ckeditor5';
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.editor-ckeditor').forEach(element => {
-            ClassicEditor
-                .create(element, {
-                    plugins: [Essentials, Paragraph, Bold, Italic, Font],
-                    toolbar: [
-                        'undo', 'redo', '|', 'bold', 'italic', '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
-                    ]
-                })
-                .then(editor => {
-                    // Set initial content from Livewire
-                    editor.setData(@this.get(element.getAttribute('id')));
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.editor-ckeditor').forEach(element => {
+                ClassicEditor
+                    .create(element, {
+                        plugins: [Essentials, Paragraph, Bold, Italic, Font],
+                        toolbar: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    })
+                    .then(editor => {
+                        // Set initial content from Livewire
+                        editor.setData(@this.get(element.getAttribute('id')));
 
-                    // Sync Livewire when data changes
-                    editor.model.document.on('change:data', () => {
-                        const data = editor.getData();
-                        @this.set(element.getAttribute('id'), data);
+                        // Sync Livewire when data changes
+                        editor.model.document.on('change:data', () => {
+                            const data = editor.getData();
+                            @this.set(element.getAttribute('id'), data);
+                        });
+
+                        // Listen for Livewire updates and sync CKEditor
+                        Livewire.hook('message.processed', (message, component) => {
+                            if (document.getElementById(element.getAttribute('id'))) {
+                                editor.setData(@this.get(element.getAttribute('id')));
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
                     });
-
-                    // Listen for Livewire updates and sync CKEditor
-                    Livewire.hook('message.processed', (message, component) => {
-                        if (document.getElementById(element.getAttribute('id'))) {
-                            editor.setData(@this.get(element.getAttribute('id')));
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            });
         });
-    });
-</script>
+    </script>
 @endsection

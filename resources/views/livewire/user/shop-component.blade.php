@@ -1,5 +1,198 @@
     <main class="main">
         <style>
+            /* ... existing styles ... */
+
+            :root {
+                --color-1: #dca915;
+                --color-2: #a36f02;
+                --color-3: #543606;
+                --color-light-1: #dcaa15b7;
+            }
+
+            /* Container Card Style */
+            .custom-category-widget {
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+                padding: 25px;
+                border: 1px solid #f0f0f0;
+            }
+
+            .category-list-item {
+                border-bottom: 1px dashed #eee;
+                margin-bottom: 5px;
+            }
+
+            .category-list-item:last-child {
+                border-bottom: none;
+            }
+
+            /* Main Category Link Design */
+            .cat-link {
+                display: flex;
+                /* Key for alignment */
+                align-items: center;
+                /* Vertically center items */
+                justify-content: space-between;
+                padding: 12px 10px;
+                border-radius: 6px;
+                color: var(--color-3);
+                font-family: 'Quicksand', sans-serif;
+                font-weight: 600;
+                text-decoration: none !important;
+                transition: all 0.3s ease;
+            }
+
+            /* Hover & Active Effects */
+            .cat-link:hover {
+                background-color: #fff9e6;
+                /* Very light gold */
+                color: var(--color-2);
+                padding-left: 15px;
+                /* Slide effect */
+            }
+
+            .cat-link.active {
+                background-color: #fff9e6;
+                color: var(--color-2);
+                border-left: 3px solid var(--color-1);
+                padding-left: 15px;
+            }
+
+            /* Left Side (Icon + Text) */
+            .cat-left {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                /* Space between icon and text */
+            }
+
+            .cat-icon {
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                opacity: 0.8;
+            }
+
+            .cat-name {
+                line-height: 1;
+                /* Fixes vertical text alignment */
+                margin-top: 2px;
+                /* Slight adjustment for visual optical center */
+            }
+
+            /* Right Side (Count + Toggle) */
+            .cat-right {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .count-badge {
+                background-color: var(--color-1);
+                color: #fff;
+                font-size: 11px;
+                font-weight: bold;
+                padding: 2px 8px;
+                border-radius: 10px;
+                min-width: 24px;
+                text-align: center;
+            }
+
+            /* Subcategory Styles */
+            .sub-cat-container {
+                background: #fbfbfb;
+                margin: 0 10px 10px 10px;
+                padding: 10px;
+                border-radius: 8px;
+                border-left: 2px solid #eee;
+            }
+
+            .sub-cat-item {
+                display: flex;
+                align-items: center;
+                padding: 8px 10px;
+                color: #666;
+                font-size: 14px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+            .sub-cat-item:hover {
+                color: var(--color-2);
+                background: #fff;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+            }
+
+            .sub-cat-item.active {
+                color: var(--color-2);
+                font-weight: 700;
+                background: #fff;
+            }
+
+            .custom-check {
+                /* Remove default browser appearance */
+                -webkit-appearance: none;
+                appearance: none;
+                /* Define size */
+                min-width: 18px;
+                width: 18px;
+                height: 18px;
+                /* Border style (Unchecked) */
+                border: 2px solid var(--color-2);
+                /* Brownish Gold */
+                border-radius: 50%;
+                margin-right: 12px;
+                cursor: pointer;
+                position: relative;
+                background-color: #fff;
+                transition: all 0.3s ease;
+                display: grid;
+                place-content: center;
+            }
+
+            .custom-check:hover {
+                border-color: var(--color-1);
+                /* Bright Gold */
+                background-color: #fffdf5;
+            }
+
+            .custom-check:checked {
+                border-color: var(--color-1);
+            }
+
+            .custom-check::before {
+                content: "";
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                transform: scale(0);
+                /* Hidden by default */
+                transition: 0.2s transform ease-in-out;
+                background-color: var(--color-1);
+                /* Bright Gold Dot */
+                box-shadow: 0 2px 5px rgba(220, 169, 21, 0.4);
+                /* Soft glow */
+            }
+
+            .custom-check:checked::before {
+                transform: scale(1);
+                /* Show dot when checked */
+            }
+
+            /* Focus Ring for Accessibility */
+            .custom-check:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px var(--color-light-1);
+            }
+
+            .toggle-arrow {
+                font-size: 12px;
+                color: #aaa;
+            }
+        </style>
+        <style>
             .ui-widget.ui-widget-content {
                 border: none;
                 height: 0.4rem;
@@ -55,56 +248,82 @@
         <div class="container mb-40">
             <div class="row">
                 <div class="col-xl-3 primary-sidebar">
-                    <div class="sidebar-widget widget-category-2 mb-30 d-none d-xl-block">
-                        <h5 class="section-title style-1 mb-30">Category</h5>
-                        <ul>
+                    <div class="sidebar-widget custom-category-widget mb-30 d-none d-xl-block">
+                        <h5 class="section-title style-1 mb-30"
+                            style="color: var(--color-3); border-bottom: 2px solid var(--color-1); display: inline-block; padding-bottom: 5px;">
+                            Category</h5>
+
+                        <div class="category-list">
                             @foreach ($productCategorys as $category)
                                 @php
                                     $subCategories = \App\Models\ProductCategory::where(
                                         'parent_id',
                                         $category->id,
                                     )->get();
+                                    // Logic to keep menu open if a child is active
+                                    $isActive = $selectedCategory == $category->id;
+                                    $isChildActive = $subCategories->contains('id', $selectedCategory);
+                                    $isOpen = $isActive || $isChildActive;
                                 @endphp
-                                <li>
-                                    <a href="#"
-                                        wire:click.prevent="categoryWiseProduct({{ $category->id }}, 'change')"
-                                        class="fw-600 quicksand">
-                                        @if ($subCategories->count() > 0)
-                                            @if ($selectedCategory == $category->id)
-                                                <span class="me-2"><i class="fi-rs-angle-small-up"></i></span>
-                                            @else
-                                                <span class="me-2"><i class="fi-rs-angle-small-down"></i></span>
+
+                                <div class="category-list-item" x-data="{ open: @json($isOpen) }">
+
+                                    <a href="#" class="cat-link {{ $isActive ? 'active' : '' }}"
+                                        @if ($subCategories->count() > 0) @click.prevent="open = !open" 
+                   @else
+                       wire:click.prevent="categoryWiseProduct({{ $category->id }}, 'change')" @endif>
+                                        <div class="cat-left">
+                                            @if ($category->icon)
+                                                <img src="{{ asset('storage/' . $category->icon) }}" class="cat-icon"
+                                                    alt="{{ $category->name }}" />
                                             @endif
-                                        @endif
-                                        <img src="{{ asset('storage/' . $category->icon) }}"
-                                            alt="" />{{ $category->name }}
+                                            <span class="cat-name">{{ $category->name }}</span>
+                                        </div>
+
+                                        <div class="cat-right">
+                                            @if ($subCategories->count() > 0)
+                                                <i class="fi-rs-angle-small-down toggle-arrow"
+                                                    :style="open ? 'transform: rotate(180deg); color: var(--color-2);' :
+                                                        'transition: 0.3s;'"></i>
+                                            @endif
+                                        </div>
                                     </a>
-                                    <span class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
-                                </li>
-                                @if ($subCategories->count() > 0)
-                                    @php
-                                        $ids = $subCategories->pluck('id')->toArray();
-                                        $ids[] = $category->id;
-                                    @endphp
-                                    <div
-                                        class="pl-25 py-3{{ in_array($selectedCategory, $ids) ? ' d-block' : ' d-none' }}">
-                                        @foreach ($subCategories as $sub_category)
-                                            <a href="#"
-                                                wire:click.prevent="categoryWiseProduct({{ $sub_category->id }}, 'change')"
-                                                class="form-check">
-                                                <input class="form-check-input cart-checkbox-custom" type="checkbox"
-                                                    value="" id="flexCheckDefault1"
-                                                    {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
-                                                <label class="form-check-label hover-a text-heading quicksand fw-600"
-                                                    for="flexCheckDefault1">
-                                                    {{ $sub_category->name }}
+
+                                    @if ($subCategories->count() > 0)
+                                        <div class="sub-cat-container" x-show="open" x-collapse style="display: none;">
+
+                                            <div
+                                                class="sub-cat-item {{ $selectedCategory == $category->id ? 'active' : '' }}">
+                                                <input type="radio" id="all-cat-{{ $category->id }}"
+                                                    name="category_group" class="custom-check"
+                                                    wire:click="categoryWiseProduct({{ $category->id }}, 'change')"
+                                                    {{ $selectedCategory == $category->id ? 'checked' : '' }}>
+
+                                                <label for="all-cat-{{ $category->id }}"
+                                                    style="cursor: pointer; width: 100%; margin: 0;">
+                                                    All {{ $category->name }}
                                                 </label>
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                @endif
+                                            </div>
+
+                                            @foreach ($subCategories as $sub_category)
+                                                <div
+                                                    class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
+                                                    <input type="radio" id="sub-{{ $sub_category->id }}"
+                                                        name="category_group" class="custom-check"
+                                                        wire:click="categoryWiseProduct({{ $sub_category->id }}, 'change')"
+                                                        {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
+
+                                                    <label for="sub-{{ $sub_category->id }}"
+                                                        style="cursor: pointer; width: 100%; margin: 0;">
+                                                        {{ $sub_category->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
                             @endforeach
-                        </ul>
+                        </div>
                     </div>
 
                     <!-- Filter By Price -->
@@ -153,7 +372,8 @@
                                         alt="{{ $new_product->seo_meta }}" />
                                 </div>
                                 <div class="content pt-10">
-                                    <h5><a href="{{ $new_product_shop_detail_url }}" class="two-liner-text">{{ $new_product->name }}</a></h5>
+                                    <h5><a href="{{ $new_product_shop_detail_url }}"
+                                            class="two-liner-text">{{ $new_product->name }}</a></h5>
 
                                     <div class="product-price">
                                         @if ($new_product->sale_price > 0 && now() >= $new_product->sale_start_date && now() <= $new_product->sale_end_date)
@@ -247,8 +467,14 @@
                                     <ul>
                                         <li><a class="{{ $sortBy == 'featured' ? 'active' : '' }}" href="#"
                                                 wire:click.prevent="setSortBy('featured')">Featured</a></li>
-                                        <li><a href="#" class="{{ $sortBy == 'price-low-to-high' ? 'active' : '' }}" wire:click.prevent="setSortBy('price-low-to-high')">Price: Low to High</a></li>
-                                        <li><a href="#" class="{{ $sortBy == 'price-high-to-low' ? 'active' : '' }}" wire:click.prevent="setSortBy('price-high-to-low')">Price: High to Low</a></li>
+                                        <li><a href="#"
+                                                class="{{ $sortBy == 'price-low-to-high' ? 'active' : '' }}"
+                                                wire:click.prevent="setSortBy('price-low-to-high')">Price: Low to
+                                                High</a></li>
+                                        <li><a href="#"
+                                                class="{{ $sortBy == 'price-high-to-low' ? 'active' : '' }}"
+                                                wire:click.prevent="setSortBy('price-high-to-low')">Price: High to
+                                                Low</a></li>
                                         <li><a href="#" class="{{ $sortBy == 'new' ? 'active' : '' }}"
                                                 wire:click.prevent="setSortBy('new')">Release Date</a></li>
                                     </ul>
@@ -282,7 +508,7 @@
     </main>
     @push('scripts')
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-        {{-- <script>
+        <script>
             document.addEventListener("DOMContentLoaded", function() {
                 let componentMinPrice = @json($minPrice);
                 let componentMaxPrice = @json($maxPrice);
@@ -290,29 +516,22 @@
                 // Use the current component values for the slider handles' starting position
                 let initialMin = @json($minPrice);
                 let initialMax = @json($maxPrice);
-
-                // Ensure initial values fall within the min/max range,
-                // especially if you are using $minPrice and $maxPrice to hold the selected range.
-                // If $minPrice and $maxPrice hold the SELECTED range:
                 let initialValues = [initialMin, initialMax];
-
-                // If $minPrice and $maxPrice hold the GLOBAL min/max of ALL products, 
-                // you should decide what the starting SELECTED range is (e.g., [minPrice, maxPrice]):
-                // let initialValues = [componentMinPrice, componentMaxPrice]; 
-
 
                 $("#shop-slider-range").slider({
                     range: true,
                     min: componentMinPrice,
                     max: componentMaxPrice,
-                    // FIX: Use the component's current values for initial handle positions
                     values: initialValues,
 
+                    // 1. "slide" event: Only update the visual text (No Server Request)
                     slide: function(event, ui) {
-                        // Update the display text
                         $("#shop-slider-range-value1").text(ui.values[0]);
                         $("#shop-slider-range-value2").text(ui.values[1]);
-                        // Update Livewire properties
+                    },
+
+                    // 2. "stop" event: Update Livewire only when user releases the handle
+                    stop: function(event, ui) {
                         @this.set('minPrice', ui.values[0]);
                         @this.set('maxPrice', ui.values[1]);
                     }
@@ -320,8 +539,31 @@
 
                 // Set initial text based on the slider's starting values
                 $("#shop-slider-range-value1").text($("#shop-slider-range").slider("values", 0));
-                $("#shop-slider-range-value2").text($("#shop-slider-range").slider("values",
-                1)); // FIX: Added value 1 initialization
+                $("#shop-slider-range-value2").text($("#shop-slider-range").slider("values", 1));
             });
-        </script> --}}
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll("input[type=radio]").forEach(function(radio) {
+                    radio.addEventListener('click', function(e) {
+                        // If already selected → unselect it
+                        if (this.wasChecked) {
+                            this.checked = false;
+                            this.wasChecked = false;
+
+                            // Trigger Livewire manually if needed
+                            this.dispatchEvent(new Event('input'));
+                            return;
+                        }
+
+                        // Unselect all other radios with same name
+                        document.querySelectorAll("input[name='" + this.name + "']").forEach(r => r
+                            .wasChecked = false);
+
+                        // Mark this radio as selected
+                        this.wasChecked = true;
+                    });
+                });
+            });
+        </script>
     @endpush

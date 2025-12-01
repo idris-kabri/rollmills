@@ -2231,7 +2231,7 @@ input.qty-val {
     display: -ms-flexbox;
     display: flex;
     position: relative;
-    max-width: 200px;
+    max-width: max-content;
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
@@ -12391,7 +12391,7 @@ footer .hotline img {
     } */
 
     .product-cart-wrap .product-img-action-wrap .product-action-1 {
-        min-width: 111px;
+        width: max-content;
     }
 
     .custom-modal .modal-dialog {
@@ -12897,8 +12897,8 @@ footer .hotline img {
     }
 
     .section-title.style-1 {
-        padding-bottom: 15px;
-        font-size: 20px;
+        padding-bottom: 0px;
+        font-size: 30px;
     }
 
     .product-list-small h6 {
@@ -12914,7 +12914,7 @@ footer .hotline img {
     }
 
     .section-title.style-2 h3 {
-        margin-bottom: 25px;
+        margin-bottom: 0;
         font-size: 28px;
     }
 
@@ -12941,6 +12941,15 @@ footer .hotline img {
 
 /*small phone*/
 @media only screen and (max-width: 480px) {
+    .tab-content.shop_info_tab {
+        margin-top: 20px;
+    }
+
+    .comment-form {
+        padding-top: 0px;
+        margin-bottom: 20px;
+    }
+
     .quantity .minus,
     .quantity .plus {
         padding: 2px;
@@ -13129,10 +13138,10 @@ footer .hotline img {
         padding: 0;
     }
 
-    .popular-categories .slider-btn.slider-prev {
+    /* .popular-categories .slider-btn.slider-prev {
         right: 50px !important;
         left: unset !important;
-    }
+    } */
 
     .mb-sm-0 {
         margin-bottom: 0 !important;
@@ -13465,8 +13474,13 @@ footer .hotline img {
     }
 
     .section-title {
-        display: block;
-        margin-bottom: 15px;
+        display: flex;
+        margin-bottom: 25px;
+        margin-top: 15px;
+    }
+
+    .section-padding {
+        padding-bottom: 0px !important;
     }
 
     .section-title .title {
@@ -13474,8 +13488,19 @@ footer .hotline img {
     }
 
     .section-title h3 {
-        margin-bottom: 20px;
-        font-size: 28px;
+        /* margin-bottom: 20px; */
+        font-size: 25px !important;
+    }
+
+    .section-title.style-1 {
+        font-size: 25px;
+    }
+
+    .slider-arrow.slider-arrow-2 .slider-btn {
+        width: 35px;
+        height: 35px;
+        line-height: 38px;
+        font-size: 20px;
     }
 
     .section-title .show-all {
@@ -13487,11 +13512,11 @@ footer .hotline img {
     }
 
     .slider-arrow.slider-arrow-2.flex-right {
-        display: none;
+        display: flex;
     }
 
     .product-grid-4 .product-cart-wrap {
-        margin-bottom: 30px;
+        margin-bottom: 22px !important;
     }
 
     .product-list-small figure.col-md-4 {

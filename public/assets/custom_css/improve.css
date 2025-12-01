@@ -210,7 +210,7 @@
     }
 
     .product-slider-nav-thumbnails .img-card:not(:last-child) {
-        margin-right: 20px;
+        margin-right: 10px;
     }
 
     .page-header.breadcrumb-wrap {
