@@ -19,8 +19,8 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/plugins/slider-range.css') }}" />
     <!-- Custom New CSS -->
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
-    @if(Request::is('coupon-claim'))
-    <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
+    @if (Request::is('coupon-claim'))
+        <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
     @endif
     <link rel="stylesheet" href="{{ asset('assets/custom_css/improve.css') }}" />
     <!-- Font Awesome -->
@@ -120,7 +120,8 @@
                                             @foreach ($chunk as $category)
                                                 <li>
                                                     {{-- Replace 'category.show' with your actual route name --}}
-                                                    <a href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
+                                                    <a
+                                                        href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
                                                         <img src="{{ asset('storage/' . $category->icon) }}"
                                                             alt="{{ $category->name }}" />
                                                         {{ $category->name }}
@@ -550,53 +551,76 @@
         </div>
     </div>
 
-    {{-- <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
+    <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
         aria-modal="true" role="dialog" style="padding-right: 0px; display: block;">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content bg-white">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="modal-body">
-                    <div class="deal" style="background-image: url('assets/imgs/banner/popup-1.png')">
+                    <div class="deal background-none" style="min-height: max-content">
                         <div class="deal-top">
-                            <h6 class="mb-10 text-brand-2">Deal of the Day</h6>
+                            <h6 class="mb-10 text-brand">Welcome To RollMills</h6>
                         </div>
                         <div class="deal-content detail-info">
-                            <h4 class="product-title"><a href="shop-product-right.html" class="text-heading">Organic
-                                    fruit for your family's health</a></h4>
+                            <h4 class="product-title" style="max-width: 100%">
+                                Shop
+                                with thrill, save at will — Let Smart Deals Roll In!!
+                            </h4>
+                            <p class="text-secondary w-md-75 w-50 quicksand fw-600 fst-italic">
+                                "You just rolled into the land of deals!
+                                Every click brings joy, every buy brings Thrills — at Rollmills!"
+                            </p>
+                            <p class="text-secondary w-md-75 w-50 quicksand fw-500">
+                                We Offer <span class="text-brand fw-600">Thank You Card</span> on every purchase you
+                                make. By
+                                the this card you recieve a coupon which can be use in your next purchase to enjoy
+                                great discounts.
+                                Deals and Offers are rolling towards you to make your purchase more Thrilling.
+                            </p>
+
                             <div class="clearfix product-price-cover">
-                                <div class="product-price primary-color float-left">
-                                    <span class="current-price text-brand">$38</span>
-                                    <span>
-                                        <span class="save-price font-md color3 ml-15">26% Off</span>
+                                <div class="product-price primary-color float-left mt-15 mb-10">
+                                    <span class="current-price fs-3 text-brand">Surprize Gift Offer!!</span>
+                                    {{-- <span>
+                                        <span class="save-price font-md color3 ml-15">Surprize Gift!!</span>
                                         <span class="old-price font-md ml-15">$52</span>
-                                    </span>
+                                    </span> --}}
                                 </div>
                             </div>
+                            <p class="mb-15 text-secondary w-md-75 w-50 fw-500 quicksand">Grab The Exclusive Gift Now!!
+                                <br> Shop
+                                <span class="text-brand fw-600">₹800</span>
+                                and get a Surprize Gift. Only On RollMills.
+                                Hurry up! grab your Gift Now!!
+                            </p>
                         </div>
                         <div class="deal-bottom">
-                            <p class="mb-20">Hurry Up! Offer End In:</p>
-                            <div class="deals-countdown pl-5" data-countdown="2025/03/25 00:00:00"><span
-                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
-                                        class="countdown-period"> days </span></span><span
-                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
-                                        class="countdown-period"> hours </span></span><span
-                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
-                                        class="countdown-period"> mins </span></span><span
-                                    class="countdown-section"><span class="countdown-amount hover-up">00</span><span
-                                        class="countdown-period"> sec </span></span></div>
-                            <div class="product-detail-rating">
+                            {{-- <p class="mb-10 quicksand fw-500">Hurry Up! Offer Ends In:</p> --}}
+                            {{-- <div class="deals-countdown pl-5" data-countdown="2026/01/1 00:00:00">
+                                <span class="countdown-section"><span class="countdown-amount hover-up">00</span>
+                                    <span class="countdown-period"> days </span></span><span
+                                    class="countdown-section"><span class="countdown-amount hover-up">00</span>
+                                    <span class="countdown-period"> hours </span></span>
+                                <span class="countdown-section"><span class="countdown-amount hover-up">00</span>
+                                    <span class="countdown-period"> mins </span></span>
+                                <span class="countdown-section"><span class="countdown-amount hover-up">00</span>
+                                    <span class="countdown-period"> sec </span>
+                                </span>
+                            </div> --}}
+                            {{-- <div class="product-detail-rating">
                                 <div class="product-rate-cover text-end">
                                     <div class="product-rate d-inline-block">
                                         <div class="product-rating" style="width: 90%"></div>
                                     </div>
                                     <span class="font-small ml-5 text-muted"> (32 rates)</span>
                                 </div>
-                            </div>
-                            <a href="shop-grid-right.html" class="btn hover-up">Shop Now <i
-                                    class="fi-rs-arrow-right"></i></a>
+                            </div> --}}
+                            <a href="/shop"
+                                class="align-items-center btn d-flex fit-content gap-1 mt-10 hover-up">Shop
+                                Now <i class="fi-rs-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
