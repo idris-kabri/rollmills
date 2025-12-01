@@ -83,10 +83,10 @@
                         <div class="card-2 wow animate__animated animate__fadeInUp"
                             data-wow-delay=".{{ $index + 1 }}s">
                             <figure class="img-hover-scale overflow-hidden w-100 h-100">
-                                <a href="/shop?category_id={{ $category->id }}" class="w-100 h-100"><img
+                                <a href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}" class="w-100 h-100"><img
                                         src="{{ asset('storage/' . $category->image) }}" alt="" /></a>
                             </figure>
-                            <h6><a href="/shop?category_id={{ $category->id }}">{{ $category->name }}</a></h6>
+                            <h6><a href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">{{ $category->name }}</a></h6>
                             <span class="fw-600 fs-12 quicksand">{{ $category->product_sum }} items</span>
                         </div>
                     @endforeach
@@ -533,11 +533,11 @@
                     @foreach ($parentCategory as $index => $category)
                         <div class="card-1">
                             <figure class="img-hover-scale overflow-hidden">
-                                <a href="/shop?category_id={{ $category->id }}"><img src="{{ asset('storage/' . $category->image) }}"
+                                <a href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}"><img src="{{ asset('storage/' . $category->image) }}"
                                         alt="" /></a>
                             </figure>
                             <h6>
-                                <a href="/shop?category_id={{ $category->id }}">{{ $category->name }}</a>
+                                <a href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">{{ $category->name }}</a>
                             </h6>
                         </div>
                     @endforeach

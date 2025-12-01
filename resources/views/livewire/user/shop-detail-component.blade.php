@@ -175,7 +175,7 @@
                                     </ul>
                                 </div>
                             @endforeach
-                            <div class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start mb-50">
+                            <div class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start mb-30">
                                 @if ($mainProduct->out_of_stock == 0)
                                     <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
                                         <a href="#" class="qty-down" wire:click.prevent="decrementQuantity()"><i
@@ -248,39 +248,47 @@
                             </div> --}}
 
                             {{-- New design section --}}
-                            <div class="d-flex flex-wrap product-delivery-icons gap-3">
-                                <div>
-                                    <img src="{{ asset('assets/frontend/imgs/theme/home-delivery.png') }}"
-                                        alt="">
-                                        <p>Home Delivery</p>
+                            {{-- <div class="d-flex flex-wrap product-delivery-icons gap-3"> --}}
+                            <div class="row pt-md-2 pt-3">
+                                <div class="col-6">
+                                    <div class="product-delivery-icons">
+                                        <div>
+                                            <img src="{{ asset('assets/frontend/imgs/theme/home-delivery.png') }}"
+                                                alt="">
+                                            <p>Home Delivery</p>
+                                        </div>
+                                        <div>
+                                            <img src="{{ asset('assets/frontend/imgs/theme/top-brands.png') }}"
+                                                alt="">
+                                            <p>Top Brands</p>
+                                        </div>
+                                        <div>
+                                            <img src="{{ asset('assets/frontend/imgs/theme/secure-transaction.png') }}"
+                                                alt="">
+                                            <p>Secure Transaction</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <img src="{{ asset('assets/frontend/imgs/theme/top-brands.png') }}"
-                                        alt="">
-                                        <p>Top Brands</p>
-                                </div>
-                                <div>
-                                    <img src="{{ asset('assets/frontend/imgs/theme/secure-transaction.png') }}"
-                                        alt="">
-                                        <p>Secure Transaction</p>
-                                </div>
-                                <div>
-                                    <img src="{{ asset('assets/frontend/imgs/theme/genuine-product.png') }}"
-                                        alt="">
-                                        <p>High Quality</p>
-                                </div>
-                                <div>
-                                    <img src="{{ asset('assets/frontend/imgs/theme/replacement.png') }}"
-                                        alt="">
-                                        @if($mainProduct->product_return_days > 0)
-                                        <p>{{ $mainProduct->product_return_days }} Day Return</p>
-                                        @elseif($mainProduct->product_replacement_days > 0)
-                                        <p>{{ $mainProduct->product_replacement_days }} Day Replacement</p>
-                                        @else
-                                        <p>No Return And Replacement Policy</p>
-                                        @endif
-                                        
-                                        
+                                <div class="col-6">
+                                    <div class="product-delivery-icons">
+                                        <div>
+                                            <img src="{{ asset('assets/frontend/imgs/theme/genuine-product.png') }}"
+                                                alt="">
+                                            <p>High Quality</p>
+                                        </div>
+                                        <div>
+                                            <img src="{{ asset('assets/frontend/imgs/theme/replacement.png') }}"
+                                                alt="">
+                                            @if ($mainProduct->product_return_days > 0)
+                                                <p>{{ $mainProduct->product_return_days }} Day Return</p>
+                                            @elseif($mainProduct->product_replacement_days > 0)
+                                                <p>{{ $mainProduct->product_replacement_days }} Day Replacement</p>
+                                            @else
+                                                <p>No Return And Replacement Policy</p>
+                                            @endif
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -339,8 +347,13 @@
                                                             <div class="user d-flex" style="width: 100%;">
                                                                 <div class="text-center me-5">
                                                                     <div class="">
-                                                                        <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
-                                                                            alt="">
+                                                                        @if ($mainProduct_review->getUsers->profile_image != null)
+                                                                            <img src="{{ asset('storage/' . $mainProduct_review->getUsers->profile_image) }}"
+                                                                                alt="">
+                                                                        @else
+                                                                            <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
+                                                                                alt="">
+                                                                        @endif
                                                                     </div>
                                                                     <a href="#"
                                                                         class="font-heading text-brand">{{ $mainProduct_review->name }}</a>

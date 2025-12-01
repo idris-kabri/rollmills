@@ -291,7 +291,7 @@
                                      <ul>
                                          @foreach ($productCategorys as $category)
                                              <li>
-                                                 <a href="/shop?category_id={{ $category->id }}"> <img src="{{ asset('storage/' . $category->icon) }}" alt="" />{{ $category->name }}</a><span class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
+                                                 <a href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}"> <img src="{{ asset('storage/' . $category->icon) }}" alt="" />{{ $category->name }}</a><span class="count">{{ $category->getProductCategoryAssign->count() ?? 0 }}</span>
                                              </li>
                                          @endforeach
                                      </ul>

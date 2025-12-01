@@ -120,7 +120,7 @@
                                             @foreach ($chunk as $category)
                                                 <li>
                                                     {{-- Replace 'category.show' with your actual route name --}}
-                                                    <a href="{{ route('shop') }}?category_id={{ $category->id }}">
+                                                    <a href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
                                                         <img src="{{ asset('storage/' . $category->icon) }}"
                                                             alt="{{ $category->name }}" />
                                                         {{ $category->name }}

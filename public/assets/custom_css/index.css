@@ -1114,40 +1114,6 @@ input[type="number"] {
     animation: celebrationPulse 1s ease-in-out infinite;
 }
 
-@media (max-width: 768px) {
-    .gift-progress-container {
-        padding: 25px;
-    }
-
-    .progress-title {
-        font-size: 20px;
-    }
-
-    .remaining-amount {
-        font-size: 24px;
-    }
-
-    .gift-scroll-bar {
-        height: 50px;
-        width: 100%;
-    }
-
-    .gift-box {
-        width: 38px;
-        height: 38px;
-    }
-
-    .box-base {
-        width: 38px;
-        height: 25px;
-    }
-
-    .box-lid {
-        width: 42px;
-        height: 13px;
-    }
-}
-
 /* ==================================================================== */
 /* Cart Page Css End */
 /* ==================================================================== */
@@ -1187,6 +1153,21 @@ input[type="number"] {
         background-position: 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%,
             100% 0, 50% 0, 0 0, 50% 50%;
     }
+}
+
+.whatsapp-logo-contact {
+    position: fixed;
+    z-index: 1000;
+    width: 5%;
+    left: 35px;
+    bottom: 35px;
+    overflow: hidden;
+    display: flex;
+}
+
+.whatsapp-logo-contact a{
+    display: flex;
+    align-items: center;
 }
 
 /* ==================================================================== */
@@ -1355,6 +1336,62 @@ input[type="number"] {
     .mb-30 {
         margin-bottom: 24px !important;
     }
+
+    .whatsapp-logo-contact {
+        position: fixed;
+        z-index: 1000;
+        width: 11%;
+        left: 30px;
+        bottom: 30px;
+        overflow: hidden;
+    }
+    .gift-progress-container {
+        padding: 20px 25px;
+    }
+
+    .progress-title {
+        font-size: 23px;
+    }
+
+    .gift-scroll-bar {
+        height: 25px;
+        width: 100%;
+    }
+
+    .progress-bar-cart {
+        height: 25px;
+    }
+
+    .progress-bar-cart .bar-circle {
+        height: 40px;
+        width: 40px;
+        font-size: 16px;
+    }
+
+    .gift-text-measure {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .milestone-marker {
+        right: -12px;
+    }
+
+    .milestone-marker img {
+        height: 60px;
+    }
+
+    .milestone-marker-open {
+        right: -10px;
+    }
+
+    .milestone-marker-open img {
+        height: 105px;
+    }
+
+    .gift-progress-container {
+        width: 100%;
+    }
 }
 
 @media (max-width: 575.98px) {
@@ -1368,6 +1405,22 @@ input[type="number"] {
 
     .product-cart-wrap .product-content-wrap {
         padding: 10px 12px 10px 12px;
+    }
+
+    .whatsapp-logo-contact {
+        position: fixed;
+        z-index: 1000;
+        width: 15%;
+        left: 20px;
+        bottom: 20px;
+        overflow: hidden;
+    }
+
+    #scrollUp {
+        width: 35px;
+        height: 35px;
+        right: 20px;
+        bottom: 35px;
     }
 }
 
@@ -1463,6 +1516,14 @@ input[type="number"] {
         display: flex;
         align-items: center;
     }
+    .whatsapp-logo-contact {
+        position: fixed;
+        z-index: 1000;
+        width: 8%;
+        left: 30px;
+        bottom: 30px;
+        overflow: hidden;
+    }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -1490,6 +1551,14 @@ input[type="number"] {
         .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
+    }
+    .whatsapp-logo-contact {
+        position: fixed;
+        z-index: 1000;
+        width: 6%;
+        left: 40px;
+        bottom: 40px;
+        overflow: hidden;
     }
 }
 
