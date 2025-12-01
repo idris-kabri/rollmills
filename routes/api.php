@@ -2,4 +2,4 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InteractionController;
 
-Route::post('{platform}/interactions', [InteractionController::class, 'store']);
+Route::get('{platform}/interactions', [InteractionController::class, 'store']);
