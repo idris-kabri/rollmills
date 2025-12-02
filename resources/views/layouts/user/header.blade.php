@@ -8,14 +8,15 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
     {{-- 2. Dynamic Description & Keywords --}}
-    <meta name="description"
-        content="{!! $meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Household And Decoration products.' !!}" />
-    <meta name="keywords" content="{{ $meta_keywords ?? 'household, decoration, rollmills, home decor, hanging Perfume, candles' }}" />
-
+   <meta name="description"
+    content="{{ strip_tags($meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Household And Decoration products.') }}" />
+    
+<meta name="keywords" 
+    content="{{ strip_tags($meta_keywords ?? 'household, decoration, rollmills, home decor, hanging Perfume, candles') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {{-- 3. Dynamic Open Graph (Social Media) Tags --}}
-    <meta property="og:title" content="{{ $og_title ?? ($meta_title ?? 'RollMills') }}" />
+    <meta property="og:title" content="{{ strip_tags($og_title ?? ($meta_title ?? 'RollMills')) }}" />
     <meta property="og:type" content="{{ $og_type ?? 'website' }}" />
     <meta property="og:url" content="{{ $og_url ?? url()->current() }}" />
     <meta property="og:image" content="{{ $og_image ?? asset('assets/frontend/imgs/theme/logo.png') }}" />
