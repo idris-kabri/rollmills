@@ -89,6 +89,7 @@ return [
 
     'razorpay_secret_key' => env('RAZORPAY_SECRET_KEY'),
     'razorpay_key_id' => env('RAZORPAY_KEY_ID'),
+    'access_token' => env('IG_ACCESS_TOKEN'),
 
     /*
     |--------------------------------------------------------------------------
