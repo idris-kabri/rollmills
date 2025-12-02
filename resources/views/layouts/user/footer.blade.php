@@ -287,7 +287,7 @@
 <!-- Template  JS -->
 <script src="{{ asset('assets/frontend/js/main.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/range-slider.js') }}"></script>
-<script src="{{ asset('assets/frontend/js/range-slider.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/frontend/js/range-slider.min.js') }}"></script> --}}
 <script src="{{ asset('assets/frontend/js/shop.js') }}"></script>
 <!-- Google Tag Manager -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
@@ -437,35 +437,6 @@
             document.getElementById('password-login').classList.toggle('d-none');
         }
         document.getElementById('stepOtp').classList.toggle('d-none');
-    });
-
-    window.addEventListener('update-og-tags', (event) => {
-        var data = event.detail[0];
-
-        // 🔥 Print ALL received values
-        console.log("OG Data Received:");
-        console.log("Title:", data.title);
-        console.log("Type:", data.type);
-        console.log("URL:", data.url);
-        console.log("Image:", data.image);
-        console.log("Full Data Object:", data); // Optional
-
-        // Helper function to find or create a meta tag
-        function setMetaTag(property, content) {
-            let meta = document.querySelector(`meta[property="${property}"]`);
-            if (!meta) {
-                meta = document.createElement('meta');
-                meta.setAttribute('property', property);
-                document.head.appendChild(meta);
-            }
-            meta.setAttribute('content', content);
-        }
-
-        // Update the tags
-        setMetaTag('og:title', data.title);
-        setMetaTag('og:type', data.type);
-        setMetaTag('og:url', data.url);
-        setMetaTag('og:image', data.image);
     });
 </script>
 @stack('scripts')

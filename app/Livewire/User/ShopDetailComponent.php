@@ -49,29 +49,6 @@ class ShopDetailComponent extends Component
         $this->selectedAttribute = [];
         $this->mainProduct = Product::findOrFail($id);
 
-        // --- START CHANGE: Dispatch Open Graph Tags ---
-        $ogImage = $this->mainProduct->image
-            ? asset('storage/' . $this->mainProduct->image)
-            : asset('assets/frontend/imgs/theme/logo.png');
-
-        $this->dispatch('update-og-tags', [
-            'title' => $this->mainProduct->name,
-            'type'  => 'product',
-            'url'   => request()->url(),
-            'image' => $ogImage,
-        ]);
-
-        $ogImage = $this->mainProduct->image
-            ? asset('storage/' . $this->mainProduct->image)
-            : asset('assets/frontend/imgs/theme/logo.png');
-
-        // Prepare the data to pass to the layout
-        $layoutData = [
-            'og_title' => $this->mainProduct->name,
-            'og_type'  => 'product',
-            'og_url'   => request()->url(),
-            'og_image' => $ogImage,
-        ];
         $this->mainProduct_reviews = ProductReview::where('status', 1)->where('product_id', $id)->get();
         $this->mainProduct_reviews_count = ProductReview::where('status', 1)->where('product_id', $id)->count();
 
@@ -82,7 +59,7 @@ class ShopDetailComponent extends Component
         $relatedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Related')->pluck('related_product_id')->toArray();
         $linkedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Linked')->pluck('related_product_id')->toArray();
 
-        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where("parent_id", null)->take(8)->get();
+        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where('parent_id', null)->take(8)->get();
         $this->linkedProducts = Product::whereIn('id', $linkedProduct)->get();
 
         if (count($this->relatedProducts) <= 0) {
@@ -92,7 +69,8 @@ class ShopDetailComponent extends Component
                 $query->whereIn('category_id', $categoryIds);
             })
                 ->where('id', '!=', $id)
-                ->take(8)->get();
+                ->take(8)
+                ->get();
         }
         $subProduct = Product::where('parent_id', $id)->pluck('attribute_id')->toArray();
         $flatIds = [];
@@ -417,20 +395,24 @@ class ShopDetailComponent extends Component
     {
         // Define the OG Image
         // Check if mainProduct has an image, otherwise fallback to logo
-        $ogImage = $this->mainProduct->image
-            ? asset('storage/' . $this->mainProduct->image)
-            : asset('assets/frontend/imgs/theme/logo.png');
+        $ogImage = $this->mainProduct->featured_image ? asset('storage/' . $this->mainProduct->featured_image) : asset('assets/frontend/imgs/theme/logo.png');
+
+        $metaTitle = $this->mainProduct->meta_title;
+        $metaDescription = $this->mainProduct->seo_description;
+        $metaKeywords = $this->mainProduct->seo_meta;
 
         // Prepare the data to pass to the layout
         $layoutData = [
+            'meta_title' => $metaTitle,
+            'meta_description' => $metaDescription,
+            'meta_keywords' => $metaKeywords,
             'og_title' => $this->mainProduct->name,
-            'og_type'  => 'product',
-            'og_url'   => request()->url(),
+            'og_type' => 'product',
+            'og_url' => request()->url(),
             'og_image' => $ogImage,
         ];
 
         // Pass $layoutData as the second argument
-        return view('livewire.user.shop-detail-component')
-            ->layout('layouts.user.app', $layoutData);
+        return view('livewire.user.shop-detail-component')->layout('layouts.user.app', $layoutData);
     }
 }

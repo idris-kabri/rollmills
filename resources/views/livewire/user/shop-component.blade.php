@@ -329,45 +329,26 @@
                     <!-- Filter By Price -->
                     <div class="sidebar-widget range mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-20">Filter by price</h5>
-                        {{-- <div class="price-filter">
+                        <div class="price-filter">
                             <div class="price-filter-inner">
-                                <div id="shop-slider-range" class="mb-20"></div>
+
+                                <div id="shop-slider-range" class="mb-20" wire:ignore></div>
 
                                 <div class="d-flex justify-content-between align-items-center caption mt-20">
-                                    <div class="">
-                                        <strong class="text-muted fw-600 fs-17 me-1">From :</strong>
-                                        <span id="shop-slider-range-value1"
-                                            class="text-brand fw-600 fs-17">{{ $minPrice }}</span>
+                                    <div class="input-group-price">
+                                        <label for="min-input">Min:</label>
+                                        <input type="number" class="quicksand form-control" id="min-input"
+                                            wire:model.blur="minPrice" min="0" max="10000"
+                                            style="width: 80px; padding: 5px; height: 35px;" />
                                     </div>
-                                    <div class="">
-                                        <strong class="text-muted fw-600 fs-17 me-1">To :</strong>
-                                        <span id="shop-slider-range-value2"
-                                            class="text-brand fw-600 fs-17">{{ $maxPrice }}</span>
+
+                                    <div class="input-group-price">
+                                        <label for="max-input">Max:</label>
+                                        <input type="number" class="quicksand form-control" id="max-input"
+                                            wire:model.blur="maxPrice" min="0" max="10000"
+                                            style="width: 80px; padding: 5px; height: 35px;" />
                                     </div>
                                 </div>
-                            </div>
-                        </div> --}}
-
-                        <!-- Slider Container -->
-                        <div class="range-slider">
-                            <div class="slider-track"></div>
-                            <div class="slider-range"></div>
-                            <div class="slider-handle handle-min" data-type="min"></div>
-                            <div class="slider-handle handle-max" data-type="max"></div>
-                        </div>
-
-                        <!-- Input fields for manual entry -->
-                        <div class="inputs">
-                            <div class="input-group-price">
-                                <label for="min-input">Min:</label>
-                                <input type="number" class="quicksand" id="min-input" wire:model.live="minPrice"
-                                    value="0" min="0" max="10000" />
-                            </div>
-
-                            <div class="input-group-price">
-                                <label for="max-input">Max:</label>
-                                <input type="number" class="quicksand" id="max-input" wire:model.live="maxPrice"
-                                    value="10000" min="0" max="10000" />
                             </div>
                         </div>
                     </div>
@@ -588,6 +569,63 @@
                         this.wasChecked = true;
                     });
                 });
+            });
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // 1. Initial Values from PHP
+                let minPrice = parseInt(@json($minPrice)) || 0;
+                let maxPrice = parseInt(@json($maxPrice)) || 10000;
+                let productMin = parseInt(@json($productsMinAmount)) || 0;
+                let productMax = parseInt(@json($productsMaxAmount)) || 10000;
+
+                // 2. Initialize jQuery UI Slider
+                $("#shop-slider-range").slider({
+                    range: true,
+                    min: productMin,
+                    max: productMax,
+                    values: [minPrice, maxPrice],
+
+                    // Slide: Update inputs visually ONLY (no server request yet)
+                    slide: function(event, ui) {
+                        $("#min-input").val(ui.values[0]);
+                        $("#max-input").val(ui.values[1]);
+                    },
+
+                    // Stop: When user releases mouse, update Livewire
+                    stop: function(event, ui) {
+                        @this.set('minPrice', ui.values[0]);
+                        @this.set('maxPrice', ui.values[1]);
+                    }
+                });
+
+                // 3. Handle Manual Input Changes
+                $("#min-input, #max-input").on("change", function() {
+                    let currentMin = parseInt($("#min-input").val());
+                    let currentMax = parseInt($("#max-input").val());
+
+                    // Validate logic
+                    if (currentMin > currentMax) {
+                        // If user types min > max, swap them or cap them
+                        currentMin = currentMax;
+                        $("#min-input").val(currentMin);
+                    }
+
+                    // Update Slider Visuals
+                    $("#shop-slider-range").slider("values", 0, currentMin);
+                    $("#shop-slider-range").slider("values", 1, currentMax);
+
+                    // Update Livewire Manually
+                    @this.set('minPrice', currentMin);
+                    @this.set('maxPrice', currentMax);
+                });
+            });
+
+            // 4. Re-initialize slider if Livewire updates other parts of DOM
+            // This hook ensures slider stays correct if you filter by Category/Brand
+            document.addEventListener('livewire:navigated', () => {
+                // Logic to re-run slider setup if needed in SPA mode
             });
         </script>
     @endpush

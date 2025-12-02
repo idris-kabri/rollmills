@@ -67,7 +67,7 @@ class ShopComponent extends Component
         }
 
         $this->productsMaxAmount = Product::max('price');
-        $this->productsMinAmount = Product::min('price');
+        $this->productsMinAmount = Product::min('sale_default_price');
 
         $this->minPrice = $this->productsMinAmount;
         $this->maxPrice = $this->productsMaxAmount;
@@ -207,7 +207,7 @@ class ShopComponent extends Component
                 });
             })
             ->when(isset($this->minPrice, $this->maxPrice), function ($query) {
-                $query->whereBetween('price', [$this->minPrice, $this->maxPrice]);
+                $query->whereBetween('sale_default_price', [$this->minPrice, $this->maxPrice]);
             })
             ->orderBy('id', 'desc')
             ->paginate($this->limit);
