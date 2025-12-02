@@ -11,6 +11,7 @@ use App\Livewire\Admin\ProductsCategories\Index as ProductsCategoriesIndex;
 use App\Livewire\Admin\ProductsCategories\Edit as ProductsCategoriesEdit;
 use App\Livewire\Admin\ProductsCategories\Create as ProductsCategoriesCreate;
 use App\Livewire\Admin\Settings\Index as SettingIndex;
+use App\Livewire\Admin\Post\Index as Post;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\ProductAttributes\Edit as ProductAttributesEdit;
 
@@ -50,11 +51,11 @@ use App\Livewire\Admin\Offer\Detail as OfferDetail;
 
 // Order
 use App\Livewire\Admin\Order\Index as OrderIndex;
-use App\Livewire\Admin\Order\View as OrderView; 
+use App\Livewire\Admin\Order\View as OrderView;
 
 // Order Retun
 use App\Livewire\Admin\OrderItemReturn\Index as OrderItemReturnIndex;
-use App\Livewire\Admin\OrderItemReturn\View as OrderItemReturnView; 
+use App\Livewire\Admin\OrderItemReturn\View as OrderItemReturnView;
 
 //reviews
 use App\Livewire\Admin\Review\Index as reviewIndex;
@@ -100,6 +101,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     //settings
     Route::prefix('/settings')->name('settings.')->group(function () {
         Route::get('/', SettingIndex::class)->name('index');
+    });
+
+    // post routes
+    Route::prefix('/post')->name('post.')->group(function () {
+        Route::match(['get', 'post'], '/', Post::class)->name('index');
     });
 
     // banner routes
@@ -153,29 +159,29 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', OfferIndex::class)->name('index');
         Route::get('/create', OfferCreate::class)->name('create');
         Route::get('/edit/{id}', OfferEdit::class)->name('edit');
-        Route::match(['get', 'post'],'/detail/{id}', OfferDetail::class)->name('detail');
-    }); 
+        Route::match(['get', 'post'], '/detail/{id}', OfferDetail::class)->name('detail');
+    });
 
     //orders route 
-    Route::prefix('/orders')->name('orders.')->group(function(){ 
-        Route::get('/',OrderIndex::class)->name('index');
-        Route::get('/view/{id}',OrderView::class)->name('view');
+    Route::prefix('/orders')->name('orders.')->group(function () {
+        Route::get('/', OrderIndex::class)->name('index');
+        Route::get('/view/{id}', OrderView::class)->name('view');
     });
 
     //orders return 
-    Route::prefix('/order-return')->name('order-return.')->group(function(){ 
-        Route::get('/',OrderItemReturnIndex::class)->name('index');
-        Route::get('/view/{id}',OrderItemReturnView::class)->name('view');
+    Route::prefix('/order-return')->name('order-return.')->group(function () {
+        Route::get('/', OrderItemReturnIndex::class)->name('index');
+        Route::get('/view/{id}', OrderItemReturnView::class)->name('view');
     });
 
     //review route 
-    Route::prefix('/reviews')->name('reviews.')->group(function(){ 
-        Route::get('/',reviewIndex::class)->name('index');
+    Route::prefix('/reviews')->name('reviews.')->group(function () {
+        Route::get('/', reviewIndex::class)->name('index');
     });
-    
+
     //review route 
-    Route::prefix('user-quotation')->name('user-quotation.')->group(function(){ 
-        Route::get('/',UserQuotationIndex::class)->name('index');
-        Route::get('/view/{id}',UserQuotationView::class)->name('view');
+    Route::prefix('user-quotation')->name('user-quotation.')->group(function () {
+        Route::get('/', UserQuotationIndex::class)->name('index');
+        Route::get('/view/{id}', UserQuotationView::class)->name('view');
     });
 });
