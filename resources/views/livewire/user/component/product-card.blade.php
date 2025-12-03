@@ -23,8 +23,8 @@
                 <a aria-label="Add To Wishlist" class="action-btn" href="#"
                     wire:click.prevent="addToWhishlist({{ $product->id }})"><i class="fi-rs-heart"></i></a>
             @else
-                <a aria-label="Add To Wishlist" class="action-btn" href="javascript:void(0);"><i
-                        class="fi-rs-heart text-danger"></i></a>
+                <a aria-label="Add To Wishlist" class="action-btn bg-brand" href="javascript:void(0);"><i
+                        class="fi-rs-heart text-danger text-white"></i></a>
             @endif
             {{-- <a aria-label="Quick view" class="action-btn quick-view" data-id="{{ $product->id }}"><i
                     class="fi-rs-eye"></i></a>
