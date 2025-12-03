@@ -117,13 +117,23 @@
             </div>
             @if ($get_sold == false)
                 @if (!isInCart($product->id))
-                    <div class="add-cart">
-                        <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add"><i
-                                class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                    </div>
+                    @if (count($product->getVarietion) > 0)
+                        <div class="add-cart">
+                            <a href="{{ $shop_detail_url }}" class="add">
+                                Select Option
+                            </a>
+
+                        </div>
+                    @else
+                        <div class="add-cart">
+                            <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add"><i
+                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                        </div>
+                    @endif
                 @else
                     <div class="add-cart">
-                        <a href="javascript:void(0);" class="add"><i class="fi-rs-shopping-cart mr-5"></i>Added </a>
+                        <a href="javascript:void(0);" class="add"><i class="fi-rs-shopping-cart mr-5"></i>Added
+                        </a>
                     </div>
                 @endif
             @endif

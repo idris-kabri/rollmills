@@ -284,6 +284,19 @@
                                                             <h5 class="underline pb-10 mb-25">Products</h5>
                                                             <div class="row">
                                                                 @foreach ($user_order->getOrderItems as $order_item)
+                                                                    @php
+                                                                        if ($order_item->getProduct->slug) {
+                                                                            $shop_detail_url = route('shop-detail', [
+                                                                                'slug' => $order_item->getProduct->slug,
+                                                                                'id' => $order_item->getProduct->id,
+                                                                            ]);
+                                                                        } else {
+                                                                            $shop_detail_url = route('shop-detail', [
+                                                                                'slug' => 'no-slug',
+                                                                                'id' => $order_item->getProduct->id,
+                                                                            ]);
+                                                                        }
+                                                                    @endphp
                                                                     <div class="col-lg-6">
                                                                         <div class="card p-3 mb-3 rounded-15">
                                                                             <div class="d-flex gap-3">
@@ -295,7 +308,8 @@
                                                                                 </a>
                                                                                 <div class="content py-2">
                                                                                     <h6>
-                                                                                        <a href="#"
+                                                                                        <a
+                                                                                            href="{{ $shop_detail_url }}"
                                                                                             class="fs-17">{{ $order_item->getProduct->name }}</a>
                                                                                     </h6>
                                                                                     <div class="product-price pt-5">
