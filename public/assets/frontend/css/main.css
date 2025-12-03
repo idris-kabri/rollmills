@@ -3405,8 +3405,8 @@ input.qty-val {
 
 /*Map*/
 .leaflet-map {
-    height: 350px;
-    width: 100%;
+    height: 350px !important;
+    width: 100% !important;
 }
 
 /*table*/
