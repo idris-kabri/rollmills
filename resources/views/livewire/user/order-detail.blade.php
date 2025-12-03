@@ -194,7 +194,7 @@
                                                                 <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                     href="#">
                                                                     <img src="{{ asset('storage/' . $order_item->getProduct->featured_image) }}"
-                                                                        alt="img" class="img-fluid"
+                                                                        alt="img" class="img-fluid w-100 h-100 rounded-3"
                                                                         style="width: 80px; height: 80px; object-fit: cover;">
                                                                 </a>
 

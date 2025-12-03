@@ -167,8 +167,8 @@
                                     <strong class="mr-10">{{ $attributes['name'] }}: </strong>
                                     <ul class="list-filter size-filter font-small">
                                         @foreach ($attributes['items'] as $item)
-                                            <li class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}"><a
-                                                    href="#"
+                                            <li class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}">
+                                                <a href="#" class="quicksand"
                                                     wire:click.prevent="handleAttributeClick({{ $key }}, '{{ $item }}')">{{ $item }}</a>
                                             </li>
                                         @endforeach
@@ -351,8 +351,8 @@
                                                                             <img src="{{ asset('storage/' . $mainProduct_review->getUsers->profile_image) }}"
                                                                                 alt="">
                                                                         @else --}}
-                                                                            <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
-                                                                                alt="">
+                                                                        <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
+                                                                            alt="">
                                                                         {{-- @endif --}}
                                                                     </div>
                                                                     <a href="#"
