@@ -324,7 +324,6 @@
                             <div class="coupon-header">
                                 <div class="coupon-code-section">
                                     <div class="coupon-code-cart">{{ $global_coupon->coupon_code }}</div>
-                                    {{-- <div class="discount-badge">20% OFF</div> --}}
                                 </div>
                                 <div class="check-circle">
                                     <svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24">
@@ -332,16 +331,28 @@
                                     </svg>
                                 </div>
                             </div>
+
                             <div class="coupon-description">
                                 {{ $global_coupon->description }}
                             </div>
+
                             <div class="coupon-footer">
-                                <div class="discount-badge">{{ $global_coupon->discount_value }}% OFF</div>
-                                <div class="min-order">Valid till:
-                                    {{ \Carbon\Carbon::parse($global_coupon->expiry_date)->format('M d, Y') }}</div>
+                                <div class="discount-badge">
+                                    @if ($global_coupon->discount_type == 'Percentage')
+                                        {{ $global_coupon->discount_value }}% OFF
+                                    @else
+                                        ₹{{ $global_coupon->discount_value }} OFF
+                                    @endif
+                                </div>
+
+                                <div class="min-order">
+                                    Valid till:
+                                    {{ \Carbon\Carbon::parse($global_coupon->expiry_date)->format('M d, Y') }}
+                                </div>
                             </div>
                         </a>
                     @endforeach
+
                 </div>
                 <div class="border p-20 cart-totals">
                     <h4 class="mb-30 pb-2 underline">Details</h4>
