@@ -121,7 +121,7 @@
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Subtotal</th>
-                                <th scope="col" class="end">Remove</th>
+                                <th scope="col" class="end pe-2">Remove</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -167,7 +167,7 @@
                                     </td>
 
                                     {{-- NAME COLUMN --}}
-                                    <td class="product-des product-name">
+                                    <td class="product-des product-name px-sm-3">
                                         @if ($isGift)
                                             <span class="gift-badge"><i class="fi-rs-gift mr-5"></i> Surprise
                                                 Gift</span>
@@ -259,7 +259,7 @@
                                     </td>
 
                                     {{-- REMOVE COLUMN --}}
-                                    <td class="action text-center small-screen-table-td remove-btn"
+                                    <td class="action text-center small-screen-table-td remove-btn pe-sm-2"
                                         data-title="Remove">
                                         @if ($isGift)
                                             {{-- Hide Remove button for gift, or show lock icon --}}
