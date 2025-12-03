@@ -7,8 +7,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="mb-0 d-inline-block fs-6 lh-1"
-                                        href="{{url("/admin")}}">Dashboard</a>
+                                    <a class="mb-0 d-inline-block fs-6 lh-1" href="{{ url('/admin') }}">Dashboard</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <h1 class="mb-0 d-inline-block fs-6 lh-1">Orders Return</h1>
@@ -28,45 +27,52 @@
             <div class="table-wrapper">
                 <div class="card has-actions has-filter">
                     <div class="card-header">
-                        <div class="w-100 justify-content-between d-flex flex-wrap align-items-center gap-1">
-                            <div class="container-fluid">
-                                <div class="row g-2 align-items-end">
-                                    <!-- Search -->
-                                    <div class="col-md-3">
-                                        <label class="form-label">Search</label>
-                                        <input type="search" class="form-control" placeholder="Search..." style="min-width: 100px"
-                                            wire:model.live.debounce.500ms="search" />
-                                    </div>
+                        <div class="container-fluid">
+                            <div class="row g-2 align-items-end">
 
-                                    <!-- From Date -->
-                                    <div class="col-md-2">
-                                        <label class="form-label text-primary">FormDate:</label>
-                                        <input type="date" class="form-control" wire:model.live="formDate" />
-                                    </div>
-
-                                    <!-- To Date -->
-                                    <div class="col-md-2">
-                                        <label class="form-label text-primary">ToDate:</label>
-                                        <input type="date" class="form-control" wire:model.live="toDate" />
-                                    </div>
-
-                                    <!-- Status -->
-                                    <div class="col-md-2">
-                                        <label class="form-label text-primary">Status:</label>
-                                        <select class="form-select" wire:model.live="status">
-                                            <option value="">--select--</option>
-                                            <option value="0">Pending</option>
-                                            <option value="1">Accepted</option>
-                                            <option value="2">Received</option>
-                                            <option value="3">Approved</option>
-                                            <option value="4">Rejected</option>
-                                        </select>
-                                    </div>
+                                <!-- Search -->
+                                <div class="col-md-3">
+                                    <label class="form-label">Search</label>
+                                    <input type="search" class="form-control" placeholder="Search..."
+                                        wire:model.live.debounce.500ms="search" />
                                 </div>
-                            </div>
 
+                                <!-- From Date -->
+                                <div class="col-md-2">
+                                    <label class="form-label text-primary">FormDate:</label>
+                                    <input type="date" class="form-control" wire:model.live="formDate" />
+                                </div>
+
+                                <!-- To Date -->
+                                <div class="col-md-2">
+                                    <label class="form-label text-primary">ToDate:</label>
+                                    <input type="date" class="form-control" wire:model.live="toDate" />
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-md-2">
+                                    <label class="form-label text-primary">Status:</label>
+                                    <select class="form-select" wire:model.live="status">
+                                        <option value="">--select--</option>
+                                        <option value="0">Pending</option>
+                                        <option value="1">Accepted</option>
+                                        <option value="2">Received</option>
+                                        <option value="3">Approved</option>
+                                        <option value="4">Rejected</option>
+                                    </select>
+                                </div>
+
+                                <!-- Button aligned to right -->
+                                <div class="col-md-3 text-end">
+                                    <a class="btn action-item btn-primary" href="{{ route('admin.order-return.create') }}">
+                                        <i class="fa fa-plus"></i> Create
+                                    </a>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
+
 
                     <div class="card-table">
                         <div class="table-responsive table-has-actions table-has-filter">
@@ -74,7 +80,7 @@
                                 id="botble-ecommerce-tables-products-categories-table">
                                 <thead>
                                     @php
-                                    $i = 1;
+                                        $i = 1;
                                     @endphp
                                     <tr>
                                         <th title="ID" width="20"
@@ -104,42 +110,45 @@
                                 </thead>
                                 <tbody>
                                     @forelse($orderReturns as $orderReturn)
-                                    <tr>
-                                        <td>{{$i++}}</td>
-                                        <td> 
-                                            <a href="{{route('admin.customer.customer-detail',$orderReturn->fetchCustomer->id)}}" target="_blank">
-                                                {{$orderReturn->fetchCustomer->name}}<br>
-                                                {{$orderReturn->fetchCustomer->email}} 
-                                            </a>
-                                        </td> 
-                                        <td> 
-                                            <a href="{{route('admin.product.edit',$orderReturn->fetchOrderItem->getProduct->id)}}" target="_blank">
-                                                {{$orderReturn->fetchOrderItem->getProduct->name}}
-                                            </a>
-                                        </td>
-                                        <td>{{$orderReturn->reason}}</td>
-                                        <td>{{$orderReturn->remarks}}</td>
-                                        <td>
-                                            @if($orderReturn->status == 0)
-                                            <p class="text text-warning">Pending</p>
-                                            @elseif($orderReturn->status == 1)
-                                            <p class="text text-info">Accepted</p>
-                                            @elseif($orderReturn->status == 2)
-                                            <p class="text text-info">Received</p>
-                                            @elseif($orderReturn->status == 3)
-                                            <p class="text text-success">Approved</p>
-                                            @elseif($orderReturn->status == 4)
-                                            <p class="text text-danger">Rejected</p>
-                                            @endif
-                                        </td>
-                                        <td><a href="{{ route('admin.order-return.view', $orderReturn->id) }}"><i class="fa fa-eye"></i></a></td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ $i++ }}</td>
+                                            <td>
+                                                <a href="{{ route('admin.customer.customer-detail', $orderReturn->fetchCustomer->id) }}"
+                                                    target="_blank">
+                                                    {{ $orderReturn->fetchCustomer->name }}<br>
+                                                    {{ $orderReturn->fetchCustomer->email }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('admin.product.edit', $orderReturn->fetchOrderItem->getProduct->id) }}"
+                                                    target="_blank">
+                                                    {{ $orderReturn->fetchOrderItem->getProduct->name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $orderReturn->reason }}</td>
+                                            <td>{{ $orderReturn->remarks }}</td>
+                                            <td>
+                                                @if ($orderReturn->status == 0)
+                                                    <p class="text text-warning">Pending</p>
+                                                @elseif($orderReturn->status == 1)
+                                                    <p class="text text-info">Accepted</p>
+                                                @elseif($orderReturn->status == 2)
+                                                    <p class="text text-info">Received</p>
+                                                @elseif($orderReturn->status == 3)
+                                                    <p class="text text-success">Approved</p>
+                                                @elseif($orderReturn->status == 4)
+                                                    <p class="text text-danger">Rejected</p>
+                                                @endif
+                                            </td>
+                                            <td><a href="{{ route('admin.order-return.view', $orderReturn->id) }}"><i
+                                                        class="fa fa-eye"></i></a></td>
+                                        </tr>
                                     @empty
-                                    <tr>
-                                        <td colspan="7">
-                                            <p class="text-center">No Data!</p>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                <p class="text-center">No Data!</p>
+                                            </td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>

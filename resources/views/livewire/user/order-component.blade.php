@@ -207,20 +207,13 @@
                                                             </h5>
 
                                                             <div class="d-flex align-items-center gap-2">
-                                                                @if ($user_order->status == 2)
+                                                                @if ($user_order->status == 3)
                                                                     <button type="button"
                                                                         class="btn btn-sm btn-outline-brand hover-up font-xs"
                                                                         wire:click.prevent="openReviewModalForOrder({{ $user_order->id }})">
-                                                                        <i class="bi bi-x-circle mr-5"></i>
-                                                                        Order Cancel
+                                                                        <i class="fi-rs-star mr-5"></i> Add Review
                                                                     </button>
                                                                 @endif
-
-                                                                <button type="button"
-                                                                    class="btn btn-sm btn-outline-brand hover-up font-xs"
-                                                                    wire:click.prevent="openReviewModalForOrder({{ $user_order->id }})">
-                                                                    <i class="fi-rs-star mr-5"></i> Add Review
-                                                                </button>
 
                                                                 <div class="position-relative">
                                                                     <a class="categories-button-active custom-dropdown-home gap-2 hover-bg text-white"
@@ -241,6 +234,22 @@
                                                                                         View Order Details
                                                                                     </a>
                                                                                 </li>
+                                                                                @if ($user_order->status == 0 || $user_order->status == 1)
+                                                                                    @php
+                                                                                        $number = '918764766553';
+                                                                                        $orderId = $user_order->id;
+                                                                                        $message = "I want to cancel this Order (Order ID: $orderId)";
+                                                                                        $whatsappUrl =
+                                                                                            "https://wa.me/$number?text=" .
+                                                                                            urlencode($message);
+                                                                                    @endphp
+                                                                                    <li>
+                                                                                        <a href="{{ $whatsappUrl }}"
+                                                                                            target="_blank">
+                                                                                            Cancel Order
+                                                                                        </a>
+                                                                                    </li>
+                                                                                @endif
                                                                             </ul>
                                                                         </div>
                                                                     </div>

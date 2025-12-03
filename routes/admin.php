@@ -55,6 +55,7 @@ use App\Livewire\Admin\Order\View as OrderView;
 
 // Order Retun
 use App\Livewire\Admin\OrderItemReturn\Index as OrderItemReturnIndex;
+use App\Livewire\Admin\OrderItemReturn\Create as OrderItemReturnCreate;
 use App\Livewire\Admin\OrderItemReturn\View as OrderItemReturnView;
 
 //reviews
@@ -171,6 +172,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     //orders return 
     Route::prefix('/order-return')->name('order-return.')->group(function () {
         Route::get('/', OrderItemReturnIndex::class)->name('index');
+        Route::get('/create', OrderItemReturnCreate::class)->name('create');
         Route::get('/view/{id}', OrderItemReturnView::class)->name('view');
     });
 

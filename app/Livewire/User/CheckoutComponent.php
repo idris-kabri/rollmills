@@ -61,7 +61,7 @@ class CheckoutComponent extends Component
         if (Auth::check()) {
             $this->fetch_user_address = Address::where('user_id', Auth::user()->id)->get();
             $this->billing_address['email'] = Auth::user()->email;
-            
+
             // Auto-select the first address if available
             if ($this->fetch_user_address->count() > 0) {
                 $this->storeAddressInToBilling($this->fetch_user_address->first()->id);
@@ -73,7 +73,7 @@ class CheckoutComponent extends Component
             $this->fetch_user_address = collect([]);
             $this->add_new_address = true;
         }
-        
+
         $this->checkBillingEmail();
     }
 
@@ -112,10 +112,10 @@ class CheckoutComponent extends Component
     {
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
         $this->ship_to_different_address_enabled = !$this->ship_to_different_address_enabled;
-        
+
         // Reset shipping address state when toggled
-        if($this->ship_to_different_address_enabled) {
-             $this->add_new_shipp_address = false;
+        if ($this->ship_to_different_address_enabled) {
+            $this->add_new_shipp_address = false;
         }
     }
 
@@ -183,7 +183,7 @@ class CheckoutComponent extends Component
                 if ($coupon_id) {
                     $coupon_get = Coupon::find($coupon_id);
                     // Check if coupon exists before accessing properties to prevent crash
-                    if($coupon_get){
+                    if ($coupon_get) {
                         $order_count = Order::where('logged_in_user_id', $user->id)->where('coupon_id', $coupon_id)->where('status', 1)->count();
                         if ($coupon_get->usage_limit <= $order_count) {
                             session()->forget('coupon_discount_amount');
@@ -200,9 +200,9 @@ class CheckoutComponent extends Component
             $this->gift_cards_items = [];
         }
     }
-    
+
     // ... [Rest of your existing methods: applyGiftCard, createBillingAddress, createShippingAddress, createOrderItem, userCreate, placeOrder, render] ...
-    
+
     public function applyGiftCard($gift_card_item_id = null)
     {
         if ($this->gift_card_code && $gift_card_item_id == null) {
@@ -216,9 +216,9 @@ class CheckoutComponent extends Component
             $this->gift_card_item = GiftCardItem::find($gift_card_item_id);
         }
 
-        if(!$this->gift_card_item) {
-             $this->toastError('Invalid Gift Card Code');
-             return;
+        if (!$this->gift_card_item) {
+            $this->toastError('Invalid Gift Card Code');
+            return;
         }
 
         $order_find = Order::where('gift_card_item_id', $this->gift_card_item->id)->count();
@@ -389,6 +389,8 @@ class CheckoutComponent extends Component
                 return $this->toastError('Billing Details Is Required!');
             }
             $this->payment_method = 'upi';
+            $nonAuthUser = null;
+
 
             // Create billing address
             if (!Auth::check()) {
@@ -397,6 +399,7 @@ class CheckoutComponent extends Component
             } else {
                 $billingAddress = $this->createBillingAddress();
             }
+
             $encdoeBillingAddress = json_encode($billingAddress);
             //order create
             $user_order = new Order();
@@ -468,18 +471,30 @@ class CheckoutComponent extends Component
 
                 $this->createOrderItem($user_order);
 
-                $order = razorPayPayment($this->finalTotal, Auth::user()->id ?? $nonAuthUser['id'], $user_order->id, 'orders', 'Order Placed Using UPI');
+                $order = razorPayPayment(
+                    $this->finalTotal,
+                    Auth::user()->id ?? ($nonAuthUser['id'] ?? null),
+                    $user_order->id,
+                    'orders',
+                    'Order Placed Using UPI'
+                );
+
+
+                $user = Auth::user() ?? (object) [
+                    'name'  => $nonAuthUser['name'],
+                    'email' => $nonAuthUser['email'],
+                ];
 
                 $this->dispatch('initiate-razorpay', [
-                    'transaction_id' => $order->transaction_id,
-                    'razorpay_order_id' => $order->id,
-                    'amount' => $order->amount,
-                    'description' => $order->description,
-                    'name' => Auth::user()->name ?? $nonAuthUser['name'],
-                    'email' => Auth::user()->email ?? $nonAuthUser['email'],
-                    'customer_name' => Auth::user()->name ?? $nonAuthUser['name'],
-                    'customer_email' => Auth::user()->email ?? $nonAuthUser['email'],
-                    'success_url' => route('payment.success'),
+                    'transaction_id'     => $order->transaction_id,
+                    'razorpay_order_id'  => $order->id,
+                    'amount'             => $order->amount,
+                    'description'        => $order->description,
+                    'name'               => $user->name,
+                    'email'              => $user->email,
+                    'customer_name'      => $user->name,
+                    'customer_email'     => $user->email,
+                    'success_url'        => route('payment.success'),
                 ]);
             } else {
                 $walletBalance = (int) Auth::user()->wallet_balance;

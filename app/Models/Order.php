@@ -24,28 +24,34 @@ class Order extends Model
         "is_cod",
         "additional_information",
         'billing_address_id',
-        'ship_different_address_id',  
-        'gift_card_item_id', 
-        'gift_card_discount', 
+        'ship_different_address_id',
+        'gift_card_item_id',
+        'gift_card_discount',
         'billing_address_details',
         'ship_different_address_details',
         'shipping_rate',
         "shipping_bear_margin",
-        'etd'
+        'etd',
+        "shipped_at",
+        "complete_at",
     ];
 
-    public function getUser(){
-        return $this->BelongsTo(User::class,"logged_in_user_id","id");
+    public function getUser()
+    {
+        return $this->BelongsTo(User::class, "logged_in_user_id", "id");
     }
 
-    public function getShipAddress(){
-        return $this->BelongsTo(Address::class,"ship_different_address_id","id");
+    public function getShipAddress()
+    {
+        return $this->BelongsTo(Address::class, "ship_different_address_id", "id");
     }
-    public function getBillAddress(){
-        return $this->BelongsTo(Address::class,"billing_address_id","id");
+    public function getBillAddress()
+    {
+        return $this->BelongsTo(Address::class, "billing_address_id", "id");
     }
 
-    public function getOrderItems(){
-        return $this->hasMany(OrderItems::class,"order_id","id");
+    public function getOrderItems()
+    {
+        return $this->hasMany(OrderItems::class, "order_id", "id");
     }
 }

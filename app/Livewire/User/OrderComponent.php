@@ -52,40 +52,6 @@ class OrderComponent extends Component
         }
     }
 
-    public function submitReturnRequest($return_id)
-    {
-        $this->validate([
-            'returnImages' => 'required|array',
-            'returnReason' => 'required',
-        ]);
-        try {
-            $orderitme = OrderItems::find($return_id);
-            $return = new OrderReturnRequest();
-            $return->order_id = $orderitme->order_id;
-            $return->order_item_id = $orderitme->id;
-            $return->customer_id = Auth::user()->id;
-            $return->reason = $this->returnReason;
-            $return->remarks = $this->returnRemarks ?? null;
-            $imagePaths = [];
-
-            if (is_array($this->returnImages)) {
-                foreach ($this->returnImages as $image) {
-                    $path = $image->store('orderReturn', 'public');
-                    $imagePaths[] = $path;
-                }
-            }
-            $return->images = json_encode($imagePaths);
-            $orderitme->status = 2;
-            $orderitme->save();
-            $return->save();
-
-            $this->toastSuccess('Your return request has been submitted successfully.');
-            $this->redirectWithDelay('/my-account');
-        } catch (\Exception $e) {
-            $this->toastError($e->getMessage());
-        }
-    }
-
     public function submitReview()
     {
         $this->validate([
