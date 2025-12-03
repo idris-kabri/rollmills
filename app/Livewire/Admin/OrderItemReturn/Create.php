@@ -6,7 +6,8 @@ use App\Models\Order;
 use App\Models\OrderItems;
 use App\Models\User;
 use App\Models\OrderReturnRequest; // Model name verify karein
-use Illuminate\Container\Attributes\Auth;
+use App\Traits\HasToastNotification;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -14,27 +15,17 @@ use function Symfony\Component\Clock\now;
 
 class Create extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, HasToastNotification;
 
     public $order_id;
-    public $order_items = []; // Dropdown items ke liye
+    public $order_items = [];
     public $item_id = '';
-    public $user_id = '';
     public $reason = '';
-    public $status = ''; // Default empty
+    public $user_id = '';
+    public $status = '';
     public $remarks = '';
     public $images = [];
 
-    // Dropdown data
-    public $customers = [];
-
-    public function mount()
-    {
-        // Customers load karein (ID, Name, Email/Phone for search)
-        $this->customers = User::where("role", "user")->get();
-    }
-
-    // Order ID change hone par items fetch karein
     public function updatedOrderId($value)
     {
         $this->order_items = [];
@@ -53,13 +44,13 @@ class Create extends Component
         $this->validate([
             'order_id' => 'required|exists:orders,id',
             'item_id' => 'required',
-            'user_id' => 'required',
             'reason' => 'required',
             'status' => 'required|in:0,1,2,3,4',
             'images.*' => 'image|max:2048',
         ]);
 
-        // Store images and return array of file paths
+        $get_customer = Order::find($this->order_id);
+        $this->user_id = $get_customer->getUser->id;
         $imagePaths = [];
         if (!empty($this->images)) {
             foreach ($this->images as $image) {
@@ -71,18 +62,16 @@ class Create extends Component
         $store->order_id = $this->order_id;
         $store->order_item_id = $this->item_id;
         $store->customer_id = $this->user_id;
-        $store->changed_by = Auth::user()->id;
+        $store->changed_by = FacadesAuth::user()->id;
         $store->changed_at = now();
         $store->reason = $this->reason;
         $store->remarks = $this->remarks;
         $store->status = $this->status;
-
-        // 👇 Save images into column as JSON
         $store->images = json_encode($imagePaths);
-
         $store->save();
+        $this->toastSuccess('Return Request Created Successfully');
 
-        return redirect()->route('admin.order-item-return.index');
+        return redirect()->route('admin.order-return.index');
     }
 
 

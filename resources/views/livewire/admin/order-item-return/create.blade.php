@@ -32,7 +32,7 @@
                         <h5 class="bb-section-title mb-4">Create Return Request</h5>
 
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Order ID</label>
                                 <input type="text" wire:model.live.debounce.500ms="order_id"
                                     class="form-control @error('order_id') is-invalid @enderror"
@@ -42,7 +42,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Select Order Item</label>
                                 <select wire:model="item_id" class="form-select @error('item_id') is-invalid @enderror">
                                     <option value="">-- Select Item --</option>
@@ -59,24 +59,6 @@
                                 </select>
                                 @error('item_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-semibold">Select Customer</label>
-                                <div wire:ignore>
-                                    <select id="customer-select" class="form-select select2">
-                                        <option value="">-- Search Customer --</option>
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}">
-                                                {{ $customer->name }}
-                                                ({{ $customer->mobile_number ?? $customer->email }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('user_id')
-                                    <span class="text-danger small">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
