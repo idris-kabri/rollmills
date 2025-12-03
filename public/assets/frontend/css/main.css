@@ -1566,16 +1566,16 @@ textarea:focus {
 .contact-from-area .contact-form-style button {
     font-size: 17px;
     font-weight: 500;
-    padding: 20px 40px;
+    /* padding: 20px 40px; */
     color: #ffffff;
     border: none;
-    background-color: #253d4e;
+    background-color: var(--color-1);
     border-radius: 10px;
     font-family: "Quicksand", sans-serif;
 }
 
 .contact-from-area .contact-form-style button:hover {
-    background-color: #dca915 !important;
+    background-color: var(--color-2) !important;
 }
 
 .form-group {

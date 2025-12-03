@@ -3,7 +3,7 @@
          <div class="container">
              <div class="breadcrumb">
                  <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                 <span></span> Pages <span></span> Contact
+                 <span></span>  Contact
              </div>
          </div>
      </div>
@@ -63,7 +63,7 @@
              width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
              referrerpolicy="no-referrer-when-downgrade">
          </iframe>
-         <div class="container mt-3">
+         <div class="container mt-4 mt-md-5">
              <div class="row">
                  <div class="col-xl-10 col-lg-12 m-auto">
                      <section class="mb-50">
@@ -205,7 +205,7 @@
                                                  </div>
 
                                                  {{-- IMPORTANT: button must be <button>, not <a> --}}
-                                                 <button class="btn fs-18 fw-600 quicksand" type="submit">
+                                                 <button class="btn rounded-2 fs-18 fw-600 quicksand" type="submit">
                                                      Send message
                                                  </button>
                                              </div>
