@@ -239,7 +239,7 @@
                         @endforeach
                     </div>
                 </div>
-                <div class="col-xl-3 d-none d-xl-flex">
+                {{--<div class="col-xl-3 d-none d-xl-flex">
                     <div class="banner-img style-2"
                         style="background: url('{{ asset('storage/' . $user_look_for_banner->image) }}');">
                         <div class="banner-text">
@@ -249,7 +249,7 @@
                                     class="fi-rs-arrow-small-right"></i></a>
                         </div>
                     </div>
-                </div>
+                </div>--}}
             </div>
         </div>
     </section>

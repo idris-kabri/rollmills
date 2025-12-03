@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Cart;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 
 class LoginComponent extends Component
 {
@@ -18,14 +19,59 @@ class LoginComponent extends Component
     public $forget_password_email;
     public $otp_section_show = false;
     public $password_section_show = false;
-    public $otp = ['', '', '', '']; 
+    public $otp = ['', '', '', ''];
     public $enteredOtp = null;
 
     public function updatedOtp($value, $index)
     {
         $otpCode = implode('', $this->otp);
         if (strlen($otpCode) === 4) {
-             $this->enteredOtp = $otpCode;
+            $this->enteredOtp = $otpCode;
+        }
+    }
+
+    public function messageSend($otp)
+    {
+        try {
+            $token = 'EAAWBZAOKnVrMBQMBZCU8kWa8fXMZADlKZAE9euLlFQuxkWhA92Q4ZBtmg9CYJAnMmQFgC19Dg81TK8cC7F63KLif27C2C1jx9zYWNIX3FseLhShZCWBgZBGSFTcLRbiKVudbtZBhk4SN8SjX9ZBOSv58V5yitVJ3gzPuZBmiZCmcXUJZBpgCIIja8tpvNm12eGklREFPQQZDZD';
+            $phoneNumberId = '729760939534730';
+            $apiVersion = 'v17.0';
+
+            $url = "https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages";
+
+            $payload = [
+                'messaging_product' => 'whatsapp',
+                'to' => '91' . $this->mobile,
+                'type' => 'template',
+                'template' => [
+                    'name' => 'login_otp',
+                    'language' => ['code' => 'en'],
+                    'components' => [
+                        [
+                            'type' => 'body',
+                            'parameters' => [
+                                ['type' => 'text', 'text' => (string) $otp]
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+
+            $response = Http::withToken($token)->post($url, $payload);
+
+            \Log::info('WhatsApp Response:', [$response->body()]);
+            if ($response->successful()) {
+                return true;
+            } else {
+                \Log::warning('OTP failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+                return false;
+            }
+        } catch (\Exception $e) {
+            \Log::error('WhatsApp OTP exception: ' . $e->getMessage());
+            return false;
         }
     }
 
@@ -40,6 +86,7 @@ class LoginComponent extends Component
                 if ($check_user->role == 'admin') {
                     $this->password_section_show = true;
                 } else {
+                    $this->messageSend($otp);
                     $check_user->otp = $otp;
                     $check_user->save();
                     $this->otp_section_show = true;
@@ -49,13 +96,15 @@ class LoginComponent extends Component
                 $user->role = 'user';
                 $user->mobile = $this->mobile;
                 $user->otp = $otp;
-                $user->save(); 
+                $user->save();
+                $this->messageSend($otp);
                 $this->otp_section_show = true;
             }
         } else {
             $this->otp_section_show = false;
         }
     }
+
     public function loginCheck()
     {
         $this->validate([
@@ -75,22 +124,22 @@ class LoginComponent extends Component
                 } else {
                     $this->addError('password', 'Invalid password.');
                 }
-            } else { 
+            } else {
                 $user = User::where('mobile', $this->mobile)->where('otp', $this->enteredOtp)->first();
                 if ($user) {
                     Auth::login($user);
-                    
+
                     $get_all_whislist = Cart::instance('wishlist')->content();
                     Cart::instance('wishlist')->restore(Auth::user()->mobile);
                     Cart::instance('wishlist')->store(Auth::user()->mobile);
-                    
+
                     $get_all_cart = Cart::instance('cart')->content();
                     Cart::instance('cart')->restore(Auth::user()->mobile);
                     Cart::instance('cart')->store(Auth::user()->mobile);
 
                     return redirect("/");
                 } else {
-                    $this->addError('otp','You Enter Wrong Otp!');
+                    $this->addError('otp', 'You Enter Wrong Otp!');
                 }
             }
         } catch (\Exception $e) {
