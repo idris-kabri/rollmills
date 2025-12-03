@@ -5814,7 +5814,7 @@ table .product-thumbnail img {
 }
 
 .shopping-summery table > :not(caption) > * > * {
-    padding: 15px 0;
+    padding: 15px 12px;
 }
 
 .shopping-summery table td,
@@ -5825,7 +5825,7 @@ table .product-thumbnail img {
 
 .shopping-summery table thead th {
     background-color: #ececec;
-    padding: 18px 0;
+    padding: 18px 12px;
     font-family: "Quicksand", sans-serif;
     font-size: 17px;
     font-weight: 700;

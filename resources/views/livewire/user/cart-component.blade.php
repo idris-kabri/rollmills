@@ -169,7 +169,7 @@
                                     {{-- NAME COLUMN --}}
                                     <td class="product-des product-name px-sm-3">
                                         @if ($isGift)
-                                            <span class="gift-badge"><i class="fi-rs-gift mr-5"></i> Surprise
+                                            <span class="gift-badge badge py-1 quicksand"><i class="fi-rs-gift mr-5"></i> Surprise
                                                 Gift</span>
                                         @endif
 
@@ -194,6 +194,9 @@
                                                 </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
+                                        </div>
+                                        <div class="badge bg-danger text-white rounded-pill quicksand">
+                                            Out Of Stock
                                         </div>
                                         @if ($isGift)
                                             <p class="font-xs text-muted mt-1">Free gift added automatically!</p>
