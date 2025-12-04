@@ -561,5 +561,14 @@
                 });
             })
         })
+    </script> 
+    <script>
+        document.addEventListener('openQuickView', function(e) {
+            let modal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+            modal.show();
+
+            console.log("Modal opened for product:", e.detail.productId);
+        });
     </script>
+
 @endpush

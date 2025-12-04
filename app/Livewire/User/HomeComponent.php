@@ -31,7 +31,7 @@ class HomeComponent extends Component
     public $user_look_for_banner = [];
     public $selectedProductId;
 
-    protected $listeners = ['quickView' => 'addPreviewProduct', 'closeQuickView' => 'handleCloseQuickView'];
+    protected $listeners = ['closeQuickView' => 'handleCloseQuickView'];
 
     public function mount()
     {

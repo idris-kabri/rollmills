@@ -17,6 +17,9 @@ class ProductCard extends Component
     public $parameter = '';
     public $get_sold = false;
     public $selected_product = null;
+    public $selectedProductId;
+    protected $listeners = ['quickView' => 'addPreviewProduct', 'closeQuickView' => 'handleCloseQuickView'];
+
 
     public function mount($product, $parameter = null, $get_sold = false)
     {
@@ -51,6 +54,11 @@ class ProductCard extends Component
         } else {
             return Product::find($parentId);
         }
+    }
+
+    public function addPreviewProduct($id)
+    {
+        $this->dispatch('openQuickView', productId: $id);
     }
 
     public function addToCart($id)

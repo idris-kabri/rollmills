@@ -42,14 +42,14 @@ function messageSend($mobile,$otp,$template_name)
         if ($response->successful()) {
             return true;
         } else {
-            \Log::warning('OTP failed', [
+            \Log::warning('failed', [
                 'status' => $response->status(),
                 'body' => $response->body()
             ]);
             return false;
         }
     } catch (\Exception $e) {
-        \Log::error('WhatsApp OTP exception: ' . $e->getMessage());
+        \Log::error('WhatsApp exception: ' . $e->getMessage());
         return false;
     }
-}
+} 
