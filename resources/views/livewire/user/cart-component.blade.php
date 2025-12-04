@@ -121,7 +121,7 @@
                                 <th scope="col">Unit Price</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Subtotal</th>
-                                <th scope="col" class="end">Remove</th>
+                                <th scope="col" class="end pe-2">Remove</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -167,9 +167,9 @@
                                     </td>
 
                                     {{-- NAME COLUMN --}}
-                                    <td class="product-des product-name">
+                                    <td class="product-des product-name px-sm-3">
                                         @if ($isGift)
-                                            <span class="gift-badge"><i class="fi-rs-gift mr-5"></i> Surprise
+                                            <span class="gift-badge badge py-1 quicksand"><i class="fi-rs-gift mr-5"></i> Surprise
                                                 Gift</span>
                                         @endif
 
@@ -194,6 +194,9 @@
                                                 </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
+                                        </div>
+                                        <div class="badge bg-danger text-white rounded-pill quicksand">
+                                            Out Of Stock
                                         </div>
                                         @if ($isGift)
                                             <p class="font-xs text-muted mt-1">Free gift added automatically!</p>
@@ -259,7 +262,7 @@
                                     </td>
 
                                     {{-- REMOVE COLUMN --}}
-                                    <td class="action text-center small-screen-table-td remove-btn"
+                                    <td class="action text-center small-screen-table-td remove-btn pe-sm-2"
                                         data-title="Remove">
                                         @if ($isGift)
                                             {{-- Hide Remove button for gift, or show lock icon --}}
@@ -324,7 +327,6 @@
                             <div class="coupon-header">
                                 <div class="coupon-code-section">
                                     <div class="coupon-code-cart">{{ $global_coupon->coupon_code }}</div>
-                                    {{-- <div class="discount-badge">20% OFF</div> --}}
                                 </div>
                                 <div class="check-circle">
                                     <svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24">
@@ -332,16 +334,28 @@
                                     </svg>
                                 </div>
                             </div>
+
                             <div class="coupon-description">
                                 {{ $global_coupon->description }}
                             </div>
+
                             <div class="coupon-footer">
-                                <div class="discount-badge">{{ $global_coupon->discount_value }}% OFF</div>
-                                <div class="min-order">Valid till:
-                                    {{ \Carbon\Carbon::parse($global_coupon->expiry_date)->format('M d, Y') }}</div>
+                                <div class="discount-badge">
+                                    @if ($global_coupon->discount_type == 'Percentage')
+                                        {{ $global_coupon->discount_value }}% OFF
+                                    @else
+                                        ₹{{ $global_coupon->discount_value }} OFF
+                                    @endif
+                                </div>
+
+                                <div class="min-order">
+                                    Valid till:
+                                    {{ \Carbon\Carbon::parse($global_coupon->expiry_date)->format('M d, Y') }}
+                                </div>
                             </div>
                         </a>
                     @endforeach
+
                 </div>
                 <div class="border p-20 cart-totals">
                     <h4 class="mb-30 pb-2 underline">Details</h4>

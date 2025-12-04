@@ -16,7 +16,8 @@
             </a>
             <a href="/cart"><span class="lable">Cart</span></a>
             <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                <ul wire:poll.750ms>
+                <ul wire:poll.750ms
+                    style="max-height: 250px; overflow: auto; scrollbar-color: var(--color-1) #fcfcfc; scrollbar-width: thin;">
                     @foreach (Cart::instance('cart')->content() as $item)
                         <li>
                             @php
@@ -69,12 +70,12 @@
                 </a>
                 <a href="/my-account"><span class="lable">Account</span></a>
             @else
-<a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
                     <img class="svgInject" alt="Nest"
                         src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
                 </a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"><span class="lable">Login</span></a>
-
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"><span
+                        class="lable">Login</span></a>
             @endif
 
         </div>

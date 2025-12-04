@@ -184,7 +184,8 @@
                 attribution: cartodbAttribution
             }).addTo(map);
 
-            var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+            var positronLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
+, {
                 attribution: cartodbAttribution,
                 pane: 'labels'
             }).addTo(map);

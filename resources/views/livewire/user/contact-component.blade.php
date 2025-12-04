@@ -3,7 +3,7 @@
          <div class="container">
              <div class="breadcrumb">
                  <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                 <span></span> Pages <span></span> Contact
+                 <span></span>  Contact
              </div>
          </div>
      </div>
@@ -58,12 +58,12 @@
                  </div>
              </div>
          </div>
-         <section class="container mb-50 d-none d-md-block">
-             <div class="border-radius-15 overflow-hidden">
-                 <div id="map-panes" class="leaflet-map"></div>
-             </div>
-         </section>
-         <div class="container">
+         <iframe
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3007.134205802572!2d74.0241464!3d23.667408299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39673dc707b54201%3A0xf6ae948f4454706!2sRoll%20Mills!5e1!3m2!1sen!2sin!4v1764761859509!5m2!1sen!2sin"
+             width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+             referrerpolicy="no-referrer-when-downgrade">
+         </iframe>
+         <div class="container mt-4 mt-md-5">
              <div class="row">
                  <div class="col-xl-10 col-lg-12 m-auto">
                      <section class="mb-50">
@@ -146,50 +146,83 @@
                                  <div class="contact-from-area padding-20-row-col">
                                      <h5 class="text-brand mb-10">Contact form</h5>
                                      <h2 class="mb-10">Drop Us a Line</h2>
-                                     <p class="text-muted mb-30 font-sm">We’d love to hear from you! Whether you have a
-                                         question about your order, need help with a product, or just want to share
-                                         feedback — the RollMills support team is always ready to assist.</p>
-                                     <form class="contact-form-style mt-30" id="contact-form" action="#"
-                                         method="post">
+                                     <p class="text-muted mb-30 font-sm">
+                                         We’d love to hear from you! Whether you have a question about your order,
+                                         need help with a product, or just want to share feedback — the RollMills
+                                         support team is always ready to assist.
+                                     </p>
+
+                                     {{-- Success Message --}}
+                                     @if (session()->has('success'))
+                                         <div class="alert alert-success">{{ session('success') }}</div>
+                                     @endif
+
+                                     <form class="contact-form-style mt-30" wire:submit.prevent="store">
                                          <div class="row">
+
                                              <div class="col-lg-6 col-md-6">
                                                  <div class="input-style mb-20">
-                                                     <input name="name" placeholder="First Name" type="text" />
+                                                     <input type="text" placeholder="First Name" wire:model="name">
+                                                     @error('name')
+                                                         <span class="text-danger font-xs">{{ $message }}</span>
+                                                     @enderror
                                                  </div>
                                              </div>
+
                                              <div class="col-lg-6 col-md-6">
                                                  <div class="input-style mb-20">
-                                                     <input name="email" placeholder="Your Email" type="email" />
+                                                     <input type="email" placeholder="Your Email" wire:model="email">
+                                                     @error('email')
+                                                         <span class="text-danger font-xs">{{ $message }}</span>
+                                                     @enderror
                                                  </div>
                                              </div>
+
                                              <div class="col-lg-6 col-md-6">
                                                  <div class="input-style mb-20">
-                                                     <input name="telephone" placeholder="Your Phone" type="tel" />
+                                                     <input type="tel" placeholder="Your Phone" wire:model="phone">
+                                                     @error('phone')
+                                                         <span class="text-danger font-xs">{{ $message }}</span>
+                                                     @enderror
                                                  </div>
                                              </div>
+
                                              <div class="col-lg-6 col-md-6">
                                                  <div class="input-style mb-20">
-                                                     <input name="subject" placeholder="Subject" type="text" />
+                                                     <input type="text" placeholder="Subject" wire:model="subject">
+                                                     @error('subject')
+                                                         <span class="text-danger font-xs">{{ $message }}</span>
+                                                     @enderror
                                                  </div>
                                              </div>
+
                                              <div class="col-lg-12 col-md-12">
                                                  <div class="textarea-style mb-30">
-                                                     <textarea name="message" placeholder="Message"></textarea>
+                                                     <textarea placeholder="Message" wire:model="message"></textarea>
+                                                     @error('message')
+                                                         <span class="text-danger font-xs">{{ $message }}</span>
+                                                     @enderror
                                                  </div>
-                                                 <a class="btn fs-18 fw-600  quicksand"
-                                                     type="submit">Send
-                                                     message</a>
+
+                                                 {{-- IMPORTANT: button must be <button>, not <a> --}}
+                                                 <button class="btn rounded-2 fs-18 fw-600 quicksand" type="submit">
+                                                     Send message
+                                                 </button>
                                              </div>
+
                                          </div>
                                      </form>
+
                                      <p class="form-messege"></p>
                                  </div>
                              </div>
+
                              <div class="col-lg-5 pl-50 d-lg-block d-none">
                                  <img class="border-radius-15 mt-50"
-                                     src="{{ asset('assets/frontend/imgs/page/contact-2.png') }}" alt="" />
+                                     src="{{ asset('assets/frontend/imgs/page/contact-2.png') }}" alt="">
                              </div>
                          </div>
+
                      </section>
                  </div>
              </div>

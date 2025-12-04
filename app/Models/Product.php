@@ -47,6 +47,11 @@ class Product extends Model
     {
         return $this->belongsTo(Product::class, 'parent_id', "id");
     }
+
+    public function getVarietion()
+    {
+        return $this->hasMany(Product::class, 'parent_id', 'id');
+    }
  
     public function categoryAssigns()
     {

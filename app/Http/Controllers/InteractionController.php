@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InteractionPlatform;
 use App\Models\PostPlatform;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -14,42 +15,51 @@ class InteractionController extends Controller
     public function store($platform, Request $request)
     {
         $data = $request->all();
-        Log::error('Insta Store: ');
-        Log::error($request->all());
+        $entry = $data['entry'][0] ?? null;
 
-        $user_id = 123;
-        $user_name = "Hatim Rustam";
-        $post_id = 1;
-        $description = 1;
+        if ($entry && isset($entry['changes'][0]) && ($entry['changes'][0]['field'] ?? null) === 'comments') {
 
-        $store = new InteractionPlatform();
-        $store->user_id = $user_id;
-        $store->user_name = $user_name;
-        $store->type = "Comment";
-        $store->description = $description;
-        $store->save();
+            Log::error('Insta Store: ');
+            Log::error($request->all());
 
+            $change = $entry['changes'][0];
+            $value  = $change['value'];
 
-        $lowercase_desc = strtolower($description);
+            $user_id    = $value['from']['id'];
+            $user_name  = $value['from']['username'];
+            $post_id    = $value['media']['id']; 
+            $description = $value['text'];
+            $comment_id  = $value['id']; 
 
-        $match = PostPlatform::where("keyword", "like", "%$lowercase_desc%")
-            ->first();
+            $store = new InteractionPlatform();
+            $store->user_id = $user_id;
+            $store->name = $user_name;
+            $store->type = "Comment";
+            $store->post_id = $post_id;
+            $store->description = $description;
+            $store->save();
 
+            $lowercase_desc = strtolower($description);
 
+            $match = PostPlatform::whereRaw("LOWER(keyword) LIKE ?", ["%{$lowercase_desc}%"])
+                ->first();
 
-        $response = Http::post("https://graph.facebook.com/v21.0/18165448510388010/replies", [
-            'message' => "Thanks for your comment! Here's the link you requested 😊",
-            'access_token' => "IGAAWMVmPvKlpBZAFRnci1iemlhanlPUDNIMjBDLVNHVDR2V1B1cW8yYVZARengwY1dHTHF6a1g1TldBSUtlVFBQWHVoZAEVyUVlKblhSa2VVLXM2V21kVjdrTWxfNkpYVEZAYLTBzUjB4MU9kYThOQ0NoUjBhSmJwT3lMRnQ4U2UyTQZDZD",
-        ]);
+            $post_message = Setting::where("label", "post_comment_message")->value('value') ?? '';
 
-        Log::error($response->json());
+            $response = Http::post("https://graph.facebook.com/v21.0/$comment_id/replies", [
+                'message' => $post_message,
+                'access_token' => config('instagram.access_token'),
+            ]);
 
-        return response()->json([
-            'data' => $data,
-            'platform' => $platform,
-            'status' => 200,
-            'message' => 'Data store successfully',
-        ]);
+            Log::error($response->json());
+
+            return response()->json([
+                'data' => $data,
+                'platform' => $platform,
+                'status' => 200,
+                'message' => 'Data stored successfully',
+            ]);
+        }
     }
 
     public function verify($platform, Request $request)

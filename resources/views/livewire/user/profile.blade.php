@@ -37,7 +37,7 @@
                              </div>
 
                              <label
-                                 class="fw-600 text-center justify-content-center d-flex fs-16 align-items-center gap-1"
+                                 class="fw-600 text-center hover-a justify-content-center d-flex fs-16 align-items-center gap-1"
                                  style="cursor: pointer">
                                  Change Profile Image <i class="fa-solid fa-pen-to-square"></i>
 

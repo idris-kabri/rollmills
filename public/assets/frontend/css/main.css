@@ -1566,16 +1566,16 @@ textarea:focus {
 .contact-from-area .contact-form-style button {
     font-size: 17px;
     font-weight: 500;
-    padding: 20px 40px;
+    /* padding: 20px 40px; */
     color: #ffffff;
     border: none;
-    background-color: #253d4e;
+    background-color: var(--color-1);
     border-radius: 10px;
     font-family: "Quicksand", sans-serif;
 }
 
 .contact-from-area .contact-form-style button:hover {
-    background-color: #dca915 !important;
+    background-color: var(--color-2) !important;
 }
 
 .form-group {
@@ -3405,8 +3405,8 @@ input.qty-val {
 
 /*Map*/
 .leaflet-map {
-    height: 350px;
-    width: 100%;
+    height: 350px !important;
+    width: 100% !important;
 }
 
 /*table*/
@@ -5814,7 +5814,7 @@ table .product-thumbnail img {
 }
 
 .shopping-summery table > :not(caption) > * > * {
-    padding: 15px 0;
+    padding: 15px 12px;
 }
 
 .shopping-summery table td,
@@ -5825,7 +5825,7 @@ table .product-thumbnail img {
 
 .shopping-summery table thead th {
     background-color: #ececec;
-    padding: 18px 0;
+    padding: 18px 12px;
     font-family: "Quicksand", sans-serif;
     font-size: 17px;
     font-weight: 700;

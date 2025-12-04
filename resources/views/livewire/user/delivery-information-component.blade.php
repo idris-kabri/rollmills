@@ -52,7 +52,7 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                <span></span> Pages <span></span> Delivery Information
+                <span></span>  Delivery Information
             </div>
         </div>
     </div>
