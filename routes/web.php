@@ -25,6 +25,7 @@ use App\Livewire\User\OrderDetail;
 use App\Livewire\User\Profile;
 use App\Livewire\User\AddressComponent;
 use App\Http\Controllers\PaymentSuccessController;
+use App\Livewire\User\AllCategory;
 use App\Livewire\User\OrderCompleted;
 
 Route::get('/', HomeComponent::class)->name('login');
@@ -50,7 +51,7 @@ Route::get('/user-address', AddressComponent::class)->name("user-address");
 // Route::get('/login', LoginComponent::class)->name('login');
 Route::get('/register', RegisterComponent::class)->name('register');
 Route::get('/order-completed', OrderCompleted::class)->name('order-completed');
-
+Route::get('/all-category', AllCategory::class)->name('all-category');
 Route::match(['get','post'],'/get-payment',[PaymentSuccessController::class,'paymentSuccess'])->name('payment.success');
 
 @include('admin.php');

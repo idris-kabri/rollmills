@@ -341,7 +341,11 @@
                                 </ul> --}}
                             </li>
                             <li class="menu-item-has-children">
+                                @if(Auth::check())
                                 <a href="/my-account">My Account</a>
+                                @else
+                                <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a>
+                                @endif
                             </li>
                             {{-- <li class="menu-item-has-children">
                                 <a href="#">Vendors</a>

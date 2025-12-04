@@ -7,6 +7,7 @@
             /* Gold left border */
         }
 
+
         .gift-badge {
             background-color: #ffbc0d;
             color: #fff;
@@ -148,7 +149,6 @@
 
                                 {{-- Add 'gift-row' class if it is a gift --}}
                                 <tr class="pt-3 {{ $isGift ? 'gift-row' : '' }}">
-
                                     {{-- IMAGE COLUMN --}}
                                     <td class="image product-thumbnail pt-40 position-relative ps-3">
                                         <img src="{{ asset('storage/' . $item->model->featured_image) }}"
@@ -169,7 +169,8 @@
                                     {{-- NAME COLUMN --}}
                                     <td class="product-des product-name px-sm-3">
                                         @if ($isGift)
-                                            <span class="gift-badge badge py-1 quicksand"><i class="fi-rs-gift mr-5"></i> Surprise
+                                            <span class="gift-badge badge py-1 quicksand"><i
+                                                    class="fi-rs-gift mr-5"></i> Surprise
                                                 Gift</span>
                                         @endif
 
@@ -195,9 +196,11 @@
                                             </div>
                                             <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
                                         </div>
-                                        <div class="badge bg-danger text-white rounded-pill quicksand">
-                                            Out Of Stock
-                                        </div>
+                                        @if ($item->model->out_of_stock == 1)
+                                            <div class="badge bg-danger text-white rounded-pill quicksand">
+                                                Out Of Stock
+                                            </div>
+                                        @endif
                                         @if ($isGift)
                                             <p class="font-xs text-muted mt-1">Free gift added automatically!</p>
                                         @endif
@@ -438,9 +441,10 @@
                         </table>
                     </div>
                     @if ($checkout_button)
-                        <a href="/checkout"
-                            class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
-                            To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                        <a href="javascript:void(0);"
+                            class="btn mb-20 w-100 d-flex justify-content-center align-items-center">
+                            Proceed To CheckOut <i class="fi-rs-sign-out ml-15"></i>
+                        </a>
                     @endif
                 </div>
             </div>

@@ -212,8 +212,9 @@
                                                 class="action-btn hover-up wishlist-detail-active"><i
                                                     class="fi-rs-heart"></i></a>
                                         @else
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"
-                                                wire:click.prevent="addToWhishlist()"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                href="#" wire:click.prevent="addToWhishlist()"><i
+                                                    class="fi-rs-heart"></i></a>
                                         @endif
                                     </div>
                                 @else
@@ -337,50 +338,47 @@
                                             <div class="col-lg-8">
                                                 <h4 class="mb-30">Customer questions & answers</h4>
                                                 <div class="comment-list">
-                                                    @foreach ($mainProduct_reviews as $mainProduct_review)
+                                                    @foreach ($mainProduct_reviews as $review)
                                                         @php
-                                                            $rating = $mainProduct_review->ratings ?? 0;
-                                                            $rating_percentage = ($rating / 5) * 100;
+                                                            $rating = $review->ratings ?? 0;
                                                         @endphp
-                                                        <div
-                                                            class="single-comment justify-content-between d-flex mb-30">
-                                                            <div class="user d-flex" style="width: 100%;">
-                                                                <div class="text-center me-5">
-                                                                    <div class="">
-                                                                        {{-- @if ($mainProduct_review->getUsers->profile_image != null)
-                                                                            <img src="{{ asset('storage/' . $mainProduct_review->getUsers->profile_image) }}"
-                                                                                alt="">
-                                                                        @else --}}
-                                                                        <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
-                                                                            alt="">
-                                                                        {{-- @endif --}}
-                                                                    </div>
-                                                                    <a href="#"
-                                                                        class="font-heading text-brand">{{ $mainProduct_review->name }}</a>
+
+                                                        <div class="single-comment mb-3 pb-1 border-bottom">
+                                                            <div class="d-flex align-items-center mb-2">
+                                                                <div class="me-2">
+                                                                    {{-- Profile Image Logic --}}
+                                                                    <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
+                                                                        alt="">
                                                                 </div>
-                                                                <div class="" style="width: 100%;">
-                                                                    <div class="mb-10" style="width: 100%;">
-                                                                        <div
-                                                                            class="d-flex align-items-center justify-content-between">
-                                                                            <div class=""><span
-                                                                                    class="font-xs text-muted">{{ \Carbon\Carbon::parse($mainProduct_review->created_at)->format('Y-m-d h:i A') }}</span>
-                                                                            </div>
-                                                                            <div class="product-rate">
-                                                                                @php
-                                                                                    $reviews_percentage =
-                                                                                        ($mainProduct_review->ratings /
-                                                                                            5) *
-                                                                                        100;
-                                                                                @endphp
-                                                                                <div class="product-rating"
-                                                                                    style="width: {{ (int) $reviews_percentage }}%">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <p class="mb-10">
-                                                                            {{ $mainProduct_review->remarks }}</p>
-                                                                    </div>
+                                                                <div>
+                                                                    <h6 class="mb-0 font-heading text-brand"
+                                                                        style="font-size: 14px; font-weight: bold;">
+                                                                        {{ $review->name }}
+                                                                    </h6>
                                                                 </div>
+                                                            </div>
+
+                                                            {{-- 2. Star Ratings Section --}}
+                                                            <div class="d-flex align-items-center mb-2">
+                                                                <div class="stars me-2">
+                                                                    {{-- Loop to display 5 stars --}}
+                                                                    @for ($i = 1; $i <= 5; $i++)
+                                                                        @if ($i <= $rating)
+                                                                            {{-- Filled Star (Orange) --}}
+                                                                            <i class="fas fa-star text-warning"></i>
+                                                                        @else
+                                                                            {{-- Empty Star (Grey) --}}
+                                                                            <i class="far fa-star text-muted"></i>
+                                                                        @endif
+                                                                    @endfor
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="desc">
+                                                                <p class="mb-0 text-dark"
+                                                                    style="font-size: 14px; line-height: 1.5;">
+                                                                    {{ $review->remarks }}
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     @endforeach
