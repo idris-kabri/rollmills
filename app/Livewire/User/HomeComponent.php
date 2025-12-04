@@ -31,7 +31,11 @@ class HomeComponent extends Component
     public $user_look_for_banner = [];
     public $selectedProductId;
 
-    protected $listeners = ['closeQuickView' => 'handleCloseQuickView'];
+    protected $listeners = [
+        'previewProductEvent' => 'addPreviewProduct',
+        'closeQuickView' => 'handleCloseQuickView',
+    ];
+
 
     public function mount()
     {
@@ -96,6 +100,9 @@ class HomeComponent extends Component
     public function addPreviewProduct($id)
     {
         $this->selectedProductId = $id;
+        $this->dispatch('openQuickView', [
+            'productId' => $id
+        ]);
     }
 
     public function setSaleProductCategory($category)

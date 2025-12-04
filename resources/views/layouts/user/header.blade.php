@@ -553,7 +553,7 @@
         </div>
     </div>
 
-    <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
+    <div class="modal fade custom-modal custom-modal-new" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
         aria-modal="true" role="dialog" style="padding-right: 0px; display: block;">
         <div class="modal-dialog">
             <div class="modal-content bg-white">
@@ -563,7 +563,7 @@
                         <div class="deal-top">
                             <h6 class="mb-10 text-brand">Welcome To RollMills</h6>
                         </div>
-                        <div class="deal-content detail-info">
+                        <div class="deal-content detail-info first-popup-modal">
                             <h4 class="product-title" style="max-width: 100%">
                                 Shop
                                 with thrill, save at will — Let Smart Deals Roll In!!

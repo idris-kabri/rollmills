@@ -3,12 +3,12 @@
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-function messageSend($mobile,$otp,$template_name)
+function messageSend($mobile, $otp, $template_name)
 {
     try {
-        $token = 'EAAWBZAOKnVrMBQMBZCU8kWa8fXMZADlKZAE9euLlFQuxkWhA92Q4ZBtmg9CYJAnMmQFgC19Dg81TK8cC7F63KLif27C2C1jx9zYWNIX3FseLhShZCWBgZBGSFTcLRbiKVudbtZBhk4SN8SjX9ZBOSv58V5yitVJ3gzPuZBmiZCmcXUJZBpgCIIja8tpvNm12eGklREFPQQZDZD';
-        $phoneNumberId = '882451871618236';
-        $apiVersion = 'v20.0';
+        $token = config('app.whatsapp_api_token');
+        $phoneNumberId = config('app.whatsapp_phone_number_id');
+        $apiVersion = config('app.whatsapp_api_version');
 
         $url = "https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages";
 
@@ -53,4 +53,4 @@ function messageSend($mobile,$otp,$template_name)
         Log::error('WhatsApp exception: ' . $e->getMessage());
         return false;
     }
-} 
+}
