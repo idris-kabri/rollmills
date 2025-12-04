@@ -7,7 +7,7 @@
             <span class="pro-count white">{{ Cart::instance('wishlist')->count() }}</span>
         </a>
     </div>
-    <div class="header-action-icon-2">
+    <div class="header-action-icon-2" wire:poll.750ms>
         <a class="" href="/cart">
             <img alt="Nest" src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}" />
             <span class="pro-count white">{{ Cart::instance('cart')->count() }}</span>

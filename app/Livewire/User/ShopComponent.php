@@ -43,6 +43,11 @@ class ShopComponent extends Component
     public $product_count = 0;
     public $limit = 50;
 
+    protected $listeners = [
+        'previewProductEvent' => 'addPreviewProduct',
+        'closeQuickView' => 'handleCloseQuickView',
+    ];
+
     public function mount(Request $request)
     {
         $this->search = $request->search;
@@ -93,7 +98,10 @@ class ShopComponent extends Component
 
     public function addPreviewProduct($id)
     {
-        $this->selectedProductId = $id;
+        $this->selectedProductId = $id; 
+        $this->dispatch('openQuickView', [
+            'productId' => $id
+        ]);
     }
 
     private function updateProductCount()

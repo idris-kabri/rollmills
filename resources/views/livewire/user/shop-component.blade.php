@@ -1,5 +1,5 @@
     <main class="main"> 
-        @livewire('user.quick-view', ['id' => $selectedProductId, 'bindClose' => 'selectedProductId'], key($selectedProductId ?? time()))
+        @livewire('user.quick-view', ['id' => $selectedProductId], key('quickview'))
         <style>
             /* ... existing styles ... */
 
@@ -636,5 +636,6 @@
 
                 console.log("Modal opened for product:", e.detail.productId);
             });
-        </script>
+        </script> 
+        
     @endpush
