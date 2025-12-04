@@ -1,5 +1,5 @@
 <main class="main home-page-main">
-    @livewire('user.quick-view', ['id' => $selectedProductId, 'bindClose' => 'selectedProductId'], key($selectedProductId ?? time()))
+   @livewire('user.quick-view', ['id' => $selectedProductId], key('quickview'))
     <section class="home-slider style-2 position-relative mb-md-3" wire:ignore>
         <div class="container">
             <div class="row">
@@ -570,5 +570,6 @@
             console.log("Modal opened for product:", e.detail.productId);
         });
     </script>
+    
 
 @endpush
