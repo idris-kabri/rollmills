@@ -3533,6 +3533,9 @@ table .product-thumbnail img {
     border-radius: 25px;
     padding: 40px;
     border: 1px solid #dcaa15b7;
+}
+
+.custom-modal.custom-modal-new .modal-dialog .modal-content {
     background: url("/assets/frontend/imgs/icon&images/gz8vNxZFT9MVn9vG3u0ndFVc4AmtvKeplrme23EK-removebg-preview (4).png");
     background-size: contain;
     background-position: 0 bottom;
@@ -12036,6 +12039,25 @@ footer .hotline img {
 }
 
 @media only screen and (max-width: 768px) {
+    .custom-modal .modal-dialog .modal-content {
+        border-radius: 15px;
+        padding: 25px 20px;
+    }
+
+    .custom-modal.custom-modal-new .modal-dialog .modal-content {
+        background: linear-gradient(135deg, #fffaec, #fff7e0);
+    }
+
+    .first-popup-modal .product-title {
+        margin-bottom: 20px;
+        font-size: 35px !important;
+        line-height: 1.1;
+    }
+
+    .first-popup-modal p {
+        font-size: 15px;
+    }
+
     .totall-product h2 {
         font-size: 28px;
     }
@@ -12932,7 +12954,7 @@ footer .hotline img {
     }
 
     .modal-open .modal {
-        padding-right: 0 !important;
+        padding: 10px !important;
     }
 
     .vendor-wrap.style-2 {
@@ -12954,6 +12976,16 @@ footer .hotline img {
 
 /*small phone*/
 @media only screen and (max-width: 480px) {
+    .custom-modal.custom-modal-new .modal-dialog .modal-content {
+        padding: 10px 5px;
+    }
+
+    .first-popup-modal .product-title {
+        margin-bottom: 20px;
+        font-size: 30px !important;
+        line-height: 1.1;
+    }
+
     .tab-content.shop_info_tab {
         margin-top: 20px;
     }
@@ -13610,7 +13642,7 @@ footer .hotline img {
     }
 
     .modal-open .modal {
-        padding-right: 0 !important;
+        padding: 10px !important;
     }
 
     .archive-header-3 {
@@ -13637,7 +13669,7 @@ footer .hotline img {
     }
 
     .modal-open .modal {
-        padding-right: 0 !important;
+        padding: 10px !important;
     }
 }
 
@@ -13662,7 +13694,7 @@ footer .hotline img {
     }
 
     .modal-open .modal {
-        padding-right: 0 !important;
+        padding: 10px !important;
     }
 
     .cart-action {
