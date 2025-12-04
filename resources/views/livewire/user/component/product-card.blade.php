@@ -123,8 +123,8 @@
                 @if (!isInCart($product->id))
                     @if (count($product->getVarietion) > 0)
                         <div class="add-cart">
-                            <a href="{{ $shop_detail_url }}" class="add">
-                                Select Option
+                            <a href="{{ $shop_detail_url }}" class="add" style="white-space: nowrap;">
+                                See Options
                             </a>
 
                         </div>

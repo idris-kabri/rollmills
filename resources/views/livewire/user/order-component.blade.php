@@ -204,7 +204,39 @@
                                                             <h5 class="fs-24">
                                                                 Order ID <span
                                                                     class="text-brand">#{{ $user_order->id }}</span>
+
+                                                                {{-- STATUS BADGE --}}
+                                                                @php
+                                                                    $status_badges = [
+                                                                        0 => [
+                                                                            'text' => 'Pending',
+                                                                            'class' => 'badge bg-warning',
+                                                                        ],
+                                                                        1 => [
+                                                                            'text' => 'Processed',
+                                                                            'class' => 'badge bg-info',
+                                                                        ],
+                                                                        2 => [
+                                                                            'text' => 'Shipped',
+                                                                            'class' => 'badge bg-primary',
+                                                                        ],
+                                                                        3 => [
+                                                                            'text' => 'Complete',
+                                                                            'class' => 'badge bg-success',
+                                                                        ],
+                                                                        4 => [
+                                                                            'text' => 'Cancelled',
+                                                                            'class' => 'badge bg-danger',
+                                                                        ],
+                                                                    ];
+                                                                @endphp
+
+                                                                <span
+                                                                    class="{{ $status_badges[$user_order->status]['class'] }} ms-2">
+                                                                    {{ $status_badges[$user_order->status]['text'] }}
+                                                                </span>
                                                             </h5>
+
 
                                                             <div class="d-flex align-items-center gap-2">
                                                                 @if ($user_order->status == 3)
@@ -308,8 +340,7 @@
                                                                                 </a>
                                                                                 <div class="content py-2">
                                                                                     <h6>
-                                                                                        <a
-                                                                                            href="{{ $shop_detail_url }}"
+                                                                                        <a href="{{ $shop_detail_url }}"
                                                                                             class="fs-17">{{ $order_item->getProduct->name }}</a>
                                                                                     </h6>
                                                                                     <div class="product-price pt-5">

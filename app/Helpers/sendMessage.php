@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 function messageSend($mobile,$otp,$template_name)
 {
@@ -42,14 +43,14 @@ function messageSend($mobile,$otp,$template_name)
         if ($response->successful()) {
             return true;
         } else {
-            \Log::warning('failed', [
+            Log::warning('failed', [
                 'status' => $response->status(),
                 'body' => $response->body()
             ]);
             return false;
         }
     } catch (\Exception $e) {
-        \Log::error('WhatsApp exception: ' . $e->getMessage());
+        Log::error('WhatsApp exception: ' . $e->getMessage());
         return false;
     }
 } 
