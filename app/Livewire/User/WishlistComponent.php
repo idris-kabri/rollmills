@@ -14,6 +14,18 @@ class WishlistComponent extends Component
     use HasToastNotification;
     public $quantity = 1;
 
+    public $confirmMessage = '';
+    public $confirmAction = '';
+
+    public function askRemove($rowId)
+    {
+        $this->confirmMessage = "Are you sure you want to remove this item from your wishlist?";
+        $this->confirmAction  = "removeWishlist('$rowId')";
+
+        $this->dispatch('open-whislit-remove-item-modal');
+    }
+
+
     public function addToCart($rowId)
     {
         $mainProduct = Cart::instance('wishlist')->get($rowId);
@@ -85,7 +97,8 @@ class WishlistComponent extends Component
     {
         $removeWishlist = finalRemoveWishlist($rowId);
         if ($removeWishlist == true) {
-            $this->toastError('Product Successfully Remove In Your Wishlist!');
+            $this->toastError('Product Successfully Remove In Your Wishlist!'); 
+            $this->dispatch('close-whislit-remove-item-modal');
         }
     }
     public function render()

@@ -109,7 +109,7 @@ class CartComponent extends Component
         }
         $this->productCategoryIds = array_unique($this->productCategoryIds);
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
-        $this->surprise_gift_amount = (int) Setting::where('label', 'surprise_gift_minimum_amount')->first()->value;
+        // $this->surprise_gift_amount = (int) Setting::where('label', 'surprise_gift_minimum_amount')->first()->value;
         $this->surprise_gift_product_id = Setting::where('label', 'surprise_gift_product_id')->first();
         $this->getDisplayCoupons();
         $this->checkSurpriseGift('no');
