@@ -45,6 +45,17 @@ class CartComponent extends Component
     public $surprise_gift_product_id = null;
     public $productCategoryIds = [];
 
+    public $confirmMessage = '';
+    public $confirmAction = '';
+
+    public function askRemove($rowId)
+    {
+        $this->confirmMessage = "Are you sure you want to remove this item from your cart?";
+        $this->confirmAction  = "removeFromCart('$rowId')";
+
+        $this->dispatch('open-cart-remove-item-modal');
+    }
+
     public function mount()
     {
         $items = [];
@@ -677,7 +688,8 @@ class CartComponent extends Component
         $items[] = $item;
         $this->dispatch('remove-from-cart', $items);
         if ($removeCart) {
-            $this->toastError('Product Remove Successfully From Your Cart!');
+            $this->toastError('Product Remove Successfully From Your Cart!'); 
+            $this->dispatch('close-cart-remove-item-modal');
         }
         // $this->offerCheckEligibility();
         $this->pincodeCheckFunction();
