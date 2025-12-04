@@ -3,7 +3,7 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                <span></span> Shop <span></span> Fillter
+                <span></span> Fillter
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
     </div>
     <!-- END CONFIRM MODAL -->
 
-
+    @if (count(Cart::instance('wishlist')->content()) > 0)
     <div class="container mb-30 mt-50">
         <div class="row">
             <div class="col-xl-11 col-lg-12 m-auto">
@@ -54,6 +54,7 @@
                     <h1 class="heading-2 mb-10">Your Wishlist</h1>
                     <h6 class="text-body">There are <span class="text-brand">5</span> products in this list</h6>
                 </div> --}}
+
                 <div class="table-responsive shopping-summery table-responsive-custom">
                     <table class="table table-wishlist">
                         <thead>
@@ -143,23 +144,25 @@
             </div>
         </div>
     </div>
+    @else
+    <livewire:user.component.no-item-found-component />
+    @endif
 </main>
 @push('scripts')
 <script>
-document.addEventListener('livewire:init', () => {
+    document.addEventListener('livewire:init', () => {
 
-    let wishlistModal = null;
-    Livewire.on('open-whislit-remove-item-modal', () => {
-        wishlistModal = new bootstrap.Modal(document.getElementById('WhislitRemoveItemModal'));
-        wishlistModal.show();
-    });
-    Livewire.on('close-whislit-remove-item-modal', () => {
-        if (wishlistModal) {
-            wishlistModal.hide();
-        }
-    });
+        let wishlistModal = null;
+        Livewire.on('open-whislit-remove-item-modal', () => {
+            wishlistModal = new bootstrap.Modal(document.getElementById('WhislitRemoveItemModal'));
+            wishlistModal.show();
+        });
+        Livewire.on('close-whislit-remove-item-modal', () => {
+            if (wishlistModal) {
+                wishlistModal.hide();
+            }
+        });
 
-});
+    });
 </script>
 @endpush
-
