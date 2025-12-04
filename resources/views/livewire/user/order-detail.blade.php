@@ -188,19 +188,33 @@
                                             <h5 class="underline pb-10 mb-25 d-sm-flex d-none">Products</h5>
                                             <div class="row">
                                                 @foreach ($order->getOrderItems as $order_item)
+                                                    @php
+                                                        if ($order_item->getProduct->slug) {
+                                                            $shop_detail_url = route('shop-detail', [
+                                                                'slug' => $order_item->getProduct->slug,
+                                                                'id' => $order_item->getProduct->id,
+                                                            ]);
+                                                        } else {
+                                                            $shop_detail_url = route('shop-detail', [
+                                                                'slug' => 'no-slug',
+                                                                'id' => $order_item->getProduct->id,
+                                                            ]);
+                                                        }
+                                                    @endphp
                                                     <div class="col-lg-12">
                                                         <div class="card p-3 mb-3 rounded-15">
                                                             <div class="d-flex gap-3 align-items-center flex-wrap">
                                                                 <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                     href="#">
                                                                     <img src="{{ asset('storage/' . $order_item->getProduct->featured_image) }}"
-                                                                        alt="img" class="img-fluid w-100 h-100 rounded-3"
+                                                                        alt="img"
+                                                                        class="img-fluid w-100 h-100 rounded-3"
                                                                         style="width: 80px; height: 80px; object-fit: cover;">
                                                                 </a>
 
                                                                 <div class="content py-2 flex-grow-1">
                                                                     <h6>
-                                                                        <a href="#"
+                                                                        <a href="{{ $shop_detail_url }}"
                                                                             class="fs-17">{{ $order_item->getProduct->name }}</a>
                                                                     </h6>
 

@@ -26,9 +26,13 @@
                 <a aria-label="Add To Wishlist" class="action-btn bg-brand" href="javascript:void(0);"><i
                         class="fi-rs-heart text-danger text-white"></i></a>
             @endif
-            {{-- <a aria-label="Quick view" class="action-btn quick-view" data-id="{{ $product->id }}"><i
-                    class="fi-rs-eye"></i></a>
-            <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a> --}}
+             <a aria-label="Quick view"
+   class="action-btn quick-view"
+   wire:click="addPreviewProduct({{ $product->id }})">
+    <i class="fi-rs-eye"></i>
+</a>
+
+            <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a> 
         </div>
         <div class="product-badges product-badges-position product-badges-mrg">
             @if ($parameter)
@@ -117,13 +121,23 @@
             </div>
             @if ($get_sold == false)
                 @if (!isInCart($product->id))
-                    <div class="add-cart">
-                        <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add"><i
-                                class="fi-rs-shopping-cart mr-5"></i>Add </a>
-                    </div>
+                    @if (count($product->getVarietion) > 0)
+                        <div class="add-cart">
+                            <a href="{{ $shop_detail_url }}" class="add" style="white-space: nowrap;">
+                                See Options
+                            </a>
+
+                        </div>
+                    @else
+                        <div class="add-cart">
+                            <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add"><i
+                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                        </div>
+                    @endif
                 @else
                     <div class="add-cart">
-                        <a href="javascript:void(0);" class="add"><i class="fi-rs-shopping-cart mr-5"></i>Added </a>
+                        <a href="javascript:void(0);" class="add"><i class="fi-rs-shopping-cart mr-5"></i>Added
+                        </a>
                     </div>
                 @endif
             @endif

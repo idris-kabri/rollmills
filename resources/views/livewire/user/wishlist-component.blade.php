@@ -32,6 +32,19 @@
                         </thead>
                         <tbody>
                             @foreach (Cart::instance('wishlist')->content() as $item)
+                                @php
+                                    if ($item->model->slug) {
+                                        $shop_detail_url = route('shop-detail', [
+                                            'slug' => $item->model->slug,
+                                            'id' => $item->model->id,
+                                        ]);
+                                    } else {
+                                        $shop_detail_url = route('shop-detail', [
+                                            'slug' => 'no-slug',
+                                            'id' => $item->model->id,
+                                        ]);
+                                    }
+                                @endphp
                                 <tr class="pt-30">
                                     <td class="image product-thumbnail pt-40 position-relative ps-3">
                                         <img src="{{ asset('storage/' . $item->model->featured_image) }}"
@@ -44,8 +57,9 @@
                                         </div>
                                     </td>
                                     <td class="product-des product-name">
-                                        <h6><a class="product-name mb-10" href="/shop-detail">Field Roast Chao
-                                                Cheese Creamy Original</a></h6>
+                                        <h6><a class="product-name mb-10"
+                                                href="{{$shop_detail_url}}">{{ $item->model->name }}</a>
+                                        </h6>
                                         @php
                                             $reviews = \App\Models\ProductReview::where('status', 1)
                                                 ->where('product_id', $item->model->id)
@@ -78,7 +92,10 @@
                                         @endif
                                     </td>
                                     <td class="small-screen-table-td before-remove" data-title="">
-                                        <button class="btn btn-sm custom-btn-table-responsive" wire:click="addToCart('{{ $item->rowId }}')" wire:confirm="Are you sure you want to add this item to your cart?">Add to cart</button>
+                                        <button class="btn btn-sm custom-btn-table-responsive"
+                                            wire:click="addToCart('{{ $item->rowId }}')"
+                                            wire:confirm="Are you sure you want to add this item to your cart?">Add to
+                                            cart</button>
                                     </td>
                                     <td class="action text-center small-screen-table-td remove-btn" data-title="Remove">
                                         <a href="#" wire:click.prevent="removeWishlist('{{ $item->rowId }}')"

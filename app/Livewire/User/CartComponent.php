@@ -231,7 +231,7 @@ class CartComponent extends Component
             // Check total usage limit
             $totalUsage = Order::where('coupon_id', $coupon->id)->count();
             if ($totalUsage >= $coupon->total_usage) {
-                dd($coupon, $coupon->total_usage, $totalUsage);
+                // dd($coupon, $coupon->total_usage, $totalUsage);
                 continue;
             }
 

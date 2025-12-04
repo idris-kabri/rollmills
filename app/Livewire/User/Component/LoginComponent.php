@@ -8,6 +8,7 @@ use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Cart;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class LoginComponent extends Component
@@ -39,6 +40,7 @@ class LoginComponent extends Component
                     $this->password_section_show = true;
                     $this->dispatch('password-show');
                 } else {
+                    messageSend($this->mobile,$otp,'login_otp');
                     $check_user->otp = $otp;
                     $check_user->save();
                     $this->otp_section_show = true;
@@ -50,6 +52,7 @@ class LoginComponent extends Component
                 $user->mobile = $this->mobile;
                 $user->otp = $otp;
                 $user->save();
+                messageSend($this->mobile,$otp,'login_otp');
                 $this->otp_section_show = true;
                 $this->dispatch('');
             }

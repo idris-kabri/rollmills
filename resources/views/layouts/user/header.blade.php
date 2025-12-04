@@ -8,11 +8,11 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
     {{-- 2. Dynamic Description & Keywords --}}
-   <meta name="description"
-    content="{{ strip_tags($meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Household And Decoration products.') }}" />
-    
-<meta name="keywords" 
-    content="{{ strip_tags($meta_keywords ?? 'household, decoration, rollmills, home decor, hanging Perfume, candles') }}" />
+    <meta name="description"
+        content="{{ strip_tags($meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Household And Decoration products.') }}" />
+
+    <meta name="keywords"
+        content="{{ strip_tags($meta_keywords ?? 'household, decoration, rollmills, home decor, hanging Perfume, candles') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {{-- 3. Dynamic Open Graph (Social Media) Tags --}}
@@ -427,20 +427,9 @@
                 </div>
                 <div class="mobile-social-icon mb-50">
                     <h6 class="mb-15">Follow Us</h6>
-                    <a href="#"><img
-                            src="{{ asset('assets/frontend/imgs/theme/icons/icon-facebook-white.svg') }}"
-                            alt="" /></a>
-                    <a href="#"><img
-                            src="{{ asset('assets/frontend/imgs/theme/icons/icon-twitter-white.svg') }}"
-                            alt="" /></a>
-                    <a href="#"><img
+
+                    <a href="https://www.instagram.com/roll.mills/" target="_blank"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-instagram-white.svg') }}"
-                            alt="" /></a>
-                    <a href="#"><img
-                            src="{{ asset('assets/frontend/imgs/theme/icons/icon-pinterest-white.svg') }}"
-                            alt="" /></a>
-                    <a href="#"><img
-                            src="{{ asset('assets/frontend/imgs/theme/icons/icon-youtube-white.svg') }}"
                             alt="" /></a>
                 </div>
                 <div class="site-copyright">Copyright 2025 © RollMills. All rights reserved.</div>
