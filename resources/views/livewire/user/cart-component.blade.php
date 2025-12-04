@@ -37,29 +37,28 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                <span></span> Shop
                 <span></span> Cart
             </div>
         </div>
     </div>
     @php
-        $shippingCharge = (float) (session('shipping_charge') ?? 0);
-        $total = floatval(str_replace(',', '', Cart::total()));
+    $shippingCharge = (float) (session('shipping_charge') ?? 0);
+    $total = floatval(str_replace(',', '', Cart::total()));
 
-        $remain_amount = 0;
-        if ($surprise_gift_amount <= 0) {
-            $percentage=0;
-            $remain_amount=0;
+    $remain_amount = 0;
+    if ($surprise_gift_amount <= 0) {
+        $percentage=0;
+        $remain_amount=0;
 
         } elseif ($total>= $surprise_gift_amount) {
-            $percentage = 100;
-            $remain_amount = 0;
+        $percentage = 100;
+        $remain_amount = 0;
 
         } else {
-            $percentage = ($total / $surprise_gift_amount) * 100;
-            $remain_amount = $surprise_gift_amount - $total;
+        $percentage = ($total / $surprise_gift_amount) * 100;
+        $remain_amount = $surprise_gift_amount - $total;
         }
-    @endphp
+        @endphp
 
         <div class="container mb-80 mt-50">
             <div class="row">
@@ -74,6 +73,39 @@
                 </div>
             </div>
 
+            <!-- CONFIRM MODAL -->
+            <div class="modal fade" id="CartRemoveItemModal" tabindex="-1" wire:ignore.self>
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content-custom w-100">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('assets/frontend/imgs/icon&images/complain.png') }}"
+                                    class="img-fluid mb-3 mt-4 modal-logo" />
+                            </div>
+
+                            <h1 class="fs-3 text-center">Are you Sure?</h1>
+                            <p class="fs-6 mx-auto text-center quicksand">
+                                {{ $confirmMessage }}
+                            </p>
+                        </div>
+
+                        <div class="pb-4 d-flex flex-column justify-content-center">
+                            <button class="btn mb-3 w-90-per pt-10 pb-10"
+                                wire:click.prevent="{{ $confirmAction }}">
+                                Yes, Continue
+                            </button>
+
+                            <button class="btn btn-brand-outline mx-auto pt-10 pb-10 w-90-per"
+                                data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONFIRM MODAL -->
+
+            @if (count(Cart::instance('cart')->content()) > 0)
             <div class="container" wire:ignore>
                 <div class="row">
                     <div class="col-12">
@@ -119,37 +151,6 @@
                 </div>
             </div>
 
-            <!-- CONFIRM MODAL -->
-            <div class="modal fade" id="CartRemoveItemModal" tabindex="-1" wire:ignore.self>
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content-custom w-100">
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-center">
-                                <img src="{{ asset('assets/frontend/imgs/icon&images/complain.png') }}"
-                                    class="img-fluid mb-3 mt-4 modal-logo" />
-                            </div>
-
-                            <h1 class="fs-3 text-center">Are you Sure?</h1>
-                            <p class="fs-6 mx-auto text-center quicksand">
-                                {{ $confirmMessage }}
-                            </p>
-                        </div>
-
-                        <div class="pb-4 d-flex flex-column justify-content-center">
-                            <button class="btn mb-3 w-90-per pt-10 pb-10"
-                                wire:click.prevent="{{ $confirmAction }}">
-                                Yes, Continue
-                            </button>
-
-                            <button class="btn btn-brand-outline mx-auto pt-10 pb-10 w-90-per"
-                                data-bs-dismiss="modal">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END CONFIRM MODAL -->
 
             <div class="row">
                 <div class="col-xl-9">
@@ -210,9 +211,9 @@
                                         @if ($isGift)
                                         <span class="gift-badge badge py-1 quicksand"><i class="fi-rs-gift mr-5"></i> Surprise
                                             Gift</span>
-                                            <span class="gift-badge badge py-1 quicksand"><i
-                                                    class="fi-rs-gift mr-5"></i> Surprise
-                                                Gift</span>
+                                        <span class="gift-badge badge py-1 quicksand"><i
+                                                class="fi-rs-gift mr-5"></i> Surprise
+                                            Gift</span>
                                         @endif
 
                                         <h6 class="mb-5">
@@ -238,9 +239,9 @@
                                             <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
                                         </div>
                                         @if ($item->model->out_of_stock == 1)
-                                            <div class="badge bg-danger text-white rounded-pill quicksand">
-                                                Out Of Stock
-                                            </div>
+                                        <div class="badge bg-danger text-white rounded-pill quicksand">
+                                            Out Of Stock
+                                        </div>
                                         @endif
                                         @if ($isGift)
                                         <p class="font-xs text-muted mt-1">Free gift added automatically!</p>
@@ -488,23 +489,16 @@
                     </div>
                 </div>
             </div>
+            @if ($checkout_button)
+            <a href="javascript:void(0);"
+                class="btn mb-20 w-100 d-flex justify-content-center align-items-center">
+                Proceed To CheckOut <i class="fi-rs-sign-out ml-15"></i>
+            </a>
+            @endif 
+            @else
+                <livewire:user.component.no-item-found-component />
+            @endif
         </div>
-                                        @endif
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    @if ($checkout_button)
-                        <a href="javascript:void(0);"
-                            class="btn mb-20 w-100 d-flex justify-content-center align-items-center">
-                            Proceed To CheckOut <i class="fi-rs-sign-out ml-15"></i>
-                        </a>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 
 @push('scripts')
