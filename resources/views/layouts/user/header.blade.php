@@ -341,10 +341,10 @@
                                 </ul> --}}
                             </li>
                             <li class="menu-item-has-children">
-                                @if(Auth::check())
-                                <a href="/my-account">My Account</a>
+                                @if (Auth::check())
+                                    <a href="/my-account">My Account</a>
                                 @else
-                                <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a>
+                                    <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a>
                                 @endif
                             </li>
                             {{-- <li class="menu-item-has-children">
@@ -423,7 +423,9 @@
                             Gopi Restaurant, Sagwara, India </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="/"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fi-rs-user"></i>Log In / Sign Up
+                        </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="tel:+91 87647 66553"><i class="fi-rs-headphones"></i>+91 87647 66553</a>
@@ -553,8 +555,9 @@
         </div>
     </div>
 
-    <div class="modal fade custom-modal custom-modal-new" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
-        aria-modal="true" role="dialog" style="padding-right: 0px; display: block;">
+    <div class="modal fade custom-modal custom-modal-new" id="onloadModal" tabindex="-1"
+        aria-labelledby="onloadModalLabel" aria-modal="true" role="dialog"
+        style="padding-right: 0px; display: block;">
         <div class="modal-dialog">
             <div class="modal-content bg-white">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
