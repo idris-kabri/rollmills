@@ -1,4 +1,4 @@
-    <main class="main"> 
+    <main class="main">
         @livewire('user.quick-view', ['id' => $selectedProductId], key('quickview'))
         <style>
             /* ... existing styles ... */
@@ -271,8 +271,8 @@
 
                                     <a href="#" class="cat-link {{ $isActive ? 'active' : '' }}"
                                         @if ($subCategories->count() > 0) @click.prevent="open = !open" 
-                   @else
-                       wire:click.prevent="categoryWiseProduct({{ $category->id }}, 'change')" @endif>
+                                             @else
+                                             wire:click.prevent="categoryWiseProduct({{ $category->id }}, 'change')" @endif>
                                         <div class="cat-left">
                                             @if ($category->icon)
                                                 <img src="{{ asset('storage/' . $category->icon) }}" class="cat-icon"
@@ -628,7 +628,7 @@
             document.addEventListener('livewire:navigated', () => {
                 // Logic to re-run slider setup if needed in SPA mode
             });
-        </script> 
+        </script>
         <script>
             document.addEventListener('openQuickView', function(e) {
                 let modal = new bootstrap.Modal(document.getElementById('quickViewModal'));
@@ -636,6 +636,5 @@
 
                 console.log("Modal opened for product:", e.detail.productId);
             });
-        </script> 
-        
+        </script>
     @endpush

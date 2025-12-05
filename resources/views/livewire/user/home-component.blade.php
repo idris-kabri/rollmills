@@ -72,13 +72,13 @@
         <div class="container wow animate__animated animate__fadeIn">
             <div class="section-title">
                 <div class="title">
-                    <h3 class="mr-15">Featured Categories</h3>
+                    <h3 class="m-0">Featured Categories</h3>
                 </div>
                 {{-- <div class="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow"
                     id="carausel-10-columns-arrows"></div> --}}
-                    <a class="btn btn-brand px-3 py-2 quicksand d-flex align-items-center gap-1" href="/all-category">
-                       <span class="fi-rs-apps me-md-1 fs-14 text-white d-flex align-items-center"></span> View All
-                    </a>
+                <a class="btn btn-brand px-2 px-sm-4 py-2 quicksand d-flex align-items-center gap-1" href="/all-category">
+                    <span class="fi-rs-apps me-md-1 fs-14 text-white d-flex align-items-center"></span> View All
+                </a>
             </div>
             <div class="home-categories-cards-section">
                 <div class="row justify-content-center">
@@ -91,7 +91,7 @@
                                         class="w-100 h-100"><img src="{{ asset('storage/' . $category->image) }}"
                                             alt="" /></a>
                                 </figure>
-                                <h6><a class="fs-15 one-liner-text" 
+                                <h6><a class="fs-15 one-liner-text"
                                         href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">{{ $category->name }}</a>
                                 </h6>
                             </div>
@@ -233,7 +233,7 @@
                         $category_popular_products = \App\Models\Product::where('status', 1)
                             ->where('is_featured', 1)
                             ->whereIn('id', $category_product_category_assign)
-                            ->where("parent_id", null)
+                            ->where('parent_id', null)
                             ->inRandomOrder()
                             ->limit(10)
                             ->get();
