@@ -7,6 +7,7 @@
             /* Gold left border */
         }
 
+
         .gift-badge {
             background-color: #ffbc0d;
             color: #fff;
@@ -36,23 +37,29 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                <span></span> Shop
                 <span></span> Cart
             </div>
         </div>
     </div>
     @php
-        $shippingCharge = (float) (session('shipping_charge') ?? 0);
-        $total = floatval(str_replace(',', '', Cart::total()));
+    $shippingCharge = (float) (session('shipping_charge') ?? 0);
+    $total = floatval(str_replace(',', '', Cart::total()));
+
+    $remain_amount = 0;
+    if ($surprise_gift_amount <= 0) {
+        $percentage=0;
+        $remain_amount=0;
+
+        } elseif ($total>= $surprise_gift_amount) {
+        $percentage = 100;
         $remain_amount = 0;
-        if ($total > $surprise_gift_amount) {
-            $percentage = 100;
-            $remain_amount = 0;
+
         } else {
-            $percentage = ($total / $surprise_gift_amount) * 100;
-            $remain_amount = $surprise_gift_amount - $total;
+        $percentage = ($total / $surprise_gift_amount) * 100;
+        $remain_amount = $surprise_gift_amount - $total;
         }
-    @endphp
+        @endphp
+
     <div class="container mb-80 mt-50">
         <div class="row">
             <div class="col-lg-12 mb-40">
@@ -66,36 +73,69 @@
             </div>
         </div>
 
-        <div class="container" wire:ignore>
-            <div class="row">
-                <div class="col-12">
-                    <div class="mb-md-5 mb-4">
-                        <div class="gift-progress-container">
-                            <div class="gift-text-measure">
-                                <div class="progress-title">Grab Your Gift Now!!</div>
-                                {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
-                                <p class="quicksand fw-500">Shop ₹{{ $surprise_gift_amount }} and get exclusive surprise
-                                    gift
-                                    only on RollMills. Let the
-                                    offers Roll-In !!</p>
+            <!-- CONFIRM MODAL -->
+            <div class="modal fade" id="CartRemoveItemModal" tabindex="-1" wire:ignore.self>
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content-custom w-100">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('assets/frontend/imgs/icon&images/complain.png') }}"
+                                    class="img-fluid mb-3 mt-4 modal-logo" />
                             </div>
-                            <div class="gift-scroll-bar">
-                                <div class="progress-bar-cart" id="" data-width="{{ $percentage }}">
-                                    <div class="bar-circle">
-                                        <i class="fa-solid fa-gift"></i>
+
+                            <h1 class="fs-3 text-center">Are you Sure?</h1>
+                            <p class="fs-6 mx-auto text-center quicksand">
+                                {{ $confirmMessage }}
+                            </p>
+                        </div>
+
+                        <div class="pb-4 d-flex flex-column justify-content-center">
+                            <button class="btn mb-3 w-90-per pt-10 pb-10"
+                                wire:click.prevent="{{ $confirmAction }}">
+                                Yes, Continue
+                            </button>
+
+                            <button class="btn btn-brand-outline mx-auto pt-10 pb-10 w-90-per"
+                                data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONFIRM MODAL -->
+
+            @if (count(Cart::instance('cart')->content()) > 0)
+            <div class="container" wire:ignore>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-md-5 mb-4">
+                            <div class="gift-progress-container">
+                                <div class="gift-text-measure">
+                                    <div class="progress-title">Grab Your Gift Now!!</div>
+                                    {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
+                                    <p class="quicksand fw-500">Shop ₹{{ $surprise_gift_amount }} and get exclusive surprise
+                                        gift
+                                        only on RollMills. Let the
+                                        offers Roll-In !!</p>
+                                </div>
+                                <div class="gift-scroll-bar">
+                                    <div class="progress-bar-cart" id="" data-width="{{ $percentage }}">
+                                        <div class="bar-circle">
+                                            <i class="fa-solid fa-gift"></i>
+                                        </div>
+                                    </div>
+                                    <div class="milestone-marker">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/istockphoto-2172206741-612x612-removebg-preview__1_-removebg-preview.png') }}"
+                                            alt="" class="img-fluid">
+                                    </div>
+                                    <div class="milestone-marker-open">
+                                        <img src="{{ asset('assets/frontend/imgs/shop/surprise-gift-box-vector-with-white-bow-suitable-for-use-on-birthday-party-new-year-and-marry-christmas-2R4YDP3-removebg-preview__1_-removebg-preview.png') }}"
+                                            alt="" class="img-fluid">
                                     </div>
                                 </div>
-                                <div class="milestone-marker">
-                                    <img src="{{ asset('assets/frontend/imgs/shop/istockphoto-2172206741-612x612-removebg-preview__1_-removebg-preview.png') }}"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="milestone-marker-open">
-                                    <img src="{{ asset('assets/frontend/imgs/shop/surprise-gift-box-vector-with-white-bow-suitable-for-use-on-birthday-party-new-year-and-marry-christmas-2R4YDP3-removebg-preview__1_-removebg-preview.png') }}"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                            <div class="content">
-                                <p class="text-center mt-4 fs-20 fw-500">
+                                <div class="content">
+                                    <p class="text-center mt-4 fs-20 fw-500">
 
                                     @if ($remain_amount > 0)
                                         You are ₹{{ $remain_amount }} away from your gift &nbsp;<a href="/shop">Shop
@@ -110,6 +150,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="row">
             <div class="col-xl-9">
@@ -148,7 +189,6 @@
 
                                 {{-- Add 'gift-row' class if it is a gift --}}
                                 <tr class="pt-3 {{ $isGift ? 'gift-row' : '' }}">
-
                                     {{-- IMAGE COLUMN --}}
                                     <td class="image product-thumbnail pt-40 position-relative ps-3">
                                         <img src="{{ asset('storage/' . $item->model->featured_image) }}"
@@ -159,7 +199,7 @@
                                             <div class="display-visible-480 d-none">
                                                 <a href="#"
                                                     class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                    wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
+                                                    wire:click.prevent="askRemove('{{ $item->rowId }}')"
                                                     wire:confirm="Are you sure you want to remove this item from your cart?">
                                                     <i class="fi-rs-trash text-white"></i></a>
                                             </div>
@@ -169,8 +209,11 @@
                                     {{-- NAME COLUMN --}}
                                     <td class="product-des product-name px-sm-3">
                                         @if ($isGift)
-                                            <span class="gift-badge badge py-1 quicksand"><i class="fi-rs-gift mr-5"></i> Surprise
-                                                Gift</span>
+                                        <span class="gift-badge badge py-1 quicksand"><i class="fi-rs-gift mr-5"></i> Surprise
+                                            Gift</span>
+                                        <span class="gift-badge badge py-1 quicksand"><i
+                                                class="fi-rs-gift mr-5"></i> Surprise
+                                            Gift</span>
                                         @endif
 
                                         <h6 class="mb-5">
@@ -195,9 +238,11 @@
                                             </div>
                                             <span class="font-small ml-5 text-muted"> ({{ $reviews_avg }})</span>
                                         </div>
+                                        @if ($item->model->out_of_stock == 1)
                                         <div class="badge bg-danger text-white rounded-pill quicksand">
                                             Out Of Stock
                                         </div>
+                                        @endif
                                         @if ($isGift)
                                             <p class="font-xs text-muted mt-1">Free gift added automatically!</p>
                                         @endif
@@ -269,9 +314,7 @@
                                             <span class="text-muted" title="Automatic Gift"><i
                                                     class="fi-rs-lock"></i></span>
                                         @else
-                                            <a href="#"
-                                                wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
-                                                wire:confirm="Are you sure you want to remove this item from your cart?"
+                                            <a href="#" wire:click.prevent="askRemove('{{ $item->rowId }}')"
                                                 class="text-body"><i class="fi-rs-trash"></i></a>
                                         @endif
                                     </td>
@@ -290,8 +333,7 @@
                 {{-- <div class="divider-2 mb-30"></div> --}}
                 <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
                     <a href="/shop" class="btn d-flex align-items-center custom-pad"><i
-                            class="fi-rs-arrow-left mr-10"></i>Continue
-                        Shopping</a>
+                            class="fi-rs-add mr-10"></i>Add More</a>
                 </div>
             </div>
             <div class="col-xl-3">
@@ -441,11 +483,20 @@
                         <a href="/checkout"
                             class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
                             To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
-                    @endif
+                        @endif
+                    </div>
                 </div>
             </div>
+            {{-- @if ($checkout_button)
+            <a href="javascript:void(0);"
+                class="btn mb-20 w-100 d-flex justify-content-center align-items-center">
+                Proceed To CheckOut <i class="fi-rs-sign-out ml-15"></i>
+            </a>
+            @endif  --}}
+            @else
+                <livewire:user.component.no-item-found-component />
+            @endif
         </div>
-    </div>
 </main>
 
 @push('scripts')
@@ -520,6 +571,22 @@
         // Optional: fire from Livewire event also
         window.addEventListener('coupon-applied', event => {
             showCongratsOffer();
+        });
+    </script>
+    <script>
+        document.addEventListener('livewire:init', () => {
+
+            let wishlistModal = null;
+            Livewire.on('open-cart-remove-item-modal', () => {
+                wishlistModal = new bootstrap.Modal(document.getElementById('CartRemoveItemModal'));
+                wishlistModal.show();
+            });
+            Livewire.on('close-cart-remove-item-modal', () => {
+                if (wishlistModal) {
+                    wishlistModal.hide();
+                }
+            });
+
         });
     </script>
 @endpush

@@ -294,6 +294,10 @@
     integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+    toastr.options = {
+        "timeOut": 1000, // 2 seconds
+        "extendedTimeOut": 1000, // fade out delay
+    };
     // Listen for the success event
     document.addEventListener('success', event => {
         toastr.success(event.detail.message);

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{{ $meta_title ?? 'RollMills - Household & Decoration' }}</title>
+    <title>{{ strip_tags($og_title ?? ($meta_title ?? 'RollMills - Household & Decoration')) }}</title>
 
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
@@ -274,6 +274,55 @@
                         @livewire('user.component.mobile-header-cart-component')
                     </div>
                 </div>
+                <div class="d-flex justify-content-between d-xl-none mobile-category-options header-style-1">
+                    <div class="main-categori-wrap">
+                        <a class="categories-button-active" href="#">
+                            <span class="fi-rs-apps"></span>
+                        </a>
+                        <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
+                            <div class="d-flex categori-dropdown-inner">
+                                @php
+                                    $firstTen = $categories->take(10);
+                                    $remaining = $categories->skip(10);
+                                @endphp
+                                @foreach ($firstTen->split(2) as $chunk)
+                                    <ul>
+                                        @foreach ($chunk as $category)
+                                            <li>
+                                                {{-- Replace 'category.show' with your actual route name --}}
+                                                <a
+                                                    href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
+                                                    <img src="{{ asset('storage/' . $category->icon) }}"
+                                                        alt="{{ $category->name }}" />
+                                                    {{ $category->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endforeach
+                            </div>
+                            @if ($categories->count() > 10)
+                                <div class="more_slide_open" style="display: none">
+                                    <div class="d-flex categori-dropdown-inner">
+                                        @foreach ($remaining->split(2) as $chunk)
+                                            <ul>
+                                                @foreach ($chunk as $category)
+                                                    <li>
+                                                        <a href="shop-grid-right.html"> <img
+                                                                src="{{ asset('storage/' . $category->icon) }}"
+                                                                alt="" />{{ $category->name }}</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="more_categories"><span class="icon"></span> <span
+                                        class="heading-sm-1">Show more...</span></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -341,7 +390,11 @@
                                 </ul> --}}
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="/my-account">My Account</a>
+                                @if (Auth::check())
+                                    <a href="/my-account">My Account</a>
+                                @else
+                                    <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a>
+                                @endif
                             </li>
                             {{-- <li class="menu-item-has-children">
                                 <a href="#">Vendors</a>
@@ -419,7 +472,9 @@
                             Gopi Restaurant, Sagwara, India </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="/"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fi-rs-user"></i>Log In / Sign Up
+                        </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="tel:+91 87647 66553"><i class="fi-rs-headphones"></i>+91 87647 66553</a>
@@ -549,8 +604,9 @@
         </div>
     </div>
 
-    <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel"
-        aria-modal="true" role="dialog" style="padding-right: 0px; display: block;">
+    <div class="modal fade custom-modal custom-modal-new" id="onloadModal" tabindex="-1"
+        aria-labelledby="onloadModalLabel" aria-modal="true" role="dialog"
+        style="padding-right: 0px; display: block;">
         <div class="modal-dialog">
             <div class="modal-content bg-white">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -559,7 +615,7 @@
                         <div class="deal-top">
                             <h6 class="mb-10 text-brand">Welcome To RollMills</h6>
                         </div>
-                        <div class="deal-content detail-info">
+                        <div class="deal-content detail-info first-popup-modal">
                             <h4 class="product-title" style="max-width: 100%">
                                 Shop
                                 with thrill, save at will — Let Smart Deals Roll In!!

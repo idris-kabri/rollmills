@@ -494,6 +494,7 @@ class CheckoutComponent extends Component
                     'email'              => $user->email,
                     'customer_name'      => $user->name,
                     'customer_email'     => $user->email,
+                    'id'              => $user_order->id,
                     'success_url'        => route('payment.success'),
                 ]);
             } else {
