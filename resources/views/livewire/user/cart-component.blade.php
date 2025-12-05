@@ -387,22 +387,25 @@
                                         $discount = $totalOfferDiscountedPrice + $mainDiscountAmount;
                                     @endphp
                                     @if ($discount != 0)
-                                        <tr class="d-flex justify-content-between border-0">
+                                        <tr class="d-flex justify-content-between border-0 align-items-center">
                                             <td class="cart_total_label text-start">
-                                                <h6 class="text-muted">
-                                                    Discount
-                                                    @if ($couponCode)
-                                                        ({{ strtoupper($couponCode) }})
-                                                    @endif
-                                                </h6>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-success me-2">Coupon Applied</span>
+                                                    <h6 class="text-success m-0">
+                                                        @if ($couponCode)
+                                                            ({{ strtoupper($couponCode) }})
+                                                        @endif
+                                                    </h6>
+                                                </div>
                                             </td>
 
                                             <td class="cart_total_amount">
-                                                <h5 class="text-heading text-end fs-16 text-success">
-                                                    ₹{{ number_format($discount, 2) }}
+                                                <h5 class="text-end fs-16 text-success fw-bold">
+                                                    - ₹{{ number_format($discount, 2) }}
                                                 </h5>
                                             </td>
                                         </tr>
+
                                     @endif
 
                                     @php
