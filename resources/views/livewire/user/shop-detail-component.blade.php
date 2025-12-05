@@ -8,7 +8,7 @@
                 <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                 @if ($count_category_assign > 1)
                     <span></span> <a
-                        href="shop-grid-right.html">{{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->name }}</a>
+                        href="/shop?category_id={{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->id }}&category_slug={{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->slug ?? 'no-slug' }}">{{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->name }}</a>
                     <span></span> {{ $mainProduct->categoryAssigns[0]->category->name }}
                 @else
                     <span></span> <a

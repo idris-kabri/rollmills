@@ -421,7 +421,7 @@
                     "image": "https://rollmills.store/assets/frontend/imgs/theme/logo.png",
                     "order_id": detail.razorpay_order_id,
                     "handler": function(response) {
-                        window.location.href = `${detail.success_url}?transaction_id=${detail.transaction_id}&payment_id=${response.razorpay_payment_id}&order_id=${detail.razorpay_order_id}&title=${detail.title}&customer_name=${detail.customer_name}&customer_email=${detail.customer_email}&type=order_payment`;
+                        window.location.href = `${detail.success_url}?transaction_id=${detail.transaction_id}&payment_id=${response.razorpay_payment_id}&order_id=${detail.razorpay_order_id}&title=${detail.title}&customer_name=${detail.customer_name}&customer_email=${detail.customer_email}&type=order_payment&id=${detail.id}`;
                     },
                     "prefill": {
                         "name": detail.name,
