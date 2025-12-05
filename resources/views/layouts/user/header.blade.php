@@ -263,6 +263,11 @@
                             <p class="fs-18 text-dark fw-600">+91 87647 66553</p>
                         </a>
                     </div>
+                    <div class="d-none d-md-flex d-xl-none mx-auto">
+                        <div class="header-wrap justify-content-between">
+                            @livewire('user.component.search-component')
+                        </div>
+                    </div>
                     <div class="header-action-icon-2 d-block d-xl-none">
                         <div class="burger-icon burger-icon-white">
                             <span class="burger-icon-top"></span>
@@ -274,10 +279,11 @@
                         @livewire('user.component.mobile-header-cart-component')
                     </div>
                 </div>
-                <div class="d-flex justify-content-between d-xl-none mobile-category-options header-style-1">
-                    <div class="main-categori-wrap">
-                        <a class="categories-button-active" href="#">
-                            <span class="fi-rs-apps"></span>
+                <div
+                    class="d-flex justify-content-between d-md-none mobile-category-options header-style-1 mt-15 mb-10 px-1">
+                    <div class="main-categori-wrap mr-15">
+                        <a class="categories-button-active p-15" href="#">
+                            <span class="fi-rs-apps m-0"></span>
                         </a>
                         <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                             <div class="d-flex categori-dropdown-inner">
@@ -321,6 +327,9 @@
                                         class="heading-sm-1">Show more...</span></div>
                             @endif
                         </div>
+                    </div>
+                    <div class="header-wrap justify-content-between w-100">
+                        @livewire('user.component.search-component')
                     </div>
                 </div>
             </div>

@@ -256,11 +256,78 @@
         max-width: 100px;
     }
     .logo.logo-width-1 a img {
-        width: 70px;
+        width: 78px;
         min-width: 70px;
     }
     .header-bottom {
-        height: 80px;
+        height: fit-content;
+    }
+    .mobile-category-options .categories-dropdown-active-large {
+        margin: 0;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        min-width: 275px;
+        margin-top: 10px;
+    }
+    .mobile-category-options .main-categori-wrap .categori-dropdown-inner {
+        min-width: fit-content;
+    }
+    .mobile-category-options .categories-dropdown-wrap ul li {
+        line-height: 48px;
+        border-radius: 5px;
+        padding: 7px 7px;
+        margin: 0 12px 12px 0;
+    }
+    .mobile-category-options .categories-dropdown-wrap ul li a {
+        padding: 5px 5px;
+        line-height: 1.2;
+        font-size: 13px;
+    }
+    .sticky-bar.stick
+        .mobile-category-options
+        .categories-dropdown-active-large {
+        display: none;
+    }
+    .mobile-category-options.header-style-1 .select2-container {
+        min-width: 130px;
+    }
+    .mobile-category-options.header-style-1
+        .select2-container--default
+        .select2-selection--single
+        .select2-selection__rendered {
+        height: 45px;
+        line-height: 45px;
+            font-size: 13px;
+        position: relative;
+    }
+    .mobile-category-options.header-style-1
+        .select2-container--default
+        .select2-selection--single {
+        height: 45px;
+        line-height: 45px;
+        padding-left: 15px;
+        width: 130px;
+    }
+    .mobile-category-options.header-style-1
+        .select2-container--default
+        .select2-selection--single
+        .select2-selection__arrow {
+        right: 8px;
+        top: 10px;
+    }
+    .mobile-category-options.header-style-1
+        .select2-container--default
+        .select2-selection--single
+        .select2-selection__rendered:after {
+        top: 13px;
+    }
+    .mobile-category-options.header-style-1 .search-style-2 form input {
+        max-width: 600px;
+        margin-left: 13px;
+        height: 45px;
+        line-height: 45px;
+        background-size: 33px;
     }
 }
 
