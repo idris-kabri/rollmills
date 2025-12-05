@@ -1,22 +1,24 @@
 <div class="search-style-2">
     <form action="#" class="border-1 rounded-pill overflow-hidden" wire:ignore>
-        <select class="select-active" id="category-search">
-            <option value="">All Categories</option>
-            @foreach ($categories as $product_category)
-                <option value="{{ $product_category->id }}">
-                    {{ $product_category->name }}</option>
+        <div class="custom-header-select-search-wrapper">
+            <select class="select-active custom-header-select-search" id="category-search">
+                <option value="">All Categories</option>
+                @foreach ($categories as $product_category)
+                    <option value="{{ $product_category->id }}">
+                        {{ $product_category->name }}</option>
 
-                @php
-                    $sub_categories = App\Models\ProductCategory::where('parent_id', $product_category->id)->get();
-                @endphp
+                    @php
+                        $sub_categories = App\Models\ProductCategory::where('parent_id', $product_category->id)->get();
+                    @endphp
 
-                @foreach ($sub_categories as $sub_category)
-                    <option value="{{ $sub_category->id }}">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $sub_category->name }}
-                    </option>
+                    @foreach ($sub_categories as $sub_category)
+                        <option value="{{ $sub_category->id }}">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $sub_category->name }}
+                        </option>
+                    @endforeach
                 @endforeach
-            @endforeach
-        </select>
+            </select>
+        </div>
         <input type="text" placeholder="Search for items..."
             class="placeholder-font-family-quicksand placeholder-style" wire:model.live="search" />
     </form>
@@ -48,7 +50,8 @@
                                 </div>
                                 <div class="col-xl-10 col-9">
                                     <div class="product_info">
-                                        <div class="product_title"><a href="{{ $shop_detail_url }}">{{ $query->name }}</a>
+                                        <div class="product_title"><a
+                                                href="{{ $shop_detail_url }}">{{ $query->name }}</a>
                                         </div>
                                         <div class="product_price d-flex">
                                             @php

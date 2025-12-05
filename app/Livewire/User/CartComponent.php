@@ -373,15 +373,20 @@ class CartComponent extends Component
             }
             $total = floatval(str_replace(',', '', Cart::total()));
             $remain_amount = 0;
-            if ($total > $this->surprise_gift_amount) {
-                $percentage = 100;
-                $remain_amount = 0;
+
+            if ($this->surprise_gift_amount > 0) {
+
+                if ($total >= $this->surprise_gift_amount) {
+                    $percentage = 100;
+                    $remain_amount = 0;
+                } else {
+                    $percentage = ($total / $this->surprise_gift_amount) * 100;
+                    $remain_amount = $this->surprise_gift_amount - $total;
+                }
             } else {
-                $percentage = ($total / $this->surprise_gift_amount) * 100;
-                $remain_amount = $this->surprise_gift_amount - $total;
-            }
-            if ($value == 'yes') {
-                $this->dispatch('surprise-gift');
+                // Fallback if surprise_gift_amount is 0 or null
+                $percentage = 0;
+                $remain_amount = 0;
             }
         } else {
             // User is NOT ELIGIBLE (Total is too low)
@@ -688,7 +693,7 @@ class CartComponent extends Component
         $items[] = $item;
         $this->dispatch('remove-from-cart', $items);
         if ($removeCart) {
-            $this->toastError('Product Remove Successfully From Your Cart!'); 
+            $this->toastError('Product Remove Successfully From Your Cart!');
             $this->dispatch('close-cart-remove-item-modal');
         }
         // $this->offerCheckEligibility();
