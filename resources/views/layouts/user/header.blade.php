@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{{ $meta_title ?? 'RollMills - Household & Decoration' }}</title>
+    <title>{{ strip_tags($og_title ?? ($meta_title ?? 'RollMills - Household & Decoration')) }}</title>
 
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
