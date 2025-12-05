@@ -240,7 +240,7 @@
 {{-- Whatsapp Logo --}}
 <div class="whatsapp-logo-contact">
     <a href="https://wa.me/918764766553?text=Hi%20RollMills%20Store.">
-        <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" alt=""
+        <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" target="_blank" alt=""
             class="img-fluid">
     </a>
 </div>
@@ -405,6 +405,22 @@
             }
         });
     })
+    window.addEventListener('purchase', (event) => {
+        var data = event.detail[0];
+        console.log(data)
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            ecommerce: null
+        });
+        dataLayer.push({
+            event: 'purchase',
+            ecommerce: {
+                items: data
+            }
+        });
+
+        console.log(dataLayer)
+    })
     window.addEventListener('add-to-wishlist', (event) => {
         var data = event.detail[0];
         console.log(data)
@@ -443,6 +459,72 @@
         document.getElementById('stepOtp').classList.toggle('d-none');
     });
 </script>
+
+<script>
+    function displayValidationErrors(errors) {
+        // Clear any previous error messages
+        document.querySelectorAll('.error-message').forEach((elem) => elem.remove());
+
+        // Iterate through the errors object
+        for (const [field, messages] of Object.entries(errors)) {
+            // Find the input element associated with the field
+            const input = document.querySelector(`[name="${field}"]`);
+            if (input) {
+                // Create a new span element for the error message
+                const errorMessage = document.createElement('span');
+                errorMessage.className = 'error-message'; // Add a class for styling
+                errorMessage.style.color = 'red'; // Optional: Add inline styling
+                errorMessage.textContent = messages.join(', '); // Join multiple messages if any
+                // Insert the error message after the input field
+                input.parentNode.insertBefore(errorMessage, input.nextSibling);
+                console.log(input.parentNode.insertBefore(errorMessage, input.nextSibling))
+            }
+        }
+    }
+
+    // Listen for the success event
+    document.addEventListener('success', event => {
+        toastr.success(event.detail.message);
+    });
+
+    document.addEventListener('error', event => {
+        toastr.error(event.detail.message);
+    });
+
+    window.addEventListener('redirectAfterDelay', (event) => {
+        const redirectUrl = event.detail[0].url ?? '/';
+        setTimeout(() => {
+            window.location.href = redirectUrl;
+        }, 2000);
+    });
+
+    function displayValidationErrors(errors) {
+        // Clear any previous error messages
+        document.querySelectorAll('.error-message').forEach((elem) => elem.remove());
+
+        // Iterate through the errors object
+        for (const [field, messages] of Object.entries(errors)) {
+            // Find the input element associated with the field
+            const input = document.querySelector(`[name="${field}"]`);
+            if (input) {
+                // Create a new span element for the error message
+                const errorMessage = document.createElement('span');
+                errorMessage.className = 'error-message'; // Add a class for styling
+                errorMessage.style.color = 'red'; // Optional: Add inline styling
+                errorMessage.textContent = messages.join(', '); // Join multiple messages if any
+                // Insert the error message after the input field
+                input.parentNode.insertBefore(errorMessage, input.nextSibling);
+                console.log(input.parentNode.insertBefore(errorMessage, input.nextSibling))
+            }
+        }
+    }
+
+    window.addEventListener('validation-errors', (event) => {
+        var errors = event.detail[0].errors;
+        displayValidationErrors(errors);
+    })
+</script>
+
 @stack('scripts')
 </body>
 

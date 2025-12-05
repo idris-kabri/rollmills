@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Coupon;
 use App\Models\GiftCardItem;
 use App\Models\Order;
+use App\Models\ProductCategoryAssign;
 use App\Models\OrderItems;
 use App\Models\User;
 use App\Traits\HasToastNotification;
@@ -13,7 +14,9 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Cart;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class CheckoutComponent extends Component
 {
@@ -36,6 +39,7 @@ class CheckoutComponent extends Component
     public $ship_to_different_address_enabled = false;
     public $gift_card_code;
     public $mainDiscountAmount = 0;
+    public $items_checkout_event_array = [];
 
     public function mount()
     {
@@ -352,6 +356,57 @@ class CheckoutComponent extends Component
             $orderItem->item_replacement_days = $item->model->product_replacement_days;
             $orderItem->delivery_at = now();
             $orderItem->save();
+
+            $product = $item->model;
+            $sale_price = 0;
+            $currentDate = Carbon::now();
+            $sale_from_date = Carbon::parse($product->sale_from_date);
+            $sale_to_date = Carbon::parse($product->sale_to_date);
+
+            if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+                $sale_price = $product->sale_price;
+            } else {
+                $sale_price = $product->sale_default_price;
+            }
+            $price = $product->price;
+            $discount = 0;
+            if ($sale_price > 0) {
+                $price = $sale_price;
+                $discount = $product->price > $sale_price ? round($product->price - $sale_price) : 0;
+            }
+            $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
+
+            $item = [
+                'item_id' => $product->id,
+                'item_name' => $product->name,
+                'affiliation' => '',
+                'coupon' => '',
+                'discount' => (float) $discount,
+                'index' => 0,
+                'item_brand' => 'Roll Mills',
+            ];
+
+            foreach ($category_assign as $key => $category) {
+                if ($key == 0) {
+                    $item['item_category'] = $category->category->name;
+                } else {
+                    $item['item_category' . $key + 1] = $category->category->name;
+                }
+            }
+
+            $item['item_list_id'] = '';
+            $item['item_list_name'] = '';
+            if ($product->attributes_name != null) {
+                $attributes = explode(',', $product->attributes_name);
+                foreach ($attributes as $key => $attribute) {
+                    $item['item_variant'] = $attribute;
+                }
+            }
+            $item['location_id'] = '';
+            $item['price'] = (float) $price;
+            $item['quantity'] = $orderItem->quantity;
+
+            $this->items_checkout_event_array[] = $item;
         }
     }
 
@@ -385,12 +440,26 @@ class CheckoutComponent extends Component
     public function placeOrder()
     {
         try {
-            if (empty($this->billing_address['name']) || empty($this->billing_address['email']) || empty($this->billing_address['mobile']) || empty($this->billing_address['billing_address1']) || empty($this->billing_address['city']) || empty($this->billing_address['state']) || empty($this->billing_address['zipcode'])) {
-                return $this->toastError('Billing Details Is Required!');
+            $validator = Validator::make($this->billing_address, [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email',
+                'state' => 'required|string|max:255',
+                'city' => 'required|string|max:255',
+                'billing_address1' => 'required|string|max:255',
+                'billing_address2' => 'nullable|string|max:255',
+                'zipcode' => 'required',
+                'mobile' => 'required|digits_between:10,15',
+            ]);
+
+            if ($validator->fails()) {
+                $this->dispatch('validation-errors', [
+                    'errors' => $validator->errors(),
+                ]);
+                dd($validator->errors());
+                return;
             }
             $this->payment_method = 'upi';
             $nonAuthUser = null;
-
 
             // Create billing address
             if (!Auth::check()) {
@@ -470,32 +539,41 @@ class CheckoutComponent extends Component
                 $user_order->save();
 
                 $this->createOrderItem($user_order);
+                $coupon = Coupon::find($this->coupon_discount_id);
 
-                $order = razorPayPayment(
-                    $this->finalTotal,
-                    Auth::user()->id ?? ($nonAuthUser['id'] ?? null),
-                    $user_order->id,
-                    'orders',
-                    'Order Placed Using UPI'
-                );
-
-
-                $user = Auth::user() ?? (object) [
-                    'name'  => $nonAuthUser['name'],
-                    'email' => $nonAuthUser['email'],
+                $final_order_array = [
+                    'transaction_id' => $user_order->id,
+                    'value' => (float) $this->finalTotal,
+                    'tax' => 0.0,
+                    'shipping' => (float) $user_order->shipping_charges,
+                    'currency' => 'INR',
+                    'coupon' => $coupon->code ?? null,
+                    'customer_type' => 'new',
+                    'items' => $this->items_checkout_event_array,
                 ];
 
+                $order = razorPayPayment($this->finalTotal, Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using UPI');
+
+                $user =
+                    Auth::user() ??
+                    (object) [
+                        'name' => $nonAuthUser['name'],
+                        'email' => $nonAuthUser['email'],
+                    ];
+
+                $this->dispatch('purchase', $final_order_array);
+
                 $this->dispatch('initiate-razorpay', [
-                    'transaction_id'     => $order->transaction_id,
-                    'razorpay_order_id'  => $order->id,
-                    'amount'             => $order->amount,
-                    'description'        => $order->description,
-                    'name'               => $user->name,
-                    'email'              => $user->email,
-                    'customer_name'      => $user->name,
-                    'customer_email'     => $user->email,
-                    'id'              => $user_order->id,
-                    'success_url'        => route('payment.success'),
+                    'transaction_id' => $order->transaction_id,
+                    'razorpay_order_id' => $order->id,
+                    'amount' => $order->amount,
+                    'description' => $order->description,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'customer_name' => $user->name,
+                    'customer_email' => $user->email,
+                    'id' => $user_order->id,
+                    'success_url' => route('payment.success'),
                 ]);
             } else {
                 $walletBalance = (int) Auth::user()->wallet_balance;

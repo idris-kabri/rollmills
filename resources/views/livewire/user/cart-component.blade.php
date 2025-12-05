@@ -58,9 +58,9 @@
         }
     @endphp
 
-    <div class="container mb-24 mt-24">
+    <div class="container mb-24 mt-md-5 mt-4">
         <div class="row">
-            <div class="col-lg-12 mb-24">
+            <div class="col-lg-12 mb-md-4 mb-3">
                 <div class="content mb-10">
                     <h1 class="title style-3 mb-20 text-center">Your Cart</h1>
                     <h6 class="text-body text-center">There are <span
@@ -103,7 +103,7 @@
         <!-- END CONFIRM MODAL -->
 
         @if (count(Cart::instance('cart')->content()) > 0)
-            <div class="container" wire:ignore>
+            <div class="container mb-3 mb-md-0" wire:ignore>
                 <div class="row">
                     <div class="col-12">
                         <div class="mb-md-5 mb-2">
@@ -111,7 +111,8 @@
                                 <div class="gift-text-measure">
                                     <div class="progress-title">Grab Your Gift Now!!</div>
                                     {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
-                                    <p class="quicksand fw-500">Shop ₹{{ $surprise_gift_amount }} and get exclusive
+                                    <p class="quicksand fw-500 quicksand">Shop ₹{{ $surprise_gift_amount }} and get
+                                        exclusive
                                         surprise
                                         gift
                                         only on RollMills. Let the
@@ -133,7 +134,7 @@
                                     </div>
                                 </div>
                                 <div class="content">
-                                    <p class="text-center mt-4 fs-20 fw-500">
+                                    <p class="text-center mt-md-4 mt-3 quicksand fs-20 fw-500">
 
                                         @if ($remain_amount > 0)
                                             You are ₹{{ $remain_amount }} away from your gift &nbsp;<a
@@ -336,6 +337,148 @@
                             </tbody>
                         </table>
                     </div>
+
+
+
+
+                    {{-- mobile responsive cart page new design start --}}
+
+                    <div class="product-detail-small-screen">
+                        @php
+                            $totalOfferDiscountedPrice = 0;
+                        @endphp
+                        @foreach (Cart::instance('cart')->content() as $item)
+                            @php
+                                // Check if this is the gift product
+                                $isGift = $item->options['is_gift_product'] ?? false;
+
+                                if ($item->model->slug) {
+                                    $shop_detail_url = route('shop-detail', [
+                                        'slug' => $item->model->slug,
+                                        'id' => $item->model->id,
+                                    ]);
+                                } else {
+                                    $shop_detail_url = route('shop-detail', [
+                                        'slug' => 'no-slug',
+                                        'id' => $item->model->id,
+                                    ]);
+                                }
+                            @endphp
+                            <div class="product-card">
+                                <div class="d-flex gap-3 align-items-center py-4 px-2">
+                                    <div class="img-section">
+                                        <img src="{{ asset('storage/' . $item->model->featured_image) }}"
+                                            alt="{{ $item->model->seo_meta }}" class="img-fluid">
+                                    </div>
+                                    <div class="content-section">
+                                        @if ($isGift)
+                                            <span class="gift-badge fs-10 badge px-2 text-capitalize quicksand">
+                                                Surprise
+                                                Gift</span>
+                                        @endif
+                                        <a class="product-name fw-600 quicksand text-dark hover-a two-liner-text mb-1"
+                                            style="line-height: 1.2em" href="{{ $shop_detail_url }}">
+                                            {{ $item->model->name }}
+                                        </a>
+                                        @php
+                                            $reviews = \App\Models\ProductReview::where('status', 1)
+                                                ->where('product_id', $item->model->id)
+                                                ->get();
+                                            $reviews_count = $reviews->count();
+                                            $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
+                                            $reviews_percentage = ($reviews_avg / 5) * 100;
+                                        @endphp
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="product-price">
+                                                @if ($isGift)
+                                                    <h4 class="text-body small-screen-table-td-content">
+                                                        <del
+                                                            class="text-muted fs-14 fw-500">₹{{ number_format($item->model->price) }}</del><br>
+                                                        <span class="price-free">FREE</span>
+                                                    </h4>
+                                                @else
+                                                    @if ($item->model->sale_price > 0 && now() >= $item->model->sale_start_date && now() <= $item->model->sale_end_date)
+                                                        <h3 class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                            ₹{{ $item->model->sale_price * $item->qty }}</h3>
+                                                        <del class="old-price fw-600">₹{{ $item->model->price }}</del>
+                                                    @elseif($item->model->sale_default_price > 0)
+                                                        <h3 class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                            ₹{{ $item->model->sale_default_price * $item->qty }}</h3>
+                                                        <del class="old-price fw-600">₹{{ $item->model->price }}</del>
+                                                    @else
+                                                        <h3 class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                            ₹{{ $item->model->price * $item->qty }}</h3>
+                                                    @endif
+                                                @endif
+                                            </div>
+
+                                            <div class="product-rate-cover">
+                                                <div class="product-rate d-inline-block">
+                                                    <div class="product-rating"
+                                                        style="width: {{ $reviews_percentage }}%">
+                                                    </div>
+                                                </div>
+                                                <span class="font-xs ml-5 text-muted fw-500 quicksand">
+                                                    ({{ $reviews_avg }})
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        @if ($isGift)
+                                                {{-- Lock Quantity for Gift --}}
+                                                <div class="detail-qty border radius bg-light disabled"
+                                                    style="cursor: not-allowed; opacity: 0.7;">
+                                                    <span class="qty-val">1</span>
+                                                </div>
+                                            @else
+                                                {{-- Normal Quantity Controls --}}
+                                                <div class="detail-extralink mr-15 display-hide-480">
+                                                    <div class="detail-qty border radius">
+                                                        <a href="#"
+                                                            wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
+                                                            class="qty-down"><i
+                                                                class="fi-rs-angle-small-down"></i></a>
+                                                        <span class="qty-val">{{ $item->qty }}</span>
+                                                        <a href="#"
+                                                            wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
+                                                            class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="quantity d-none">
+                                                    <button type="button" class="minus"
+                                                        wire:click.prevent="decrementQuantity('{{ $item->rowId }}')">-</button>
+                                                    <input type="number" min="1" value="{{ $item->qty }}"
+                                                        class="qty" size="4" title="Qty"
+                                                        wire:change="updateQuantity('{{ $item->rowId }}')"
+                                                        wire:model.lazy="quantities.{{ $item->rowId }}">
+                                                    <button type="button" class="plus"
+                                                        wire:click.prevent="incrementQuantity('{{ $item->rowId }}')">+</button>
+                                                </div>
+                                            @endif
+
+                                        @if ($item->model->out_of_stock == 1)
+                                            <div class="badge bg-danger fs-10 text-white rounded-pill quicksand">
+                                                Out Of Stock
+                                            </div>
+                                        @endif
+                                        @if ($isGift)
+                                            <p class="font-xs fw-500 text-muted mt-1">Free gift added automatically!
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+
+                    {{-- mobile responsive cart page new design end --}}
+
+
+
+
+
+
                     {{-- <div class="divider-2 mb-30"></div> --}}
                     <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
                         <a href="/shop" class="btn d-flex align-items-center custom-pad"><i
@@ -387,19 +530,21 @@
                                         $discount = $totalOfferDiscountedPrice + $mainDiscountAmount;
                                     @endphp
                                     @if ($discount != 0)
-                                        <tr class="d-flex justify-content-between border-0">
+                                        <tr class="d-flex justify-content-between border-0 align-items-center">
                                             <td class="cart_total_label text-start">
-                                                <h6 class="text-muted">
-                                                    Discount
-                                                    @if ($couponCode)
-                                                        ({{ strtoupper($couponCode) }})
-                                                    @endif
-                                                </h6>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-success me-2">Coupon Applied</span>
+                                                    <h6 class="text-success m-0">
+                                                        @if ($couponCode)
+                                                            ({{ strtoupper($couponCode) }})
+                                                        @endif
+                                                    </h6>
+                                                </div>
                                             </td>
 
                                             <td class="cart_total_amount">
-                                                <h5 class="text-heading text-end fs-16 text-success">
-                                                    ₹{{ number_format($discount, 2) }}
+                                                <h5 class="text-end fs-16 text-success fw-bold">
+                                                    - ₹{{ number_format($discount, 2) }}
                                                 </h5>
                                             </td>
                                         </tr>
@@ -547,7 +692,7 @@
 
             // Start bar animation (0 -> finalWidth)
             if (finalWidth == 0) {
-                bar.style.width = "3%";
+                bar.style.width = "4%";
             } else {
                 bar.style.width = finalWidth + "%";
             }
