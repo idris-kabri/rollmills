@@ -333,8 +333,7 @@
                 {{-- <div class="divider-2 mb-30"></div> --}}
                 <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
                     <a href="/shop" class="btn d-flex align-items-center custom-pad"><i
-                            class="fi-rs-arrow-left mr-10"></i>Continue
-                        Shopping</a>
+                            class="fi-rs-add mr-10"></i>Add More</a>
                 </div>
             </div>
             <div class="col-xl-3">
@@ -488,12 +487,12 @@
                     </div>
                 </div>
             </div>
-            @if ($checkout_button)
+            {{-- @if ($checkout_button)
             <a href="javascript:void(0);"
                 class="btn mb-20 w-100 d-flex justify-content-center align-items-center">
                 Proceed To CheckOut <i class="fi-rs-sign-out ml-15"></i>
             </a>
-            @endif 
+            @endif  --}}
             @else
                 <livewire:user.component.no-item-found-component />
             @endif
