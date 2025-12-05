@@ -233,6 +233,7 @@
                         $category_popular_products = \App\Models\Product::where('status', 1)
                             ->where('is_featured', 1)
                             ->whereIn('id', $category_product_category_assign)
+                            ->where("parent_id", null)
                             ->inRandomOrder()
                             ->limit(10)
                             ->get();

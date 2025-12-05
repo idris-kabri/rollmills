@@ -990,7 +990,7 @@ input[type="number"] {
     width: 80%;
     margin: 0 auto;
     border: 1px solid var(--color-light-1);
-    padding: 40px;
+    padding: 16px;
     box-shadow: 0 3px 3px rgba(220, 169, 21, 0.2);
 }
 
