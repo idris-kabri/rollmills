@@ -42,7 +42,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 /* .product-delivery-icons div:not(:last-child) {

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Cart;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class CheckoutComponent extends Component
@@ -385,8 +386,24 @@ class CheckoutComponent extends Component
     public function placeOrder()
     {
         try {
-            if (empty($this->billing_address['name']) || empty($this->billing_address['email']) || empty($this->billing_address['mobile']) || empty($this->billing_address['billing_address1']) || empty($this->billing_address['city']) || empty($this->billing_address['state']) || empty($this->billing_address['zipcode'])) {
-                return $this->toastError('Billing Details Is Required!');
+            $validator = Validator::make($this->billing_address, [
+                'name'              => 'required|string|max:255',
+                'email'             => 'required|email',
+                'state'             => 'required|string|max:255',
+                'city'              => 'required|string|max:255',
+                'billing_address1'  => 'required|string|max:255',
+                'billing_address2'  => 'nullable|string|max:255',
+                'zipcode'           => 'required',
+                'mobile'            => 'required|digits_between:10,15',
+            ]);
+
+
+            if ($validator->fails()) {
+                $this->dispatch('validation-errors', [
+                    'errors' => $validator->errors()
+                ]);
+                dd($validator->errors());
+                return;
             }
             $this->payment_method = 'upi';
             $nonAuthUser = null;

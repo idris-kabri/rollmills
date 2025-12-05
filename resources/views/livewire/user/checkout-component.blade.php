@@ -176,46 +176,94 @@
                     @else
                         <form method="post">
                             <div class="row">
+
+                                <!-- Name -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" required="" name="name" placeholder="Name *"
+                                    <input type="text" required name="name" placeholder="Name *"
                                         wire:model="billing_address.name">
+                                    @error('billing_address.name')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
+                                <!-- Email -->
                                 <div class="form-group col-lg-6">
-                                    <input required="" type="text" name="email" placeholder="Email address *"
+                                    <input required type="text" name="email" placeholder="Email address *"
                                         wire:model="billing_address.email">
+                                    @error('billing_address.email')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
                             </div>
+
                             <div class="row">
+
+                                <!-- State -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" name="state" required="" placeholder="State *"
+                                    <input type="text" required name="state" placeholder="State *"
                                         wire:model="billing_address.state">
+                                    @error('billing_address.state')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
+                                <!-- City -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" name="city" required="" placeholder="City *"
+                                    <input type="text" required name="city" placeholder="City *"
                                         wire:model="billing_address.city">
+                                    @error('billing_address.city')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
                             </div>
+
                             <div class="row">
+
+                                <!-- Address 1 -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" name="billing_address" required="" placeholder="Address *"
+                                    <input type="text" required name="billing_address" placeholder="Address *"
                                         wire:model="billing_address.billing_address1">
+                                    @error('billing_address.billing_address1')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
+                                <!-- Address 2 -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" name="billing_address2" required=""
-                                        placeholder="Address line2" wire:model="billing_address.billing_address2">
+                                    <input type="text" name="billing_address2" placeholder="Address line 2"
+                                        wire:model="billing_address.billing_address2">
+                                    @error('billing_address.billing_address2')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
                             </div>
+
                             <div class="row">
+
+                                <!-- Zipcode -->
                                 <div class="form-group col-lg-6">
                                     <input type="text" disabled name="zipcode" placeholder="Postcode / ZIP *"
                                         wire:model="billing_address.zipcode">
+                                    @error('billing_address.zipcode')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
+                                <!-- Phone -->
                                 <div class="form-group col-lg-6">
-                                    <input required="" type="text" name="phone" placeholder="Phone *"
+                                    <input required type="text" name="phone" placeholder="Phone *"
                                         wire:model="billing_address.mobile">
+                                    @error('billing_address.mobile')
+                                        <span class="text-danger small d-block">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
                             </div>
                         </form>
+
                     @endif
 
                     <div class="form-group mb-30">

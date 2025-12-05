@@ -3531,7 +3531,8 @@ table .product-thumbnail img {
 
 .custom-modal .modal-dialog .modal-content {
     border-radius: 25px;
-    padding: 40px;
+    /* padding: 40px; */
+    padding: 0px 20px !important;
     border: 1px solid #dcaa15b7;
 }
 
@@ -5460,7 +5461,7 @@ table .product-thumbnail img {
     font-weight: 700;
     color: #dca915;
     border-radius: 5px;
-    padding: 7px 20px 7px 0px;
+    padding: 7px 20px 7px 8px;
     max-width: 90px;
 }
 
@@ -5709,7 +5710,7 @@ table .product-thumbnail img {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    padding: 15px 0;
+    padding: 8px 0;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
