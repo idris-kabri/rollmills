@@ -206,12 +206,13 @@
     .product-slider-nav-thumbnails {
         display: flex;
         height: fit-content;
-        width: 150%;
+        width: 100%;
         overflow: overlay;
     }
 
     .product-slider-nav-thumbnails .img-card {
-        width: 15%;
+        min-width: 85px;
+        width: 85px;
     }
 
     .product-slider-nav-thumbnails .img-card:not(:last-child) {
@@ -258,6 +259,11 @@
 }
 
 @media (max-width: 768px) {
+    .product-slider-nav-thumbnails .img-card {
+        min-width: 80px;
+        width: 70px;
+    }
+
     .shop-detail-page-main .detail-info {
         padding: 0px;
     }
@@ -307,7 +313,7 @@
         .select2-selection__rendered {
         height: 45px;
         line-height: 45px;
-            font-size: 13px;
+        font-size: 13px;
         position: relative;
     }
     .mobile-category-options.header-style-1
