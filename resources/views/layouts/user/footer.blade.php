@@ -405,6 +405,22 @@
             }
         });
     })
+    window.addEventListener('purchase', (event) => {
+        var data = event.detail[0];
+        console.log(data)
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            ecommerce: null
+        });
+        dataLayer.push({
+            event: 'purchase',
+            ecommerce: {
+                items: data
+            }
+        });
+
+        console.log(dataLayer)
+    })
     window.addEventListener('add-to-wishlist', (event) => {
         var data = event.detail[0];
         console.log(data)
