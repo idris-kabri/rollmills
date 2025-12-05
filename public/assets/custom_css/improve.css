@@ -322,7 +322,7 @@
         .select2-container--default
         .select2-selection--single
         .select2-selection__arrow {
-        right: 8px;
+        right: 16px;
         top: 10px;
     }
     .mobile-category-options.header-style-1
