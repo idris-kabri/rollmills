@@ -341,7 +341,7 @@
                                                                                 <div class="content py-2">
                                                                                     <h6>
                                                                                         <a href="{{ $shop_detail_url }}"
-                                                                                            class="fs-17">{{ $order_item->getProduct->name }}</a>
+                                                                                            class="fs-17 two-liner-text">{{ $order_item->getProduct->name }}</a>
                                                                                     </h6>
                                                                                     <div class="product-price pt-5">
                                                                                         <span

@@ -1,16 +1,27 @@
 <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel"
     aria-hidden="true" wire:ignore.self>
     <style>
-        /* .custom-modal .modal-dialog {
-            max-width: 90% !important;
-        } */
+        .custom-modal .modal-dialog {
+            max-width: 60% !important;
+        }
 
         .main-image {
             max-width: 80%;
-            /* Reduce size */
             height: auto;
-            /* Keep proportions */
         }
+
+        .custom-mar{
+            margin: 8px !important;
+        }
+
+        .detail-extralink {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            /* or space-between / center */
+            gap: 15px;
+        }
+
 
 
         .active-ietm {
@@ -113,8 +124,8 @@
                                     <span class="stock-status hot">Hot</span>
                                 @endif
 
-                                <h3 class="title-detail"><a href="shop-product-right.html"
-                                        class="text-heading">{{ $mainProduct->name }}</a></h3>
+                                <h5 class="title-detail"><a href="shop-product-right.html"
+                                        class="text-heading">{{ $mainProduct->name }}</a></h5>
                                 <div class="product-detail-rating">
                                     <div class="product-rate-cover text-end">
                                         <div class="product-rate d-inline-block">
@@ -126,7 +137,7 @@
                                     </div>
                                 </div>
                                 <div class="clearfix product-price-cover">
-                                    <div class="product-price primary-color float-left">
+                                    <div class="product-price primary-color float-left custom-mar">
 
                                         @php
                                             $original_price = $mainProduct->price;
@@ -158,17 +169,17 @@
 
 
                                         {{-- Show dynamic price based on above logic --}}
-                                        <span class="current-price text-brand">
+                                        <span class="current-price text-brand" style="font-size: 24px">
                                             ₹{{ $sale_price ?? $original_price }}
                                         </span>
 
                                         @if ($sale_price)
                                             <span>
-                                                <span class="save-price font-md color3 ml-15">
+                                                <span class="save-price font-md color3 ml-15" style="font-size: 18px">
                                                     {{ $discount_percentage }}% Off
                                                 </span>
 
-                                                <span class="old-price font-md ml-15">
+                                                <span class="old-price font-md ml-15" style="font-size: 18px">
                                                     <del>₹{{ $original_price }}</del>
                                                 </span>
                                             </span>
@@ -177,7 +188,7 @@
                                     </div>
                                 </div>
                                 @foreach ($groupedAttributes as $key => $attributes)
-                                    <div class="attr-detail attr-size mb-30" wire:ignore>
+                                    <div class="attr-detail attr-size mb-16" wire:ignore>
                                         <strong class="mr-10">{{ $attributes['name'] }}: </strong>
                                         <ul class="list-filter size-filter font-small">
                                             @foreach ($attributes['items'] as $item)
@@ -190,7 +201,7 @@
                                         </ul>
                                     </div>
                                 @endforeach
-                                <div class="detail-extralink mb-30">
+                                <div class="detail-extralink mb-24">
                                     <div class="detail-qty border radius">
                                         <a href="#" class="qty-down" wire:click.prevent="decrementQuantity()"><i
                                                 class="fi-rs-angle-small-down"></i></a>

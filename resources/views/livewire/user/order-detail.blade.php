@@ -149,11 +149,11 @@
         </div>
     </div>
 
-    <div class="page-content pt-50 pb-50">
+    <div class="page-content pt-20 pb-20">
         <div class="container">
             <div class="row">
                 <div class="col-xl-11 col-12 m-auto">
-                    <div class="content mb-50">
+                    <div class="content mb-30">
                         <h1 class="title style-3 mb-20 text-center">Order Details</h1>
                     </div>
                     <div class="row">
@@ -183,9 +183,9 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="card-content p-3 py-4">
+                                    <div class="card-content p-2">
                                         <div class="product-cards">
-                                            <h5 class="underline pb-10 mb-25 d-sm-flex d-none">Products</h5>
+                                            <h5 class="underline pb-10 mb-10 d-sm-flex d-none">Products</h5>
                                             <div class="row">
                                                 @foreach ($order->getOrderItems as $order_item)
                                                     @php
@@ -201,21 +201,25 @@
                                                             ]);
                                                         }
                                                     @endphp
-                                                    <div class="col-lg-12">
-                                                        <div class="card p-3 mb-3 rounded-15">
-                                                            <div class="d-flex gap-3 align-items-center flex-wrap">
-                                                                <a class="align-items-center border d-flex img-section p-1 rounded-3"
-                                                                    href="#">
+                                                    <div class="col-sm-6">
+                                                        <div class="card p-2 mb-3 rounded-15">
+                                                            <div class="d-flex align-items-start gap-3 flex-nowrap">
+
+                                                                <!-- IMAGE LEFT -->
+                                                                <a class="border d-flex img-section p-1 rounded-3"
+                                                                    href="#" style="flex: 0 0 80px;">
                                                                     <img src="{{ asset('storage/' . $order_item->getProduct->featured_image) }}"
-                                                                        alt="img"
-                                                                        class="img-fluid w-100 h-100 rounded-3"
+                                                                        alt="img" class="img-fluid rounded-3"
                                                                         style="width: 80px; height: 80px; object-fit: cover;">
                                                                 </a>
 
-                                                                <div class="content py-2 flex-grow-1">
-                                                                    <h6>
+                                                                <!-- CONTENT RIGHT -->
+                                                                <div class="content flex-grow-1" style="min-width: 0;">
+                                                                    <h6 class="text-truncate-2">
                                                                         <a href="{{ $shop_detail_url }}"
-                                                                            class="fs-17">{{ $order_item->getProduct->name }}</a>
+                                                                            class="fs-17 two-liner-text">
+                                                                            {{ $order_item->getProduct->name }}
+                                                                        </a>
                                                                     </h6>
 
                                                                     {{-- Rating Stars Display --}}
@@ -232,124 +236,28 @@
                                                                                 : 0;
                                                                         $reviews_percentage = ($reviews_avg / 5) * 100;
                                                                     @endphp
+
                                                                     <div class="product-rate-cover">
                                                                         <div class="product-rate d-inline-block">
                                                                             <div class="product-rating"
                                                                                 style="width: {{ $reviews_percentage }}%">
                                                                             </div>
                                                                         </div>
-                                                                        <span
-                                                                            class="font-small ml-5 text-muted">({{ number_format($reviews_avg, 1) }})</span>
+                                                                        <span class="font-small ml-5 text-muted">
+                                                                            ({{ number_format($reviews_avg, 1) }})
+                                                                        </span>
                                                                     </div>
 
                                                                     <div class="product-price pt-2">
+                                                                        <span class="fs-18 fw-bold">
+                                                                            ₹{{ number_format($order_item->regular_price, 2) }}
+                                                                        </span>
                                                                         <span
-                                                                            class="fs-18 fw-bold">₹{{ number_format($order_item->regular_price, 2) }}</span>
-                                                                        <span
-                                                                            class="ms-2 fs-12 fw-600 px-1 bg-light border border-2 rounded-3 quicksand mt-2">x{{ $order_item->quantity }}</span>
+                                                                            class="ms-2 fs-12 fw-600 px-1 bg-light border border-2 rounded-3 quicksand">
+                                                                            x{{ $order_item->quantity }}
+                                                                        </span>
                                                                     </div>
                                                                 </div>
-
-                                                                @php
-                                                                    $order = $order_item->getOrder;
-                                                                    $product = $order_item->getProduct;
-
-                                                                    $completeAt = $order->complete_at
-                                                                        ? \Carbon\Carbon::parse($order->complete_at)
-                                                                        : null;
-                                                                    $today = \Carbon\Carbon::now();
-
-                                                                    // product return / replacement days
-                                                                    $returnDays = (int) $product->product_return_days;
-                                                                    $replacementDays =
-                                                                        (int) $product->product_replacement_days;
-
-                                                                    $showReturn = false;
-                                                                    $showReplace = false;
-
-                                                                    if ($order->status == 3 && $completeAt) {
-                                                                        // ====== CHECK RETURN ======
-                                                                        if ($returnDays > 0) {
-                                                                            $returnLastDate = $completeAt
-                                                                                ->copy()
-                                                                                ->addDays($returnDays);
-                                                                            if (
-                                                                                $today->lessThanOrEqualTo(
-                                                                                    $returnLastDate,
-                                                                                )
-                                                                            ) {
-                                                                                $showReturn = true;
-                                                                            }
-                                                                        }
-
-                                                                        // ====== CHECK REPLACEMENT (only if return expired or not allowed) ======
-                                                                        if (!$showReturn && $replacementDays > 0) {
-                                                                            $replaceLastDate = $completeAt
-                                                                                ->copy()
-                                                                                ->addDays($replacementDays);
-                                                                            if (
-                                                                                $today->lessThanOrEqualTo(
-                                                                                    $replaceLastDate,
-                                                                                )
-                                                                            ) {
-                                                                                $showReplace = true;
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    // ====== WHATSAPP LOGIC ======
-                                                                    $number = '918764766553'; // WhatsApp number without +
-                                                                    $productName = $product->name ?? '';
-                                                                    $orderId = $order->id ?? '';
-
-                                                                    // Dynamic message for each case
-                                                                    if ($showReturn) {
-                                                                        $message = "I want to return this product: $productName (Order ID: $orderId)";
-                                                                    } elseif ($showReplace) {
-                                                                        $message = "I want to replace this product: $productName (Order ID: $orderId)";
-                                                                    } else {
-                                                                        $message = null; // no return or replace
-                                                                    }
-
-                                                                    $whatsappUrl = $message
-                                                                        ? "https://wa.me/$number?text=" .
-                                                                            urlencode($message)
-                                                                        : null;
-                                                                @endphp
-
-
-                                                                @if ($order->status == 3)
-                                                                    <div class="review-btn-section mt-2 mt-md-0">
-
-                                                                        {{-- Write Review --}}
-                                                                        <button type="button"
-                                                                            class="btn btn-sm btn-outline-brand hover-up font-xs"
-                                                                            wire:click.prevent="openReviewModalForProduct({{ $order_item->item_id }})">
-                                                                            <i class="fi-rs-star mr-1"></i> Write Review
-                                                                        </button>
-
-                                                                        {{-- Return --}}
-                                                                        @if ($showReturn && $whatsappUrl)
-                                                                            <a href="{{ $whatsappUrl }}"
-                                                                                target="_blank"
-                                                                                class="btn btn-sm btn-outline-warning hover-up font-xs">
-                                                                                <i class="fi-rs-rotate-left mr-1"></i>
-                                                                                Return
-                                                                            </a>
-                                                                        @endif
-
-                                                                        {{-- Replace --}}
-                                                                        @if ($showReplace && $whatsappUrl)
-                                                                            <a href="{{ $whatsappUrl }}"
-                                                                                target="_blank"
-                                                                                class="btn btn-sm btn-outline-info hover-up font-xs">
-                                                                                <i class="fi-rs-refresh mr-1"></i>
-                                                                                Replace
-                                                                            </a>
-                                                                        @endif
-
-                                                                    </div>
-                                                                @endif
 
                                                             </div>
                                                         </div>
@@ -363,8 +271,9 @@
                         </div>
 
                         <div class="col-xl-3 primary-sidebar sticky-sidebar">
-                            <div class="border p-20 cart-totals mb-25">
-                                <h4 class="mb-20 pb-2 underline">Details</h4>
+                            <div class="border p-20 cart-totals mb-25 rounded-15">
+                                <h4 class="mb-20 pb-2 underline">Order Details</h4>
+
                                 <div class="table-responsive">
                                     <table class="table no-border">
                                         <tbody>
@@ -376,9 +285,79 @@
                                                     <h4 class="text-brand text-end fs-16">#{{ $order->id }}</h4>
                                                 </td>
                                             </tr>
-                                            {{-- ... Other rows ... --}}
-                                            <tr class="d-flex justify-content-between mt-2 pt-2"
-                                                style="border-width: 2px 0px 0px 0px; border-style: dashed">
+
+                                            <tr class="d-flex justify-content-between border-0 mt-1">
+                                                <td class="px-0 cart_total_label text-start">
+                                                    <h6 class="text-muted">Subtotal</h6>
+                                                </td>
+                                                <td class="px-0 cart_total_amount">
+                                                    <h5 class="text-heading text-end fs-16">
+                                                        ₹{{ number_format($order->subtotal, 2) }}</h5>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="d-flex justify-content-between border-0 mt-1">
+                                                <td class="px-0 cart_total_label text-start">
+                                                    <h6 class="text-muted">Shipping</h6>
+                                                </td>
+                                                <td class="px-0 cart_total_amount">
+                                                    <h5 class="text-heading text-end fs-16">
+                                                        @if ($order->shipping_charges == 0)
+                                                            Free Shipping
+                                                        @else
+                                                            ₹{{ number_format($order->shipping_charges, 2) }}
+                                                        @endif
+                                                    </h5>
+                                                </td>
+                                            </tr>
+
+                                            @if (!empty($order->coupon_discount) && $order->coupon_discount > 0)
+                                                <tr
+                                                    class="d-flex justify-content-between border-0 align-items-center mt-1">
+                                                    <td class="px-0 cart_total_label text-start">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="badge bg-success me-2">Coupon Applied</span>
+                                                            <h6 class="text-success m-0">
+                                                                ({{ $order->getCoupon->coupon_code }})
+                                                            </h6>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="px-0 cart_total_amount">
+                                                        <h5 class="text-end fs-16 text-success fw-bold">
+                                                            - ₹{{ number_format($order->coupon_discount, 2) }}
+                                                        </h5>
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            @if ($order->offer_discount > 0)
+                                                <tr class="d-flex justify-content-between border-0 mt-1">
+                                                    <td class="px-0 cart_total_label text-start">
+                                                        <h6 class="text-success">Offer Discount</h6>
+                                                    </td>
+                                                    <td class="px-0 cart_total_amount">
+                                                        <h5 class="text-success text-end fs-16">
+                                                            - ₹{{ number_format($order->offer_discount, 2) }}
+                                                        </h5>
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            @if ($order->etd)
+                                                <tr class="d-flex justify-content-between border-0 mt-1">
+                                                    <td class="px-0">
+                                                        <h6 class="text-muted">Delivery ETA</h6>
+                                                    </td>
+                                                    <td class="px-0">
+                                                        <h5 class="text-heading text-end fs-16">{{ $order->etd }}
+                                                        </h5>
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            <tr class="d-flex justify-content-between mt-3 pt-3"
+                                                style="border-top:2px dashed #ddd;">
                                                 <td class="px-0 cart_total_label text-start">
                                                     <h6 class="text-heading fs-18">Total (₹)</h6>
                                                 </td>
@@ -392,6 +371,7 @@
                                 </div>
                             </div>
 
+
                             @php
                                 $address = json_decode($order->ship_different_address_details, true);
                             @endphp
@@ -400,7 +380,8 @@
                                 <div class="address-details mb-4 px-1">
                                     <div class="align-items-center flex-wrap mb-10">
                                         <span class="me-2 text-muted fw-600 fs-16 quicksand">Name :</span>
-                                        <span class="text-heading fw-600 fs-16 quicksand">{{ $address['name'] }}</span>
+                                        <span
+                                            class="text-heading fw-600 fs-16 quicksand">{{ $address['name'] }}</span>
                                     </div>
                                     <div class="align-items-center flex-wrap mb-10">
                                         <span class="me-2 text-muted fw-600 fs-16 quicksand">Address :</span>
