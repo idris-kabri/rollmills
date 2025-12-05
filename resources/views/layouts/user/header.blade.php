@@ -519,94 +519,110 @@
                 <div class="mobile-menu-wrap mobile-header-border">
                     <!-- mobile menu start -->
                     <div class="sidebar-widget widget-category-2 mb-40">
-                        <h5 class="section-title style-1 border-0 pb-2 mb-30">Category</h5>
-                        <ul>
-                            <li>
-                                <a href="shop-grid-right.html"> <img
-                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-1.svg') }}"
-                                        alt="" />Milks & Dairies</a><span class="count">30</span>
-                            </li>
-                            <li>
-                                <a href="shop-grid-right.html"> <img
-                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-2.svg') }}"
-                                        alt="" />Clothing</a><span class="count">35</span>
-                            </li>
-                            <li>
-                                <a href="shop-grid-right.html"> <img
-                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-3.svg') }}"
-                                        alt="" />Pet Foods </a><span class="count">42</span>
-                            </li>
-                            <li>
-                                <a href="shop-grid-right.html"> <img
-                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-4.svg') }}"
-                                        alt="" />Baking material</a><span class="count">68</span>
-                            </li>
-                            <li>
-                                <a href="shop-grid-right.html"> <img
-                                        src="{{ asset('assets/frontend/imgs/theme/icons/category-5.svg') }}"
-                                        alt="" />Fresh Fruit</a><span class="count">87</span>
-                            </li>
-                        </ul>
+                        <h5 class="section-title style-1 mb-30 underline"
+                            style="color: var(--color-3); display: inline-block;">Category</h5>
+                        <div class="category-list">
+                            @foreach ($categories as $category)
+                                @php
+                                    $selectedCategory = 1;
+                                    $subCategories = \App\Models\ProductCategory::where(
+                                        'parent_id',
+                                        $category->id,
+                                    )->get();
+                                    // Logic to keep menu open if a child is active
+                                    $isActive = $selectedCategory == $category->id;
+                                    $isChildActive = $subCategories->contains('id', $selectedCategory);
+                                    $isOpen = $isActive || $isChildActive;
+                                @endphp
+
+                                <div class="category-list-item" x-data="{ open: @json($isOpen) }">
+
+                                    <a href="#" class="cat-link {{ $isActive ? 'active' : '' }}"
+                                        @if ($subCategories->count() > 0) @click.prevent="open = !open" 
+                                             @else
+                                             wire:click.prevent="categoryWiseProduct({{ $category->id }}, 'change')" @endif>
+                                        <div class="cat-left">
+                                            @if ($category->icon)
+                                                <img src="{{ asset('storage/' . $category->icon) }}" class="cat-icon"
+                                                    alt="{{ $category->name }}" />
+                                            @endif
+                                            <span class="cat-name">{{ $category->name }}</span>
+                                        </div>
+
+                                        <div class="cat-right">
+                                            @if ($subCategories->count() > 0)
+                                                <i class="fi-rs-angle-small-down toggle-arrow"
+                                                    :style="open ? 'transform: rotate(180deg); color: var(--color-2);' :
+                                                        'transition: 0.3s;'"></i>
+                                            @endif
+                                        </div>
+                                    </a>
+
+                                    @if ($subCategories->count() > 0)
+                                        <div class="sub-cat-container" x-show="open" x-collapse
+                                            style="display: none;">
+
+                                            <div
+                                                class="sub-cat-item {{ $selectedCategory == $category->id ? 'active' : '' }}">
+                                                <input type="radio" id="all-cat-{{ $category->id }}"
+                                                    name="category_group" class="custom-check"
+                                                    wire:click="categoryWiseProduct({{ $category->id }}, 'change')"
+                                                    {{ $selectedCategory == $category->id ? 'checked' : '' }}>
+
+                                                <label for="all-cat-{{ $category->id }}"
+                                                    style="cursor: pointer; width: 100%; margin: 0;">
+                                                    All {{ $category->name }}
+                                                </label>
+                                            </div>
+
+                                            @foreach ($subCategories as $sub_category)
+                                                <div
+                                                    class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
+                                                    <input type="radio" id="sub-{{ $sub_category->id }}"
+                                                        name="category_group" class="custom-check"
+                                                        wire:click="categoryWiseProduct({{ $sub_category->id }}, 'change')"
+                                                        {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
+
+                                                    <label for="sub-{{ $sub_category->id }}"
+                                                        style="cursor: pointer; width: 100%; margin: 0;">
+                                                        {{ $sub_category->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                     <!-- Fillter By Price -->
                     <div class="sidebar-widget range mb-40">
-                        <h5 class="section-title style-1 border-0 pb-2 mb-30">Filter by price</h5>
+                        <h5 class="section-title style-1 mb-30 underline"
+                            style="color: var(--color-3); display: inline-block;">Filter by price</h5>
                         <div class="price-filter">
                             <div class="price-filter-inner">
-                                <div id="slider-range" class="mb-20"></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="caption">From: &nbsp; <strong id="slider-range-value1"
-                                            class="text-brand"></strong></div>
-                                    <div class="caption">To: &nbsp; <strong id="slider-range-value2"
-                                            class="text-brand"></strong></div>
+                                <div id="shop-slider-range" class="mb-20" wire:ignore></div>
+                                <div class="d-flex justify-content-between align-items-center caption mt-20">
+                                    <div class="input-group-price">
+                                        <label for="min-input">Min:</label>
+                                        <input type="number" class="quicksand form-control" id="min-input"
+                                            wire:model.blur="minPrice" min="0" max="10000"
+                                            style="width: 80px; padding: 5px; height: 35px;" />
+                                    </div>
+
+                                    <div class="input-group-price">
+                                        <label for="max-input">Max:</label>
+                                        <input type="number" class="quicksand form-control" id="max-input"
+                                            wire:model.blur="maxPrice" min="0" max="10000"
+                                            style="width: 80px; padding: 5px; height: 35px;" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Fillter By Condition -->
-                    <div class="sidebar-widget price_range range mb-30">
-                        <h5 class="section-title style-1 border-0 pb-2 mb-10">Fill by condition</h5>
-                        <div class="list-group">
-                            <div class="list-group-item mb-10 mt-10">
-                                <label class="fw-900">Color</label>
-                                <div class="custome-checkbox">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox1" value="" />
-                                    <label class="form-check-label" for="exampleCheckbox1"><span>Red
-                                            (56)</span></label>
-                                    <br />
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox2" value="" />
-                                    <label class="form-check-label" for="exampleCheckbox2"><span>Green
-                                            (78)</span></label>
-                                    <br />
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox3" value="" />
-                                    <label class="form-check-label" for="exampleCheckbox3"><span>Blue
-                                            (54)</span></label>
-                                </div>
-                                <label class="fw-900 mt-15">Item Condition</label>
-                                <div class="custome-checkbox">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox11" value="" />
-                                    <label class="form-check-label" for="exampleCheckbox11"><span>New
-                                            (1506)</span></label>
-                                    <br />
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox21" value="" />
-                                    <label class="form-check-label" for="exampleCheckbox21"><span>Refurbished
-                                            (27)</span></label>
-                                    <br />
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox31" value="" />
-                                    <label class="form-check-label" for="exampleCheckbox31"><span>Used
-                                            (45)</span></label>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="shop-grid-right.html" class="btn btn-sm btn-default mt-20"><i
-                                class="fi-rs-filter mr-5"></i>Apply Fillters</a>
-                    </div>
+                    <a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center"><i
+                            class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply
+                        Fillters</a>
                     <!-- mobile menu end -->
                 </div>
             </div>
