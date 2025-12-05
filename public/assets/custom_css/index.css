@@ -299,6 +299,14 @@ input[type="number"] {
 /* Home Page Css Start */
 /* ==================================================================== */
 
+.home-categories-cards-section .card-2 figure img {
+    height: 80px;
+}
+
+.home-categories-cards-section .card-2 figure {
+    margin-bottom: 7px;
+}
+
 .categories-dropdown-active-large-2 {
     list-style-type: none;
     position: absolute;
@@ -1294,6 +1302,14 @@ input[type="number"] {
     height: 54px;
 }
 
+/* ==================================================================== */
+/* Shop Page Price Filter New Css End */
+/* ==================================================================== */
+
+/* ==================================================================== */
+/* Responsive Css Start */
+/* ==================================================================== */
+
 @media (min-width: 769px) {
     .custom-header-select-search-wrapper {
         position: relative;
@@ -1337,14 +1353,6 @@ input[type="number"] {
         color: var(--color-2) !important;
     }
 }
-
-/* ==================================================================== */
-/* Shop Page Price Filter New Css End */
-/* ==================================================================== */
-
-/* ==================================================================== */
-/* Responsive Css Start */
-/* ==================================================================== */
 
 @media (max-width: 767px) {
     .w-md-75 {
