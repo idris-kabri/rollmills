@@ -299,6 +299,14 @@ input[type="number"] {
 /* Home Page Css Start */
 /* ==================================================================== */
 
+.home-categories-cards-section .card-2 figure img {
+    height: 80px;
+}
+
+.home-categories-cards-section .card-2 figure {
+    margin-bottom: 7px;
+}
+
 .categories-dropdown-active-large-2 {
     list-style-type: none;
     position: absolute;
@@ -1301,6 +1309,50 @@ input[type="number"] {
 /* ==================================================================== */
 /* Responsive Css Start */
 /* ==================================================================== */
+
+@media (min-width: 769px) {
+    .custom-header-select-search-wrapper {
+        position: relative;
+        width: 210px;
+    }
+
+    .custom-header-select-search-wrapper::after {
+        font-family: uicons-regular-straight !important;
+        font-style: normal;
+        font-weight: normal !important;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1 !important;
+        content: "\f10f";
+        position: absolute;
+        font-size: 12px;
+        color: var(--color-1);
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+    .custom-header-select-search {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        color: var(--color-1) !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        min-height: 50px;
+        border: none !important;
+        min-width: 160px !important;
+        width: 100% !important;
+        border-right: 1px solid var(--color-1) !important;
+        font-family: "Quicksand" !important;
+        padding: 3px 20px 3px 20px !important;
+    }
+
+    .custom-header-select-search:focus {
+        color: var(--color-2) !important;
+    }
+}
 
 @media (max-width: 767px) {
     .w-md-75 {
