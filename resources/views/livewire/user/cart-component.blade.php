@@ -126,8 +126,15 @@
                                     <div class="progress-bar-cart" id="" data-width="{{ $giftAlreadyAdded ? 100 : $percentage }}" data-skip="{{ $giftAlreadyAdded ? 'true' : 'false' }}">
                                         <div class="bar-circle">
                                             <i class="fa-solid fa-gift d-none d-sm-block"></i>
+                                            @php
+                                            $cartSubtotal = (float) str_replace(
+                                            ',',
+                                            '',
+                                            Cart::instance('cart')->subtotal(),
+                                            );
+                                            @endphp
                                             <span class="d-block d-sm-none fs-12 fw-600"
-                                                style="line-height: 1em">₹{{ $surprise_gift_amount }}</span>
+                                                style="line-height: 1em">₹{{ $cartSubtotal }}</span>
                                         </div>
                                     </div>
                                     <div class="milestone-marker" style="{{ $giftAlreadyAdded ? 'display:none;' : '' }}">

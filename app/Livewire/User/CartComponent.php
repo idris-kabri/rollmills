@@ -23,6 +23,7 @@ class CartComponent extends Component
     public $out_of_stock_id = [];
     public $pincode_validation_id = [];
     public $mainDiscountAmount = 0;
+    public $totalOfferDiscountedPrice = 0;
     public $totalAfterDiscount = 0;
     public $triger_offer_product_array = [];
     public $triger_offer_brand_array = [];
