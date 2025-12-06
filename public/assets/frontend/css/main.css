@@ -3571,8 +3571,7 @@ table .product-thumbnail img {
 
 .active-thumb {
     border-color: #4caf50 !important;
-} 
-
+}
 
 .custom-modal.custom-modal-new .modal-dialog .modal-content {
     background: url("/assets/frontend/imgs/icon&images/gz8vNxZFT9MVn9vG3u0ndFVc4AmtvKeplrme23EK-removebg-preview (4).png");
@@ -13037,8 +13036,8 @@ footer .hotline img {
     .quantity .minus,
     .quantity .plus {
         padding: 2px;
-        width: 32px;
-        height: 32px;
+        width: 25px;
+        height: 25px;
         border: 1px solid var(--color-light-1);
         background: white;
         border-radius: 6px;
@@ -13059,9 +13058,10 @@ footer .hotline img {
         color: var(--color-1);
         border: 1px solid var(--color-light-1);
         border-radius: 100px;
-        width: 36px;
+        width: 45px;
         text-align: center;
-        height: 36px;
+        height: 27px;
+        font-size: 15px;
     }
 
     .display-hide-480 {
@@ -13069,8 +13069,9 @@ footer .hotline img {
     }
 
     .quantity {
-        -ms-flex-pack: end;
-        justify-content: flex-end;
+        margin-top: 5px;
+        -ms-flex-pack: start;
+        justify-content: start;
         align-items: center;
         display: flex !important;
         gap: 10px;
@@ -13125,9 +13126,12 @@ footer .hotline img {
 
     .display-visible-480 {
         display: block !important;
+    }
+
+    .custom-remove-item {
         position: absolute;
-        top: 10%;
-        right: 25%;
+        top: -9px;
+        left: -9px;
     }
 
     .single-content blockquote p {

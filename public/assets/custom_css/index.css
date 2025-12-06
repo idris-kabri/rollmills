@@ -1619,9 +1619,13 @@ input[type="number"] {
         border-bottom: 1px dashed var(--color-light-1);
     }
 
+    .product-detail-small-screen .product-card:last-child {
+        border-bottom: none;
+    }
+
     .product-detail-small-screen .product-card .img-section {
         min-width: 100px;
-        height: 100px;
+        height: 115px;
         width: 100px;
         border: 1px solid #ddd;
         border-radius: 5px;
