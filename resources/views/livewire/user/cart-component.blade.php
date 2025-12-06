@@ -266,7 +266,7 @@
                                         @else
                                         @php
                                         $originalPrice = $item->model->price;  
-                                        $total_original_price += $item->model->price; 
+                                        $total_original_price += $item->model->price * $item->qty; 
                                         $cartPrice = $item->price; 
                                         @endphp
 
@@ -527,7 +527,7 @@
                                                 $customer_save_amount = $total_original_price - $cartSubtotal;
                                             @endphp
                                             <h4 class="text-end fs-16 text-success">
-                                                - ₹{{ number_format($customer_save_amount,2) }}</h4>
+                                               - ₹{{ number_format(abs($customer_save_amount),2) }}</h4>
                                         </td>
                                     </tr>
                                     <tr class="d-flex justify-content-between border-0">
@@ -656,7 +656,7 @@
                             <input class="font-medium pl-15 mr-15 coupon" name="Coupon" placeholder="Enter Code"
                                 wire:model="couponCode">
                             <button class="btn d-flex justify-content-center align-items-center"
-                                wire:click="applyCoupon"><i class="fi-rs-label mr-10"></i>Apply</button>
+                                wire:click="applyCoupon('yes')"><i class="fi-rs-label mr-10"></i>Apply</button>
                         </div>
                         @foreach ($display_coupons as $global_coupon)
                         <a class="coupon-card-cart {{ $couponCode == $global_coupon->coupon_code ? 'selected' : '' }}"

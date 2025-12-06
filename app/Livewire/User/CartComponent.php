@@ -131,7 +131,7 @@ class CartComponent extends Component
         }
     }
 
-    public function applyCoupon()
+    public function applyCoupon($show_dispatch_event = 'no')
     {
         $currentDate = Carbon::now()->format('Y-m-d');
         $checkCuponCode = Coupon::where('coupon_code', $this->couponCode)->first();
@@ -229,7 +229,9 @@ class CartComponent extends Component
         session()->put('coupon_discount_id', $checkCuponCode->id);
         session()->put('coupon_code', $this->couponCode);
 
-        $this->dispatch('coupon-applied');
+        if($show_dispatch_event == 'yes'){ 
+            $this->dispatch('coupon-applied');
+        }
 
         return true;
     }
@@ -792,7 +794,7 @@ class CartComponent extends Component
     public function checkCoupon($coupon_code)
     {
         $this->couponCode = $coupon_code;
-        $response = $this->applyCoupon();
+        $response = $this->applyCoupon('yes');
         if (!$response) {
             $this->couponCode = '';
         }
