@@ -187,11 +187,6 @@
                                     </div>
                                     <div class="product-extra-link2">
                                         @php
-                                            $cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use (
-                                                $mainProduct,
-                                            ) {
-                                                return $cartItem->model->id === $mainProduct->id;
-                                            });
                                             $wishlist = Cart::instance('wishlist')->search(function (
                                                 $wishlistItem,
                                                 $rowId,
@@ -199,22 +194,16 @@
                                                 return $wishlistItem->model->id === $mainProduct->id;
                                             });
                                         @endphp
-                                        @if ($cart->isNotEmpty())
-                                            <button type="button" class="button button-add-to-cart"><i
-                                                    class="fi-rs-shopping-cart"></i>Added</button>
-                                        @else
-                                            <button type="button" class="button button-add-to-cart"
-                                                wire:click="addToCart()"><i class="fi-rs-shopping-cart"></i>Add to
-                                                cart</button>
-                                        @endif
+                                        <button type="button" class="button button-add-to-cart"
+                                            wire:click="addToCart()"><i class="fi-rs-shopping-cart"></i>Add to
+                                            cart</button>
                                         @if ($wishlist->isNotEmpty())
                                             <a href="javascript:void(0);" aria-label="Add To Wishlist"
                                                 class="action-btn hover-up wishlist-detail-active"><i
                                                     class="fi-rs-heart"></i></a>
                                         @else
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                href="#" wire:click.prevent="addToWhishlist()"><i
-                                                    class="fi-rs-heart"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"
+                                                wire:click.prevent="addToWhishlist()"><i class="fi-rs-heart"></i></a>
                                         @endif
                                     </div>
                                 @else

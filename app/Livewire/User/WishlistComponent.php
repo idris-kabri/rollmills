@@ -19,18 +19,24 @@ class WishlistComponent extends Component
 
     public function askRemove($rowId)
     {
-        $this->confirmMessage = "Are you sure you want to remove this item from your wishlist?";
-        $this->confirmAction  = "removeWishlist('$rowId')";
+        $this->confirmMessage = 'Are you sure you want to remove this item from your wishlist?';
+        $this->confirmAction = "removeWishlist('$rowId')";
 
         $this->dispatch('open-whislit-remove-item-modal');
     }
-
 
     public function addToCart($rowId)
     {
         $mainProduct = Cart::instance('wishlist')->get($rowId);
         $product = $mainProduct->model;
-        $addToCart = finalAddToCart($product, $this->quantity);
+        $existing_qauntity = 0;
+        $cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use (&$existing_qauntity, $product) {
+            if ($cartItem->id === $product->id) {
+                $existing_qauntity = $cartItem->qty;
+                return true;
+            }
+        });
+        $addToCart = finalAddToCart($product, $this->quantity + $existing_qauntity);
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($product->sale_from_date);
@@ -97,7 +103,7 @@ class WishlistComponent extends Component
     {
         $removeWishlist = finalRemoveWishlist($rowId);
         if ($removeWishlist == true) {
-            $this->toastError('Product Successfully Remove In Your Wishlist!'); 
+            $this->toastError('Product Successfully Remove In Your Wishlist!');
             $this->dispatch('close-whislit-remove-item-modal');
         }
     }

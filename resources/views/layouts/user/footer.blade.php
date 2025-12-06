@@ -407,7 +407,6 @@
     })
     window.addEventListener('purchase', (event) => {
         var data = event.detail[0];
-        console.log(data)
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             ecommerce: null
@@ -418,8 +417,6 @@
                 items: data
             }
         });
-
-        console.log(dataLayer)
     })
     window.addEventListener('add-to-wishlist', (event) => {
         var data = event.detail[0];
@@ -481,22 +478,6 @@
             }
         }
     }
-
-    // Listen for the success event
-    document.addEventListener('success', event => {
-        toastr.success(event.detail.message);
-    });
-
-    document.addEventListener('error', event => {
-        toastr.error(event.detail.message);
-    });
-
-    window.addEventListener('redirectAfterDelay', (event) => {
-        const redirectUrl = event.detail[0].url ?? '/';
-        setTimeout(() => {
-            window.location.href = redirectUrl;
-        }, 2000);
-    });
 
     function displayValidationErrors(errors) {
         // Clear any previous error messages
