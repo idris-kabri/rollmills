@@ -7452,7 +7452,7 @@ footer .widget_title {
 }
 
 .panel--search-result .panel__footer a {
-    color: #ff324d;
+    color: --color-1;
 }
 
 .custom-box-shadow {
