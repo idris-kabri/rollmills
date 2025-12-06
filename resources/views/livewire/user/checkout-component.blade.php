@@ -96,6 +96,9 @@
 
         .coupon-card-cart.selected .check-circle {
             display: flex;
+        } 
+        input{ 
+            height: 50px !important;
         }
     </style>
 
