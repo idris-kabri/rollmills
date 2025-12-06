@@ -647,7 +647,7 @@ input[type="number"] {
 }
 
 .panel--search-result .panel__footer a {
-    color: #ff324d;
+    color: var(--color-1);
 }
 
 .product_price span.price {

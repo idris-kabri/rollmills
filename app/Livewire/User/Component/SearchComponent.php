@@ -18,7 +18,7 @@ class SearchComponent extends Component
     public function serachFunction()
     {
         $this->is_search = true;
-        $product_query = Product::where('active_inactive_status', 1);
+        $product_query = Product::where('active_inactive_status', 1)->whereNull('parent_id');
 
         if ($this->category != '' && $this->category != null) {
             $product_query
