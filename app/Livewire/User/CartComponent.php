@@ -44,6 +44,7 @@ class CartComponent extends Component
     public $surprise_gift_amount = 0;
     public $surprise_gift_product_id = null;
     public $productCategoryIds = [];
+    public $flat_rate;
 
     public $confirmMessage = '';
     public $confirmAction = '';
@@ -124,6 +125,10 @@ class CartComponent extends Component
         $this->surprise_gift_product_id = Setting::where('label', 'surprise_gift_product_id')->first();
         $this->getDisplayCoupons();
         $this->checkSurpriseGift('no');
+        $this->flat_rate = Setting::where('label', 'Flat Rate')->first(); 
+        if($this->flat_rate){ 
+            session()->put('shipping_charge', (int) $this->flat_rate->value);
+        }
     }
 
     public function applyCoupon()
@@ -719,8 +724,6 @@ class CartComponent extends Component
                 session()->forget('show_deleviery_time');
             } else {
                 $cart_items = Cart::instance('cart')->content();
-                $flat_rate = Setting::where('label', 'Flat Rate')->first()->value;
-                session()->put('shipping_charge', (int) $flat_rate);
                 session()->put('latest_etd', '5 to 7 days');
                 session()->put('shipping_bear_margin', 0);
 

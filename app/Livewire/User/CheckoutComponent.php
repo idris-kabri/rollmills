@@ -439,25 +439,32 @@ class CheckoutComponent extends Component
     }
     public function placeOrder()
     {
-        try {
-            $validator = Validator::make($this->billing_address, [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email',
-                'state' => 'required|string|max:255',
-                'city' => 'required|string|max:255',
-                'billing_address1' => 'required|string|max:255',
-                'billing_address2' => 'nullable|string|max:255',
-                'zipcode' => 'required',
-                'mobile' => 'required|digits_between:10,15',
-            ]);
+        $this->validate(
+            [
+                'billing_address.name' => 'required|string|max:255',
+                'billing_address.email' => 'required|email',
+                'billing_address.state' => 'required|string|max:255',
+                'billing_address.city' => 'required|string|max:255',
+                'billing_address.billing_address1' => 'required|string|max:255',
+                'billing_address.billing_address2' => 'nullable|string|max:255',
+                'billing_address.zipcode' => 'required',
+                'billing_address.mobile' => 'required|digits_between:10,15',
+            ],
+            [],
+            [
+                'billing_address.name' => 'name',
+                'billing_address.email' => 'email address',
+                'billing_address.state' => 'state',
+                'billing_address.city' => 'city',
+                'billing_address.billing_address1' => 'address',
+                'billing_address.billing_address2' => 'address line 2',
+                'billing_address.zipcode' => 'zipcode',
+                'billing_address.mobile' => 'phone number',
+            ]
+        );
 
-            if ($validator->fails()) {
-                $this->dispatch('validation-errors', [
-                    'errors' => $validator->errors(),
-                ]);
-                dd($validator->errors());
-                return;
-            }
+        try {
+
             $this->payment_method = 'upi';
             $nonAuthUser = null;
 
@@ -624,7 +631,7 @@ class CheckoutComponent extends Component
                 }
             }
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             $this->toastError($e->getMessage());
         }
     }

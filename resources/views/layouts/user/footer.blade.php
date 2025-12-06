@@ -465,28 +465,7 @@
         // Iterate through the errors object
         for (const [field, messages] of Object.entries(errors)) {
             // Find the input element associated with the field
-            const input = document.querySelector(`[name="${field}"]`);
-            if (input) {
-                // Create a new span element for the error message
-                const errorMessage = document.createElement('span');
-                errorMessage.className = 'error-message'; // Add a class for styling
-                errorMessage.style.color = 'red'; // Optional: Add inline styling
-                errorMessage.textContent = messages.join(', '); // Join multiple messages if any
-                // Insert the error message after the input field
-                input.parentNode.insertBefore(errorMessage, input.nextSibling);
-                console.log(input.parentNode.insertBefore(errorMessage, input.nextSibling))
-            }
-        }
-    }
-
-    function displayValidationErrors(errors) {
-        // Clear any previous error messages
-        document.querySelectorAll('.error-message').forEach((elem) => elem.remove());
-
-        // Iterate through the errors object
-        for (const [field, messages] of Object.entries(errors)) {
-            // Find the input element associated with the field
-            const input = document.querySelector(`[name="${field}"]`);
+            const input = document.querySelector(`[name="billing_address.${field}"]`);
             if (input) {
                 // Create a new span element for the error message
                 const errorMessage = document.createElement('span');
@@ -501,6 +480,7 @@
     }
 
     window.addEventListener('validation-errors', (event) => {
+        console.log('hi',event)
         var errors = event.detail[0].errors;
         displayValidationErrors(errors);
     })

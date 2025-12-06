@@ -179,7 +179,7 @@
 
                                 <!-- Name -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" required name="name" placeholder="Name *"
+                                    <input type="text" required name="billing_address.name" placeholder="Name *"
                                         wire:model="billing_address.name">
                                     @error('billing_address.name')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -188,7 +188,7 @@
 
                                 <!-- Email -->
                                 <div class="form-group col-lg-6">
-                                    <input required type="text" name="email" placeholder="Email address *"
+                                    <input required type="text" name="billing_address.email" placeholder="Email address *"
                                         wire:model="billing_address.email">
                                     @error('billing_address.email')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -201,7 +201,7 @@
 
                                 <!-- State -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" required name="state" placeholder="State *"
+                                    <input type="text" required name="billing_address.state" placeholder="State *"
                                         wire:model="billing_address.state">
                                     @error('billing_address.state')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -210,7 +210,7 @@
 
                                 <!-- City -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" required name="city" placeholder="City *"
+                                    <input type="text" required name="billing_address.city" placeholder="City *"
                                         wire:model="billing_address.city">
                                     @error('billing_address.city')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -223,7 +223,7 @@
 
                                 <!-- Address 1 -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" required name="billing_address" placeholder="Address *"
+                                    <input type="text" required name="billing_address.billing_address1" placeholder="Address *"
                                         wire:model="billing_address.billing_address1">
                                     @error('billing_address.billing_address1')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -232,7 +232,7 @@
 
                                 <!-- Address 2 -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" name="billing_address2" placeholder="Address line 2"
+                                    <input type="text" name="billing_address.billing_address2" placeholder="Address line 2"
                                         wire:model="billing_address.billing_address2">
                                     @error('billing_address.billing_address2')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -245,7 +245,7 @@
 
                                 <!-- Zipcode -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" disabled name="zipcode" placeholder="Postcode / ZIP *"
+                                    <input type="text" disabled name="billing_address.zipcode" placeholder="Postcode / ZIP *"
                                         wire:model="billing_address.zipcode">
                                     @error('billing_address.zipcode')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -254,7 +254,7 @@
 
                                 <!-- Phone -->
                                 <div class="form-group col-lg-6">
-                                    <input required type="text" name="phone" placeholder="Phone *"
+                                    <input required type="text" name="billing_address.mobile" placeholder="Phone *"
                                         wire:model="billing_address.mobile">
                                     @error('billing_address.mobile')
                                         <span class="text-danger small d-block">{{ $message }}</span>
