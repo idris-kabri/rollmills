@@ -794,8 +794,12 @@ class CartComponent extends Component
 
     public function checkCoupon($coupon_code)
     {
-        $this->couponCode = $coupon_code;
-        $response = $this->applyCoupon('yes');
+        $this->couponCode = $coupon_code; 
+        if($this->couponCode != session()->get('coupon_code')){ 
+            $response = $this->applyCoupon('yes');
+        }else{ 
+            $response = $this->applyCoupon('no');
+        }
         if (!$response) {
             $this->couponCode = '';
         }
