@@ -377,7 +377,6 @@
 
 
                     {{-- mobile responsive cart page new design start --}}
-
                     <div class="product-detail-small-screen d-block d-sm-none">
                         @php
                             $totalOfferDiscountedPrice = 0;
