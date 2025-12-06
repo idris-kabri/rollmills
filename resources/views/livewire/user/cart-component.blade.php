@@ -376,7 +376,6 @@
 
 
                     {{-- mobile responsive cart page new design start --}}
-
                     <div class="product-detail-small-screen d-block d-sm-none">
                         @php
                         $totalOfferDiscountedPrice = 0;
@@ -444,12 +443,12 @@
                                                 <h3
                                                     class="text-brand small-screen-table-td-content d-inline-block me-1">
                                                     ₹{{ $item->model->sale_price * $item->qty }}</h3>
-                                                <del class="old-price fw-600">₹{{ $item->model->price }}</del>
+                                                <del class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
                                                 @elseif($item->model->sale_default_price > 0)
                                                 <h3
                                                     class="text-brand small-screen-table-td-content d-inline-block me-1">
                                                     ₹{{ $item->model->sale_default_price * $item->qty }}</h3>
-                                                <del class="old-price fw-600">₹{{ $item->model->price }}</del>
+                                                <del class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
                                                 @else
                                                 <h3
                                                     class="text-brand small-screen-table-td-content d-inline-block me-1">

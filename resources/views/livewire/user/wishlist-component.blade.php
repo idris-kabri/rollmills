@@ -25,13 +25,11 @@
                 </div>
 
                 <div class="pb-4 d-flex flex-column justify-content-center">
-                    <button class="btn mb-3 w-90-per pt-10 pb-10"
-                        wire:click.prevent="{{ $confirmAction }}">
+                    <button class="btn mb-3 w-90-per pt-10 pb-10" wire:click.prevent="{{ $confirmAction }}">
                         Yes, Continue
                     </button>
 
-                    <button class="btn btn-brand-outline mx-auto pt-10 pb-10 w-90-per"
-                        data-bs-dismiss="modal">
+                    <button class="btn btn-brand-outline mx-auto pt-10 pb-10 w-90-per" data-bs-dismiss="modal">
                         Cancel
                     </button>
                 </div>
@@ -41,128 +39,230 @@
     <!-- END CONFIRM MODAL -->
 
     @if (count(Cart::instance('wishlist')->content()) > 0)
-    <div class="container mb-30 mt-50">
-        <div class="row">
-            <div class="col-xl-11 col-lg-12 m-auto">
-                <div class="content mb-50">
-                    <h1 class="title style-3 mb-20 text-center">Your Wishlist</h1>
-                    <h6 class="text-body text-center">There are <span
-                            class="text-brand">{{ Cart::instance('wishlist')->count() }}</span> products in this list
-                    </h6>
-                </div>
-                {{-- <div class="mb-50">
-                    <h1 class="heading-2 mb-10">Your Wishlist</h1>
-                    <h6 class="text-body">There are <span class="text-brand">5</span> products in this list</h6>
-                </div> --}}
+        <div class="container mb-24 mt-md-5 mt-4">
+            <div class="row">
+                <div class="col-xl-11 col-lg-12 m-auto">
+                    <div class="content mb-30">
+                        <h1 class="title style-3 mb-20 text-center">Your Wishlist</h1>
+                        <h6 class="text-body text-center">There are <span
+                                class="text-brand">{{ Cart::instance('wishlist')->count() }}</span> products in this
+                            list
+                        </h6>
+                    </div>
 
-                <div class="table-responsive shopping-summery table-responsive-custom">
-                    <table class="table table-wishlist">
-                        <thead>
-                            <tr class="main-heading">
-                                <th scope="col" colspan="2" class="ps-3">Product</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Action</th>
-                                <th scope="col" class="end">Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (Cart::instance('wishlist')->content() as $item)
-                            @php
-                            if ($item->model->slug) {
-                            $shop_detail_url = route('shop-detail', [
-                            'slug' => $item->model->slug,
-                            'id' => $item->model->id,
-                            ]);
-                            } else {
-                            $shop_detail_url = route('shop-detail', [
-                            'slug' => 'no-slug',
-                            'id' => $item->model->id,
-                            ]);
-                            }
-                            @endphp
-                            <tr class="pt-30">
-                                <td class="image product-thumbnail pt-40 position-relative ps-3">
-                                    <img src="{{ asset('storage/' . $item->model->featured_image) }}"
-                                        alt="#" />
-                                    <div class="display-visible-480 d-none">
-                                        <a href="#" wire:click.prevent="removeWishlist('{{ $item->rowId }}')"
-                                            wire:confirm="Are you sure you want to remove this item from your wishlist?"
-                                            class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
-                                            <i class="fi-rs-trash text-white"></i></a>
-                                    </div>
-                                </td>
-                                <td class="product-des product-name">
-                                    <h6><a class="product-name mb-10"
-                                            href="{{$shop_detail_url}}">{{ $item->model->name }}</a>
-                                    </h6>
+                    <div class="table-responsive shopping-summery table-responsive-custom d-none d-sm-block">
+                        <table class="table table-wishlist">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col" colspan="2" class="ps-3">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col" class="end">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Cart::instance('wishlist')->content() as $item)
                                     @php
-                                    $reviews = \App\Models\ProductReview::where('status', 1)
-                                    ->where('product_id', $item->model->id)
-                                    ->get();
-
-                                    $reviews_count = $reviews->count();
-                                    $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
-                                    $reviews_percentage = ($reviews_avg / 5) * 100;
+                                        if ($item->model->slug) {
+                                            $shop_detail_url = route('shop-detail', [
+                                                'slug' => $item->model->slug,
+                                                'id' => $item->model->id,
+                                            ]);
+                                        } else {
+                                            $shop_detail_url = route('shop-detail', [
+                                                'slug' => 'no-slug',
+                                                'id' => $item->model->id,
+                                            ]);
+                                        }
                                     @endphp
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: {{ $reviews_percentage }}%">
+                                    <tr class="pt-30">
+                                        <td class="image product-thumbnail pt-40 position-relative ps-3">
+                                            <img src="{{ asset('storage/' . $item->model->featured_image) }}"
+                                                alt="#" />
+                                            <div class="display-visible-480 d-none">
+                                                <a href="#"
+                                                    wire:click.prevent="removeWishlist('{{ $item->rowId }}')"
+                                                    wire:confirm="Are you sure you want to remove this item from your wishlist?"
+                                                    class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
+                                                    <i class="fi-rs-trash text-white"></i></a>
+                                            </div>
+                                        </td>
+                                        <td class="product-des product-name">
+                                            <h6><a class="product-name mb-10"
+                                                    href="{{ $shop_detail_url }}">{{ $item->model->name }}</a>
+                                            </h6>
+                                            @php
+                                                $reviews = \App\Models\ProductReview::where('status', 1)
+                                                    ->where('product_id', $item->model->id)
+                                                    ->get();
+
+                                                $reviews_count = $reviews->count();
+                                                $reviews_avg =
+                                                    $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
+                                                $reviews_percentage = ($reviews_avg / 5) * 100;
+                                            @endphp
+                                            <div class="product-rate-cover">
+                                                <div class="product-rate d-inline-block">
+                                                    <div class="product-rating"
+                                                        style="width: {{ $reviews_percentage }}%">
+                                                    </div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted"> ({{ $reviews_count }})</span>
+                                            </div>
+                                        </td>
+                                        <td class="price small-screen-table-td" data-title="Price">
+                                            @if ($item->model->sale_price > 0 && now() >= $item->model->sale_start_date && now() <= $item->model->sale_end_date)
+                                                <h3 class="text-brand small-screen-table-td-content">
+                                                    ₹{{ $item->model->sale_price }}</h3>
+                                                <del class="old-price">₹{{ $item->model->price }}</del>
+                                            @elseif($item->model->sale_default_price > 0)
+                                                <h3 class="text-brand small-screen-table-td-content">
+                                                    ₹{{ $item->model->sale_default_price }}</h3>
+                                                <del class="old-price">₹{{ $item->model->price }}</del>
+                                            @else
+                                                <h3 class="text-brand small-screen-table-td-content">
+                                                    ₹{{ $item->model->price }}</h3>
+                                            @endif
+                                        </td>
+                                        <td class="small-screen-table-td before-remove" data-title="">
+                                            <button class="btn btn-sm custom-btn-table-responsive"
+                                                style="min-width: max-content"
+                                                wire:click="addToCart('{{ $item->rowId }}')"
+                                                wire:confirm="Are you sure you want to add this item to your cart?">Add
+                                                to
+                                                cart</button>
+                                        </td>
+                                        <td class="action text-center small-screen-table-td remove-btn"
+                                            data-title="Remove">
+                                            <a href="#" wire:click.prevent="askRemove('{{ $item->rowId }}')"
+                                                class="text-body"><i class="fi-rs-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    {{-- mobile responsive cart page new design start --}}
+
+                    <div class="product-detail-small-screen d-block d-sm-none">
+                        @foreach (Cart::instance('wishlist')->content() as $item)
+                            @php
+                                if ($item->model->slug) {
+                                    $shop_detail_url = route('shop-detail', [
+                                        'slug' => $item->model->slug,
+                                        'id' => $item->model->id,
+                                    ]);
+                                } else {
+                                    $shop_detail_url = route('shop-detail', [
+                                        'slug' => 'no-slug',
+                                        'id' => $item->model->id,
+                                    ]);
+                                }
+                            @endphp
+                            <div class="product-card">
+                                <div class="d-flex gap-3 align-items-center py-4 px-2">
+                                    <div class="img-section position-relative">
+                                        <img src="{{ asset('storage/' . $item->model->featured_image) }}"
+                                            alt="{{ $item->model->seo_meta }}" class="img-fluid">
+                                        <div class="display-visible-480 d-none custom-remove-item">
+                                            <a href="#"
+                                                class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
+                                                wire:click.prevent="askRemove('{{ $item->rowId }}')"
+                                                wire:confirm="Are you sure you want to remove this item from your cart?">
+                                                <i class="fi-rs-trash text-white fs-13"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="content-section">
+                                        <a class="product-name fw-600 quicksand text-dark hover-a two-liner-text mb-1"
+                                            style="line-height: 1.2em"
+                                            href="{{ $shop_detail_url }}">{{ $item->model->name }}
+                                        </a>
+                                        @php
+                                            $reviews = \App\Models\ProductReview::where('status', 1)
+                                                ->where('product_id', $item->model->id)
+                                                ->get();
+
+                                            $reviews_count = $reviews->count();
+                                            $reviews_avg = $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
+                                            $reviews_percentage = ($reviews_avg / 5) * 100;
+                                        @endphp
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="product-price">
+                                                @if ($item->model->sale_price > 0 && now() >= $item->model->sale_start_date && now() <= $item->model->sale_end_date)
+                                                    <h3
+                                                        class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                        ₹{{ $item->model->sale_price }}</h3>
+                                                    <del
+                                                        class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
+                                                @elseif($item->model->sale_default_price > 0)
+                                                    <h3
+                                                        class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                        ₹{{ $item->model->sale_default_price }}</h3>
+                                                    <del
+                                                        class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
+                                                @else
+                                                    <h3
+                                                        class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                        ₹{{ $item->model->price }}</h3>
+                                                @endif
+                                            </div>
+
+                                            <div class="product-rate-cover">
+                                                <div class="product-rate d-inline-block">
+                                                    <div class="product-rating"
+                                                        style="width: {{ $reviews_percentage }}%">
+                                                    </div>
+                                                </div>
+                                                <span class="font-xs ml-5 text-muted fw-500 quicksand">
+                                                    ({{ $reviews_count }})
+                                                </span>
                                             </div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> ({{ $reviews_count }})</span>
+
+                                        {{-- @if ($item->model->out_of_stock == 1)
+                                            <div class="badge bg-danger fs-10 text-white rounded-pill quicksand">
+                                                Out Of Stock
+                                            </div>
+                                        @endif --}}
+
+                                        <button class="btn btn-sm custom-btn-table-responsive mt-1 mb-0 fs-14"
+                                            style="width: max-content"
+                                            wire:click="addToCart('{{ $item->rowId }}')"
+                                            wire:confirm="Are you sure you want to add this item to your cart?">
+                                            Add to cart
+                                        </button>
+
                                     </div>
-                                </td>
-                                <td class="price small-screen-table-td" data-title="Price">
-                                    @if ($item->model->sale_price > 0 && now() >= $item->model->sale_start_date && now() <= $item->model->sale_end_date)
-                                        <h3 class="text-brand small-screen-table-td-content">
-                                            ₹{{ $item->model->sale_price }}</h3>
-                                        <del class="old-price">₹{{ $item->model->price }}</del>
-                                        @elseif($item->model->sale_default_price > 0)
-                                        <h3 class="text-brand small-screen-table-td-content">
-                                            ₹{{ $item->model->sale_default_price }}</h3>
-                                        <del class="old-price">₹{{ $item->model->price }}</del>
-                                        @else
-                                        <h3 class="text-brand small-screen-table-td-content">
-                                            ₹{{ $item->model->price }}</h3>
-                                        @endif
-                                </td>
-                                <td class="small-screen-table-td before-remove" data-title="">
-                                    <button class="btn btn-sm custom-btn-table-responsive"
-                                        wire:click="addToCart('{{ $item->rowId }}')"
-                                        wire:confirm="Are you sure you want to add this item to your cart?">Add to
-                                        cart</button>
-                                </td>
-                                <td class="action text-center small-screen-table-td remove-btn" data-title="Remove">
-                                    <a href="#" wire:click.prevent="askRemove('{{ $item->rowId }}')"
-                                        class="text-body"><i class="fi-rs-trash"></i></a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    {{-- mobile responsive cart page new design end --}}
+
                 </div>
             </div>
         </div>
-    </div>
     @else
-    <livewire:user.component.no-item-found-component />
+        <livewire:user.component.no-item-found-component />
     @endif
 </main>
 @push('scripts')
-<script>
-    document.addEventListener('livewire:init', () => {
+    <script>
+        document.addEventListener('livewire:init', () => {
 
-        let wishlistModal = null;
-        Livewire.on('open-whislit-remove-item-modal', () => {
-            wishlistModal = new bootstrap.Modal(document.getElementById('WhislitRemoveItemModal'));
-            wishlistModal.show();
-        });
-        Livewire.on('close-whislit-remove-item-modal', () => {
-            if (wishlistModal) {
-                wishlistModal.hide();
-            }
-        });
+            let wishlistModal = null;
+            Livewire.on('open-whislit-remove-item-modal', () => {
+                wishlistModal = new bootstrap.Modal(document.getElementById('WhislitRemoveItemModal'));
+                wishlistModal.show();
+            });
+            Livewire.on('close-whislit-remove-item-modal', () => {
+                if (wishlistModal) {
+                    wishlistModal.hide();
+                }
+            });
 
-    });
-</script>
+        });
+    </script>
 @endpush
