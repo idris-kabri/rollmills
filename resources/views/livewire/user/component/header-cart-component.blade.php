@@ -1,4 +1,4 @@
-<div class="header-action-right ms-4" wire:ignore>
+<div class="header-action-right ms-4">
     <div class="header-action-2">
         <div class="header-action-icon-2" wire:poll.750ms>
             <a href="/wishlist">
