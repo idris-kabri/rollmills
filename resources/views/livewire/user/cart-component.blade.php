@@ -486,7 +486,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3">
-                    <div class="border p-20 cart-totals">
+                    <div class="border p-20 cart-totals mb-4">
                         <h4 class="mb-30 pb-2 underline">Details</h4>
                         <div class="table-responsive">
                             <table class="table no-border">
@@ -583,12 +583,13 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if ($checkout_button)
+                        @if ($checkout_button || $flat_rate)
                             <a href="/checkout"
                                 class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
                                 To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
                         @endif
-                    </div>
+                    </div> 
+                    @if(!$flat_rate)
                     <div class="calculate-shiping p-20 border-radius-15 border mb-20">
                         <h4 class="mb-10 underline pb-2">Calculate Shipping</h4>
                         {{-- <p class="mb-30"><span class="font-lg text-muted">Flat rate:</span><strong
@@ -605,7 +606,8 @@
                                 <button type="submit" class="btn">Update Zip Code</button>
                             </div>
                         </form>
-                    </div>
+                    </div> 
+                    @endif
                     <div class="p-20 border-radius-15 border mb-20">
                         <h4 class="mb-30 pb-2 underline">Apply Coupon</h4>
                         <div class="d-flex justify-content-between mb-4">
