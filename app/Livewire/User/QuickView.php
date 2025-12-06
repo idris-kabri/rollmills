@@ -175,7 +175,14 @@ class QuickView extends Component
 
     public function addToCart()
     {
-        $addToCart = finalAddToCart($this->mainProduct, $this->quantity, 'update-quantity');
+        $existing_qauntity = 0;
+        $cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use (&$existing_qauntity) {
+            if ($cartItem->id === $this->mainProduct->id) {
+                $existing_qauntity = $cartItem->qty;
+                return true;
+            }
+        });
+        $addToCart = finalAddToCart($this->mainProduct, $existing_quantity + $this->quantity, 'update-quantity');
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($this->mainProduct->sale_from_date);

@@ -134,7 +134,15 @@ class HomeComponent extends Component
         // $product = Product::find($id);
         $defaultProduct = $this->getDefaultVariation($id);
 
-        $addToCart = finalAddToCart($defaultProduct, 1);
+        $existing_qauntity = 0;
+        $cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use (&$existing_qauntity, $id) {
+            if ($cartItem->id === $id) {
+                $existing_qauntity = $cartItem->qty;
+                return true;
+            }
+        });
+
+        $addToCart = finalAddToCart($defaultProduct, $existing_quantity + 1);
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($defaultProduct->sale_from_date);
