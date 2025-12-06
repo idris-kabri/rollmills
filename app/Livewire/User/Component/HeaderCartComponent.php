@@ -14,8 +14,8 @@ class HeaderCartComponent extends Component
     public function removeFromCart($rowId)
     {
         $qty = Cart::instance('cart')->get($rowId)->qty;
-        $removeCart = finalRemoveFromCart($rowId);
         $productId = Cart::instance('cart')->get($rowId)->model->id;
+        $removeCart = finalRemoveFromCart($rowId);
         $product = Product::find($productId);
         $sale_price = 0;
         $currentDate = Carbon::now();

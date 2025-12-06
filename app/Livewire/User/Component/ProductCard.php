@@ -66,7 +66,7 @@ class ProductCard extends Component
     {
         // $product = Product::find($id);
         $defaultProduct = $this->getDefaultVariation($id);
-
+        
         $existing_qauntity = 0;
         $cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use (&$existing_qauntity, $defaultProduct) {
             if ($cartItem->id === $defaultProduct->id) {
@@ -74,8 +74,12 @@ class ProductCard extends Component
                 return true;
             }
         });
-
-        $addToCart = finalAddToCart($defaultProduct, 1 + $existing_qauntity);
+        
+        if($existing_qauntity == 0){
+            $addToCart = finalAddToCart($defaultProduct, 1);
+        }else{
+            $addToCart = finalAddToCart($defaultProduct, 1 + $existing_qauntity, 'update-quantity');
+        }
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($defaultProduct->sale_from_date);

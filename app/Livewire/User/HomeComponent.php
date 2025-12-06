@@ -142,7 +142,12 @@ class HomeComponent extends Component
             }
         });
 
-        $addToCart = finalAddToCart($defaultProduct, $existing_quantity + 1);
+        if($existing_qauntity == 0){
+            $addToCart = finalAddToCart($defaultProduct, 1);
+        }else{
+            $addToCart = finalAddToCart($defaultProduct, 1 + $existing_qauntity, 'update-quantity');
+        }
+
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($defaultProduct->sale_from_date);
