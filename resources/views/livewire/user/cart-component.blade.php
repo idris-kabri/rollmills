@@ -60,10 +60,10 @@
 
         <div class="container mb-24 mt-md-5 mt-4">
             <div class="row">
-                <div class="col-lg-12 mb-md-4 mb-3">
+                <div class="col-lg-12 mb-md-4 mb-0">
                     <div class="content mb-10">
                         <h1 class="title style-3 mb-20 text-center">Your Cart</h1>
-                        <h6 class="text-body text-center">There are <span
+                        <h6 class="text-body text-center d-sm-block d-none">There are <span
                                 class="text-brand">{{ Cart::instance('cart')->count() }}</span> products in your cart
                             {{ $remain_amount }}
                         </h6>
@@ -103,15 +103,19 @@
             <!-- END CONFIRM MODAL -->
 
             @if (count(Cart::instance('cart')->content()) > 0)
-            <div class="container mb-3 mb-md-0" wire:ignore>
+            <div class="container-sm mb-3 mb-md-0" wire:ignore>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12 px-0 px-sm-3">
                         <div class="mb-md-5 mb-2">
                             <div class="gift-progress-container">
                                 <div class="gift-text-measure">
-                                    <div class="progress-title">Grab Your Gift Now!!</div>
+                                    <div class="progress-title d-none d-sm-block">Grab Your Gift Now!!</div>
+                                    <h6 class="d-block d-sm-none text-start text-brand">Shop
+                                        ₹{{ $surprise_gift_amount }} & Grab Your Gift Now!!
+                                    </h6>
                                     {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
-                                    <p class="quicksand fw-500 quicksand">Shop ₹{{ $surprise_gift_amount }} and get
+                                    <p class="quicksand fw-500 quicksand d-none d-sm-block">Shop
+                                        ₹{{ $surprise_gift_amount }} and get
                                         exclusive
                                         surprise
                                         gift
@@ -119,23 +123,24 @@
                                         offers Roll-In !!</p>
                                 </div>
                                 <div class="gift-scroll-bar">
-                                    <div class="progress-bar-cart" id="" data-width="{{ $percentage }}">
+                                    <div class="progress-bar-cart" id="" data-width="{{ $giftAlreadyAdded ? 100 : $percentage }}" data-skip="{{ $giftAlreadyAdded ? 'true' : 'false' }}">
                                         <div class="bar-circle">
-                                            <i class="fa-solid fa-gift"></i>
+                                            <i class="fa-solid fa-gift d-none d-sm-block"></i>
+                                            <span class="d-block d-sm-none fs-12 fw-600"
+                                                style="line-height: 1em">₹{{ $surprise_gift_amount }}</span>
                                         </div>
                                     </div>
-                                    <div class="milestone-marker">
+                                    <div class="milestone-marker" style="{{ $giftAlreadyAdded ? 'display:none;' : '' }}">
                                         <img src="{{ asset('assets/frontend/imgs/shop/istockphoto-2172206741-612x612-removebg-preview__1_-removebg-preview.png') }}"
                                             alt="" class="img-fluid">
                                     </div>
-                                    <div class="milestone-marker-open">
+                                    <div class="milestone-marker-open" style="{{ $giftAlreadyAdded ? 'display:block;' : '' }}">
                                         <img src="{{ asset('assets/frontend/imgs/shop/surprise-gift-box-vector-with-white-bow-suitable-for-use-on-birthday-party-new-year-and-marry-christmas-2R4YDP3-removebg-preview__1_-removebg-preview.png') }}"
                                             alt="" class="img-fluid">
                                     </div>
                                 </div>
                                 <div class="content">
-                                    <p class="text-center mt-md-4 mt-3 quicksand fs-20 fw-500">
-
+                                    <p class="text-center mt-md-4 mt-3 quicksand fs-20 fw-500 d-none d-sm-block">
                                         @if ($remain_amount > 0)
                                         You are ₹{{ $remain_amount }} away from your gift &nbsp;<a
                                             href="/shop">Shop
@@ -144,6 +149,16 @@
                                         Your Surprise gift has been successfully added to your cart
                                         @endif
                                     </p>
+                                    <span class="text-center mt-md-4 mt-3 quicksand fs-13 fw-600 d-block d-sm-none"
+                                        style="line-height: 1.2em">
+                                        @if ($remain_amount > 0)
+                                        You are ₹{{ $remain_amount }} away from your gift &nbsp;<a
+                                            href="/shop">Shop
+                                            Now </a>
+                                        @else
+                                        Your Surprise gift has been successfully added to your cart
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -154,9 +169,9 @@
 
             <div class="row">
                 <div class="col-xl-9">
-                    <div class="table-responsive shopping-summery table-responsive-custom"> 
-                        @php  
-                            $total_original_price = 0;
+                    <div class="table-responsive shopping-summery table-responsive-custom d-none d-sm-block">
+                        @php
+                        $total_original_price = 0;
                         @endphp
                         <table class="table table-wishlist mb-0">
                             <thead>
@@ -199,11 +214,10 @@
 
                                         {{-- Mobile Remove Button (Hide if Gift) --}}
                                         @if (!$isGift)
-                                        <div class="display-visible-480 d-none">
+                                        <div class="display-visible-480 d-none custom-remove-item">
                                             <a href="#"
                                                 class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                wire:click.prevent="askRemove('{{ $item->rowId }}')"
-                                                wire:confirm="Are you sure you want to remove this item from your cart?">
+                                                wire:click.prevent="askRemove('{{ $item->rowId }}')">
                                                 <i class="fi-rs-trash text-white"></i></a>
                                         </div>
                                         @endif
@@ -265,18 +279,21 @@
                                         </h4>
                                         @else
                                         @php
-                                        $originalPrice = $item->model->price;  
-                                        $total_original_price += $item->model->price; 
-                                        $cartPrice = $item->price; 
+                                        $originalPrice = $item->model->price;
+                                        $total_original_price += $item->model->price * $item->qty;
+                                        $cartPrice = $item->price;
                                         @endphp
 
                                         <h4 class="text-body small-screen-table-td-content">
 
                                             @if ($cartPrice < $originalPrice)
-                                                <del class="text-muted fs-6">₹{{ number_format($originalPrice) }}</del><br>
-                                                <span class="price-transition">₹{{ number_format($cartPrice) }}</span>
+                                                <del
+                                                class="text-muted fs-6">₹{{ number_format($originalPrice) }}</del><br>
+                                                <span
+                                                    class="price-transition">₹{{ number_format($cartPrice) }}</span>
                                                 @else
-                                                <span class="price-transition">₹{{ number_format($cartPrice) }}</span>
+                                                <span
+                                                    class="price-transition">₹{{ number_format($cartPrice) }}</span>
                                                 @endif
 
                                         </h4>
@@ -359,8 +376,7 @@
 
 
                     {{-- mobile responsive cart page new design start --}}
-
-                    <div class="product-detail-small-screen">
+                    <div class="product-detail-small-screen d-block d-sm-none">
                         @php
                         $totalOfferDiscountedPrice = 0;
                         @endphp
@@ -383,9 +399,18 @@
                         @endphp
                         <div class="product-card">
                             <div class="d-flex gap-3 align-items-center py-4 px-2">
-                                <div class="img-section">
+                                <div class="img-section position-relative">
                                     <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                         alt="{{ $item->model->seo_meta }}" class="img-fluid">
+                                    {{-- Mobile Remove Button (Hide if Gift) --}}
+                                    @if (!$isGift)
+                                    <div class="display-visible-480 d-none custom-remove-item">
+                                        <a href="#"
+                                            class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
+                                            wire:click.prevent="askRemove('{{ $item->rowId }}')">
+                                            <i class="fi-rs-trash text-white fs-13"></i></a>
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="content-section">
                                     @if ($isGift)
@@ -415,15 +440,18 @@
                                             </h4>
                                             @else
                                             @if ($item->model->sale_price > 0 && now() >= $item->model->sale_start_date && now() <= $item->model->sale_end_date)
-                                                <h3 class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                <h3
+                                                    class="text-brand small-screen-table-td-content d-inline-block me-1">
                                                     ₹{{ $item->model->sale_price * $item->qty }}</h3>
-                                                <del class="old-price fw-600">₹{{ $item->model->price }}</del>
+                                                <del class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
                                                 @elseif($item->model->sale_default_price > 0)
-                                                <h3 class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                <h3
+                                                    class="text-brand small-screen-table-td-content d-inline-block me-1">
                                                     ₹{{ $item->model->sale_default_price * $item->qty }}</h3>
-                                                <del class="old-price fw-600">₹{{ $item->model->price }}</del>
+                                                <del class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
                                                 @else
-                                                <h3 class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                <h3
+                                                    class="text-brand small-screen-table-td-content d-inline-block me-1">
                                                     ₹{{ $item->model->price * $item->qty }}</h3>
                                                 @endif
                                                 @endif
@@ -449,6 +477,7 @@
                                     </div>
                                     @else
                                     {{-- Normal Quantity Controls --}}
+                                    @if ($item->model->out_of_stock != 1)
                                     <div class="detail-extralink mr-15 display-hide-480">
                                         <div class="detail-qty border radius">
                                             <a href="#"
@@ -472,6 +501,7 @@
                                             wire:click.prevent="incrementQuantity('{{ $item->rowId }}')">+</button>
                                     </div>
                                     @endif
+                                    @endif
 
                                     @if ($item->model->out_of_stock == 1)
                                     <div class="badge bg-danger fs-10 text-white rounded-pill quicksand">
@@ -487,8 +517,6 @@
                         </div>
                         @endforeach
                     </div>
-
-
                     {{-- mobile responsive cart page new design end --}}
 
 
@@ -506,7 +534,7 @@
                     <div class="border p-20 cart-totals mb-4">
                         <h4 class="mb-30 pb-2 underline">Details</h4>
                         <div class="table-responsive">
-                            <table class="table no-border">
+                            <table class="table no-border mb-sm-3 mb-0">
                                 <tbody>
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
@@ -514,20 +542,24 @@
                                         </td>
                                         <td class="cart_total_amount">
                                             <h4 class="text-end fs-16">
-                                                ₹{{ number_format($total_original_price,2) }}</h4>
+                                                ₹{{ number_format($total_original_price, 2) }}</h4>
                                         </td>
                                     </tr>
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">You Save</h6>
                                         </td>
-                                        <td class="cart_total_amount"> 
+                                        <td class="cart_total_amount">
                                             @php
-                                                $cartSubtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
-                                                $customer_save_amount = $total_original_price - $cartSubtotal;
+                                            $cartSubtotal = (float) str_replace(
+                                            ',',
+                                            '',
+                                            Cart::instance('cart')->subtotal(),
+                                            );
+                                            $customer_save_amount = $total_original_price - $cartSubtotal;
                                             @endphp
                                             <h4 class="text-end fs-16 text-success">
-                                                - ₹{{ number_format($customer_save_amount,2) }}</h4>
+                                                - ₹{{ number_format($customer_save_amount, 2) }}</h4>
                                         </td>
                                     </tr>
                                     <tr class="d-flex justify-content-between border-0">
@@ -538,34 +570,36 @@
                                             <h4 class="text-brand text-end fs-16">
                                                 ₹{{ Cart::instance('cart')->subtotal() }}</h4>
                                         </td>
-                                    </tr> 
+                                    </tr>
                                     @php
-                                        $discount = $totalOfferDiscountedPrice + $mainDiscountAmount;
+                                    $discount = $totalOfferDiscountedPrice + $mainDiscountAmount;
                                     @endphp
                                     @if ($discount != 0)
-                                        <tr class="d-flex justify-content-between border-0 align-items-center">
-                                            <td class="cart_total_label text-start">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="badge bg-success me-2">Coupon Applied</span>
-                                                    <h6 class="text-success m-0">
-                                                        @if ($couponCode)
-                                                        ({{ strtoupper($couponCode) }})
-                                                        @endif
-                                                    </h6>
-                                                </div>
-                                            </td>
+                                    <tr class="d-flex justify-content-between border-0 align-items-center">
+                                        <td class="cart_total_label text-start">
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-success me-2">Coupon Applied</span>
+                                                <h6 class="text-success m-0">
+                                                    @if ($couponCode)
+                                                    ({{ strtoupper($couponCode) }})
+                                                    @endif
+                                                </h6>
+                                            </div>
+                                        </td>
 
-                                            <td class="cart_total_amount">
-                                                <h5 class="text-end fs-16 text-success fw-bold">
-                                                    - ₹{{ number_format($discount, 2) }}
-                                                </h5>
-                                            </td>
-                                        </tr>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-end fs-16 text-success fw-bold">
+                                                - ₹{{ number_format($discount, 2) }}
+                                            </h5>
+                                        </td>
+                                    </tr>
                                     @endif
+                                    @if (floatval(session('shipping_charge')))
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">Shipping</h6>
                                         </td>
+
                                         <td class="cart_total_amount">
                                             <h5 class="text-heading text-end fs-16">
                                                 @if (floatval(session('shipping_charge')) == 0)
@@ -577,6 +611,7 @@
                                         </td>
 
                                     </tr>
+                                    @endif
                                     @if (session('latest_etd') != null)
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
@@ -624,11 +659,11 @@
                         </div>
                         @if ($checkout_button || $flat_rate)
                         <a href="/checkout"
-                            class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
+                            class="btn mb-20 w-100 d-sm-flex d-none justify-content-center align-items-center">Proceed
                             To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
                         @endif
                     </div>
-                    @if(!$flat_rate)
+                    @if (!$flat_rate)
                     <div class="calculate-shiping p-20 border-radius-15 border mb-20">
                         <h4 class="mb-10 underline pb-2">Calculate Shipping</h4>
                         {{-- <p class="mb-30"><span class="font-lg text-muted">Flat rate:</span><strong
@@ -637,8 +672,9 @@
                             wire:submit.prevent="pincodeCheckFunction('yes')">
                             <div class="form-row row">
                                 <div class="form-group col-lg-12">
-                                    <input placeholder="PostCode / ZIP" name="name" type="text" class="pl-15"
-                                        wire:model="pincode" wire:keydown.enter="pincodeCheckFunction('yes')">
+                                    <input placeholder="PostCode / ZIP" name="name" type="text"
+                                        class="pl-15" wire:model="pincode"
+                                        wire:keydown.enter="pincodeCheckFunction('yes')">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
@@ -653,7 +689,7 @@
                             <input class="font-medium pl-15 mr-15 coupon" name="Coupon" placeholder="Enter Code"
                                 wire:model="couponCode">
                             <button class="btn d-flex justify-content-center align-items-center"
-                                wire:click="applyCoupon"><i class="fi-rs-label mr-10"></i>Apply</button>
+                                wire:click="applyCoupon('yes')"><i class="fi-rs-label mr-10"></i>Apply</button>
                         </div>
                         @foreach ($display_coupons as $global_coupon)
                         <a class="coupon-card-cart {{ $couponCode == $global_coupon->coupon_code ? 'selected' : '' }}"
@@ -702,6 +738,48 @@
             <livewire:user.component.no-item-found-component />
             @endif
         </div>
+        <div class="position-fixed bottom-0 bg-white shadow-lg p-3 checkout-btn-fixed w-100 d-block d-sm-none"
+            style="z-index: 999">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex gap-2 border-0">
+                    <td class="cart_total_label text-start">
+                        <h6 class="text-muted">Subtotal :</h6>
+                    </td>
+                    <td class="cart_total_amount">
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ Cart::instance('cart')->subtotal() }}</h4>
+                    </td>
+                </div>
+                <div class="d-flex gap-2 border-0">
+                    <td class="cart_total_label text-start">
+                        <h6 class="text-muted">Your Total :</h6>
+                    </td>
+                    <td class="cart_total_amount">
+                        @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                        @elseif($totalAfterDiscount != 0)
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                        @elseif($totalOfferDiscountedPrice != 0)
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                        @else
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($total + (session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                        @endif
+                    </td>
+                </div>
+            </div>
+            @if ($checkout_button || $flat_rate)
+            <a href="/checkout" class="btn w-100 d-flex d-sm-none justify-content-center align-items-center">Proceed
+                To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+            @endif
+        </div>
 </main>
 
 @push('scripts')
@@ -730,37 +808,39 @@
         const markerOpen = document.querySelector(".milestone-marker-open");
 
         let finalWidth = parseInt(bar.getAttribute("data-width"));
+        let skipAnimation = bar.getAttribute("data-skip") === "true";
 
-        // Start bar animation (0 -> finalWidth)
+        if (skipAnimation) {
+            bar.style.transition = "none"; // remove animation
+            bar.style.width = "100%"; // full bar
+            markerClosed.style.display = "none";
+            markerOpen.style.display = "block";
+            return;
+        }
+
         if (finalWidth == 0) {
             bar.style.width = "4%";
         } else {
             bar.style.width = finalWidth + "%";
         }
 
-        // When the width animation finishes
         bar.addEventListener("transitionend", function() {
-
             let reachedWidth = parseInt(bar.style.width);
 
             if (reachedWidth >= 100) {
                 showCongratsOffer();
-                // Show open box
                 setTimeout(() => {
-                    if (markerClosed) markerClosed.style.display = "none";
-                    if (markerOpen) markerOpen.style.display = "block";
+                    markerClosed.style.display = "none";
+                    markerOpen.style.display = "block";
                 }, 800);
-
-                // 🎉 Trigger confetti here
             } else {
-                // Show closed box
-                if (markerClosed) markerClosed.style.display = "block";
-                if (markerOpen) markerOpen.style.display = "none";
+                markerClosed.style.display = "block";
+                markerOpen.style.display = "none";
             }
-
         });
 
     });
+
 
     // Your confetti code
     function showCongratsOffer() {

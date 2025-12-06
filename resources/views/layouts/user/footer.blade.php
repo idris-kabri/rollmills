@@ -238,12 +238,14 @@
 </footer>
 
 {{-- Whatsapp Logo --}}
-<div class="whatsapp-logo-contact">
-    <a href="https://wa.me/918764766553?text=Hi%20RollMills%20Store.">
-        <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" target="_blank" alt=""
-            class="img-fluid">
-    </a>
-</div>
+@if (!request()->routeIs('cart'))
+    <div class="whatsapp-logo-contact">
+        <a href="https://wa.me/918764766553?text=Hi%20RollMills%20Store.">
+            <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" target="_blank"
+                alt="" class="img-fluid">
+        </a>
+    </div>
+@endif
 
 <!-- Preloader Start -->
 <div id="preloader-active">
@@ -279,7 +281,9 @@
 <script src="{{ asset('assets/frontend/js/plugins/isotope.js') }}"></script>
 
 <!-- this script give error  -->
-<script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
+@if (!request()->routeIs('cart'))
+    <script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
+@endif
 <script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script>
 
 <script src="{{ asset('assets/frontend/js/plugins/jquery.theia.sticky.js') }}"></script>
@@ -293,6 +297,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
     integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    // Add this to frontend/js/main.js
+
+    $(document).on('click', '.mobile-login-trigger', function() {
+        // 1. Remove the class that shows the sidebar
+        $(".mobile-header-active").removeClass("sidebar-visible");
+
+        // 2. Remove the class from body that handles the overlay/scroll lock
+        $("body").removeClass("mobile-menu-active");
+
+        // 3. (Optional) If your overlay doesn't disappear automatically, hide it
+        // $(".body-overlay-1").hide(); 
+    });
+</script>
+
 <script>
     toastr.options = {
         "timeOut": 1000, // 2 seconds
@@ -371,8 +391,10 @@
             }
         });
     })
-    window.addEventListener('surprise-gift', (event) => {
-        window.location.reload();
+    window.addEventListener('surprise-gift', (event) => { 
+        setTimeout(() =>{ 
+            window.location.reload();
+        },900)
     })
     window.addEventListener('remove-from-cart', (event) => {
         var data = event.detail[0];
@@ -480,7 +502,7 @@
     }
 
     window.addEventListener('validation-errors', (event) => {
-        console.log('hi',event)
+        console.log('hi', event)
         var errors = event.detail[0].errors;
         displayValidationErrors(errors);
     })

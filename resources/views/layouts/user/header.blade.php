@@ -83,6 +83,8 @@
 </head>
 
 <body>
+    @livewire('user.component.login-component')
+
     @php
         $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
     @endphp
@@ -398,11 +400,15 @@
                                     </li>
                                 </ul> --}}
                             </li>
-                            <li class="menu-item-has-children">
+                            {{-- REMOVED 'menu-item-has-children' class --}}
+                            <li>
                                 @if (Auth::check())
                                     <a href="/my-account">My Account</a>
                                 @else
-                                    <a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a>
+                                    <a href="javascript:void(0)" class="mobile-login-trigger" data-bs-toggle="modal"
+                                        data-bs-target="#loginModal">
+                                        Sign In
+                                    </a>
                                 @endif
                             </li>
                             {{-- <li class="menu-item-has-children">

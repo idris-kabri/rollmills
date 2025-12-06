@@ -8,6 +8,7 @@ use App\Models\GiftCardItem;
 use App\Models\Order;
 use App\Models\ProductCategoryAssign;
 use App\Models\OrderItems;
+use App\Models\Setting;
 use App\Models\User;
 use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,10 @@ class CheckoutComponent extends Component
     public $gift_card_code;
     public $mainDiscountAmount = 0;
     public $items_checkout_event_array = [];
+    public $out_of_stock_id = [];
+    public $pincode_validation_id = [];
+    public $payment_button;
+    public $free_shipping;
 
     public function mount()
     {
@@ -59,7 +64,7 @@ class CheckoutComponent extends Component
         $this->offerDiscount = (float) ($totalOfferDiscount ?? 0);
         $this->couponDiscount = (float) (session('coupon_discount_amount') ?? 0);
         $this->coupon_discount_id = (int) session('coupon_discount_id');
-        $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount + (float) session('shipping_charge');
+        $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount + (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
         $this->mainDiscountAmount = (float) session('coupon_discount_amount');
 
         if (Auth::check()) {
@@ -251,7 +256,7 @@ class CheckoutComponent extends Component
                 $gift_card_amount = $this->gift_card_amount - ($cartTotal - $this->offerDiscount - $this->couponDiscount);
                 $this->gift_card_amount = $this->gift_card_amount - $gift_card_amount;
             } else {
-                $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->gift_card_amount + (float) session('shipping_charge');
+                $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->gift_card_amount + (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
             }
         }
     }
@@ -531,7 +536,7 @@ class CheckoutComponent extends Component
             $user_order->billing_address_id = $billingAddress['id'];
             $user_order->billing_address_details = $encdoeBillingAddress;
             $user_order->etd = session('latest_etd');
-            $user_order->shipping_charges = (float) session('shipping_charge');
+            $user_order->shipping_charges = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
             $user_order->shipping_bearable = session('shipping_bear_margin') ?? 0;
 
             if ($this->gift_card_amount > 0) {
@@ -633,6 +638,24 @@ class CheckoutComponent extends Component
         } catch (\Exception $e) {
             // dd($e);
             $this->toastError($e->getMessage());
+        }
+    }
+
+    public function pincodeCheckFunction($show_toast = 'no')
+    {
+        $checkoutconditionFail = false;
+        $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
+        if ($setting) {
+            $outOfDeliveryPincodes = explode(',', $setting->value);
+
+            if (in_array($this->billing_address['zipcode'], $outOfDeliveryPincodes)) {
+                $this->free_shipping = true;
+                session()->put('free_shipping_pincode', $this->billing_address['zipcode']);
+                session()->forget('show_deleviery_time');
+                session()->put('shipping_pincode', $this->billing_address['zipcode']);
+                session()->forget('flat_rate_charge'); 
+                $this->mount();
+            }
         }
     }
 
