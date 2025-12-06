@@ -561,11 +561,13 @@
                                                 </h5>
                                             </td>
                                         </tr>
-                                    @endif
+                                    @endif 
+                                    @if(floatval(session('shipping_charge')))
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">Shipping</h6>
-                                        </td>
+                                        </td> 
+                                        
                                         <td class="cart_total_amount">
                                             <h5 class="text-heading text-end fs-16">
                                                 @if (floatval(session('shipping_charge')) == 0)
@@ -574,9 +576,10 @@
                                                 {{ number_format(session('shipping_charge'), 2) }}
                                                 @endif
                                             </h5>
-                                        </td>
-
+                                        </td> 
+                                        
                                     </tr>
+                                    @endif
                                     @if (session('latest_etd') != null)
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
@@ -600,7 +603,7 @@
                                             <h6 class="text-muted">Your Total</h6>
                                         </td>
                                         <td class="cart_total_amount">
-                                            @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
+                                            @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0 && !session('flat_rate_charge'))
                                             <h4 class="text-brand text-end fs-16">
                                                 ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                                             </h4>

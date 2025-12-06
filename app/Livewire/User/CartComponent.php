@@ -127,7 +127,7 @@ class CartComponent extends Component
         $this->checkSurpriseGift('no');
         $this->flat_rate = Setting::where('label', 'Flat Rate')->first(); 
         if($this->flat_rate){ 
-            session()->put('shipping_charge', (int) $this->flat_rate->value);
+            session()->put('flat_rate_charge', (int) $this->flat_rate->value);
         }
     }
 

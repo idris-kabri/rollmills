@@ -248,8 +248,7 @@
 
                                 <!-- Zipcode -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" disabled name="billing_address.zipcode" placeholder="Postcode / ZIP *"
-                                        wire:model="billing_address.zipcode">
+                                    <input type="text" @if(session('shipping_charge')) disabled @endif name="billing_address.zipcode" placeholder="Postcode / ZIP *" wire:model="billing_address.zipcode" wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
                                     @error('billing_address.zipcode')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -499,11 +498,19 @@
                                 </tr>
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Shipping</h6>
+                                        <h6 class="text-muted"> 
+                                            @if (floatval(session('flat_rate_charge')))   
+                                                Flat Rate
+                                            @else 
+                                                Shipping 
+                                            @endif
+                                        </h6>
                                     </td>
                                     <td class="cart_total_amount">
                                         <h5 class="text-heading text-end fs-16">
-                                            @if (floatval(session('shipping_charge')) == 0)
+                                            @if (floatval(session('flat_rate_charge'))) 
+                                                {{ number_format(session('flat_rate_charge'), 2) }}
+                                            @elseif (floatval(session('shipping_charge')) == 0)
                                                 Free Shipping
                                             @else
                                                 {{ number_format(session('shipping_charge'), 2) }}
