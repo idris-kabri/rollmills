@@ -3,6 +3,10 @@
         <div class="modal-content rollmills-modal">
             <div class="row g-0">
                 <div class="col-md-7 p-4 left-box text-white">
+                    <button type="button" class="mobile-close-btn" data-bs-dismiss="modal">
+                        ✖
+                    </button>
+
                     <img class="img-fluid" src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="">
                     <p class="tagline">
                         Pay online & get FLAT 20% OFF.
@@ -39,8 +43,8 @@
 
                     @if (!$otp_section_show)
                         <div id="stepMobile">
-                            <h4 class="fw-bold text-dark mb-3 quicksand">Login to Continue</h4>
-                            <label class="form-label fw-semibold pb-4">Mobile Number (WhatsApp)</label>
+                            <h4 class="fw-bold text-dark mb-sm-3 quicksand">Login to Continue</h4>
+                            <label class="form-label fw-semibold pb-sm-4">Mobile Number (WhatsApp)</label>
                             <div class="input-group mb-3">
                                 <span class="input-group-text">🇮🇳 +91</span>
                                 <input type="tel" id="mobileInput" class="form-control"
@@ -76,7 +80,7 @@
 
                     @if ($otp_section_show)
                         <div id="stepOtp">
-                            <h4 class="fw-bold text-dark mb-3 quicksand">Enter OTP</h4>
+                            <h4 class="fw-bold text-dark mb-sm-3 quicksand">Enter OTP</h4>
 
                             <p class="text-muted mb-3">
                                 We have sent a 4-digit OTP to <br>

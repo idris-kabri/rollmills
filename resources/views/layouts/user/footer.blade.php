@@ -293,6 +293,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
     integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    // Add this to frontend/js/main.js
+
+    $(document).on('click', '.mobile-login-trigger', function() {
+        // 1. Remove the class that shows the sidebar
+        $(".mobile-header-active").removeClass("sidebar-visible");
+
+        // 2. Remove the class from body that handles the overlay/scroll lock
+        $("body").removeClass("mobile-menu-active");
+
+        // 3. (Optional) If your overlay doesn't disappear automatically, hide it
+        // $(".body-overlay-1").hide(); 
+    });
+</script>
+
 <script>
     toastr.options = {
         "timeOut": 1000, // 2 seconds
@@ -480,7 +496,7 @@
     }
 
     window.addEventListener('validation-errors', (event) => {
-        console.log('hi',event)
+        console.log('hi', event)
         var errors = event.detail[0].errors;
         displayValidationErrors(errors);
     })
