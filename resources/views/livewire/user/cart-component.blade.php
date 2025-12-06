@@ -60,10 +60,10 @@
 
     <div class="container mb-24 mt-md-5 mt-4">
         <div class="row">
-            <div class="col-lg-12 mb-md-4 mb-3">
+            <div class="col-lg-12 mb-md-4 mb-0">
                 <div class="content mb-10">
                     <h1 class="title style-3 mb-20 text-center">Your Cart</h1>
-                    <h6 class="text-body text-center">There are <span
+                    <h6 class="text-body text-center d-sm-block d-none">There are <span
                             class="text-brand">{{ Cart::instance('cart')->count() }}</span> products in your cart
                         {{ $remain_amount }}
                     </h6>
@@ -103,15 +103,19 @@
         <!-- END CONFIRM MODAL -->
 
         @if (count(Cart::instance('cart')->content()) > 0)
-            <div class="container mb-3 mb-md-0" wire:ignore>
+            <div class="container-sm mb-3 mb-md-0" wire:ignore>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12 px-0 px-sm-3">
                         <div class="mb-md-5 mb-2">
                             <div class="gift-progress-container">
                                 <div class="gift-text-measure">
-                                    <div class="progress-title">Grab Your Gift Now!!</div>
+                                    <div class="progress-title d-none d-sm-block">Grab Your Gift Now!!</div>
+                                    <h6 class="d-block d-sm-none text-start text-brand">Shop
+                                        ₹{{ $surprise_gift_amount }} & Grab Your Gift Now!!
+                                    </h6>
                                     {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
-                                    <p class="quicksand fw-500 quicksand">Shop ₹{{ $surprise_gift_amount }} and get
+                                    <p class="quicksand fw-500 quicksand d-none d-sm-block">Shop
+                                        ₹{{ $surprise_gift_amount }} and get
                                         exclusive
                                         surprise
                                         gift
@@ -121,7 +125,9 @@
                                 <div class="gift-scroll-bar">
                                     <div class="progress-bar-cart" id="" data-width="{{ $percentage }}">
                                         <div class="bar-circle">
-                                            <i class="fa-solid fa-gift"></i>
+                                            <i class="fa-solid fa-gift d-none d-sm-block"></i>
+                                            <span class="d-block d-sm-none fs-12 fw-600"
+                                                style="line-height: 1em">₹{{ $surprise_gift_amount }}</span>
                                         </div>
                                     </div>
                                     <div class="milestone-marker">
@@ -134,8 +140,7 @@
                                     </div>
                                 </div>
                                 <div class="content">
-                                    <p class="text-center mt-md-4 mt-3 quicksand fs-20 fw-500">
-
+                                    <p class="text-center mt-md-4 mt-3 quicksand fs-20 fw-500 d-none d-sm-block">
                                         @if ($remain_amount > 0)
                                             You are ₹{{ $remain_amount }} away from your gift &nbsp;<a
                                                 href="/shop">Shop
@@ -144,6 +149,16 @@
                                             Your Surprise gift has been successfully added to your cart
                                         @endif
                                     </p>
+                                    <span class="text-center mt-md-4 mt-3 quicksand fs-13 fw-600 d-block d-sm-none"
+                                        style="line-height: 1.2em">
+                                        @if ($remain_amount > 0)
+                                            You are ₹{{ $remain_amount }} away from your gift &nbsp;<a
+                                                href="/shop">Shop
+                                                Now </a>
+                                        @else
+                                            Your Surprise gift has been successfully added to your cart
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -389,16 +404,16 @@
                                     <div class="img-section position-relative">
                                         <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                             alt="{{ $item->model->seo_meta }}" class="img-fluid">
-                                            {{-- Mobile Remove Button (Hide if Gift) --}}
-                                            @if (!$isGift)
-                                                <div class="display-visible-480 d-none custom-remove-item">
-                                                    <a href="#"
-                                                        class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                        wire:click.prevent="askRemove('{{ $item->rowId }}')"
-                                                        wire:confirm="Are you sure you want to remove this item from your cart?">
-                                                        <i class="fi-rs-trash text-white fs-13"></i></a>
-                                                </div>
-                                            @endif
+                                        {{-- Mobile Remove Button (Hide if Gift) --}}
+                                        @if (!$isGift)
+                                            <div class="display-visible-480 d-none custom-remove-item">
+                                                <a href="#"
+                                                    class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
+                                                    wire:click.prevent="askRemove('{{ $item->rowId }}')"
+                                                    wire:confirm="Are you sure you want to remove this item from your cart?">
+                                                    <i class="fi-rs-trash text-white fs-13"></i></a>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="content-section">
                                         @if ($isGift)
@@ -583,24 +598,24 @@
                                                 </h5>
                                             </td>
                                         </tr>
-                                    @endif 
-                                    @if(floatval(session('shipping_charge')))
-                                    <tr class="d-flex justify-content-between border-0">
-                                        <td class="cart_total_label text-start">
-                                            <h6 class="text-muted">Shipping</h6>
-                                        </td> 
-                                        
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-heading text-end fs-16">
-                                                @if (floatval(session('shipping_charge')) == 0)
-                                                    Free Shipping
-                                                @else
-                                                    {{ number_format(session('shipping_charge'), 2) }}
-                                                @endif
-                                            </h5>
-                                        </td> 
-                                        
-                                    </tr>
+                                    @endif
+                                    @if (floatval(session('shipping_charge')))
+                                        <tr class="d-flex justify-content-between border-0">
+                                            <td class="cart_total_label text-start">
+                                                <h6 class="text-muted">Shipping</h6>
+                                            </td>
+
+                                            <td class="cart_total_amount">
+                                                <h5 class="text-heading text-end fs-16">
+                                                    @if (floatval(session('shipping_charge')) == 0)
+                                                        Free Shipping
+                                                    @else
+                                                        {{ number_format(session('shipping_charge'), 2) }}
+                                                    @endif
+                                                </h5>
+                                            </td>
+
+                                        </tr>
                                     @endif
                                     @if (session('latest_etd') != null)
                                         <tr class="d-flex justify-content-between border-0">

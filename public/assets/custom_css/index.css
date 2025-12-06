@@ -1543,9 +1543,10 @@ input[type="number"] {
     }
 
     .progress-bar-cart .bar-circle {
-        height: 30px;
-        width: 30px;
+        height: fit-content;
+        width: fit-content;
         font-size: 14px;
+        padding: 6px 6px;
     }
 
     .gift-progress-container .content p {
@@ -1587,6 +1588,27 @@ input[type="number"] {
 }
 
 @media (max-width: 575.98px) {
+    
+    .milestone-marker {
+        right: -9px;
+    }
+
+    .milestone-marker img {
+        height: 45px;
+    }
+
+    .milestone-marker-open {
+        right: -8px;
+    }
+
+    .milestone-marker-open img {
+        height: 90px;
+    }
+
+    .gift-progress-container {
+        width: 100%;
+    }
+    
     .product-cart-wrap .product-img-action-wrap {
         position: relative;
         background-color: #fff;
