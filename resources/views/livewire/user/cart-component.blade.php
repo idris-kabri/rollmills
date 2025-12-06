@@ -281,7 +281,7 @@
                                             @else
                                                 @php
                                                     $originalPrice = $item->model->price;
-                                                    $total_original_price += $item->model->price;
+                                                    $total_original_price += $item->model->price * $item->qty;
                                                     $cartPrice = $item->price;
                                                 @endphp
 
