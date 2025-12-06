@@ -583,11 +583,13 @@
                                                 </h5>
                                             </td>
                                         </tr>
-                                    @endif
+                                    @endif 
+                                    @if(floatval(session('shipping_charge')))
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">Shipping</h6>
-                                        </td>
+                                        </td> 
+                                        
                                         <td class="cart_total_amount">
                                             <h5 class="text-heading text-end fs-16">
                                                 @if (floatval(session('shipping_charge')) == 0)
@@ -596,9 +598,10 @@
                                                     {{ number_format(session('shipping_charge'), 2) }}
                                                 @endif
                                             </h5>
-                                        </td>
-
+                                        </td> 
+                                        
                                     </tr>
+                                    @endif
                                     @if (session('latest_etd') != null)
                                         <tr class="d-flex justify-content-between border-0">
                                             <td class="cart_total_label text-start">
@@ -676,7 +679,7 @@
                             <input class="font-medium pl-15 mr-15 coupon" name="Coupon" placeholder="Enter Code"
                                 wire:model="couponCode">
                             <button class="btn d-flex justify-content-center align-items-center"
-                                wire:click="applyCoupon"><i class="fi-rs-label mr-10"></i>Apply</button>
+                                wire:click="applyCoupon('yes')"><i class="fi-rs-label mr-10"></i>Apply</button>
                         </div>
                         @foreach ($display_coupons as $global_coupon)
                             <a class="coupon-card-cart {{ $couponCode == $global_coupon->coupon_code ? 'selected' : '' }}"
