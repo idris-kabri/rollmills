@@ -129,10 +129,6 @@ class CartComponent extends Component
         if ($this->flat_rate) {
             session()->put('flat_rate_charge', (int) $this->flat_rate->value);
         }
-
-        if (session()->pull('surprise_gift_once')) {
-            $this->dispatch('surprise-gift-once');
-        }
     }
 
     public function applyCoupon($show_dispatch_event = 'no')
@@ -379,9 +375,8 @@ class CartComponent extends Component
                             ],
                         )
                         ->associate('App\Models\Product');
-                    session()->put('surprise_gift_once', true);
-
-                    $this->dispatch('surprise-gift-once');
+                    $this->dispatch('coupon-applied');
+                    $this->dispatch('surprise-gift');
                 }
             }
             $total = floatval(str_replace(',', '', Cart::total()));

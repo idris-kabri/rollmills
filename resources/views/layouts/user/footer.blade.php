@@ -391,8 +391,10 @@
             }
         });
     })
-    window.addEventListener('surprise-gift', (event) => {
-        window.location.reload();
+    window.addEventListener('surprise-gift', (event) => { 
+        setTimeout(() =>{ 
+            window.location.reload();
+        },900)
     })
     window.addEventListener('remove-from-cart', (event) => {
         var data = event.detail[0];
