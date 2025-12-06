@@ -36,7 +36,11 @@ class WishlistComponent extends Component
                 return true;
             }
         });
-        $addToCart = finalAddToCart($product, $this->quantity + $existing_qauntity);
+        if($existing_qauntity == 0){
+            $addToCart = finalAddToCart($product, $this->quantity);
+        }else{
+            $addToCart = finalAddToCart($product, $this->quantity + $existing_qauntity, 'update-quantity');
+        }
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($product->sale_from_date);
