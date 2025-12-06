@@ -520,8 +520,6 @@
                             </div>
                         @endforeach
                     </div>
-
-
                     {{-- mobile responsive cart page new design end --}}
 
 
@@ -539,7 +537,7 @@
                     <div class="border p-20 cart-totals mb-4">
                         <h4 class="mb-30 pb-2 underline">Details</h4>
                         <div class="table-responsive">
-                            <table class="table no-border">
+                            <table class="table no-border mb-sm-3 mb-0">
                                 <tbody>
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
@@ -664,7 +662,7 @@
                         </div>
                         @if ($checkout_button || $flat_rate)
                             <a href="/checkout"
-                                class="btn mb-20 w-100 d-flex justify-content-center align-items-center">Proceed
+                                class="btn mb-20 w-100 d-sm-flex d-none justify-content-center align-items-center">Proceed
                                 To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
                         @endif
                     </div>
@@ -741,6 +739,48 @@
             @endif  --}}
         @else
             <livewire:user.component.no-item-found-component />
+        @endif
+    </div>
+    <div class="position-fixed bottom-0 bg-white shadow-lg p-3 checkout-btn-fixed w-100 d-block d-sm-none"
+        style="z-index: 999">
+        <div class="d-flex justify-content-between mb-10">
+            <div class="d-flex gap-2 border-0">
+                <td class="cart_total_label text-start">
+                    <h6 class="text-muted">Subtotal :</h6>
+                </td>
+                <td class="cart_total_amount">
+                    <h4 class="text-brand text-end fs-16">
+                        ₹{{ Cart::instance('cart')->subtotal() }}</h4>
+                </td>
+            </div>
+            <div class="d-flex gap-2 border-0">
+                <td class="cart_total_label text-start">
+                    <h6 class="text-muted">Your Total :</h6>
+                </td>
+                <td class="cart_total_amount">
+                    @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                    @elseif($totalAfterDiscount != 0)
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                    @elseif($totalOfferDiscountedPrice != 0)
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                    @else
+                        <h4 class="text-brand text-end fs-16">
+                            ₹{{ number_format($total + (session('shipping_charge') ?? 0), 2) }}
+                        </h4>
+                    @endif
+                </td>
+            </div>
+        </div>
+        @if ($checkout_button || $flat_rate)
+            <a href="/checkout" class="btn w-100 d-flex d-sm-none justify-content-center align-items-center">Proceed
+                To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
         @endif
     </div>
 </main>

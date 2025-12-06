@@ -238,12 +238,14 @@
 </footer>
 
 {{-- Whatsapp Logo --}}
-<div class="whatsapp-logo-contact">
-    <a href="https://wa.me/918764766553?text=Hi%20RollMills%20Store.">
-        <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" target="_blank" alt=""
-            class="img-fluid">
-    </a>
-</div>
+@if (!request()->routeIs('cart'))
+    <div class="whatsapp-logo-contact">
+        <a href="https://wa.me/918764766553?text=Hi%20RollMills%20Store.">
+            <img src="{{ asset('assets/frontend/imgs/icon&images/WhatsApp.svg.webp') }}" target="_blank"
+                alt="" class="img-fluid">
+        </a>
+    </div>
+@endif
 
 <!-- Preloader Start -->
 <div id="preloader-active">
@@ -279,7 +281,9 @@
 <script src="{{ asset('assets/frontend/js/plugins/isotope.js') }}"></script>
 
 <!-- this script give error  -->
-<script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
+@if (!request()->routeIs('cart'))
+    <script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
+@endif
 <script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script>
 
 <script src="{{ asset('assets/frontend/js/plugins/jquery.theia.sticky.js') }}"></script>
