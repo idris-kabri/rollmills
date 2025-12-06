@@ -127,9 +127,14 @@
 
                     </div>
                 @else
-                    <div class="add-cart">
+                    <div class="add-cart" wire:loading.remove wire:target="addToCart">
                         <a href="#" wire:click.prevent="addToCart({{ $product->id }})" class="add"><i
                                 class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                    </div>
+                    <div class="add-cart" wire:loading wire:target="addToCart">
+                        <span class="add">
+                            <span class="spinner-border spinner-border-sm mr-8"></span>
+                        </span>
                     </div>
                 @endif
             @endif
