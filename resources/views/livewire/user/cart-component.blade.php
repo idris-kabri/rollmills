@@ -217,8 +217,7 @@
                                         <div class="display-visible-480 d-none custom-remove-item">
                                             <a href="#"
                                                 class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                wire:click.prevent="askRemove('{{ $item->rowId }}')"
-                                                wire:confirm="Are you sure you want to remove this item from your cart?">
+                                                wire:click.prevent="askRemove('{{ $item->rowId }}')">
                                                 <i class="fi-rs-trash text-white"></i></a>
                                         </div>
                                         @endif
@@ -409,8 +408,7 @@
                                     <div class="display-visible-480 d-none custom-remove-item">
                                         <a href="#"
                                             class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                            wire:click.prevent="askRemove('{{ $item->rowId }}')"
-                                            wire:confirm="Are you sure you want to remove this item from your cart?">
+                                            wire:click.prevent="askRemove('{{ $item->rowId }}')">
                                             <i class="fi-rs-trash text-white fs-13"></i></a>
                                     </div>
                                     @endif
