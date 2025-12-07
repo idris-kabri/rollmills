@@ -84,7 +84,7 @@
 
 <body>
     @livewire('user.component.login-component')
-
+    <p class="d-none" id="login_condition">{{auth()->check() ? 'true' : 'false'}}</p>
     @php
         $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
     @endphp
