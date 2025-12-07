@@ -96,8 +96,9 @@
 
         .coupon-card-cart.selected .check-circle {
             display: flex;
-        } 
-        input{ 
+        }
+
+        input {
             height: 50px !important;
         }
     </style>
@@ -191,8 +192,8 @@
 
                                 <!-- Email -->
                                 <div class="form-group col-lg-6">
-                                    <input required type="text" name="billing_address.email" placeholder="Email address *"
-                                        wire:model="billing_address.email">
+                                    <input required type="text" name="billing_address.email"
+                                        placeholder="Email address *" wire:model="billing_address.email">
                                     @error('billing_address.email')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -226,8 +227,8 @@
 
                                 <!-- Address 1 -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" required name="billing_address.billing_address1" placeholder="Address *"
-                                        wire:model="billing_address.billing_address1">
+                                    <input type="text" required name="billing_address.billing_address1"
+                                        placeholder="Address *" wire:model="billing_address.billing_address1">
                                     @error('billing_address.billing_address1')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -235,8 +236,8 @@
 
                                 <!-- Address 2 -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" name="billing_address.billing_address2" placeholder="Address line 2"
-                                        wire:model="billing_address.billing_address2">
+                                    <input type="text" name="billing_address.billing_address2"
+                                        placeholder="Address line 2" wire:model="billing_address.billing_address2">
                                     @error('billing_address.billing_address2')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -248,7 +249,10 @@
 
                                 <!-- Zipcode -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" @if(session('shipping_charge')) disabled @endif name="billing_address.zipcode" placeholder="Postcode / ZIP *" wire:model="billing_address.zipcode" wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
+                                    <input type="text" @if (session('shipping_charge')) disabled @endif
+                                        name="billing_address.zipcode" placeholder="Postcode / ZIP *"
+                                        wire:model="billing_address.zipcode"
+                                        wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
                                     @error('billing_address.zipcode')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -404,28 +408,84 @@
 
             {{-- 5. ORDER SUMMARY SECTION --}}
             <div class="col-lg-5">
+                <style>
+                    /* Mobile Card Styling */
+                    .checkout-product-mobile {
+                        display: flex;
+                        align-items: center;
+                        padding-bottom: 15px;
+                        margin-bottom: 15px;
+                        border-bottom: 1px solid #ececec;
+                    }
+
+                    .checkout-product-mobile:last-child {
+                        border-bottom: none;
+                    }
+
+                    .checkout-product-mobile .img-wrap {
+                        width: 80px;
+                        height: 80px;
+                        flex-shrink: 0;
+                        border-radius: 10px;
+                        overflow: hidden;
+                        border: 1px solid #f0f0f0;
+                        margin-right: 15px;
+                        position: relative;
+                    }
+
+                    .checkout-product-mobile .img-wrap img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .checkout-product-mobile .content-wrap {
+                        flex-grow: 1;
+                    }
+
+                    .gift-row-mobile {
+                        background: #fffbf0;
+                        border: 1px solid #f7e3a6;
+                        border-radius: 8px;
+                        padding: 10px;
+                    }
+
+                    .gift-badge-mobile {
+                        background-color: #ffbc0d;
+                        color: #fff;
+                        padding: 2px 8px;
+                        border-radius: 4px;
+                        font-size: 10px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        margin-bottom: 4px;
+                        display: inline-block;
+                    }
+                </style>
+
                 <div class="border p-20 cart-totals ml-30 mb-3">
                     <div class="d-flex align-items-end justify-content-between mb-30">
                         <h4 class="underline">Your Order</h4>
                         <h6 class="text-muted">Subtotal</h6>
                     </div>
-                    <div class="table-responsive order_table checkout">
+
+                    {{-- Desktop View (Table) --}}
+                    <div class="table-responsive order_table checkout d-none d-md-block">
                         <table class="table no-border">
+                            @php
+                                $total_original_price = 0;
+                            @endphp
                             <tbody>
                                 @foreach (Cart::instance('cart')->content() as $item)
                                     @php
                                         $isGift = $item->options['is_gift_product'] ?? false;
-                                        if ($item->model->slug) {
-                                            $shop_detail_url = route('shop-detail', [
+                                        $shop_detail_url = $item->model->slug
+                                            ? route('shop-detail', [
                                                 'slug' => $item->model->slug,
                                                 'id' => $item->model->id,
-                                            ]);
-                                        } else {
-                                            $shop_detail_url = route('shop-detail', [
-                                                'slug' => 'no-slug',
-                                                'id' => $item->model->id,
-                                            ]);
-                                        }
+                                            ])
+                                            : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
+                                            $total_original_price += $item->model->price * $item->qty;
                                     @endphp
 
                                     <tr class="{{ $isGift ? 'gift-row-summary' : '' }}">
@@ -480,6 +540,54 @@
                             </tbody>
                         </table>
                     </div>
+
+                    {{-- Mobile View (Cards) --}}
+                    <div class="d-block d-md-none">
+                        @foreach (Cart::instance('cart')->content() as $item)
+                            @php
+                                $isGift = $item->options['is_gift_product'] ?? false;
+                                $shop_detail_url = $item->model->slug
+                                    ? route('shop-detail', ['slug' => $item->model->slug, 'id' => $item->model->id])
+                                    : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
+                            @endphp
+
+                            <div class="checkout-product-mobile {{ $isGift ? 'gift-row-mobile' : '' }}">
+                                <div class="img-wrap">
+                                    <img src="{{ asset('storage/' . $item->model->featured_image) }}"
+                                        alt="{{ $item->model->name }}">
+                                </div>
+                                <div class="content-wrap">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            @if ($isGift)
+                                                <span class="gift-badge-mobile">Surprise Gift</span>
+                                            @endif
+                                            <h6 class="mb-1" style="line-height: 1.2;">
+                                                <a href="{{ $shop_detail_url }}"
+                                                    class="text-heading two-liner-text">{{ $item->model->name }}</a>
+                                            </h6>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-end mt-2">
+                                        <div class="text-muted font-sm">
+                                            Qty: <strong class="text-brand">{{ $item->qty }}</strong>
+                                        </div>
+                                        <div class="text-end">
+                                            @if ($isGift)
+                                                <h5 class="text-success mb-0">FREE</h5>
+                                                <small class="text-muted"
+                                                    style="text-decoration: line-through; font-size: 11px;">₹{{ number_format($item->model->price) }}</small>
+                                            @else
+                                                <h5 class="text-brand mb-0">
+                                                    ₹{{ number_format($item->price * $item->qty) }}</h5>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
 
                 <div class="border p-20 cart-totals ml-30">
@@ -489,6 +597,32 @@
                             <tbody>
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">Cart Total</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        <h4 class="text-end fs-16">
+                                            ₹{{ number_format($total_original_price, 2) }}</h4>
+                                    </td>
+                                </tr>
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">You Save</h6>
+                                    </td>
+                                    <td class="cart_total_amount">
+                                        @php
+                                            $cartSubtotal = (float) str_replace(
+                                                ',',
+                                                '',
+                                                Cart::instance('cart')->subtotal(),
+                                            );
+                                            $customer_save_amount = $total_original_price - $cartSubtotal;
+                                        @endphp
+                                        <h4 class="text-end fs-16 text-success">
+                                            - ₹{{ number_format($customer_save_amount, 2) }}</h4>
+                                    </td>
+                                </tr>
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Subtotal</h6>
                                     </td>
                                     <td class="cart_total_amount">
@@ -496,52 +630,76 @@
                                             ₹{{ Cart::instance('cart')->subtotal() }}</h4>
                                     </td>
                                 </tr>
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted"> 
-                                            @if (floatval(session('flat_rate_charge')))   
-                                                Flat Rate
-                                            @else 
-                                                Shipping 
-                                            @endif
-                                        </h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16">
-                                            @if (floatval(session('flat_rate_charge'))) 
-                                                {{ number_format(session('flat_rate_charge'), 2) }}
-                                            @elseif (floatval(session('shipping_charge')) == 0)
-                                                Free Shipping
-                                            @else
-                                                {{ number_format(session('shipping_charge'), 2) }}
-                                            @endif
-                                        </h5>
-                                    </td>
-                                </tr>
-                                @if ($mainDiscountAmount != 0)
+                                @php
+                                    $discount = $mainDiscountAmount;
+                                @endphp
+                                @if ($discount != 0)
                                     <tr class="d-flex justify-content-between border-0 align-items-center">
                                         <td class="cart_total_label text-start">
                                             <div class="d-flex align-items-center">
                                                 <span class="badge bg-success me-2">Coupon Applied</span>
                                                 <h6 class="text-success m-0">
-                                                    ({{ strtoupper(session('coupon_code')) }})
+                                                    @if ($couponCode)
+                                                        ({{ strtoupper($couponCode) }})
+                                                    @endif
                                                 </h6>
                                             </div>
                                         </td>
 
                                         <td class="cart_total_amount">
                                             <h5 class="text-end fs-16 text-success fw-bold">
-                                                - ₹{{ number_format($mainDiscountAmount, 2) }}
+                                                - ₹{{ number_format($discount, 2) }}
                                             </h5>
                                         </td>
                                     </tr>
                                 @endif
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start">
+                                            @if(session('flat_rate_charge') != null)
+                                            <h6 class="text-muted">Flat Rate</h6>
+                                            @else
+                                            <h6 class="text-muted">Shipping</h6>
+                                            @endif
+                                        </td>
+
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-heading text-end fs-16">
+                                                @if(session('flat_rate_charge' )!= null)
+                                                {{ number_format(session('flat_rate_charge'), 2) }}
+                                                @elseif (floatval(session('shipping_charge')) == 0)
+                                                    Free Shipping
+                                                @else
+                                                    {{ number_format(session('shipping_charge'), 2) }}
+                                                @endif
+                                            </h5>
+                                        </td>
+
+                                    </tr>
+                                @if (session('latest_etd') != null)
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start">
+                                            <h6 class="text-muted">Etd</h6>
+                                        </td>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}
+                                                </h4>
+                                        </td>
+                                    </tr>
+                                @endif
+
+                                @php
+                                    $cartTotal = (float) str_replace(',', '', Cart::total());
+                                    $mainDiscountAmount = (float)session('coupon_discount_amount');
+                                    $allCouponandOfferDiscount =
+                                        $cartTotal - $mainDiscountAmount;
+                                @endphp
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Total</h6>
+                                        <h6 class="text-muted">Your Total</h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">₹{{ number_format($finalTotal, 2) }}
+                                        <h4 class="text-brand text-end fs-16">
+                                            ₹{{ number_format($finalTotal, 2) }}
                                         </h4>
                                     </td>
                                 </tr>
@@ -564,7 +722,6 @@
                         </span>
                     </button>
                 </div>
-
             </div>
         </div>
     </div>

@@ -125,7 +125,7 @@ class CartComponent extends Component
         $this->surprise_gift_amount = (int) Setting::where('label', 'surprise_gift_minimum_amount')->first()->value;
         $this->surprise_gift_product_id = Setting::where('label', 'surprise_gift_product_id')->first();
         $this->getDisplayCoupons();
-        $this->checkSurpriseGift('no');
+        $this->checkSurpriseGift();
         $this->flat_rate = Setting::where('label', 'Flat Rate')->first();
         if ($this->flat_rate) {
             session()->put('flat_rate_charge', (int) $this->flat_rate->value);
@@ -331,14 +331,14 @@ class CartComponent extends Component
         $this->display_coupons = $display_coupons;
     }
 
-    public function checkSurpriseGift($value = 'yes')
+    public function checkSurpriseGift()
     {
         // 1. Validate that the setting exists and has a value
         if (!$this->surprise_gift_product_id || empty($this->surprise_gift_product_id->value)) {
             return;
         }
         $giftProductId = $this->surprise_gift_product_id->value;
-        $threshold = $this->surprise_gift_amount;
+        $threshold = (float) $this->surprise_gift_amount;
 
         // 2. Calculate Current Cart Total (Excluding the gift itself)
         $currentCartTotal = 0;
@@ -357,7 +357,6 @@ class CartComponent extends Component
 
         // 3. Compare Total vs Threshold
         if ($currentCartTotal >= $threshold) {
-            // User is ELIGIBLE for the gift
             if (!$existingGiftRowId) {
                 // Fetch the product details from DB
                 $product = \App\Models\Product::find($giftProductId);
@@ -376,34 +375,22 @@ class CartComponent extends Component
                             ],
                         )
                         ->associate('App\Models\Product');
+                    
+                    // Trigger events only when gift is newly added
                     $this->dispatch('coupon-applied');
                     $this->dispatch('surprise-gift');
                 }
             }
-            $total = floatval(str_replace(',', '', Cart::total()));
-            $remain_amount = 0;
-
-            if ($this->surprise_gift_amount > 0) {
-
-                if ($total >= $this->surprise_gift_amount) {
-                    $percentage = 100;
-                    $remain_amount = 0;
-                } else {
-                    $percentage = ($total / $this->surprise_gift_amount) * 100;
-                    $remain_amount = $this->surprise_gift_amount - $total;
-                }
-            } else {
-                // Fallback if surprise_gift_amount is 0 or null
-                $percentage = 0;
-                $remain_amount = 0;
+            if(!session()->has('free_gift') || session()->get('free_gift') == false){
+                session()->put('free_gift', true);
+                $this->dispatch('surprise-gift');
             }
         } else {
-            // User is NOT ELIGIBLE (Total is too low)
             if ($existingGiftRowId) {
-                // Remove the gift if it exists
                 Cart::instance('cart')->remove($existingGiftRowId);
             }
-            if ($value == 'yes') {
+            if(session()->has('free_gift')){
+                session()->forget('free_gift');
                 $this->dispatch('surprise-gift');
             }
         }

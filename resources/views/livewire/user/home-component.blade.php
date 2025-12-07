@@ -24,7 +24,10 @@
                                         <h1 class="display-2 mb-40">
                                             {!! $newHeading !!}
                                         </h1>
-                                        <p class="mb-65">{{ $slider->sub_heading }}</p>
+                                        <p class="">{!! $slider->sub_heading !!}</p>
+                                        <a href="{{ $slider->link ?? '#' }}"
+                                            class="btn btn-ls mt-20">{{ $slider->button_text }} <i
+                                                class="fi-rs-arrow-small-right"></i></a>
                                     </div>
                                 </div>
                             @endforeach
@@ -76,7 +79,8 @@
                 </div>
                 {{-- <div class="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow"
                     id="carausel-10-columns-arrows"></div> --}}
-                <a class="btn btn-brand px-2 px-sm-4 py-2 quicksand d-flex align-items-center gap-1" href="/all-category">
+                <a class="btn btn-brand px-2 px-sm-4 py-2 quicksand d-flex align-items-center gap-1"
+                    href="/all-category">
                     <span class="fi-rs-apps me-md-1 fs-14 text-white d-flex align-items-center"></span> View All
                 </a>
             </div>
@@ -99,24 +103,6 @@
                     @endforeach
                 </div>
             </div>
-            {{-- <div class="carausel-10-columns-cover position-relative">
-                <div class="carausel-10-columns" id="carausel-10-columns">
-                    @foreach ($parentCategory as $index => $category)
-                        <div class="card-2 wow animate__animated animate__fadeInUp"
-                            data-wow-delay=".{{ $index + 1 }}s">
-                            <figure class="img-hover-scale overflow-hidden w-100 h-100">
-                                <a href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}"
-                                    class="w-100 h-100"><img src="{{ asset('storage/' . $category->image) }}"
-                                        alt="" /></a>
-                            </figure>
-                            <h6><a
-                                    href="/shop?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">{{ $category->name }}</a>
-                            </h6>
-                            <span class="fw-600 fs-12 quicksand">{{ $category->product_sum }} items</span>
-                        </div>
-                    @endforeach
-                </div>
-            </div> --}}
         </div>
     </section>
     <section class="banners mb-25" wire:ignore>
@@ -226,9 +212,11 @@
                 <!--End nav-tabs-->
                 <div class="row product-grid-4">
                     @php
-                        $category_product_category_assign = \App\Models\ProductCategoryAssign::where(
+                     $all_sub_category = \App\Models\ProductCategory::where('parent_id', $popular_category->id)->pluck('id')->toArray();
+                        $all_sub_category[] = $popular_category->id;
+                        $category_product_category_assign = \App\Models\ProductCategoryAssign::whereIn(
                             'category_id',
-                            $popular_category->id,
+                            $all_sub_category
                         )->pluck('product_id');
                         $category_popular_products = \App\Models\Product::where('status', 1)
                             ->where('is_featured', 1)

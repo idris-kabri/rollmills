@@ -1,26 +1,7 @@
 <div class="search-style-2">
-    <form action="#" class="border-1 rounded-pill overflow-hidden" wire:ignore>
-        <div class="custom-header-select-search-wrapper">
-            <select class="select-active custom-header-select-search" id="category-search">
-                <option value="">All Categories</option>
-                @foreach ($categories as $product_category)
-                    <option value="{{ $product_category->id }}">
-                        {{ $product_category->name }}</option>
-
-                    @php
-                        $sub_categories = App\Models\ProductCategory::where('parent_id', $product_category->id)->get();
-                    @endphp
-
-                    @foreach ($sub_categories as $sub_category)
-                        <option value="{{ $sub_category->id }}">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $sub_category->name }}
-                        </option>
-                    @endforeach
-                @endforeach
-            </select>
-        </div>
+    <form action="#" class="border-1 rounded-pill overflow-hidden w-100" wire:ignore>
         <input type="text" placeholder="Search for items..."
-            class="placeholder-font-family-quicksand placeholder-style" wire:model.live="search" />
+            class="placeholder-font-family-quicksand placeholder-style w-100" wire:model.live="search" />
     </form>
     @if ($search)
         <div class="panel--search-result custom-search rounded_input custom-width">
