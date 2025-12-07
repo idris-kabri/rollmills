@@ -71,7 +71,6 @@
                 </div>
             </div>
 
-            <!-- CONFIRM MODAL -->
             <div wire:ignore.self class="modal fade" id="CartRemoveItemModal" tabindex="-1" data-bs-backdrop="static"
                 data-bs-keyboard="false" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -100,8 +99,6 @@
                     </div>
                 </div>
             </div>
-            <!-- END CONFIRM MODAL -->
-
             @if (count(Cart::instance('cart')->content()) > 0)
             <div class="container-sm mb-3 mb-md-0" wire:ignore>
                 <div class="row">
@@ -233,9 +230,6 @@
                                     {{-- NAME COLUMN --}}
                                     <td class="product-des product-name px-sm-3">
                                         @if ($isGift)
-                                        <span class="gift-badge badge py-1 quicksand"><i
-                                                class="fi-rs-gift mr-5"></i> Surprise
-                                            Gift</span>
                                         <span class="gift-badge badge py-1 quicksand"><i
                                                 class="fi-rs-gift mr-5"></i> Surprise
                                             Gift</span>

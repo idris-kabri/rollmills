@@ -328,7 +328,7 @@
                     </div>
 
                     <!-- Filter By Price -->
-                    <div class="sidebar-widget range mb-30 d-none d-xl-block">
+                    {{-- <div class="sidebar-widget range mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-20">Filter by price</h5>
                         <div class="price-filter">
                             <div class="price-filter-inner">
@@ -352,7 +352,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <!-- Product sidebar Widget -->
@@ -513,7 +513,7 @@
         </div>
     </main>
     @push('scripts')
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        {{-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script> --}}
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 let componentMinPrice = @json($minPrice);

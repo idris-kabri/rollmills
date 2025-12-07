@@ -391,10 +391,8 @@
             }
         });
     })
-    window.addEventListener('surprise-gift', (event) => { 
-        setTimeout(() =>{ 
-            window.location.reload();
-        },900)
+    window.addEventListener('surprise-gift', (event) => {
+        window.location.reload();
     })
     window.addEventListener('remove-from-cart', (event) => {
         var data = event.detail[0];
@@ -427,6 +425,22 @@
             }
         });
     })
+    window.addEventListener('initiate-checkout', (event) => {
+        var data = event.detail[0];
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            ecommerce: null
+        });
+        dataLayer.push({
+            event: 'begin_checkout',
+            ecommerce: {
+                currency: 'INR',
+                value: data.total,
+                items: data.items
+            }
+        });
+        console.log(dataLayer)
+    })
     window.addEventListener('purchase', (event) => {
         var data = event.detail[0];
         window.dataLayer = window.dataLayer || [];
@@ -439,6 +453,7 @@
                 items: data
             }
         });
+        console.log(dataLayer)
     })
     window.addEventListener('add-to-wishlist', (event) => {
         var data = event.detail[0];
@@ -506,6 +521,35 @@
         var errors = event.detail[0].errors;
         displayValidationErrors(errors);
     })
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const applyBtn = document.getElementById('btn-apply-mobile-filters');
+        
+        if(applyBtn){
+            applyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // 1. Find the checked radio button with name="category_group"
+                const selectedRadio = document.querySelector('input[name="category_group"]:checked');
+                
+                let targetUrl = "/shop";
+                
+                // 2. Build the URL params
+                if (selectedRadio) {
+                    const categoryId = selectedRadio.value;
+                    targetUrl += `?category_id=${categoryId}`;
+                    
+                    // Optional: Close the mobile menu immediately for better UX before reload
+                    document.querySelector('.mobile-header-active-filter')?.classList.remove('sidebar-visible');
+                }
+
+                // 3. Redirect
+                window.location.href = targetUrl;
+            });
+        }
+    });
 </script>
 
 @stack('scripts')

@@ -84,6 +84,64 @@ class CheckoutComponent extends Component
         }
 
         $this->checkBillingEmail();
+
+        if (count(Cart::instance('cart')->content()) > 0) {
+            $items = [];
+            foreach (Cart::instance('cart')->content() as $item) {
+                $quantity = $item->qty;
+                $product = $item->model;
+                $sale_price = 0;
+                $currentDate = Carbon::now();
+                $sale_from_date = Carbon::parse($product->sale_from_date);
+                $sale_to_date = Carbon::parse($product->sale_to_date);
+
+                if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
+                    $sale_price = $product->sale_price;
+                } else {
+                    $sale_price = $product->sale_default_price;
+                }
+                $price = $product->price;
+                $discount = 0;
+                if ($sale_price > 0) {
+                    $price = $sale_price;
+                    $discount = $product->price > $sale_price ? round($product->price - $sale_price) : 0;
+                }
+                $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
+
+                $item = [
+                    'item_id' => $product->id,
+                    'item_name' => $product->name,
+                    'affiliation' => '',
+                    'coupon' => '',
+                    'discount' => (float) $discount,
+                    'index' => 0,
+                    'item_brand' => 'Roll Mills',
+                ];
+
+                foreach ($category_assign as $key => $category) {
+                    if ($key == 0) {
+                        $item['item_category'] = $category->category->name;
+                    } else {
+                        $item['item_category' . $key + 1] = $category->category->name;
+                    }
+                }
+
+                $item['item_list_id'] = '';
+                $item['item_list_name'] = '';
+                if ($product->attributes_name != null) {
+                    $attributes = explode(',', $product->attributes_name);
+                    foreach ($attributes as $key => $attribute) {
+                        $item['item_variant'] = $attribute;
+                    }
+                }
+                $item['location_id'] = '';
+                $item['price'] = (float) $price;
+                $item['quantity'] = $quantity;
+
+                $items[] = $item;
+            }
+            $this->dispatch('initiate-checkout', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
+        }
     }
 
     public function addNewAddress()
@@ -361,57 +419,6 @@ class CheckoutComponent extends Component
             $orderItem->item_replacement_days = $item->model->product_replacement_days;
             $orderItem->delivery_at = now();
             $orderItem->save();
-
-            $product = $item->model;
-            $sale_price = 0;
-            $currentDate = Carbon::now();
-            $sale_from_date = Carbon::parse($product->sale_from_date);
-            $sale_to_date = Carbon::parse($product->sale_to_date);
-
-            if ($product->sale_price > 0 && $currentDate->between($sale_from_date, $sale_to_date)) {
-                $sale_price = $product->sale_price;
-            } else {
-                $sale_price = $product->sale_default_price;
-            }
-            $price = $product->price;
-            $discount = 0;
-            if ($sale_price > 0) {
-                $price = $sale_price;
-                $discount = $product->price > $sale_price ? round($product->price - $sale_price) : 0;
-            }
-            $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
-
-            $item = [
-                'item_id' => $product->id,
-                'item_name' => $product->name,
-                'affiliation' => '',
-                'coupon' => '',
-                'discount' => (float) $discount,
-                'index' => 0,
-                'item_brand' => 'Roll Mills',
-            ];
-
-            foreach ($category_assign as $key => $category) {
-                if ($key == 0) {
-                    $item['item_category'] = $category->category->name;
-                } else {
-                    $item['item_category' . $key + 1] = $category->category->name;
-                }
-            }
-
-            $item['item_list_id'] = '';
-            $item['item_list_name'] = '';
-            if ($product->attributes_name != null) {
-                $attributes = explode(',', $product->attributes_name);
-                foreach ($attributes as $key => $attribute) {
-                    $item['item_variant'] = $attribute;
-                }
-            }
-            $item['location_id'] = '';
-            $item['price'] = (float) $price;
-            $item['quantity'] = $orderItem->quantity;
-
-            $this->items_checkout_event_array[] = $item;
         }
     }
 
@@ -465,11 +472,10 @@ class CheckoutComponent extends Component
                 'billing_address.billing_address2' => 'address line 2',
                 'billing_address.zipcode' => 'zipcode',
                 'billing_address.mobile' => 'phone number',
-            ]
+            ],
         );
 
         try {
-
             $this->payment_method = 'upi';
             $nonAuthUser = null;
 
@@ -553,17 +559,6 @@ class CheckoutComponent extends Component
                 $this->createOrderItem($user_order);
                 $coupon = Coupon::find($this->coupon_discount_id);
 
-                $final_order_array = [
-                    'transaction_id' => $user_order->id,
-                    'value' => (float) $this->finalTotal,
-                    'tax' => 0.0,
-                    'shipping' => (float) $user_order->shipping_charges,
-                    'currency' => 'INR',
-                    'coupon' => $coupon->code ?? null,
-                    'customer_type' => 'new',
-                    'items' => $this->items_checkout_event_array,
-                ];
-
                 $order = razorPayPayment($this->finalTotal, Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using UPI');
 
                 $user =
@@ -572,8 +567,6 @@ class CheckoutComponent extends Component
                         'name' => $nonAuthUser['name'],
                         'email' => $nonAuthUser['email'],
                     ];
-
-                $this->dispatch('purchase', $final_order_array);
 
                 $this->dispatch('initiate-razorpay', [
                     'transaction_id' => $order->transaction_id,
@@ -653,7 +646,7 @@ class CheckoutComponent extends Component
                 session()->put('free_shipping_pincode', $this->billing_address['zipcode']);
                 session()->forget('show_deleviery_time');
                 session()->put('shipping_pincode', $this->billing_address['zipcode']);
-                session()->forget('flat_rate_charge'); 
+                session()->forget('flat_rate_charge');
                 $this->mount();
             }
         }

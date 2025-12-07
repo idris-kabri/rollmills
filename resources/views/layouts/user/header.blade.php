@@ -265,8 +265,8 @@
                             <p class="fs-18 text-dark fw-600">+91 87647 66553</p>
                         </a>
                     </div>
-                    <div class="d-none d-md-flex d-xl-none mx-auto">
-                        <div class="header-wrap justify-content-between">
+                    <div class="d-none d-md-flex d-xl-none mx-5 w-100">
+                        <div class="header-wrap justify-content-between w-100">
                             @livewire('user.component.search-component')
                         </div>
                     </div>
@@ -535,7 +535,6 @@
                                         'parent_id',
                                         $category->id,
                                     )->get();
-                                    // Logic to keep menu open if a child is active
                                     $isActive = $selectedCategory == $category->id;
                                     $isChildActive = $subCategories->contains('id', $selectedCategory);
                                     $isOpen = $isActive || $isChildActive;
@@ -544,9 +543,7 @@
                                 <div class="category-list-item" x-data="{ open: @json($isOpen) }">
 
                                     <a href="#" class="cat-link {{ $isActive ? 'active' : '' }}"
-                                        @if ($subCategories->count() > 0) @click.prevent="open = !open" 
-                                             @else
-                                             wire:click.prevent="categoryWiseProduct({{ $category->id }}, 'change')" @endif>
+                                        @if ($subCategories->count() > 0) @click.prevent="open = !open" @endif>
                                         <div class="cat-left">
                                             @if ($category->icon)
                                                 <img src="{{ asset('storage/' . $category->icon) }}" class="cat-icon"
@@ -564,15 +561,17 @@
                                         </div>
                                     </a>
 
+                                    {{-- Parent Category Radio --}}
                                     @if ($subCategories->count() > 0)
                                         <div class="sub-cat-container" x-show="open" x-collapse
                                             style="display: none;">
 
                                             <div
                                                 class="sub-cat-item {{ $selectedCategory == $category->id ? 'active' : '' }}">
+                                                {{-- ADDED value attribute here --}}
                                                 <input type="radio" id="all-cat-{{ $category->id }}"
-                                                    name="category_group" class="custom-check"
-                                                    wire:click="categoryWiseProduct({{ $category->id }}, 'change')"
+                                                    value="{{ $category->id }}" name="category_group"
+                                                    class="custom-check"
                                                     {{ $selectedCategory == $category->id ? 'checked' : '' }}>
 
                                                 <label for="all-cat-{{ $category->id }}"
@@ -584,9 +583,10 @@
                                             @foreach ($subCategories as $sub_category)
                                                 <div
                                                     class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
+                                                    {{-- ADDED value attribute here --}}
                                                     <input type="radio" id="sub-{{ $sub_category->id }}"
-                                                        name="category_group" class="custom-check"
-                                                        wire:click="categoryWiseProduct({{ $sub_category->id }}, 'change')"
+                                                        value="{{ $sub_category->id }}" name="category_group"
+                                                        class="custom-check"
                                                         {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
 
                                                     <label for="sub-{{ $sub_category->id }}"
@@ -596,13 +596,24 @@
                                                 </div>
                                             @endforeach
                                         </div>
+                                    @else
+                                        {{-- Case where there are no subcategories, we need a radio here too if you want it selectable --}}
+                                        <div class="sub-cat-container" style="padding: 5px 10px; margin-bottom: 5px;">
+                                            <div class="sub-cat-item">
+                                                <input type="radio" id="cat-only-{{ $category->id }}"
+                                                    value="{{ $category->id }}" name="category_group"
+                                                    class="custom-check">
+                                                <label for="cat-only-{{ $category->id }}"
+                                                    style="cursor: pointer; margin: 0;">Select</label>
+                                            </div>
+                                        </div>
                                     @endif
                                 </div>
                             @endforeach
                         </div>
                     </div>
                     <!-- Fillter By Price -->
-                    <div class="sidebar-widget range mb-40">
+                    {{-- <div class="sidebar-widget range mb-40">
                         <h5 class="section-title style-1 mb-30 underline"
                             style="color: var(--color-3); display: inline-block;">Filter by price</h5>
                         <div class="price-filter">
@@ -625,8 +636,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center"><i
+                    </div> --}}
+                    <a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center" id="btn-apply-mobile-filters"><i
                             class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply
                         Fillters</a>
                     <!-- mobile menu end -->
