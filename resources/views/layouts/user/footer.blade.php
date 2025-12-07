@@ -453,6 +453,7 @@
                 items: data
             }
         });
+        console.log(dataLayer)
     })
     window.addEventListener('add-to-wishlist', (event) => {
         var data = event.detail[0];

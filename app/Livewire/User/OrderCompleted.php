@@ -4,7 +4,9 @@ namespace App\Livewire\User;
 
 use App\Traits\HasToastNotification;
 use App\Models\Order;
+use App\Models\ProductCategoryAssign;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class OrderCompleted extends Component
 {
@@ -18,8 +20,8 @@ class OrderCompleted extends Component
         $this->id = request()->id;
         $user_order = Order::find($this->id);
 
-        foreach ($user_order->getOrderItems as $key => $item) {
-            $product = $item->getProduct;
+        foreach ($user_order->getOrderItems as $key => $order_item) {
+            $product = $order_item->getProduct;
             $sale_price = 0;
             $currentDate = Carbon::now();
             $sale_from_date = Carbon::parse($product->sale_from_date);
@@ -66,14 +68,14 @@ class OrderCompleted extends Component
             }
             $item['location_id'] = '';
             $item['price'] = (float) $price;
-            $item['quantity'] = $orderItem->quantity;
+            $item['quantity'] = $order_item->quantity;
 
             $this->items_checkout_event_array[] = $item;
         }
 
         $final_order_array = [
             'transaction_id' => $user_order->id,
-            'value' => (float) $this->finalTotal,
+            'value' => (float) $user_order->total,
             'tax' => 0.0,
             'shipping' => (float) $user_order->shipping_charges,
             'currency' => 'INR',
