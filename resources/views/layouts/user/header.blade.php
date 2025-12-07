@@ -410,6 +410,8 @@
                                         Sign In
                                     </a>
                                 @endif
+                                <a href="javascript:void(0);" id="a-div-login-hide" class="d-none" data-bs-toggle="modal"
+                                        data-bs-target="#loginModal"></a>
                             </li>
                             {{-- <li class="menu-item-has-children">
                                 <a href="#">Vendors</a>
@@ -646,7 +648,7 @@
         </div>
     </div>
 
-    <div class="modal fade custom-modal custom-modal-new" id="onloadModal" tabindex="-1"
+    {{-- <div class="modal fade custom-modal custom-modal-new" id="onloadModal" tabindex="-1"
         aria-labelledby="onloadModalLabel" aria-modal="true" role="dialog"
         style="padding-right: 0px; display: block;">
         <div class="modal-dialog">
@@ -677,10 +679,10 @@
                             <div class="clearfix product-price-cover">
                                 <div class="product-price primary-color float-left mt-15 mb-10">
                                     <span class="current-price fs-3 text-brand">Surprize Gift Offer!!</span>
-                                    {{-- <span>
+                                    <span>
                                         <span class="save-price font-md color3 ml-15">Surprize Gift!!</span>
                                         <span class="old-price font-md ml-15">$52</span>
-                                    </span> --}}
+                                    </span>
                                 </div>
                             </div>
                             <p class="mb-15 text-secondary w-md-75 w-50 fw-500 quicksand">Grab The Exclusive Gift Now!!
@@ -691,8 +693,8 @@
                             </p>
                         </div>
                         <div class="deal-bottom">
-                            {{-- <p class="mb-10 quicksand fw-500">Hurry Up! Offer Ends In:</p> --}}
-                            {{-- <div class="deals-countdown pl-5" data-countdown="2026/01/1 00:00:00">
+                            <p class="mb-10 quicksand fw-500">Hurry Up! Offer Ends In:</p>
+                            <div class="deals-countdown pl-5" data-countdown="2026/01/1 00:00:00">
                                 <span class="countdown-section"><span class="countdown-amount hover-up">00</span>
                                     <span class="countdown-period"> days </span></span><span
                                     class="countdown-section"><span class="countdown-amount hover-up">00</span>
@@ -702,15 +704,15 @@
                                 <span class="countdown-section"><span class="countdown-amount hover-up">00</span>
                                     <span class="countdown-period"> sec </span>
                                 </span>
-                            </div> --}}
-                            {{-- <div class="product-detail-rating">
+                            </div>
+                            <div class="product-detail-rating">
                                 <div class="product-rate-cover text-end">
                                     <div class="product-rate d-inline-block">
                                         <div class="product-rating" style="width: 90%"></div>
                                     </div>
                                     <span class="font-small ml-5 text-muted"> (32 rates)</span>
                                 </div>
-                            </div> --}}
+                            </div>
                             <a href="/shop"
                                 class="align-items-center btn d-flex fit-content gap-1 mt-10 hover-up">Shop
                                 Now <i class="fi-rs-arrow-right"></i></a>
@@ -719,4 +721,4 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
