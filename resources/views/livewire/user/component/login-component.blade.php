@@ -2,11 +2,9 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content rollmills-modal">
             <div class="row g-0">
+                
                 <div class="col-md-7 p-4 left-box text-white">
-                    <button type="button" class="mobile-close-btn" data-bs-dismiss="modal">
-                        ✖
-                    </button>
-
+                    
                     <img class="img-fluid" src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="">
                     <p class="tagline">
                         Pay online & get FLAT 20% OFF.
@@ -39,7 +37,16 @@
                     </div>
                 </div>
 
-                <div class="col-md-5 p-4 bg-white right-box">
+                <div class="col-md-5 p-4 bg-white right-box position-relative">
+
+                    <button type="button" 
+                            class="position-absolute top-0 end-0 m-3 border-0 bg-transparent text-secondary fs-4" 
+                            style="z-index: 1050; cursor: pointer;"
+                            data-bs-dismiss="modal" 
+                            data-dismiss="modal" 
+                            aria-label="Close">
+                        <span aria-hidden="true" class="fw-bold">✖</span>
+                    </button>
 
                     @if (!$otp_section_show)
                         <div id="stepMobile">
@@ -165,7 +172,7 @@
             }
         });
 
-        // Optional: Handle Backspace to move previous
+        // Handle Backspace to move previous
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Backspace' && e.target.classList.contains('otp-input')) {
                 const inputs = document.querySelectorAll(".otp-input");

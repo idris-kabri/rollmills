@@ -14,7 +14,10 @@
         if (!modalShown) {
             $("#preloader-active").delay(0).fadeOut("slow");
             $("body").delay(0).css({ overflow: "visible" });
-            $("#onloadModal").modal("show");
+            var login_text = $("#login_condition").text();
+            if(login_text == "false"){
+                $("#loginModal").modal("show");
+            }
             localStorage.setItem("triggeredModal", "true");
         } else {
             $("#preloader-active").delay(0).fadeOut("slow");
