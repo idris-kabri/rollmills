@@ -29,7 +29,7 @@ class SendMessageCommand extends Command
      */
     public function handle()
     {
-        $shoppingCarts = DB::table('shoppingcart')->where('instance', 'cart')->where('created_at', '<=', now()->subHours(24))->get();
+        $shoppingCarts = DB::table('shoppingcart')->where('instance', 'cart')->where('created_at', '<=', now()->subHours(4))->get();
         foreach ($shoppingCarts as $cart) {
 
             if (!$cart->created_at) {
