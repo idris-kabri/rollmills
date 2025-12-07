@@ -10,7 +10,7 @@
                         Pay online & get FLAT 20% OFF.
                     </p>
 
-                    <div class="d-flex gap-3">
+                    <div class="d-none d-lg-flex gap-3">
                         <div class="feature-box">
                             <span class="emoji">🚛</span>
                             <div>
