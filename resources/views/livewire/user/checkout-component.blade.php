@@ -395,7 +395,7 @@
                                         <div class="form-group col-lg-6">
                                             <input required="" type="text" name="zipcode"
                                                 placeholder="Zipcode *" wire:model="ship_to_different_address.zipcode"
-                                                disabled>
+                                                @if (session('shipping_charge')) disabled @endif wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
                                         </div>
                                     </div>
                                 @endif
