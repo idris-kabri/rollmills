@@ -52,20 +52,7 @@ class CheckoutComponent extends Component
         $this->billing_address['email'] = '';
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
 
-        $cartTotal = (float) str_replace(',', '', Cart::instance('cart')->total());
-        $totalOfferDiscount = 0;
-
-        foreach (Cart::instance('cart')->content() as $item) {
-            if (!empty($item->options['discount_price'])) {
-                $totalOfferDiscount = $item->price * $item->qty - $item->options['discount_price'];
-            }
-        }
-
-        $this->offerDiscount = (float) ($totalOfferDiscount ?? 0);
-        $this->couponDiscount = (float) (session('coupon_discount_amount') ?? 0);
-        $this->coupon_discount_id = (int) session('coupon_discount_id');
-        $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount + (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
-        $this->mainDiscountAmount = (float) session('coupon_discount_amount');
+        $this->calculateTotals();
 
         if (Auth::check()) {
             $this->fetch_user_address = Address::where('user_id', Auth::user()->id)->get();
@@ -144,6 +131,23 @@ class CheckoutComponent extends Component
         }
     }
 
+
+    public function calculateTotals(){ 
+        $cartTotal = (float) str_replace(',', '', Cart::instance('cart')->total());
+        $totalOfferDiscount = 0;
+
+        foreach (Cart::instance('cart')->content() as $item) {
+            if (!empty($item->options['discount_price'])) {
+                $totalOfferDiscount = $item->price * $item->qty - $item->options['discount_price'];
+            }
+        }
+
+        $this->offerDiscount = (float) ($totalOfferDiscount ?? 0);
+        $this->couponDiscount = (float) (session('coupon_discount_amount') ?? 0);
+        $this->coupon_discount_id = (int) session('coupon_discount_id');
+        $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount + (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
+        $this->mainDiscountAmount = (float) session('coupon_discount_amount');
+    }
     public function addNewAddress()
     {
         $this->add_new_address = true;
@@ -207,6 +211,7 @@ class CheckoutComponent extends Component
             $this->add_new_address = false; // Close form view
         }
         $this->checkBillingEmail();
+        $this->pincodeCheckFunction('yes');
     }
 
     public function storeAddressInToShipping($address_id)
@@ -647,9 +652,25 @@ class CheckoutComponent extends Component
                 session()->forget('show_deleviery_time');
                 session()->put('shipping_pincode', $this->billing_address['zipcode']);
                 session()->forget('flat_rate_charge');
-                $this->mount();
+            } else {
+                session()->forget('free_shipping_pincode');
+                session()->forget('show_deleviery_time');
+                session()->forget('shipping_pincode');
+                $flat_rate = Setting::where('label', 'Flat Rate')->first();
+                if ($flat_rate) {
+                    session()->put('flat_rate_charge', (int) $flat_rate->value);
+                }
             }
-        }
+        } else {
+            session()->forget('free_shipping_pincode');
+            session()->forget('show_deleviery_time');
+            session()->forget('shipping_pincode');
+            $flat_rate = Setting::where('label', 'Flat Rate')->first();
+            if ($flat_rate) {
+                session()->put('flat_rate_charge', (int) $flat_rate->value);
+            }
+        } 
+        $this->calculateTotals();
     }
 
     public function render()

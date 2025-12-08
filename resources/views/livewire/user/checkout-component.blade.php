@@ -395,7 +395,7 @@
                                         <div class="form-group col-lg-6">
                                             <input required="" type="text" name="zipcode"
                                                 placeholder="Zipcode *" wire:model="ship_to_different_address.zipcode"
-                                                disabled>
+                                                @if (session('shipping_charge')) disabled @endif wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
                                         </div>
                                     </div>
                                 @endif
@@ -462,7 +462,7 @@
                     }
                 </style>
 
-                <div class="border p-20 cart-totals ml-30 mb-3">
+                <div class="border p-20 cart-totals mb-3">
                     <div class="d-flex align-items-end justify-content-between mb-30">
                         <h4 class="underline">Your Order</h4>
                         <h6 class="text-muted">Subtotal</h6>
