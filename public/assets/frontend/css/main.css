@@ -2046,6 +2046,25 @@ input.qty-val {
     border-radius: 30px;
 }
 
+.single-hero-slider-custom {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.single-hero-slider-custom::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+    z-index: 1;
+}
+
+.single-hero-slider-custom .slider-content {
+    position: relative;
+    z-index: 2;
+}
+
 .hero-slider-1 .slider-content {
     position: absolute;
     top: 50%;
@@ -2054,8 +2073,13 @@ input.qty-val {
     transform: translateY(-50%);
 }
 
+.hero-slider-1 .slider-content.custom-width-home-banner {
+    width: 27vw;
+}
+
 .hero-slider-1 .slider-content p {
-    font-size: 30px;
+    font-size: 28px;
+    color: #4a4a4a;
 }
 
 .hero-slider-1 .slider-content form {
