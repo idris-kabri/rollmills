@@ -2074,11 +2074,14 @@ background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
 }
 
 .hero-slider-1 .slider-content.custom-width-home-banner {
-    width: 27vw;
+    width: 30vw;
+}
+.custom-width-home-banner h1{
+    font-size: 50px !important;
 }
 
 .hero-slider-1 .slider-content p {
-    font-size: 28px;
+    font-size: 24px;
     color: #4a4a4a;
 }
 
