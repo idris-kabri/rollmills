@@ -18,10 +18,10 @@
                                         $newHeading = $slider->heading;
                                     }
                                 @endphp
-                                <div class="single-hero-slider single-animation-wrap"
+                                <div class="single-hero-slider single-animation-wrap single-hero-slider-custom"
                                     style="background-image: url('{{ asset($image) }}')">
-                                    <div class="slider-content">
-                                        <h1 class="display-2 mb-40">
+                                    <div class="slider-content custom-width-home-banner">
+                                        <h1 class="display-2 mb-25">
                                             {!! $newHeading !!}
                                         </h1>
                                         <p class="">{!! $slider->sub_heading !!}</p>
@@ -55,7 +55,7 @@
                         }
                     @endphp
                     <div class="banner-img style-3 animated animated"
-                        style="background: url({{ asset('storage/' . $top_side_banner->image) }}) no-repeat center bottom;">
+                        style="background: url({{ asset('storage/' . $top_side_banner->image) }}) no-repeat center bottom; background-size: cover">
                         <div class="banner-text mt-50">
                             <h2 class="mb-50">
                                 {!! $newHeadingSide !!}
@@ -212,11 +212,13 @@
                 <!--End nav-tabs-->
                 <div class="row product-grid-4">
                     @php
-                     $all_sub_category = \App\Models\ProductCategory::where('parent_id', $popular_category->id)->pluck('id')->toArray();
+                        $all_sub_category = \App\Models\ProductCategory::where('parent_id', $popular_category->id)
+                            ->pluck('id')
+                            ->toArray();
                         $all_sub_category[] = $popular_category->id;
                         $category_product_category_assign = \App\Models\ProductCategoryAssign::whereIn(
                             'category_id',
-                            $all_sub_category
+                            $all_sub_category,
                         )->pluck('product_id');
                         $category_popular_products = \App\Models\Product::where('status', 1)
                             ->where('is_featured', 1)
