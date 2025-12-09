@@ -29,7 +29,7 @@ class SendMessageCommand extends Command
      */
     public function handle()
     {
-        $shoppingCarts = DB::table('shoppingcart')->where('instance', 'cart')->where('created_at', '<=', now()->subHours(4))->get();
+        $shoppingCarts = DB::table('shoppingcart')->where('instance', 'cart')->where('created_at', '<=', now()->subMinutes(3))->get();
         foreach ($shoppingCarts as $cart) {
 
             if (!$cart->created_at) {
@@ -37,7 +37,8 @@ class SendMessageCommand extends Command
             }
 
             $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy("id", "desc")->first();
-            if ($check_condtion && now()->diffInDays($check_condtion->send_at) <= 3) {
+            if ($check_condtion && now()->diffInMinutes($check_condtion->created_at) <= 3) {
+                Log::error('Abandoned cart message already sent');
                 try {
                     $token = config('app.whatsapp_api_token');
                     $phoneNumberId = config('app.whatsapp_phone_number_id');

@@ -212,41 +212,7 @@
                 font-weight: bold;
             }
         </style>
-        <div class="page-header mt-30 mb-50">
-            <div class="container">
-                <div class="archive-header">
-                    <div class="row align-items-center">
-                        <div class="col-xl-3">
-                            <h1 class="mb-15">Shop</h1>
-                            <div class="breadcrumb">
-                                <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                                <span></span> Shop
-                            </div>
-                        </div>
-                        {{-- <div class="col-xl-9 text-end d-none d-xl-block">
-                            <ul class="tags-list">
-                                <li class="hover-up">
-                                    <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Cabbage</a>
-                                </li>
-                                <li class="hover-up active">
-                                    <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Broccoli</a>
-                                </li>
-                                <li class="hover-up">
-                                    <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Artichoke</a>
-                                </li>
-                                <li class="hover-up">
-                                    <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Celery</a>
-                                </li>
-                                <li class="hover-up mr-0">
-                                    <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Spinach</a>
-                                </li>
-                            </ul>
-                        </div> --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container mb-40">
+        <div class="container mb-40 mt-40">
             <div class="row">
                 <div class="col-xl-3 primary-sidebar">
                     <div class="sidebar-widget custom-category-widget mb-30 d-none d-xl-block">
@@ -419,6 +385,7 @@
                         @endforeach
                     </div>
 
+                    @if ($shop_page_banner != null)
                     <div class="banner-img wow fadeIn mb-lg-0 animated d-xl-block d-none">
                         <img src="{{ asset('storage/' . $shop_page_banner->image) }}" alt="" />
                         <div class="banner-text">
@@ -429,6 +396,7 @@
 
                         </div>
                     </div>
+                    @endif
                 </div>
 
                 <div class="col-xl-9">
@@ -466,7 +434,7 @@
                                         <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
-                                        <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                        <span> {{ ucfirst(str_replace('-', ' ', $sortBy)) }} <i class="fi-rs-angle-small-down"></i></span>
                                     </div>
                                 </div>
                                 <div class="sort-by-dropdown">
