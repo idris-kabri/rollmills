@@ -402,7 +402,7 @@
                 <div class="col-xl-9">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p>We found <strong class="text-brand">{{ $product_count }}</strong> items for you!</p>
+                            <p>We found <strong class="text-brand">{{ count($products) }}</strong> items for you!</p>
                         </div>
                         <div class="sort-by-product-area flex-wrap justify-content-center">
                             <div class="sort-by-cover mr-10 mt-2">
