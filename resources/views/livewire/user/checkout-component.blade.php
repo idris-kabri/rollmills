@@ -589,7 +589,7 @@
                     </div>
                 </div>
 
-                <div class="border p-20 cart-totals ml-30">
+                <div class="border p-20 cart-totals ml-0 ml-sm-30">
                     <h4 class="mb-30 pb-2 underline">Details</h4>
                     <div class="table-responsive">
                         <table class="table no-border">
@@ -654,11 +654,7 @@
                                 @endif
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
-                                            @if(session('flat_rate_charge') != null)
-                                            <h6 class="text-muted">Flat Rate</h6>
-                                            @else
-                                            <h6 class="text-muted">Shipping</h6>
-                                            @endif
+                                            <h6 class="text-muted">Shipping Charges</h6>
                                         </td>
 
                                         <td class="cart_total_amount">
@@ -707,7 +703,7 @@
                     </div>
                 </div>
 
-                <div class="payment ml-30">
+                <div class="payment ml-0 ml-sm-30">
                     <button
                         class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
                         wire:click.prevent="placeOrder" wire:loading.attr="disabled" wire:target="placeOrder">

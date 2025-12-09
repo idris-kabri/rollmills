@@ -1,5 +1,5 @@
 <div class="search-style-2">
-    <form action="#" class="border-1 rounded-pill overflow-hidden w-100" wire:ignore>
+    <form action="#" class="border-1 rounded-pill overflow-hidden w-100 mx-auto" wire:ignore>
         <input type="text" placeholder="Search for items..."
             class="placeholder-font-family-quicksand placeholder-style w-100" wire:model.live="search" />
     </form>
