@@ -100,7 +100,7 @@
     @endphp
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
-            <span>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</span>
+             <span>Big Winter Savings! <strong>Up To 60%</strong> OFF Storewide. Shop <strong>Before the Deals</strong> Melt.</span>
         </div>
         <div class="header-middle header-middle-ptb-1 d-none d-xl-block">
             <div class="container">
