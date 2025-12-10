@@ -4,6 +4,10 @@ namespace App\Livewire\User\Component;
 
 use Livewire\Component;
 use App\Traits\HasToastNotification;
+use Cart;
+use App\Models\Product;
+use App\Models\ProductCategoryAssign;
+use Carbon\Carbon;
 
 class MobileHeaderCartComponent extends Component
 {
