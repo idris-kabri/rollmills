@@ -207,14 +207,11 @@
 
     <!-- category wise product section  -->
     @php
-        // 1. Define the Category IDs you want to show FIRST
-        // Replace 5 and 10 with your actual Category IDs
-        $priority_ids = [1,29]; 
+        $priority_ids = [29, 1]; 
 
-        // 2. Sort the collection
         $sortedCategories = $parentCategory->sortBy(function($cat) use ($priority_ids) {
-            // If ID is in priority list, return 0 (top), else return 1 (bottom)
-            return in_array($cat->id, $priority_ids) ? 0 : 1;
+            $index = array_search($cat->id, $priority_ids);
+            return $index === false ? 999 : $index;
         });
     @endphp
     @foreach ($sortedCategories as $popular_category)
