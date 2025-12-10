@@ -593,12 +593,12 @@
                                                 <div
                                                     class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
                                                     {{-- ADDED value attribute here --}}
-                                                    <input type="radio" id="sub-{{ $sub_category->id }}"
+                                                    <input type="radio" id="sub-{{ $sub_category->id }}-header"
                                                         value="{{ $sub_category->id }}" name="category_group"
                                                         class="custom-check"
                                                         {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
 
-                                                    <label for="sub-{{ $sub_category->id }}"
+                                                    <label for="sub-{{ $sub_category->id }}-header"
                                                         style="cursor: pointer; width: 100%; margin: 0;">
                                                         {{ $sub_category->name }}
                                                     </label>
