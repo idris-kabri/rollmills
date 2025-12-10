@@ -11,8 +11,8 @@
                                     $image = 'storage/' . $slider->image;
                                     $words = explode(' ', $slider->heading);
                                     if (count($words) > 2) {
-                                        $firstPart = implode(' ', array_slice($words, 0, 2));
-                                        $secondPart = implode(' ', array_slice($words, 2));
+                                        $firstPart = implode(' ', array_slice($words, 0, 3));
+                                        $secondPart = implode(' ', array_slice($words, 3));
                                         $newHeading = $firstPart . ' <br> ' . $secondPart;
                                     } else {
                                         $newHeading = $slider->heading;
