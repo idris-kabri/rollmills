@@ -281,7 +281,7 @@
                         @foreach ($sale_products as $sale_product)
                             <div class="col-md-3 col-lg-3 col-6 small-screen-padding">
                                 @php
-                                    $parameter = array_rand($array_random_parameter);
+                                    $parameter = $array_random_parameter[array_rand($array_random_parameter)];
                                 @endphp
                                 @livewire('user.component.product-card', ['product' => $sale_product, 'parameter' => $parameter], key($sale_product->id . '-' . now()->timestamp))
                             </div>
@@ -304,7 +304,7 @@
                         @foreach ($users_look_for as $user_look_for)
                             <div class="col-md-3 col-lg-3 col-6 small-screen-padding">
                                 @php
-                                    $parameter = array_rand($array_random_parameter);
+                                    $parameter = $array_random_parameter[array_rand($array_random_parameter)];
                                 @endphp
                                 @livewire('user.component.product-card', ['product' => $user_look_for, 'parameter' => $parameter], key($user_look_for->id . '-' . now()->timestamp))
                             </div>
