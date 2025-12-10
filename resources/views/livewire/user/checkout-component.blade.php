@@ -631,6 +631,7 @@
                                 </tr>
                                 @php
                                     $discount = $mainDiscountAmount;
+                                    $couponCode = session()->get('coupon_code');
                                 @endphp
                                 @if ($discount != 0)
                                     <tr class="d-flex justify-content-between border-0 align-items-center">
