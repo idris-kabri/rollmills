@@ -359,8 +359,6 @@
         });
     });
 </script>
-
-{{-- @livewireScripts() --}}
 <script>
     window.addEventListener('item-view', (event) => {
         var data = event.detail[0];
@@ -555,6 +553,7 @@
 </script>
 
 @stack('scripts')
+@livewireScripts
 </body>
 
 </html>
