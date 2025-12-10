@@ -281,9 +281,7 @@
 <script src="{{ asset('assets/frontend/js/plugins/isotope.js') }}"></script>
 
 <!-- this script give error  -->
-@if (!request()->routeIs('cart'))
-    <script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
-@endif
+<script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script>
 
 <script src="{{ asset('assets/frontend/js/plugins/jquery.theia.sticky.js') }}"></script>
@@ -291,7 +289,6 @@
 <!-- Template  JS -->
 <script src="{{ asset('assets/frontend/js/main.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/range-slider.js') }}"></script>
-{{-- <script src="{{ asset('assets/frontend/js/range-slider.min.js') }}"></script> --}}
 <script src="{{ asset('assets/frontend/js/shop.js') }}"></script>
 <!-- Google Tag Manager -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"

@@ -80,11 +80,18 @@
             style="display:none;visibility:hidden"></iframe></noscript>
 
     @livewireStyles
+    @if (request()->routeIs('cart'))
+        <style>
+            #scrollUp {
+                display: none !important;
+            }
+        </style>
+    @endif
 </head>
 
 <body>
     @livewire('user.component.login-component')
-    <p class="d-none" id="login_condition">{{auth()->check() ? 'true' : 'false'}}</p>
+    <p class="d-none" id="login_condition">{{ auth()->check() ? 'true' : 'false' }}</p>
     @php
         $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
     @endphp
@@ -410,8 +417,8 @@
                                         Sign In
                                     </a>
                                 @endif
-                                <a href="javascript:void(0);" id="a-div-login-hide" class="d-none" data-bs-toggle="modal"
-                                        data-bs-target="#loginModal"></a>
+                                <a href="javascript:void(0);" id="a-div-login-hide" class="d-none"
+                                    data-bs-toggle="modal" data-bs-target="#loginModal"></a>
                             </li>
                             {{-- <li class="menu-item-has-children">
                                 <a href="#">Vendors</a>
@@ -571,12 +578,12 @@
                                             <div
                                                 class="sub-cat-item {{ $selectedCategory == $category->id ? 'active' : '' }}">
                                                 {{-- ADDED value attribute here --}}
-                                                <input type="radio" id="all-cat-{{ $category->id }}"
+                                                <input type="radio" id="all-cat-{{ $category->id }}-header"
                                                     value="{{ $category->id }}" name="category_group"
                                                     class="custom-check"
                                                     {{ $selectedCategory == $category->id ? 'checked' : '' }}>
 
-                                                <label for="all-cat-{{ $category->id }}"
+                                                <label for="all-cat-{{ $category->id }}-header"
                                                     style="cursor: pointer; width: 100%; margin: 0;">
                                                     All {{ $category->name }}
                                                 </label>
@@ -586,12 +593,12 @@
                                                 <div
                                                     class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
                                                     {{-- ADDED value attribute here --}}
-                                                    <input type="radio" id="sub-{{ $sub_category->id }}"
+                                                    <input type="radio" id="sub-category-{{ $sub_category->id }}"
                                                         value="{{ $sub_category->id }}" name="category_group"
                                                         class="custom-check"
                                                         {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
 
-                                                    <label for="sub-{{ $sub_category->id }}"
+                                                    <label for="sub-category-{{ $sub_category->id }}"
                                                         style="cursor: pointer; width: 100%; margin: 0;">
                                                         {{ $sub_category->name }}
                                                     </label>
@@ -639,8 +646,8 @@
                             </div>
                         </div>
                     </div> --}}
-                    <a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center" id="btn-apply-mobile-filters"><i
-                            class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply
+                    <a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center"
+                        id="btn-apply-mobile-filters"><i class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply
                         Fillters</a>
                     <!-- mobile menu end -->
                 </div>

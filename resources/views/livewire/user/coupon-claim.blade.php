@@ -103,7 +103,7 @@
                                     @foreach ($user_orders as $user_order)
                                         <tr class="pt-30">
                                             <td class="custome-checkbox pl-30">
-                                                <p class="small-screen-table-index">1</p>
+                                                <p class="small-screen-table-index">{{ $user_order->id }}</p>
                                             </td>
                                             <td class="product-des product-name">
                                                 <h5 class="mb-3 fs-18 underline">Product List</h5>
@@ -323,9 +323,9 @@
 </main>
 
 @push('scripts')
-    <script>
-        // --- 1. Auto-Open Modal on Page Load ---
-        document.addEventListener('DOMContentLoaded', function() {
+    @if(!auth()->check())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
             var modalElement = document.getElementById('giftCouponModal');
 
             if (modalElement) {
@@ -337,6 +337,10 @@
                 myModal.show();
             }
         });
+        </script>
+    @endif
+    <script>
+        // --- 1. Auto-Open Modal on Page Load ---
 
         // --- 2. Livewire Close Modal Trigger ---
         document.addEventListener('livewire:initialized', () => {

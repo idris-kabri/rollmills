@@ -626,7 +626,6 @@ class CheckoutComponent extends Component
                         'description' => $order->description,
                         'name' => Auth::user()->name,
                         'email' => Auth::user()->email,
-                        // 'title' => $this->gift_card_item['title'],
                         'customer_name' => Auth::user()->name,
                         'customer_email' => Auth::user()->email,
                         'success_url' => route('payment.success'),
@@ -645,12 +644,18 @@ class CheckoutComponent extends Component
         $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
         if ($setting) {
             $outOfDeliveryPincodes = explode(',', $setting->value);
+            $pincode = "";
+            if($this->ship_to_different_address_enabled){
+                $pincode = $this->ship_to_different_address['zipcode'];
+            }else{
+                $pincode = $this->billing_address['zipcode'];
+            }
 
-            if (in_array($this->billing_address['zipcode'], $outOfDeliveryPincodes)) {
+            if (in_array($pincode, $outOfDeliveryPincodes)) {
                 $this->free_shipping = true;
-                session()->put('free_shipping_pincode', $this->billing_address['zipcode']);
+                session()->put('free_shipping_pincode', $pincode);
                 session()->forget('show_deleviery_time');
-                session()->put('shipping_pincode', $this->billing_address['zipcode']);
+                session()->put('shipping_pincode', $pincode);
                 session()->forget('flat_rate_charge');
             } else {
                 session()->forget('free_shipping_pincode');

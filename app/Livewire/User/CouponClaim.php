@@ -8,6 +8,8 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Traits\HasToastNotification;
 use Livewire\Component;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CouponClaim extends Component
 {
@@ -40,6 +42,13 @@ class CouponClaim extends Component
             $this->step = 2;
         } else {
             $this->addError('mobile', 'User not found with this mobile number.');
+        }
+    }
+
+    public function mount(){
+        if(Auth::check()){
+            $this->step = 3;
+            $this->user_id = Auth::user()->id;
         }
     }
 
@@ -108,7 +117,7 @@ class CouponClaim extends Component
         $coupon->usage_limit = 1;
         $coupon->total_usage = 1;
         $coupon->category = "";
-        $coupon->expiry_date = Carbon::now()->addDays($settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
+        $coupon->expiry_date = Carbon::now()->addDays((int)$settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
         $coupon->order_id = $order->id;
         $coupon->save();
 
