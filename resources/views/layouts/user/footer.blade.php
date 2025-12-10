@@ -281,9 +281,7 @@
 <script src="{{ asset('assets/frontend/js/plugins/isotope.js') }}"></script>
 
 <!-- this script give error  -->
-@if (!request()->routeIs('cart'))
-    <script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
-@endif
+<script src="{{ asset('assets/frontend/js/plugins/scrollup.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/plugins/jquery.vticker-min.js') }}"></script>
 
 <script src="{{ asset('assets/frontend/js/plugins/jquery.theia.sticky.js') }}"></script>

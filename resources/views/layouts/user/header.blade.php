@@ -80,6 +80,13 @@
             style="display:none;visibility:hidden"></iframe></noscript>
 
     @livewireStyles
+    @if (request()->routeIs('cart'))
+        <style>
+            #scrollUp{
+                display: none !important;
+            }
+        </style>
+    @endif
 </head>
 
 <body>
