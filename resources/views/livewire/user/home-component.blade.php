@@ -209,7 +209,7 @@
     @php
         // 1. Define the Category IDs you want to show FIRST
         // Replace 5 and 10 with your actual Category IDs
-        $priority_ids = [29, 1]; 
+        $priority_ids = [1,29]; 
 
         // 2. Sort the collection
         $sortedCategories = $parentCategory->sortBy(function($cat) use ($priority_ids) {
