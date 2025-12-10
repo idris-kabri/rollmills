@@ -645,6 +645,12 @@ class CheckoutComponent extends Component
         $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
         if ($setting) {
             $outOfDeliveryPincodes = explode(',', $setting->value);
+            $pincode = "";
+            if($this->ship_to_different_address_enabled){
+                $pincode = $this->ship_to_different_address['zipcode'];
+            }else{
+                $pincode = $this->billing_address['zipcode'];
+            }
 
             if (in_array($this->billing_address['zipcode'], $outOfDeliveryPincodes)) {
                 $this->free_shipping = true;
