@@ -24,7 +24,7 @@
                                         <h1 class="display-2 mb-25">
                                             {!! $newHeading !!}
                                         </h1>
-                                        <p class="">{!! $slider->sub_heading !!}</p>
+                                        {!! $slider->sub_heading !!}
                                         <a href="{{ $slider->link ?? '#' }}"
                                             class="btn btn-ls mt-20">{{ $slider->button_text }} <i
                                                 class="fi-rs-arrow-small-right"></i></a>
