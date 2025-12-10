@@ -12541,6 +12541,12 @@ footer .hotline img {
 }
 
 /*Mobile landscape*/
+@media (max-width: 576px){
+    .hero-slider-1 .slider-content.custom-width-home-banner{
+        width: 90vw;
+    }
+}
+
 @media only screen and (min-width: 576px) and (max-width: 767px) {
     .header-action .header-action-icon {
         margin-right: 20px;
