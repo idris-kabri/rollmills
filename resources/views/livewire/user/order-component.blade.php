@@ -332,12 +332,12 @@
                                                             <div class="col-lg-6">
                                                                 <div class="card p-3 mb-3 rounded-15">
                                                                     <div class="d-flex gap-3">
-                                                                        <a class="align-items-center border d-flex img-section p-1 rounded-3"
-                                                                            href="#">
-                                                                            <img src="{{ asset('storage/' . $order_item->getProduct->featured_image) }}"
-                                                                                alt="img"
-                                                                                class="img-fluid">
-                                                                        </a>
+                                                                        <a class="border d-flex img-section p-1 rounded-3"
+                                                                href="#" style="flex: 0 0 80px;">
+                                                                <img src="{{ asset('storage/' . $order_item->getProduct->featured_image) }}"
+                                                                    alt="img" class="img-fluid rounded-3"
+                                                                    style="width: 80px; height: 80px; object-fit: cover;">
+                                                            </a>
                                                                         <div class="content py-2">
                                                                             <h6>
                                                                                 @if($order_item->is_gift_item == 1)
