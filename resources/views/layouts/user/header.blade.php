@@ -350,7 +350,7 @@
         </div>
     </header>
     <div class="mobile-header-active mobile-header-wrapper-style">
-        <div class="mobile-header-wrapper-inner">
+        <div class="mobile-header-wrapper-inner pb-2">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
                     <a href="/"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}"
@@ -364,21 +364,15 @@
                 </div>
             </div>
             <div class="mobile-header-content-area">
-                <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="/shop" method="get">
-                        <input type="text" name="search" placeholder="Search for items…" />
-                        <button type="submit"><i class="fi-rs-search"></i></button>
-                    </form>
-                </div>
                 <div class="mobile-menu-wrap mobile-header-border">
                     <!-- mobile menu start -->
                     <nav>
                         <ul class="mobile-menu font-heading">
                             <li class="menu-item-has-children">
-                                <a href="/">Home</a>
+                                <a href="/" class="w-100">Home</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="/shop">shop</a>
+                                <a href="/shop" class="w-100">shop</a>
                                 {{-- <ul class="dropdown">
                                     <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
                                     <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
@@ -415,12 +409,12 @@
                             {{-- REMOVED 'menu-item-has-children' class --}}
                             <li>
                                 @if (Auth::check())
-                                <a href="/my-account">My Account</a>
+                                    <a href="/my-account" class="w-100">My Account</a>
                                 @else
-                                <a href="javascript:void(0)" class="mobile-login-trigger" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal">
-                                    Sign In
-                                </a>
+                                    <a href="javascript:void(0)" class="mobile-login-trigger w-100" data-bs-toggle="modal"
+                                        data-bs-target="#loginModal">
+                                        Sign In
+                                    </a>
                                 @endif
                                 <a href="javascript:void(0);" id="a-div-login-hide" class="d-none"
                                     data-bs-toggle="modal" data-bs-target="#loginModal"></a>
@@ -486,10 +480,10 @@
                                 </ul>
                             </li> --}}
                             <li class="menu-item-has-children">
-                                <a href="/about">About Us</a>
+                                <a href="/about" class="w-100">About Us</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="/contact">Contact Us</a>
+                                <a href="/contact" class="w-100">Contact Us</a>
                             </li>
                         </ul>
                     </nav>
@@ -497,20 +491,16 @@
                 </div>
                 <div class="mobile-header-info-wrap border border-1 rounded-3">
                     <div class="single-mobile-header-info">
-                        <a href="/contact"><i class="fi-rs-marker"></i> 02 Floor, Taheri Complex, Opp. <br>
+                        <a href="https://maps.app.goo.gl/hasSGRbbo8o9oPNd7" target="_blank"><i
+                                class="fi-rs-marker"></i> 02 Floor, Taheri Complex, Opp. <br>
                             Gopi Restaurant, Sagwara, India </a>
-                    </div>
-                    <div class="single-mobile-header-info">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <i class="fi-rs-user"></i>Log In / Sign Up
-                        </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="tel:+91 87647 66553"><i class="fi-rs-headphones"></i>+91 87647 66553</a>
                     </div>
                 </div>
-                <div class="mobile-social-icon mb-50">
-                    <h6 class="mb-15">Follow Us</h6>
+                <div class="mobile-social-icon mb-3">
+                    <h6 class="mb-2">Follow Us</h6>
 
                     <a href="https://www.instagram.com/roll.mills/" target="_blank"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-instagram-white.svg') }}"

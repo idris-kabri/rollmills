@@ -97,7 +97,7 @@
                          </div>
                          <div class="col-lg-4 col-md-6 col-12 mb-30">
                              <div class="my-account-cards">
-                                 <a href="mailto:rollmills.rm@gmail.com"
+                                 <a href="mailto:info@rollmills.store"
                                      class="card px-4 d-flex flex-row py-4 rounded-15 shadow-sm text-center border border-2">
                                      <div class="img-section me-4">
                                          <img src="{{ asset('assets/frontend/imgs/icon&images/mail.png') }}"
