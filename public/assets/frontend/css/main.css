@@ -7835,6 +7835,7 @@ h6.post-title {
     opacity: 1;
     visibility: visible;
     top: calc(100% + 10px);
+    z-index: 9999;
 }
 
 .header-middle-ptb-1 {
