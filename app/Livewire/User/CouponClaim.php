@@ -117,7 +117,7 @@ class CouponClaim extends Component
         $coupon->usage_limit = 1;
         $coupon->total_usage = 1;
         $coupon->category = "";
-        $coupon->expiry_date = Carbon::now()->addDays($settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
+        $coupon->expiry_date = Carbon::now()->addDays((int)$settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
         $coupon->order_id = $order->id;
         $coupon->save();
 
