@@ -32,7 +32,7 @@
     <!-- Custom New CSS -->
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
     @if (Request::is('coupon-claim'))
-    <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
+        <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
     @endif
     <link rel="stylesheet" href="{{ asset('assets/custom_css/improve.css') }}" />
     <!-- Font Awesome -->
@@ -84,11 +84,11 @@
 
     @livewireStyles
     @if (request()->routeIs('cart'))
-    <style>
-        #scrollUp {
-            display: none !important;
-        }
-    </style>
+        <style>
+            #scrollUp {
+                display: none !important;
+            }
+        </style>
     @endif
 </head>
 
@@ -96,12 +96,14 @@
     @livewire('user.component.login-component')
     <p class="d-none" id="login_condition">{{ auth()->check() ? 'true' : 'false' }}</p>
     @php
-    $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
+        $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
     @endphp
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
-             <span>Big Winter Savings! <strong>Up To 60%</strong> OFF Storewide. Shop <strong>Before the Deals</strong> Melt.</span>
+            <span>Big Winter Savings! <strong>Up To 60%</strong> OFF Storewide. Shop <strong>Before the Deals</strong>
+                Melt.</span>
         </div>
+        <a href="javascript:void(0);" id="a-div-login-hide" class="d-none" data-bs-toggle="modal" data-bs-target="#loginModal"></a>
         <div class="header-middle header-middle-ptb-1 d-none d-xl-block">
             <div class="container">
                 <div class="header-wrap justify-content-between">
@@ -133,43 +135,43 @@
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                                 <div class="d-flex categori-dropdown-inner">
                                     @php
-                                    $firstTen = $categories->take(10);
-                                    $remaining = $categories->skip(10);
+                                        $firstTen = $categories->take(10);
+                                        $remaining = $categories->skip(10);
                                     @endphp
                                     @foreach ($firstTen->split(2) as $chunk)
-                                    <ul>
-                                        @foreach ($chunk as $category)
-                                        <li>
-                                            {{-- Replace 'category.show' with your actual route name --}}
-                                            <a
-                                                href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
-                                                <img src="{{ asset('storage/' . $category->icon) }}"
-                                                    alt="{{ $category->name }}" />
-                                                {{ $category->name }}
-                                            </a>
-                                        </li>
-                                        @endforeach
-                                    </ul>
+                                        <ul>
+                                            @foreach ($chunk as $category)
+                                                <li>
+                                                    {{-- Replace 'category.show' with your actual route name --}}
+                                                    <a
+                                                        href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
+                                                        <img src="{{ asset('storage/' . $category->icon) }}"
+                                                            alt="{{ $category->name }}" />
+                                                        {{ $category->name }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     @endforeach
                                 </div>
                                 @if ($categories->count() > 10)
-                                <div class="more_slide_open" style="display: none">
-                                    <div class="d-flex categori-dropdown-inner">
-                                        @foreach ($remaining->split(2) as $chunk)
-                                        <ul>
-                                            @foreach ($chunk as $category)
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img
-                                                        src="{{ asset('storage/' . $category->icon) }}"
-                                                        alt="" />{{ $category->name }}</a>
-                                            </li>
+                                    <div class="more_slide_open" style="display: none">
+                                        <div class="d-flex categori-dropdown-inner">
+                                            @foreach ($remaining->split(2) as $chunk)
+                                                <ul>
+                                                    @foreach ($chunk as $category)
+                                                        <li>
+                                                            <a href="shop-grid-right.html"> <img
+                                                                    src="{{ asset('storage/' . $category->icon) }}"
+                                                                    alt="" />{{ $category->name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
                                             @endforeach
-                                        </ul>
-                                        @endforeach
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="more_categories"><span class="icon"></span> <span
-                                        class="heading-sm-1">Show more...</span></div>
+                                    <div class="more_categories"><span class="icon"></span> <span
+                                            class="heading-sm-1">Show more...</span></div>
                                 @endif
                             </div>
                         </div>
@@ -256,95 +258,95 @@
                         <li>
                             <a href="/blog">Blog</a>
                         </li> --}}
-                        <li>
-                            <a href="/about" class="{{ Request::is('about') ? 'active' : '' }}">About
-                                Us</a>
-                        </li>
-                        <li>
-                            <a href="/contact"
-                                class="{{ Request::is('contact') ? 'active' : '' }}">Contact Us</a>
-                        </li>
-                        </ul>
-                        </nav>
+                                    <li>
+                                        <a href="/about" class="{{ Request::is('about') ? 'active' : '' }}">About
+                                            Us</a>
+                                    </li>
+                                    <li>
+                                        <a href="/contact"
+                                            class="{{ Request::is('contact') ? 'active' : '' }}">Contact Us</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="hotline d-none d-xl-flex align-items-center">
+                        <a href="tel:+91 87647 66553" class="d-flex align-items-center">
+                            <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-headphone.svg') }}"
+                                alt="hotline" style="width: 32px" class="img-color" />
+                            <p class="fs-18 text-dark fw-600">+91 87647 66553</p>
+                        </a>
+                    </div>
+                    <div class="d-none d-md-flex d-xl-none mx-5 w-100">
+                        <div class="header-wrap justify-content-between w-100">
+                            @livewire('user.component.search-component')
+                        </div>
+                    </div>
+                    <div class="header-action-icon-2 d-block d-xl-none">
+                        <div class="burger-icon burger-icon-white">
+                            <span class="burger-icon-top"></span>
+                            <span class="burger-icon-mid"></span>
+                            <span class="burger-icon-bottom"></span>
+                        </div>
+                    </div>
+                    <div class="header-action-right d-block d-xl-none">
+                        @livewire('user.component.mobile-header-cart-component')
                     </div>
                 </div>
-                <div class="hotline d-none d-xl-flex align-items-center">
-                    <a href="tel:+91 87647 66553" class="d-flex align-items-center">
-                        <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-headphone.svg') }}"
-                            alt="hotline" style="width: 32px" class="img-color" />
-                        <p class="fs-18 text-dark fw-600">+91 87647 66553</p>
-                    </a>
-                </div>
-                <div class="d-none d-md-flex d-xl-none mx-5 w-100">
+                <div
+                    class="d-flex justify-content-between d-md-none mobile-category-options header-style-1 mt-15 mb-10 px-1">
+                    <div class="main-categori-wrap mr-15">
+                        <a class="categories-button-active p-15" href="#">
+                            <span class="fi-rs-apps m-0"></span>
+                        </a>
+                        <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
+                            <div class="d-flex categori-dropdown-inner">
+                                @php
+                                    $firstTen = $categories->take(10);
+                                    $remaining = $categories->skip(10);
+                                @endphp
+                                @foreach ($firstTen->split(2) as $chunk)
+                                    <ul>
+                                        @foreach ($chunk as $category)
+                                            <li>
+                                                {{-- Replace 'category.show' with your actual route name --}}
+                                                <a
+                                                    href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
+                                                    <img src="{{ asset('storage/' . $category->icon) }}"
+                                                        alt="{{ $category->name }}" />
+                                                    {{ $category->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endforeach
+                            </div>
+                            @if ($categories->count() > 10)
+                                <div class="more_slide_open" style="display: none">
+                                    <div class="d-flex categori-dropdown-inner">
+                                        @foreach ($remaining->split(2) as $chunk)
+                                            <ul>
+                                                @foreach ($chunk as $category)
+                                                    <li>
+                                                        <a href="shop-grid-right.html"> <img
+                                                                src="{{ asset('storage/' . $category->icon) }}"
+                                                                alt="" />{{ $category->name }}</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="more_categories"><span class="icon"></span> <span
+                                        class="heading-sm-1">Show more...</span></div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="header-wrap justify-content-between w-100">
                         @livewire('user.component.search-component')
                     </div>
                 </div>
-                <div class="header-action-icon-2 d-block d-xl-none">
-                    <div class="burger-icon burger-icon-white">
-                        <span class="burger-icon-top"></span>
-                        <span class="burger-icon-mid"></span>
-                        <span class="burger-icon-bottom"></span>
-                    </div>
-                </div>
-                <div class="header-action-right d-block d-xl-none">
-                    @livewire('user.component.mobile-header-cart-component')
-                </div>
             </div>
-            <div
-                class="d-flex justify-content-between d-md-none mobile-category-options header-style-1 mt-15 mb-10 px-1">
-                <div class="main-categori-wrap mr-15">
-                    <a class="categories-button-active p-15" href="#">
-                        <span class="fi-rs-apps m-0"></span>
-                    </a>
-                    <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
-                        <div class="d-flex categori-dropdown-inner">
-                            @php
-                            $firstTen = $categories->take(10);
-                            $remaining = $categories->skip(10);
-                            @endphp
-                            @foreach ($firstTen->split(2) as $chunk)
-                            <ul>
-                                @foreach ($chunk as $category)
-                                <li>
-                                    {{-- Replace 'category.show' with your actual route name --}}
-                                    <a
-                                        href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
-                                        <img src="{{ asset('storage/' . $category->icon) }}"
-                                            alt="{{ $category->name }}" />
-                                        {{ $category->name }}
-                                    </a>
-                                </li>
-                                @endforeach
-                            </ul>
-                            @endforeach
-                        </div>
-                        @if ($categories->count() > 10)
-                        <div class="more_slide_open" style="display: none">
-                            <div class="d-flex categori-dropdown-inner">
-                                @foreach ($remaining->split(2) as $chunk)
-                                <ul>
-                                    @foreach ($chunk as $category)
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img
-                                                src="{{ asset('storage/' . $category->icon) }}"
-                                                alt="" />{{ $category->name }}</a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="more_categories"><span class="icon"></span> <span
-                                class="heading-sm-1">Show more...</span></div>
-                        @endif
-                    </div>
-                </div>
-                <div class="header-wrap justify-content-between w-100">
-                    @livewire('user.component.search-component')
-                </div>
-            </div>
-        </div>
         </div>
     </header>
     <div class="mobile-header-active mobile-header-wrapper-style">
@@ -409,13 +411,11 @@
                                 @if (Auth::check())
                                     <a href="/my-account" class="w-100">My Account</a>
                                 @else
-                                    <a href="javascript:void(0)" class="mobile-login-trigger w-100" data-bs-toggle="modal"
-                                        data-bs-target="#loginModal">
+                                    <a href="javascript:void(0)" class="mobile-login-trigger w-100"
+                                        data-bs-toggle="modal" data-bs-target="#loginModal">
                                         Sign In
                                     </a>
                                 @endif
-                                <a href="javascript:void(0);" id="a-div-login-hide" class="d-none"
-                                    data-bs-toggle="modal" data-bs-target="#loginModal"></a>
                             </li>
                             {{-- <li class="menu-item-has-children">
                                 <a href="#">Vendors</a>
@@ -532,104 +532,101 @@
                         <div class="category-list">
 
                             @foreach ($categories as $category)
-                            @php
-                            // GET SELECTED CATEGORY FROM URL
-                            $selectedCategory = request('category_id');
+                                @php
+                                    // GET SELECTED CATEGORY FROM URL
+                                    $selectedCategory = request('category_id');
 
-                            // GET SUBCATEGORIES
-                            $subCategories = \App\Models\ProductCategory::where('parent_id', $category->id)->get();
+                                    // GET SUBCATEGORIES
+                                    $subCategories = \App\Models\ProductCategory::where(
+                                        'parent_id',
+                                        $category->id,
+                                    )->get();
 
-                            // CHECK ACTIVE STATES
-                            $isActive = $selectedCategory == $category->id;
-                            $isChildActive = $subCategories->contains('id', $selectedCategory);
+                                    // CHECK ACTIVE STATES
+                                    $isActive = $selectedCategory == $category->id;
+                                    $isChildActive = $subCategories->contains('id', $selectedCategory);
 
-                            // OPEN IF ACTIVE OR CHILD SELECTED
-                            $isOpen = $isActive || $isChildActive;
-                            @endphp
+                                    // OPEN IF ACTIVE OR CHILD SELECTED
+                                    $isOpen = $isActive || $isChildActive;
+                                @endphp
 
-                            <div class="category-list-item" x-data="{ open: @json($isOpen) }">
+                                <div class="category-list-item" x-data="{ open: @json($isOpen) }">
 
-                                {{-- CATEGORY HEADER --}}
-                                <a href="#"
-                                    class="cat-link {{ $isActive ? 'active' : '' }}"
+                                    {{-- CATEGORY HEADER --}}
+                                    <a href="#" class="cat-link {{ $isActive ? 'active' : '' }}"
+                                        @if ($subCategories->count() > 0) @click.prevent="open = !open" @endif>
+                                        <div class="cat-left">
+                                            @if ($category->icon)
+                                                <img src="{{ asset('storage/' . $category->icon) }}"
+                                                    class="cat-icon" />
+                                            @endif
+                                            <span class="cat-name">{{ $category->name }}</span>
+                                        </div>
+
+                                        <div class="cat-right">
+                                            @if ($subCategories->count() > 0)
+                                                <i class="fi-rs-angle-small-down toggle-arrow"
+                                                    :style="open ? 'transform: rotate(180deg); color: var(--color-2);' : ''"></i>
+                                            @endif
+                                        </div>
+                                    </a>
+
+                                    {{-- If category has subcategories --}}
                                     @if ($subCategories->count() > 0)
-                                    @click.prevent="open = !open"
-                                    @endif>
-                                    <div class="cat-left">
-                                        @if ($category->icon)
-                                        <img src="{{ asset('storage/' . $category->icon) }}" class="cat-icon" />
-                                        @endif
-                                        <span class="cat-name">{{ $category->name }}</span>
-                                    </div>
+                                        <div class="sub-cat-container" x-show="open" x-collapse
+                                            style="display: none;">
 
-                                    <div class="cat-right">
-                                        @if ($subCategories->count() > 0)
-                                        <i class="fi-rs-angle-small-down toggle-arrow"
-                                            :style="open ? 'transform: rotate(180deg); color: var(--color-2);' : ''"></i>
-                                        @endif
-                                    </div>
-                                </a>
+                                            {{-- ALL category (Parent) --}}
+                                            <div class="sub-cat-item {{ $isActive ? 'active' : '' }}">
+                                                <input type="radio" id="all-cat-{{ $category->id }}-header"
+                                                    value="{{ $category->id }}" name="category_group"
+                                                    class="custom-check"
+                                                    onchange="window.location.href='/shop?category_id={{ $category->id }}&category_slug={{ $category->slug }}'"
+                                                    {{ $isActive ? 'checked' : '' }}>
 
-                                {{-- If category has subcategories --}}
-                                @if ($subCategories->count() > 0)
+                                                <label for="all-cat-{{ $category->id }}-header"
+                                                    style="cursor: pointer; width: 100%;">
+                                                    All {{ $category->name }}
+                                                </label>
+                                            </div>
 
-                                <div class="sub-cat-container" x-show="open" x-collapse style="display: none;">
+                                            {{-- Child categories --}}
+                                            @foreach ($subCategories as $sub_category)
+                                                <div
+                                                    class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
 
-                                    {{-- ALL category (Parent) --}}
-                                    <div class="sub-cat-item {{ $isActive ? 'active' : '' }}">
-                                        <input type="radio"
-                                            id="all-cat-{{ $category->id }}-header"
-                                            value="{{ $category->id }}"
-                                            name="category_group"
-                                            class="custom-check"
-                                            onchange="window.location.href='/shop?category_id={{ $category->id }}&category_slug={{ $category->slug }}'"
-                                            {{ $isActive ? 'checked' : '' }}>
+                                                    <input type="radio" id="sub-category-{{ $sub_category->id }}"
+                                                        value="{{ $sub_category->id }}" name="category_group"
+                                                        class="custom-check"
+                                                        onchange="window.location.href='/shop?category_id={{ $sub_category->id }}&category_slug={{ $sub_category->slug }}'"
+                                                        {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
 
-                                        <label for="all-cat-{{ $category->id }}-header" style="cursor: pointer; width: 100%;">
-                                            All {{ $category->name }}
-                                        </label>
-                                    </div>
+                                                    <label for="sub-category-{{ $sub_category->id }}"
+                                                        style="cursor: pointer; width:100%;">
+                                                        {{ $sub_category->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
 
-                                    {{-- Child categories --}}
-                                    @foreach ($subCategories as $sub_category)
-                                    <div class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
+                                        </div>
+                                    @else
+                                        {{-- Category with NO child --}}
+                                        <div class="sub-cat-container" style="padding: 5px 10px; margin-bottom: 5px;">
+                                            <div class="sub-cat-item">
+                                                <input type="radio" id="cat-only-{{ $category->id }}"
+                                                    value="{{ $category->id }}" name="category_group"
+                                                    class="custom-check"
+                                                    onchange="window.location.href='/shop?category_id={{ $category->id }}&category_slug={{ $category->slug }}'"
+                                                    {{ $selectedCategory == $category->id ? 'checked' : '' }}>
 
-                                        <input type="radio"
-                                            id="sub-category-{{ $sub_category->id }}"
-                                            value="{{ $sub_category->id }}"
-                                            name="category_group"
-                                            class="custom-check"
-                                            onchange="window.location.href='/shop?category_id={{ $sub_category->id }}&category_slug={{ $sub_category->slug }}'"
-                                            {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
-
-                                        <label for="sub-category-{{ $sub_category->id }}" style="cursor: pointer; width:100%;">
-                                            {{ $sub_category->name }}
-                                        </label>
-                                    </div>
-                                    @endforeach
+                                                <label for="cat-only-{{ $category->id }}" style="cursor:pointer;">
+                                                    Select
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endif
 
                                 </div>
-
-                                @else
-                                {{-- Category with NO child --}}
-                                <div class="sub-cat-container" style="padding: 5px 10px; margin-bottom: 5px;">
-                                    <div class="sub-cat-item">
-                                        <input type="radio"
-                                            id="cat-only-{{ $category->id }}"
-                                            value="{{ $category->id }}"
-                                            name="category_group"
-                                            class="custom-check"
-                                            onchange="window.location.href='/shop?category_id={{ $category->id }}&category_slug={{ $category->slug }}'"
-                                            {{ $selectedCategory == $category->id ? 'checked' : '' }}>
-
-                                        <label for="cat-only-{{ $category->id }}" style="cursor:pointer;">
-                                            Select
-                                        </label>
-                                    </div>
-                                </div>
-                                @endif
-
-                            </div>
                             @endforeach
 
                         </div>
@@ -660,8 +657,8 @@
                             </div>
                         </div>
                     </div> --}}
-                    {{--<a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center"
-                        id="btn-apply-mobile-filters"><i class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply Fillters</a>--}}
+                    {{-- <a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center"
+                        id="btn-apply-mobile-filters"><i class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply Fillters</a> --}}
                     <!-- mobile menu end -->
                 </div>
             </div>
