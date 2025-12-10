@@ -276,6 +276,7 @@
                                                 <div
                                                     class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
                                                     <input type="radio" id="sub-{{ $sub_category->id }}"
+                                                        value="{{ $sub_category->id }}" {{-- <--- FIX: Added the value attribute --}}
                                                         name="category_group" class="custom-check"
                                                         wire:click="categoryWiseProduct({{ $sub_category->id }}, 'change')"
                                                         {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
@@ -386,16 +387,16 @@
                     </div>
 
                     @if ($shop_page_banner != null)
-                    <div class="banner-img wow fadeIn mb-lg-0 animated d-xl-block d-none">
-                        <img src="{{ asset('storage/' . $shop_page_banner->image) }}" alt="" />
-                        <div class="banner-text">
-                            <span>{{ $shop_page_banner->heading }}</span>
-                            <h4>
-                                {!! preg_replace('/<\/?p>/', '', $shop_page_banner->sub_heading) !!}
-                            </h4>
+                        <div class="banner-img wow fadeIn mb-lg-0 animated d-xl-block d-none">
+                            <img src="{{ asset('storage/' . $shop_page_banner->image) }}" alt="" />
+                            <div class="banner-text">
+                                <span>{{ $shop_page_banner->heading }}</span>
+                                <h4>
+                                    {!! preg_replace('/<\/?p>/', '', $shop_page_banner->sub_heading) !!}
+                                </h4>
 
+                            </div>
                         </div>
-                    </div>
                     @endif
                 </div>
 
@@ -434,7 +435,8 @@
                                         <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
-                                        <span> {{ ucfirst(str_replace('-', ' ', $sortBy)) }} <i class="fi-rs-angle-small-down"></i></span>
+                                        <span> {{ ucfirst(str_replace('-', ' ', $sortBy)) }} <i
+                                                class="fi-rs-angle-small-down"></i></span>
                                     </div>
                                 </div>
                                 <div class="sort-by-dropdown">
