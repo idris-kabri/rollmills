@@ -30,23 +30,29 @@ class CouponClaim extends Component
     public function sendOTP()
     {
         $this->validate(['mobile' => 'required|digits:10']);
-
+        
         // Find or Create user logic (Adjust based on your needs)
         $user = User::where('mobile', $this->mobile)->first();
-
+        
+        $otpCode = rand(1000, 9999);
         if ($user) {
-            $otpCode = rand(1000, 9999);
             $user->otp = $otpCode;
             $user->save();
-
-            $this->step = 2;
+            messageSend($this->mobile, $otpCode, 'login_otp');
         } else {
-            $this->addError('mobile', 'User not found with this mobile number.');
-        }
+            $user = new User();
+            $user->role = 'user';
+            $user->mobile = $this->mobile;
+            $user->otp = $otpCode;
+            $user->save();
+            messageSend($this->mobile, $otpCode, 'login_otp');
+        } 
+        $this->step = 2;
     }
 
-    public function mount(){
-        if(Auth::check()){
+    public function mount()
+    {
+        if (Auth::check()) {
             $this->step = 3;
             $this->user_id = Auth::user()->id;
         }
@@ -71,6 +77,7 @@ class CouponClaim extends Component
             $this->user_id = $user->id;
             $this->step = 3;
             $this->dispatch('close-modal');
+            Auth::login($user);
         } else {
             $this->addError('otp', 'Invalid OTP. Please try again.');
             $this->reset('otp');
