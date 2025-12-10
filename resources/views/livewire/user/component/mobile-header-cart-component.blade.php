@@ -39,7 +39,7 @@
                             <h3><span>{{ $item->qty }} × </span>₹{{ number_format($item->price) }}</h3>
                         </div>
                         <div class="shopping-cart-delete">
-                            <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"><i class="fi-rs-cross-small"></i></a>
+                            {{-- <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"><i class="fi-rs-cross-small"></i></a> --}}
                         </div>
                     </li>
                 @endforeach
