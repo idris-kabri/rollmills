@@ -49,7 +49,6 @@ class CouponClaim extends Component
         if(Auth::check()){
             $this->step = 3;
             $this->user_id = Auth::user()->id;
-            $this->dispatch('close-modal');
         }
     }
 

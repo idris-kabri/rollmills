@@ -323,9 +323,9 @@
 </main>
 
 @push('scripts')
-    <script>
-        // --- 1. Auto-Open Modal on Page Load ---
-        document.addEventListener('DOMContentLoaded', function() {
+    @if(!auth()->check())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
             var modalElement = document.getElementById('giftCouponModal');
 
             if (modalElement) {
@@ -337,6 +337,10 @@
                 myModal.show();
             }
         });
+        </script>
+    @endif
+    <script>
+        // --- 1. Auto-Open Modal on Page Load ---
 
         // --- 2. Livewire Close Modal Trigger ---
         document.addEventListener('livewire:initialized', () => {
