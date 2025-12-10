@@ -652,11 +652,11 @@ class CheckoutComponent extends Component
                 $pincode = $this->billing_address['zipcode'];
             }
 
-            if (in_array($this->billing_address['zipcode'], $outOfDeliveryPincodes)) {
+            if (in_array($pincode, $outOfDeliveryPincodes)) {
                 $this->free_shipping = true;
-                session()->put('free_shipping_pincode', $this->billing_address['zipcode']);
+                session()->put('free_shipping_pincode', $pincode);
                 session()->forget('show_deleviery_time');
-                session()->put('shipping_pincode', $this->billing_address['zipcode']);
+                session()->put('shipping_pincode', $pincode);
                 session()->forget('flat_rate_charge');
             } else {
                 session()->forget('free_shipping_pincode');
