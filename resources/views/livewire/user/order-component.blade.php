@@ -330,14 +330,7 @@
                                                             }
                                                             @endphp
                                                             <div class="col-lg-6">
-                                                                <div class="card p-3 mb-3 rounded-15"> 
-                                                                    @if($order_item->is_gift_item == 1)
-                                                                    <div class="mb-2">
-                                                                        <p class="badge bg-success py-1 quicksand text-end">
-                                                                            <i class="fi-rs-gift mr-5"></i> Surprise Gift
-                                                                        </p>
-                                                                    </div>
-                                                                    @endif
+                                                                <div class="card p-3 mb-3 rounded-15">
                                                                     <div class="d-flex gap-3">
                                                                         <a class="align-items-center border d-flex img-section p-1 rounded-3"
                                                                             href="#">
@@ -347,12 +340,22 @@
                                                                         </a>
                                                                         <div class="content py-2">
                                                                             <h6>
+                                                                                @if($order_item->is_gift_item == 1)
+                                                                                <div class="mb-2">
+                                                                                    <p class="badge bg-success py-1 quicksand text-end">
+                                                                                        <i class="fi-rs-gift mr-5"></i> Surprise Gift
+                                                                                    </p>
+                                                                                </div>
+                                                                                @endif
                                                                                 <a href="{{ $shop_detail_url }}"
                                                                                     class="fs-17 two-liner-text">{{ $order_item->getProduct->name }}</a>
                                                                             </h6>
-                                                                            <div class="product-price pt-5">
-                                                                                <span
-                                                                                    class="fs-18 fw-bold">₹{{ number_format($order_item->sale_default_price, 2) }}</span>
+                                                                            <div class="product-price pt-5"> 
+                                                                                @if($order_item->is_gift_item == 1)
+                                                                                    <span class="fs-18 fw-bold">₹0</span> 
+                                                                                @else 
+                                                                                    <span class="fs-18 fw-bold">₹{{ number_format($order_item->sale_default_price, 2) }}</span>
+                                                                                @endif
                                                                                 <span
                                                                                     class="ms-2 fs-12 fw-600 px-1 bg-light border border-2 rounded-3 quicksand mt-2">x{{ $order_item->quantity }}</span>
                                                                             </div>
