@@ -297,7 +297,7 @@
                                         <a href="#" class="qty-up" wire:click.prevent="incrementQuantity()"><i
                                                 class="fi-rs-angle-small-up"></i></a>
                                     </div>
-                                    <div class="product-extra-link2">
+                                    <div class="d-flex product-extra-link2">
                                         <button type="submit" class="button button-add-to-cart"
                                             wire:click="addToCart()"><i class="fi-rs-shopping-cart"></i>Add to
                                             cart</button>

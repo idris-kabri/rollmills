@@ -17,7 +17,8 @@ class GiftCardItem extends Model
         'user_id', 
         'customer_name', 
         'customer_email', 
-        'used_at'
+        'used_at', 
+        'is_gift_item'
     ]; 
 
     public function fetchCreatedBy(){ 

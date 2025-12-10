@@ -282,7 +282,7 @@
                 <h3 class="">Product Users look for</h3>
             </div>
             <div class="row">
-                <div class="col-xl-9 col-md-12">
+                <div class="col-xl-12 col-md-12">
                     <div class="row">
                         @foreach ($users_look_for as $user_look_for)
                             <div class="col-md-3 col-lg-3 col-6 small-screen-padding">

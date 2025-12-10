@@ -84,7 +84,7 @@ class HomeComponent extends Component
         $this->trending_products = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->inRandomOrder()->limit(3)->get();
         $this->latest_products = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->orderBy('created_at', 'desc')->inRandomOrder()->limit(3)->get();
         $this->top_rated_products = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->inRandomOrder()->limit(3)->get();
-        $this->users_look_for = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->orderBy('price', 'asc')->inRandomOrder()->limit(4)->get();
+        $this->users_look_for = Product::where('status', 1)->where('parent_id', null)->where('is_featured', 1)->orderBy('price', 'asc')->inRandomOrder()->limit(8)->get();
     }
 
     public function setPopularProductCategory($category)

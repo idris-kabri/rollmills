@@ -18,36 +18,50 @@
                 <ul wire:poll.750ms
                     style="max-height: 250px; overflow: auto; scrollbar-color: var(--color-1) #fcfcfc; scrollbar-width: thin;">
                     @foreach (Cart::instance('cart')->content() as $item)
-                        <li>
-                            @php
-                                if ($item->model->slug) {
-                                    $shop_detail_url = route('shop-detail', [
-                                        'slug' => $item->model->slug,
-                                        'id' => $item->model->id,
-                                    ]);
-                                } else {
-                                    $shop_detail_url = route('shop-detail', [
-                                        'slug' => 'no-slug',
-                                        'id' => $item->model->id,
-                                    ]);
-                                }
-                            @endphp
-                            <div class="shopping-cart-img">
-                                <a href="{{ $shop_detail_url }}"><img alt="{{ $item->model->seo_meta }}"
-                                        src="{{ asset('storage/' . $item->model->featured_image) }}" /></a>
-                            </div>
-                            <div class="shopping-cart-title">
-                                <h4><a href="{{ $shop_detail_url }}">{{ Str::words($item->model->name, 2, ' ...') }}</a>
-                                </h4>
-                                <h4 class="fs-14 text-secondary fw-500"><span>{{ $item->qty }} ×
-                                        ₹{{ number_format($item->price) }}</span>
-                                </h4>
-                            </div>
-                            <div class="shopping-cart-delete">
-                                <a href="#" wire:click.prevent="removeFromCart('{{ $item->rowId }}')"><i
-                                        class="fi-rs-cross-small"></i></a>
-                            </div>
-                        </li>
+                    <li>
+                        @php
+                        if ($item->model->slug) {
+                        $shop_detail_url = route('shop-detail', [
+                        'slug' => $item->model->slug,
+                        'id' => $item->model->id,
+                        ]);
+                        } else {
+                        $shop_detail_url = route('shop-detail', [
+                        'slug' => 'no-slug',
+                        'id' => $item->model->id,
+                        ]);
+                        }
+                        @endphp
+                        <div class="shopping-cart-img">
+                            <a href="{{ $shop_detail_url }}"><img alt="{{ $item->model->seo_meta }}"
+                                    src="{{ asset('storage/' . $item->model->featured_image) }}" /></a>
+                        </div>
+                        <div class="shopping-cart-title">
+                            <h4><a href="{{ $shop_detail_url }}">{{ Str::words($item->model->name, 2, ' ...') }}</a>
+                            </h4>
+                            <h4 class="fs-14 text-secondary fw-500"><span>{{ $item->qty }} ×
+                                    ₹{{ number_format($item->price) }}</span>
+                            </h4>
+                        </div>
+                        <div class="shopping-cart-delete">
+
+                            <!-- Normal delete icon (shown only when NOT loading) -->
+                            <a href="#"
+                                wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
+                                wire:loading.remove
+                                wire:target="removeFromCart('{{ $item->rowId }}')">
+                                <i class="fi-rs-cross-small"></i>
+                            </a>
+
+                            <!-- Loader (shown only when loading) -->
+                            <span wire:loading
+                                wire:target="removeFromCart('{{ $item->rowId }}')">
+                                <i class="spinner-border spinner-border-sm"></i>
+                            </span>
+
+                        </div>
+
+                    </li>
                     @endforeach
                 </ul>
                 <div class="shopping-cart-footer">
@@ -63,18 +77,18 @@
         <div class="header-action-icon-2">
 
             @if (auth()->check())
-                <a href="/my-account">
-                    <img class="svgInject" alt="Nest"
-                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
-                </a>
-                <a href="/my-account"><span class="lable">Account</span></a>
+            <a href="/my-account">
+                <img class="svgInject" alt="Nest"
+                    src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
+            </a>
+            <a href="/my-account"><span class="lable">Account</span></a>
             @else
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                    <img class="svgInject" alt="Nest"
-                        src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
-                </a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"><span
-                        class="lable">Login</span></a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <img class="svgInject" alt="Nest"
+                    src="{{ asset('assets/frontend/imgs/theme/icons/icon-user.svg') }}" />
+            </a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"><span
+                    class="lable">Login</span></a>
             @endif
 
         </div>

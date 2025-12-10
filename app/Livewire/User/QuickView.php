@@ -182,7 +182,7 @@ class QuickView extends Component
                 return true;
             }
         });
-        $addToCart = finalAddToCart($this->mainProduct, $existing_quantity + $this->quantity, 'update-quantity');
+        $addToCart = finalAddToCart($this->mainProduct, $existing_qauntity + $this->quantity, 'update-quantity');
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($this->mainProduct->sale_from_date);

@@ -366,7 +366,7 @@
                                                 wire:model="ship_to_different_address.name">
                                         </div>
                                         <div class="form-group col-lg-6">
-                                            <input required="" type="email" name="email"
+                                            <input type="email" name="email"
                                                 placeholder="Email *" wire:model="ship_to_different_address.email">
                                         </div>
                                         <div class="form-group col-lg-6">

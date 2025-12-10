@@ -8,11 +8,18 @@ use Cart;
 use App\Models\Product;
 use App\Models\ProductCategoryAssign;
 use Carbon\Carbon;
+
 class HeaderCartComponent extends Component
 {
     use HasToastNotification;
     public function removeFromCart($rowId)
     {
+        try {
+            $item = Cart::instance('cart')->get($rowId);
+        } catch (\Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException $e) {
+            return; // rowId not found — safely exit
+        }
+
         $qty = Cart::instance('cart')->get($rowId)->qty;
         $productId = Cart::instance('cart')->get($rowId)->model->id;
         $removeCart = finalRemoveFromCart($rowId);
@@ -69,7 +76,7 @@ class HeaderCartComponent extends Component
         $items[] = $item;
         $this->dispatch('remove-from-cart', $items);
         if ($removeCart) {
-            $this->toastError('Product Remove Successfully From Your Cart!');
+            // $this->toastError('Product Remove Successfully From Your Cart!');
         }
     }
 

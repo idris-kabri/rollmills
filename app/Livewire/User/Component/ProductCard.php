@@ -17,6 +17,7 @@ class ProductCard extends Component
     public $parameter = '';
     public $get_sold = false;
     public $selected_product = null;
+    public $groupedAttributes = [];
     public $selectedProductId;
     protected $listeners = [];
 
@@ -28,6 +29,31 @@ class ProductCard extends Component
             $this->parameter = $parameter;
         }
         $this->get_sold = $get_sold;
+
+        $subProduct = Product::where('parent_id', $this->product->id)->pluck('attribute_id')->toArray();
+        $flatIds = [];
+        foreach ($subProduct as $item) {
+            $flatIds = array_merge($flatIds, explode(',', $item));
+        }
+        $flatIds = array_map('intval', $flatIds);
+        $productAttributeAssign = ProductAttributeAssign::whereIn('id', $flatIds)->get();
+
+        foreach ($productAttributeAssign as $assign) {
+            $setIds = $assign->product_set_id;
+            $attributeName = $assign->productAttribute->name;
+
+            $assignItems = $assign->productAttribute->getAttibuteItems;
+            if (!isset($this->groupedAttributes[$setIds])) {
+                $this->groupedAttributes[$setIds] = [
+                    'name' => $attributeName,
+                    'items' => [],
+                ];
+
+            }
+            if (!in_array($assign->title, $this->groupedAttributes[$setIds]['items'])) {
+                $this->groupedAttributes[$setIds]['items'][] = $assign->title;
+            }
+        }
     }
 
     public function updatedSelectedProduct($id)
@@ -66,7 +92,7 @@ class ProductCard extends Component
     {
         // $product = Product::find($id);
         $defaultProduct = $this->getDefaultVariation($id);
-        
+
         $existing_qauntity = 0;
         $cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use (&$existing_qauntity, $defaultProduct) {
             if ($cartItem->id === $defaultProduct->id) {
@@ -74,10 +100,10 @@ class ProductCard extends Component
                 return true;
             }
         });
-        
-        if($existing_qauntity == 0){
+
+        if ($existing_qauntity == 0) {
             $addToCart = finalAddToCart($defaultProduct, 1);
-        }else{
+        } else {
             $addToCart = finalAddToCart($defaultProduct, 1 + $existing_qauntity, 'update-quantity');
         }
         $sale_price = 0;

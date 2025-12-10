@@ -158,8 +158,8 @@
                                 ->get();
                         @endphp
                         @foreach ($categories as $category)
-                            <li><a
-                                    href="{{ route('shop') }}?category_id={{ $category->id }}">{{ $category->name }}</a>
+                            <li>
+                                <a href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">{{ $category->name }}</a>
                             </li>
                         @endforeach
                     </ul>
