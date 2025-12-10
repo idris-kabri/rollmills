@@ -20,7 +20,7 @@
             position: relative;
             color: #ffffff;
         }
-        
+
         .guidelines-box {
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -137,11 +137,12 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4);
             color: white;
-        } 
-        .no-border-custom{ 
-            border-bottom:  0px !important;
-            border-left:  0px !important;
-            border-right:  0px !important;
+        }
+
+        .no-border-custom {
+            border-bottom: 0px !important;
+            border-left: 0px !important;
+            border-right: 0px !important;
         }
     </style>
 
@@ -207,13 +208,7 @@
                                                 @endphp
                                                 <div class="col-sm-6">
                                                     <div class="card p-2 mb-3 rounded-15">
-                                                        @if($order_item->is_gift_item == 1)
-                                                        <div class="mb-2">
-                                                            <p class="badge bg-success py-1 quicksand text-end">
-                                                                <i class="fi-rs-gift mr-5"></i> Surprise Gift
-                                                            </p>
-                                                        </div>
-                                                        @endif
+
                                                         <div class="d-flex align-items-start gap-3 flex-nowrap">
 
                                                             <!-- IMAGE LEFT -->
@@ -227,6 +222,13 @@
                                                             <!-- CONTENT RIGHT -->
                                                             <div class="content flex-grow-1" style="min-width: 0;">
                                                                 <h6 class="text-truncate-2">
+                                                                    @if($order_item->is_gift_item == 1)
+                                                                    <div class="mb-2">
+                                                                        <p class="badge bg-success py-1 quicksand text-end">
+                                                                            <i class="fi-rs-gift mr-5"></i> Surprise Gift
+                                                                        </p>
+                                                                    </div>
+                                                                    @endif
                                                                     <a href="{{ $shop_detail_url }}"
                                                                         class="fs-17 two-liner-text">
                                                                         {{ $order_item->getProduct->name }}
@@ -259,10 +261,16 @@
                                                                     </span>
                                                                 </div>
 
-                                                                <div class="product-price pt-2">
+                                                                <div class="product-price pt-2"> 
+                                                                    @if($order_item->is_gift_item == 1)
+                                                                    <span class="fs-18 fw-bold">
+                                                                        ₹0
+                                                                    </span>
+                                                                    @else 
                                                                     <span class="fs-18 fw-bold">
                                                                         ₹{{ number_format($order_item->sale_default_price, 2) }}
-                                                                    </span>
+                                                                    </span> 
+                                                                    @endif
                                                                     <span
                                                                         class="ms-2 fs-12 fw-600 px-1 bg-light border border-2 rounded-3 quicksand">
                                                                         x{{ $order_item->quantity }}

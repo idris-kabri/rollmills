@@ -105,7 +105,13 @@
                                             <img src="{{Storage::url($item->getProduct->featured_image)}}" alt="{{$item->getProduct->name}}">
                                         </td>
                                         <td style="width: 45%" class="text-start">
+                                            @if($item->is_gift_item == 1)
+                                            <p class="badge bg-success py-1 quicksand text-white mb-0">
+                                                <i class="fi-rs-gift mr-5"></i> Surprise Gift
+                                            </p>
+                                            @endif
                                             <div class="d-flex align-items-center flex-wrap">
+
                                                 <a href="{{route('admin.product.edit',$item->getProduct->id)}}" title="{{$item->getProduct->name}}" target="_blank" class="me-2">
                                                     {{$item->getProduct->name}}
                                                 </a>
@@ -116,9 +122,17 @@
                                         <td>
                                             @if($item->sale_default_price != null || $item->sale_default_price != 0)
                                             <del>₹{{number_format($item->regular_price,2)}}</del>
-                                            <span class="">{{number_format($item->sale_default_price,2)}}</span>
+                                            @if($item->is_gift_item == 1)
+                                            <span class="">₹0</span>
+                                            @else 
+                                            <span class="">₹{{number_format($item->sale_default_price,2)}}</span>
+                                            @endif
                                             @else
-                                            <span class="">{{number_format($item->sale_default_price,2)}}</span>
+                                            @if($item->is_gift_item == 1)
+                                            <span class="">₹0</span>
+                                            @else 
+                                            <span class="">₹{{number_format($item->sale_default_price,2)}}</span>
+                                            @endif
                                             @endif
                                         </td>
                                         <td>
@@ -137,8 +151,12 @@
                                         @else
                                         <td></td>
                                         @endif
-                                        <td>
-                                            ₹{{number_format($item->total,2)}}
+                                        <td> 
+                                            @if($item->is_gift_item == 1)
+                                                ₹0
+                                            @else
+                                                ₹{{number_format($item->total,2)}}
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -327,84 +345,84 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                         <div class="card">
 
-                        <div class="crad-header">
-                            <h3 class="m-3">Transaction</h3>
-                        </div>
-                        
-                        <div class="card-table">
-                            <div class="table-responsive table-has-actions table-has-filter">
-                                <table class="table card-table table-vcenter table-striped table-hover"
-                                    id="botble-payment-tables-payment-table">
-                                    <thead>
-                                        <tr>
-                                            <th title="ID" width="20"
-                                                class="text-center no-column-visibility column-key-0">
-                                                #
-                                            </th>
-                                            <th title="Charge ID" class="column-key-1">
-                                                Payment ID
-                                            </th>
-                                            <th title="Payer Name" class="text-start column-key-2">
-                                                Payer Name
-                                            </th>
-                                            <th title="Amount" class="text-start column-key-3">
-                                                Amount
-                                            </th>
-                                            <th title="Description" class="text-start column-key-3">
-                                                Description
-                                            </th>
-                                            <th title="Status" class="text-start column-key-5">
-                                                Status
-                                            </th>
-                                            <th title="Created At" class="column-key-6">
-                                                Created At
-                                            </th>
-                                            <th title="Operations">Operations</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-center no-column-visibility column-key-0 sorting_1">
-                                                1
-                                            </td>
-                                            <td class="   column-key-1"><a href="{{ route('admin.transaction.edit',$order_transaction->id) }}" target="_blank">{{ $order_transaction->payment_id }}</a>
-                                            </td>
-                                            <td class="column-key-2">{{ $order_transaction->getUser->name }}</td>
-                                            <td class="column-key-3">₹{{ number_format($order_transaction->amount) }}</td>
-                                            <td class="column-key-3">{{ $order_transaction->description }}</td>
-                                            <td class="column-key-5">
-                                                @if ($order_transaction->status === 0)
-                                                <span class="badge bg-warning text-warning-fg">
-                                                    Pending
-                                                </span>
-                                                @elseif($order_transaction->status === 1)
-                                                <span class="badge bg-success text-success-fg">
-                                                    Confirm
-                                                </span>
-                                                @else
-                                                <span class="badge bg-danger text-danger-fg">
-                                                    Cancel
-                                                </span>
-                                                @endif
-                                            </td>
-                                            <td class="column-key-6">
-                                                {{ \Carbon\Carbon::parse($order_transaction->created_at)->format('d-m-Y') }}
-                                            </td>
-                                            <td class="no-column-visibility text-nowrap">
-                                                <div class="table-actions">
-                                                    <a href="{{ route('admin.transaction.edit',$order_transaction->id) }}" target="_blank">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="crad-header">
+                                <h3 class="m-3">Transaction</h3>
                             </div>
-                        </div> 
+
+                            <div class="card-table">
+                                <div class="table-responsive table-has-actions table-has-filter">
+                                    <table class="table card-table table-vcenter table-striped table-hover"
+                                        id="botble-payment-tables-payment-table">
+                                        <thead>
+                                            <tr>
+                                                <th title="ID" width="20"
+                                                    class="text-center no-column-visibility column-key-0">
+                                                    #
+                                                </th>
+                                                <th title="Charge ID" class="column-key-1">
+                                                    Payment ID
+                                                </th>
+                                                <th title="Payer Name" class="text-start column-key-2">
+                                                    Payer Name
+                                                </th>
+                                                <th title="Amount" class="text-start column-key-3">
+                                                    Amount
+                                                </th>
+                                                <th title="Description" class="text-start column-key-3">
+                                                    Description
+                                                </th>
+                                                <th title="Status" class="text-start column-key-5">
+                                                    Status
+                                                </th>
+                                                <th title="Created At" class="column-key-6">
+                                                    Created At
+                                                </th>
+                                                <th title="Operations">Operations</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-center no-column-visibility column-key-0 sorting_1">
+                                                    1
+                                                </td>
+                                                <td class="   column-key-1"><a href="{{ route('admin.transaction.edit',$order_transaction->id) }}" target="_blank">{{ $order_transaction->payment_id }}</a>
+                                                </td>
+                                                <td class="column-key-2">{{ $order_transaction->getUser->name }}</td>
+                                                <td class="column-key-3">₹{{ number_format($order_transaction->amount) }}</td>
+                                                <td class="column-key-3">{{ $order_transaction->description }}</td>
+                                                <td class="column-key-5">
+                                                    @if ($order_transaction->status === 0)
+                                                    <span class="badge bg-warning text-warning-fg">
+                                                        Pending
+                                                    </span>
+                                                    @elseif($order_transaction->status === 1)
+                                                    <span class="badge bg-success text-success-fg">
+                                                        Confirm
+                                                    </span>
+                                                    @else
+                                                    <span class="badge bg-danger text-danger-fg">
+                                                        Cancel
+                                                    </span>
+                                                    @endif
+                                                </td>
+                                                <td class="column-key-6">
+                                                    {{ \Carbon\Carbon::parse($order_transaction->created_at)->format('d-m-Y') }}
+                                                </td>
+                                                <td class="no-column-visibility text-nowrap">
+                                                    <div class="table-actions">
+                                                        <a href="{{ route('admin.transaction.edit',$order_transaction->id) }}" target="_blank">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
