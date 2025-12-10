@@ -52,8 +52,8 @@ class CartComponent extends Component
 
     public function askRemove($rowId)
     {
-        $this->confirmMessage = "Are you sure you want to remove this item from your cart?";
-        $this->confirmAction  = "removeFromCart('$rowId')";
+        $this->confirmMessage = 'Are you sure you want to remove this item from your cart?';
+        $this->confirmAction = "removeFromCart('$rowId')";
 
         $this->dispatch('open-cart-remove-item-modal');
     }
@@ -375,13 +375,13 @@ class CartComponent extends Component
                             ],
                         )
                         ->associate('App\Models\Product');
-                    
+
                     // Trigger events only when gift is newly added
                     $this->dispatch('coupon-applied');
                     $this->dispatch('surprise-gift');
                 }
             }
-            if(!session()->has('free_gift') || session()->get('free_gift') == false){
+            if (!session()->has('free_gift') || session()->get('free_gift') == false) {
                 session()->put('free_gift', true);
                 $this->dispatch('surprise-gift');
             }
@@ -389,7 +389,7 @@ class CartComponent extends Component
             if ($existingGiftRowId) {
                 Cart::instance('cart')->remove($existingGiftRowId);
             }
-            if(session()->has('free_gift')){
+            if (session()->has('free_gift')) {
                 session()->forget('free_gift');
                 $this->dispatch('surprise-gift');
             }
@@ -633,6 +633,11 @@ class CartComponent extends Component
 
     public function removeFromCart($rowId)
     {
+        try {
+            $item = Cart::instance('cart')->get($rowId);
+        } catch (\Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException $e) {
+            return; // rowId not found — safely exit
+        }
         $qty = Cart::instance('cart')->get($rowId)->qty;
         $productId = Cart::instance('cart')->get($rowId)->model->id;
         $removeCart = finalRemoveFromCart($rowId);
@@ -782,10 +787,10 @@ class CartComponent extends Component
 
     public function checkCoupon($coupon_code)
     {
-        $this->couponCode = $coupon_code; 
-        if($this->couponCode != session()->get('coupon_code')){ 
+        $this->couponCode = $coupon_code;
+        if ($this->couponCode != session()->get('coupon_code')) {
             $response = $this->applyCoupon('yes');
-        }else{ 
+        } else {
             $response = $this->applyCoupon('no');
         }
         if (!$response) {
