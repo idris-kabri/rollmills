@@ -103,12 +103,13 @@
                             <a href="/" class="mb-15"><img
                                     src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="logo" /></a>
                             <p class="text-heading fw-600 quicksand text-secondary">Welcome to Roll Mills
-                                Your trusted destination for high quality Household And Decoration products and
-                                solutions!</p>
+                                Your trusted destination for high quality Household, Decoration products and Fragrance
+                                products!</p>
                         </div>
                         <ul class="contact-infor">
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-location.svg') }}"
-                                    alt="" /><strong>Address: </strong> <a class="hover-a" href="#">02
+                                    alt="" /><strong>Address: </strong> <a class="hover-a"
+                                    href="https://maps.app.goo.gl/hasSGRbbo8o9oPNd7" target="_blank">02
                                     Floor, Taheri Complex, Opp.
                                     Gopi Restaurant, Sagwara, India</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-contact.svg') }}"
@@ -116,13 +117,10 @@
                                     href="tel:+91 87647 66553">+91 87647 66553</a></li>
                             <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-email-2.svg') }}"
                                     alt="" /><strong>Email:</strong> <a class="hover-a"
-                                    href="mailto:rollmills.rm@gmail.com">rollmills.rm@gmail.com</a></li>
+                                    href="mailto:info@rollmills.store">info@rollmills.store</a></li>
                             {{-- <li><img src="{{ asset('assets/frontend/imgs/theme/icons/icon-clock.svg') }}"
                                         alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li> --}}
                         </ul>
-                        <p class="mb-20 mt-30">Secured Payment Gateways</p>
-                        <img class="wow fadeIn animated"
-                            src="{{ asset('assets/frontend/imgs/theme/payment-method.png') }}" alt="" />
                     </div>
                 </div>
                 <div class="footer-link-widget col">
@@ -158,8 +156,7 @@
                                 ->get();
                         @endphp
                         @foreach ($categories as $category)
-                            <li><a
-                                    href="{{ route('shop') }}?category_id={{ $category->id }}">{{ $category->name }}</a>
+                            <li><a href="{{ route('shop') }}?category_id={{ $category->id }}">{{ $category->name }}</a>
                             </li>
                         @endforeach
                     </ul>
@@ -177,17 +174,12 @@
                         <li><a href="/wishlist">My Wishlist</a></li>
                     </ul>
                 </div>
-                {{-- <div class="footer-link-widget widget-install-app col">
-                    <h4 class="widget-title">Install App</h4>
-                    <p class="wow fadeIn animated">From App Store or Google Play</p>
-                    <div class="download-app">
-                        <a href="#" class="hover-up mb-sm-2 mb-lg-0"><img class="active"
-                                src="{{ asset('assets/frontend/imgs/theme/app-store.jpg') }}" alt="" /></a>
-                        <a href="#" class="hover-up mb-sm-2"><img
-                                src="{{ asset('assets/frontend/imgs/theme/google-play.jpg') }}" alt="" /></a>
-                    </div>
-
-                </div> --}}
+                <div class="footer-link-widget col-12 d-flex align-items-sm-end flex-column justify-content-center pe-sm-3">
+                    {{-- <h4 class="widget-title">Install App</h4> --}}
+                    <p class="mb-15 fw-500 text-muted">Secured Payment Gateways</p>
+                    <img class="wow fadeIn animated" src="{{ asset('assets/frontend/imgs/theme/payment-method.png') }}"
+                        alt="" />
+                </div>
             </div>
         </div>
     </section>
@@ -341,7 +333,7 @@
             // $("#preloader-active").delay(0).fadeOut("slow");
             // $("body").delay(0).css({ overflow: "visible" });
             var login_text = $("#login_condition").text();
-            if(login_text == "false"){
+            if (login_text == "false") {
                 $("#a-div-login-hide").click();
             }
             localStorage.setItem("triggeredModal", "true");
@@ -534,23 +526,24 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const applyBtn = document.getElementById('btn-apply-mobile-filters');
-        
-        if(applyBtn){
+
+        if (applyBtn) {
             applyBtn.addEventListener('click', function(e) {
                 e.preventDefault();
 
                 // 1. Find the checked radio button with name="category_group"
                 const selectedRadio = document.querySelector('input[name="category_group"]:checked');
-                
+
                 let targetUrl = "/shop";
-                
+
                 // 2. Build the URL params
                 if (selectedRadio) {
                     const categoryId = selectedRadio.value;
                     targetUrl += `?category_id=${categoryId}`;
-                    
+
                     // Optional: Close the mobile menu immediately for better UX before reload
-                    document.querySelector('.mobile-header-active-filter')?.classList.remove('sidebar-visible');
+                    document.querySelector('.mobile-header-active-filter')?.classList.remove(
+                        'sidebar-visible');
                 }
 
                 // 3. Redirect

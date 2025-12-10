@@ -671,7 +671,7 @@
                                         </td>
 
                                     </tr>
-                                @if (session('latest_etd') != null)
+                                {{-- @if (session('latest_etd') != null)
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">Etd</h6>
@@ -681,7 +681,7 @@
                                                 </h4>
                                         </td>
                                     </tr>
-                                @endif
+                                @endif --}}
 
                                 @php
                                     $cartTotal = (float) str_replace(',', '', Cart::total());
