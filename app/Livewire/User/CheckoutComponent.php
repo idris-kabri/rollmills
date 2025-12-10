@@ -626,7 +626,6 @@ class CheckoutComponent extends Component
                         'description' => $order->description,
                         'name' => Auth::user()->name,
                         'email' => Auth::user()->email,
-                        // 'title' => $this->gift_card_item['title'],
                         'customer_name' => Auth::user()->name,
                         'customer_email' => Auth::user()->email,
                         'success_url' => route('payment.success'),

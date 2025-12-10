@@ -289,7 +289,6 @@
 <!-- Template  JS -->
 <script src="{{ asset('assets/frontend/js/main.js') }}"></script>
 <script src="{{ asset('assets/frontend/js/range-slider.js') }}"></script>
-{{-- <script src="{{ asset('assets/frontend/js/range-slider.min.js') }}"></script> --}}
 <script src="{{ asset('assets/frontend/js/shop.js') }}"></script>
 <!-- Google Tag Manager -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
