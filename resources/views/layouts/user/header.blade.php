@@ -10,8 +10,6 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta name="X-CSRF-TOKEN" content="{{ csrf_token() }}">
-
     {{-- 2. Dynamic Description & Keywords --}}
     <meta name="description"
         content="{{ strip_tags($meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Household And Decoration products.') }}" />

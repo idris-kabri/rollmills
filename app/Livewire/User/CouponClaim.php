@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Traits\HasToastNotification;
 use Livewire\Component;
 use Carbon\Carbon;
+use Cart;
 use Illuminate\Support\Facades\Auth;
 
 class CouponClaim extends Component
@@ -30,10 +31,10 @@ class CouponClaim extends Component
     public function sendOTP()
     {
         $this->validate(['mobile' => 'required|digits:10']);
-        
+
         // Find or Create user logic (Adjust based on your needs)
         $user = User::where('mobile', $this->mobile)->first();
-        
+
         $otpCode = rand(1000, 9999);
         if ($user) {
             $user->otp = $otpCode;
@@ -46,7 +47,7 @@ class CouponClaim extends Component
             $user->otp = $otpCode;
             $user->save();
             messageSend($this->mobile, $otpCode, 'login_otp');
-        } 
+        }
         $this->step = 2;
     }
 
@@ -78,6 +79,14 @@ class CouponClaim extends Component
             $this->step = 3;
             $this->dispatch('close-modal');
             Auth::login($user);
+
+            $get_all_whislist = Cart::instance('wishlist')->content();
+            Cart::instance('wishlist')->restore(Auth::user()->mobile);
+            Cart::instance('wishlist')->store(Auth::user()->mobile);
+
+            $get_all_cart = Cart::instance('cart')->content();
+            Cart::instance('cart')->restore(Auth::user()->mobile);
+            Cart::instance('cart')->store(Auth::user()->mobile);
         } else {
             $this->addError('otp', 'Invalid OTP. Please try again.');
             $this->reset('otp');
@@ -93,53 +102,61 @@ class CouponClaim extends Component
     public function applyCoupon($id)
     {
         $order = Order::find($id);
-        if ($order && $order->logged_in_user_id == $this->user_id) {
-            $order->is_coupon_avail = 1;
-            $order->save();
-            session()->flash('message', 'Coupon applied successfully!');
+        if ($order->is_coupon_avail == 0) {
+
+
+            if ($order && $order->logged_in_user_id == $this->user_id) {
+                $order->is_coupon_avail = 1;
+                $order->save();
+                session()->flash('message', 'Coupon applied successfully!');
+            } else {
+                session()->flash('error', 'Unable to apply coupon. Please try again.');
+            }
+            $user = User::find($this->user_id);
+            $settings = Setting::all();
+
+
+            // Get first name only
+            $nameParts = preg_split('/\s+/', trim($user->name));
+            $firstName = $nameParts[0]; // only first name
+
+            $randomNumber = rand(10, 200);
+
+            // Build coupon code with first name only
+            $couponCode = $firstName . $randomNumber;
+
+
+            $coupon = new Coupon;
+            $coupon->title = "Coupon for Order #" . $order->id;
+            $coupon->coupon_code = $couponCode;
+            $coupon->minimum_order_value = $settings->where('label', 'coupon_min_order_value')->first()->value ?? 0;
+            $coupon->discount_type = $settings->where('label', 'coupon_discount_type')->first()->value ?? 0;
+            $coupon->discount_value = $settings->where('label', 'discount_value')->first()->value ?? 0;
+            $coupon->maximum_discount_amount = $settings->where('label', 'coupon_max_discount')->first()->value ?? 0;
+            $coupon->usage_limit = 1;
+            $coupon->total_usage = 1;
+            $coupon->category = "";
+            $coupon->expiry_date = Carbon::now()->addDays((int)$settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
+            $coupon->order_id = $order->id;
+            $coupon->save();
+
+            $this->coupon = $coupon;
+
+            $this->couponCode = $couponCode;
+            $this->toastSuccess("Coupon Availed Successfully!");
         } else {
-            session()->flash('error', 'Unable to apply coupon. Please try again.');
+            $this->coupon = Coupon::where('order_id',$order->id)->first();
+            $this->couponCode = $this->coupon->coupon_code;
         }
-        $user = User::find($this->user_id);
-        $settings = Setting::all();
-
-
-        // Get first name only
-        $nameParts = preg_split('/\s+/', trim($user->name));
-        $firstName = $nameParts[0]; // only first name
-
-        $randomNumber = rand(10, 200);
-
-        // Build coupon code with first name only
-        $couponCode = $firstName . $randomNumber;
-
-
-        $coupon = new Coupon;
-        $coupon->title = "Coupon for Order #" . $order->id;
-        $coupon->coupon_code = $couponCode;
-        $coupon->minimum_order_value = $settings->where('label', 'coupon_min_order_value')->first()->value ?? 0;
-        $coupon->discount_type = $settings->where('label', 'coupon_discount_type')->first()->value ?? 0;
-        $coupon->discount_value = $settings->where('label', 'discount_value')->first()->value ?? 0;
-        $coupon->maximum_discount_amount = $settings->where('label', 'coupon_max_discount')->first()->value ?? 0;
-        $coupon->usage_limit = 1;
-        $coupon->total_usage = 1;
-        $coupon->category = "";
-        $coupon->expiry_date = Carbon::now()->addDays((int)$settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
-        $coupon->order_id = $order->id;
-        $coupon->save();
-
-        $this->coupon = $coupon;
-
-        $this->couponCode = $couponCode;
         $this->step = 4;
-        $this->toastSuccess("Coupon Availed Successfully!");
     }
 
     public function render()
     {
         $user_orders = "";
         if ($this->step == 3 && $this->user_id) {
-            $user_orders = Order::where('logged_in_user_id', $this->user_id)->where("is_coupon_avail", 0)
+            $user_orders = Order::where('logged_in_user_id', $this->user_id)
+                // ->where("is_coupon_avail", 0)
                 ->where('status', '!=', 0)
                 ->orderBy('id', 'desc')
                 ->get();
