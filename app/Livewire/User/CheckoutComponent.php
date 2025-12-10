@@ -132,7 +132,8 @@ class CheckoutComponent extends Component
     }
 
 
-    public function calculateTotals(){ 
+    public function calculateTotals()
+    {
         $cartTotal = (float) str_replace(',', '', Cart::instance('cart')->total());
         $totalOfferDiscount = 0;
 
@@ -423,6 +424,7 @@ class CheckoutComponent extends Component
             $orderItem->item_return_days = $item->model->product_return_days;
             $orderItem->item_replacement_days = $item->model->product_replacement_days;
             $orderItem->delivery_at = now();
+            $orderItem->is_gift_item = ($item->options['is_gift_product'] ?? false) ? 1 : 0;
             $orderItem->save();
         }
     }
@@ -645,9 +647,9 @@ class CheckoutComponent extends Component
         if ($setting) {
             $outOfDeliveryPincodes = explode(',', $setting->value);
             $pincode = "";
-            if($this->ship_to_different_address_enabled){
+            if ($this->ship_to_different_address_enabled) {
                 $pincode = $this->ship_to_different_address['zipcode'];
-            }else{
+            } else {
                 $pincode = $this->billing_address['zipcode'];
             }
 
@@ -674,9 +676,49 @@ class CheckoutComponent extends Component
             if ($flat_rate) {
                 session()->put('flat_rate_charge', (int) $flat_rate->value);
             }
-        } 
+        }
         $this->calculateTotals();
     }
+
+    public function updatedBillingAddressMobile($value)
+    {
+        $value = str_replace(' ', '', $value);
+
+        if (str_starts_with($value, '+91')) {
+            $value = substr($value, 3);
+        }
+
+        if (str_starts_with($value, '91') && strlen($value) > 10) {
+            $value = substr($value, 2);
+        }
+
+        if (str_starts_with($value, '0')) {
+            $value = substr($value, 1);
+        }
+
+        $this->billing_address['mobile'] = $value;
+    }
+
+    public function updatedShipToDifferentAddressMobile($value)
+    {
+        $value = str_replace(' ', '', $value);
+
+        if (str_starts_with($value, '+91')) {
+            $value = substr($value, 3);
+        }
+
+        if (str_starts_with($value, '91') && strlen($value) > 10) {
+            $value = substr($value, 2);
+        }
+
+        if (str_starts_with($value, '0')) {
+            $value = substr($value, 1);
+        }
+
+        $this->ship_to_different_address['mobile'] = $value;
+    }
+
+
 
     public function render()
     {

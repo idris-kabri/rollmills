@@ -19,20 +19,41 @@
                             }
                         @endphp
                         <div
-                            class="col-12 px-1 px-md-2 py-1 product_wrap mb-0 border border-top-0 border-gray shadow-none rounded-0">
-                            <div class="row mx-md-2 gx-md-2 gx-1 justify-content-center align-items-center">
-                                <div class="col-xl-2 col-3">
-                                    <div class="product-img">
-                                        <a href="{{ $shop_detail_url }}">
+                            class="col-12 px-1 px-md-2 py-1 py-md-2 product_wrap mb-0 border border-top-0 border-gray shadow-none rounded-0">
+                            <div class="row gx-md-2 gx-1 justify-content-center align-items-center">
+                                <div class="col-lg-1 col-3">
+                                    <div class="product-img search-result-img mx-auto">
+                                        <a href="{{ $shop_detail_url }}" class="d-flex">
                                             <img src="{{ '/storage/' . $query->featured_image }}"
                                                 alt="{{ '/storage/' . $query->featured_image }}" loading="lazy">
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-xl-10 col-9">
-                                    <div class="product_info">
-                                        <div class="product_title"><a
-                                                href="{{ $shop_detail_url }}">{{ $query->name }}</a>
+                                <div class="col-lg-11 col-9">
+                                    <div class="product_info px-2">
+                                        <div class="product_title mb-1"><a href="{{ $shop_detail_url }}"
+                                                class="two-liner-text fw-500"
+                                                style="line-height: 1.2em">{{ $query->name }}</a>
+                                        </div>
+                                        <div class="product-rate-cover" style="line-height: 1.1em">
+                                            @php
+                                                $reviews = \App\Models\ProductReview::where('status', 1)
+                                                    ->where('product_id', $query->id)
+                                                    ->get();
+
+                                                $reviews_count = $reviews->count();
+                                                $reviews_avg =
+                                                    $reviews_count > 0 ? round($reviews->avg('ratings'), 1) : 0;
+                                                $reviews_percentage = ($reviews_avg / 5) * 100;
+                                            @endphp
+
+                                            <div class="product-rate d-inline-block">
+                                                <div class="product-rating" style="width: {{ $reviews_percentage }}%;">
+                                                </div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted fs-12">
+                                                ({{ $reviews_avg }})
+                                            </span>
                                         </div>
                                         <div class="product_price d-flex">
                                             @php

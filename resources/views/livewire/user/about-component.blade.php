@@ -3,7 +3,7 @@
          <div class="container">
              <div class="breadcrumb">
                  <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                 <span></span>  About us
+                 <span></span> About us
              </div>
          </div>
      </div>
@@ -20,13 +20,13 @@
                                  alt="" class="border-radius-15 mb-md-3 mb-lg-0 mb-sm-4" />
                          </div>
                          <div class="col-lg-6">
-                             <div class="pl-25">
+                             <div class="ps-lg-4 px-2">
                                  <h3 class="mb-30">Welcome to RollMills</h3>
                                  <p class="mb-25">At RollMills, we believe shopping should be simple, enjoyable, and
                                      trustworthy. Our mission is to bring you a seamless online shopping experience —
                                      offering high-quality products, great value, and reliable service, all from the
                                      comfort of your home.</p>
-                                 <p class="mb-50">From everyday essentials to the latest trends, we curate our
+                                 <p class="mb-md-4 mb-3">From everyday essentials to the latest trends, we curate our
                                      collections with care to make sure every item you buy meets your expectations.
                                      We’re passionate about creating a store that puts customers first — where quality,
                                      affordability, and satisfaction roll together perfectly.</p>
@@ -46,9 +46,7 @@
                                      <p>At RollMills, customers always get the most competitive prices on every product.
                                          We regularly offer discounts, combo deals, and seasonal promotions to ensure
                                          you save more every time you shop.</p>
-                                     <a href="#"
-                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
-                                         more <i class="fa-solid fa-arrow-right"></i></a>
+
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
@@ -59,9 +57,7 @@
                                      <p>Explore a diverse collection of high-quality products under one roof.
                                          From daily essentials to premium picks, RollMills ensures you find everything
                                          you need — in the brands you trust.</p>
-                                     <a href="#"
-                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
-                                         more <i class="fa-solid fa-arrow-right"></i></a>
+
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
@@ -72,9 +68,6 @@
                                      <p>Enjoy fast doorstep delivery on all eligible orders.
                                          We partner with reliable logistics providers to make sure your products reach
                                          you safely and on time.</p>
-                                     <a href="#"
-                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
-                                         more <i class="fa-solid fa-arrow-right"></i>
                                      </a>
                                  </div>
                              </div>
@@ -86,9 +79,7 @@
                                      <p>Customer satisfaction is our top priority.
                                          If something doesn’t meet your expectations, our simple and transparent return
                                          policy makes the process smooth and stress-free.</p>
-                                     <a href="#"
-                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
-                                         more <i class="fa-solid fa-arrow-right"></i></a>
+
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
@@ -99,9 +90,7 @@
                                      <p>We stand by the quality of every item sold on RollMills.
                                          With verified sellers and strict quality checks, we guarantee a worry-free
                                          shopping experience every time.</p>
-                                     <a href="#"
-                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
-                                         more <i class="fa-solid fa-arrow-right"></i></a>
+
                                  </div>
                              </div>
                              <div class="col-lg-4 col-md-6 mb-24">
@@ -112,19 +101,17 @@
                                      <p>Don’t miss out on exclusive daily deals and flash offers!
                                          At RollMills, we make shopping exciting by bringing you fresh discounts and
                                          special promotions every single day.</p>
-                                     <a href="#"
-                                         class="custom-a-tag fw-600 quicksand d-flex align-items-center gap-2 justify-content-center">Read
-                                         more <i class="fa-solid fa-arrow-right"></i></a>
+
                                  </div>
                              </div>
                          </div>
                      </section>
-                     <section class="row align-items-center mb-50">
+                     <section class="align-items-center mb-50">
                          <div class="content pt-lg-5">
                              <h1 class="title style-3 mb-40 text-center">Our performance</h1>
                          </div>
                          <div class="row mb-50 align-items-center">
-                             <div class="col-lg-7 pr-30">
+                             <div class="col-lg-7 pe-lg-4">
                                  <img src="{{ asset('assets/frontend/imgs/page/about-5.png') }}" alt=""
                                      class="mb-md-3 mb-lg-0 mb-sm-4" />
                              </div>
@@ -179,8 +166,9 @@
                                  </div>
                                  <div class="contact_text">
                                      <span>Address</span>
-                                     <span class="fs-16 fw-600 text-muted mb-0">
-                                         02 Floor, Taheri Complex, Opp. Gopi Restaurant, <br> Sagwara, India </span>
+                                     <a class="fs-16 fw-600 text-muted mb-0 hover-a"
+                                         href="https://maps.app.goo.gl/hasSGRbbo8o9oPNd7" target="_blank">
+                                         02 Floor, Taheri Complex, Opp. Gopi Restaurant, <br> Sagwara, India </a>
                                  </div>
                              </div>
                          </div>
@@ -191,9 +179,8 @@
                                  </div>
                                  <div class="contact_text">
                                      <span>Email Address</span>
-                                     <a class="fs-16 fw-600 text-muted hover-a"
-                                         href="mailto: rollmills.rm@gmail.com">
-                                         rollmills.rm@gmail.com
+                                     <a class="fs-16 fw-600 text-muted hover-a" href="mailto: info@rollmills.store">
+                                         info@rollmills.store
                                      </a>
                                  </div>
                              </div>

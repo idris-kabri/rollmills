@@ -3,9 +3,9 @@
     <section class="home-slider style-2 position-relative mb-md-3" wire:ignore>
         <div class="container">
             <div class="row">
-                <div class="col-xl-8 col-lg-12">
+                <div class="col-xl-8 col-lg-12 px-0 px-sm-3">
                     <div class="home-slide-cover">
-                        <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
+                        <div class="hero-slider-1 hero-slider-1-custom style-4 dot-style-1 dot-style-1-position-1">
                             @foreach ($slider_banner as $slider)
                                 @php
                                     $image = 'storage/' . $slider->image;
@@ -18,7 +18,7 @@
                                         $newHeading = $slider->heading;
                                     }
                                 @endphp
-                                <div class="single-hero-slider single-animation-wrap single-hero-slider-custom"
+                                <div class="single-hero-slider overflow-hidden single-animation-wrap single-hero-slider-custom"
                                     style="background-image: url('{{ asset($image) }}')">
                                     <div class="slider-content custom-width-home-banner">
                                         <h1 class="display-2 mb-25">
@@ -79,10 +79,10 @@
                 </div>
                 {{-- <div class="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow"
                     id="carausel-10-columns-arrows"></div> --}}
-                <a class="btn btn-brand px-2 px-sm-4 py-2 quicksand d-flex align-items-center gap-1"
+                {{-- <a class="btn btn-brand px-2 px-sm-4 py-2 quicksand d-flex align-items-center gap-1"
                     href="/all-category">
                     <span class="fi-rs-apps me-md-1 fs-14 text-white d-flex align-items-center"></span> View All
-                </a>
+                </a> --}}
             </div>
             <div class="home-categories-cards-section">
                 <div class="row justify-content-center">
@@ -282,7 +282,7 @@
                 <h3 class="">Product Users look for</h3>
             </div>
             <div class="row">
-                <div class="col-xl-9 col-md-12">
+                <div class="col-xl-12 col-md-12">
                     <div class="row">
                         @foreach ($users_look_for as $user_look_for)
                             <div class="col-md-3 col-lg-3 col-6 small-screen-padding">

@@ -194,10 +194,10 @@ class ShopComponent extends Component
                 $query->orderBy('created_at', 'desc');
             })
             ->when($this->sortBy === 'price-low-to-high', function ($query) {
-                $query->orderBy('price', 'asc');
+                $query->orderBy('sale_default_price', 'asc');
             })
             ->when($this->sortBy === 'price-high-to-low', function ($query) {
-                $query->orderBy('price', 'desc');
+                $query->orderBy('sale_default_price', 'desc');
             })
             ->when(!empty($this->finalBrands), function ($query) {
                 $query->whereHas('brands', function ($q) {

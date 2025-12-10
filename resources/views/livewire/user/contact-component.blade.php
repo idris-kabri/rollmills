@@ -3,7 +3,7 @@
          <div class="container">
              <div class="breadcrumb">
                  <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                 <span></span>  Contact
+                 <span></span> Contact
              </div>
          </div>
      </div>
@@ -75,8 +75,9 @@
                                      </div>
                                      <div class="contact_text">
                                          <span>Address</span>
-                                         <span class="fs-16 fw-600 text-muted mb-0">
-                                             02 Floor, Taheri Complex, Opp. Gopi Restaurant, <br> Sagwara, India </span>
+                                         <a class="fs-16 fw-600 text-muted mb-0 hover-a"
+                                             href="https://maps.app.goo.gl/hasSGRbbo8o9oPNd7" target="_blank">
+                                             02 Floor, Taheri Complex, Opp. Gopi Restaurant, <br> Sagwara, India </a>
                                      </div>
                                  </div>
                              </div>
@@ -88,8 +89,8 @@
                                      <div class="contact_text">
                                          <span>Email Address</span>
                                          <a class="fs-16 fw-600 text-muted hover-a"
-                                             href="mailto: rollmills.rm@gmail.com">
-                                             rollmills.rm@gmail.com
+                                             href="mailto: info@rollmills.store">
+                                             info@rollmills.store
                                          </a>
                                      </div>
                                  </div>

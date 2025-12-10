@@ -7,6 +7,11 @@
 
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <meta name="X-CSRF-TOKEN" content="{{ csrf_token() }}">
+
     {{-- 2. Dynamic Description & Keywords --}}
     <meta name="description"
         content="{{ strip_tags($meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Household And Decoration products.') }}" />
@@ -29,7 +34,7 @@
     <!-- Custom New CSS -->
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
     @if (Request::is('coupon-claim'))
-        <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
     @endif
     <link rel="stylesheet" href="{{ asset('assets/custom_css/improve.css') }}" />
     <!-- Font Awesome -->
@@ -81,11 +86,11 @@
 
     @livewireStyles
     @if (request()->routeIs('cart'))
-        <style>
-            #scrollUp {
-                display: none !important;
-            }
-        </style>
+    <style>
+        #scrollUp {
+            display: none !important;
+        }
+    </style>
     @endif
 </head>
 
@@ -93,7 +98,7 @@
     @livewire('user.component.login-component')
     <p class="d-none" id="login_condition">{{ auth()->check() ? 'true' : 'false' }}</p>
     @php
-        $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
+    $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
     @endphp
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
@@ -130,43 +135,43 @@
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                                 <div class="d-flex categori-dropdown-inner">
                                     @php
-                                        $firstTen = $categories->take(10);
-                                        $remaining = $categories->skip(10);
+                                    $firstTen = $categories->take(10);
+                                    $remaining = $categories->skip(10);
                                     @endphp
                                     @foreach ($firstTen->split(2) as $chunk)
-                                        <ul>
-                                            @foreach ($chunk as $category)
-                                                <li>
-                                                    {{-- Replace 'category.show' with your actual route name --}}
-                                                    <a
-                                                        href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
-                                                        <img src="{{ asset('storage/' . $category->icon) }}"
-                                                            alt="{{ $category->name }}" />
-                                                        {{ $category->name }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                    <ul>
+                                        @foreach ($chunk as $category)
+                                        <li>
+                                            {{-- Replace 'category.show' with your actual route name --}}
+                                            <a
+                                                href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
+                                                <img src="{{ asset('storage/' . $category->icon) }}"
+                                                    alt="{{ $category->name }}" />
+                                                {{ $category->name }}
+                                            </a>
+                                        </li>
+                                        @endforeach
+                                    </ul>
                                     @endforeach
                                 </div>
                                 @if ($categories->count() > 10)
-                                    <div class="more_slide_open" style="display: none">
-                                        <div class="d-flex categori-dropdown-inner">
-                                            @foreach ($remaining->split(2) as $chunk)
-                                                <ul>
-                                                    @foreach ($chunk as $category)
-                                                        <li>
-                                                            <a href="shop-grid-right.html"> <img
-                                                                    src="{{ asset('storage/' . $category->icon) }}"
-                                                                    alt="" />{{ $category->name }}</a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
+                                <div class="more_slide_open" style="display: none">
+                                    <div class="d-flex categori-dropdown-inner">
+                                        @foreach ($remaining->split(2) as $chunk)
+                                        <ul>
+                                            @foreach ($chunk as $category)
+                                            <li>
+                                                <a href="shop-grid-right.html"> <img
+                                                        src="{{ asset('storage/' . $category->icon) }}"
+                                                        alt="" />{{ $category->name }}</a>
+                                            </li>
                                             @endforeach
-                                        </div>
+                                        </ul>
+                                        @endforeach
                                     </div>
-                                    <div class="more_categories"><span class="icon"></span> <span
-                                            class="heading-sm-1">Show more...</span></div>
+                                </div>
+                                <div class="more_categories"><span class="icon"></span> <span
+                                        class="heading-sm-1">Show more...</span></div>
                                 @endif
                             </div>
                         </div>
@@ -175,7 +180,7 @@
                                 <ul>
                                     {{-- <li class="hot-deals"><img
                                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-hot.svg') }}"
-                                            alt="hot deals" /><a href="shop-grid-right.html">Deals</a>
+                                    alt="hot deals" /><a href="shop-grid-right.html">Deals</a>
                                     </li> --}}
                                     <li>
                                         <a class="{{ Request::is('/') ? 'active' : '' }}" href="/">Home</a>
@@ -226,126 +231,126 @@
                                                 <div class="menu-banner-wrap">
                                                     <a href="shop-product-right.html"><img
                                                             src="{{ asset('assets/frontend/imgs/banner/banner-menu.png') }}"
-                                                            alt="Nest" /></a>
-                                                    <div class="menu-banner-content">
-                                                        <h4>Hot deals</h4>
-                                                        <h3>
-                                                            Don't miss<br />
-                                                            Trending
-                                                        </h3>
-                                                        <div class="menu-banner-price">
-                                                            <span class="new-price text-success">Save to 50%</span>
-                                                        </div>
-                                                        <div class="menu-banner-btn">
-                                                            <a href="shop-product-right.html">Shop now</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="menu-banner-discount">
-                                                        <h3>
-                                                            <span>25%</span>
-                                                            off
-                                                        </h3>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="/blog">Blog</a>
-                                    </li> --}}
-                                    <li>
-                                        <a href="/about" class="{{ Request::is('about') ? 'active' : '' }}">About
-                                            Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="/contact"
-                                            class="{{ Request::is('contact') ? 'active' : '' }}">Contact Us</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                                    alt="Nest" /></a>
+                                    <div class="menu-banner-content">
+                                        <h4>Hot deals</h4>
+                                        <h3>
+                                            Don't miss<br />
+                                            Trending
+                                        </h3>
+                                        <div class="menu-banner-price">
+                                            <span class="new-price text-success">Save to 50%</span>
+                                        </div>
+                                        <div class="menu-banner-btn">
+                                            <a href="shop-product-right.html">Shop now</a>
+                                        </div>
+                                    </div>
+                                    <div class="menu-banner-discount">
+                                        <h3>
+                                            <span>25%</span>
+                                            off
+                                        </h3>
+                                    </div>
                         </div>
-                    </div>
-                    <div class="hotline d-none d-xl-flex align-items-center">
-                        <a href="tel:+91 87647 66553" class="d-flex align-items-center">
-                            <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-headphone.svg') }}"
-                                alt="hotline" style="width: 32px" class="img-color" />
-                            <p class="fs-18 text-dark fw-600">+91 87647 66553</p>
-                        </a>
-                    </div>
-                    <div class="d-none d-md-flex d-xl-none mx-5 w-100">
-                        <div class="header-wrap justify-content-between w-100">
-                            @livewire('user.component.search-component')
-                        </div>
-                    </div>
-                    <div class="header-action-icon-2 d-block d-xl-none">
-                        <div class="burger-icon burger-icon-white">
-                            <span class="burger-icon-top"></span>
-                            <span class="burger-icon-mid"></span>
-                            <span class="burger-icon-bottom"></span>
-                        </div>
-                    </div>
-                    <div class="header-action-right d-block d-xl-none">
-                        @livewire('user.component.mobile-header-cart-component')
+                        </li>
+                        </ul>
+                        </li>
+                        <li>
+                            <a href="/blog">Blog</a>
+                        </li> --}}
+                        <li>
+                            <a href="/about" class="{{ Request::is('about') ? 'active' : '' }}">About
+                                Us</a>
+                        </li>
+                        <li>
+                            <a href="/contact"
+                                class="{{ Request::is('contact') ? 'active' : '' }}">Contact Us</a>
+                        </li>
+                        </ul>
+                        </nav>
                     </div>
                 </div>
-                <div
-                    class="d-flex justify-content-between d-md-none mobile-category-options header-style-1 mt-15 mb-10 px-1">
-                    <div class="main-categori-wrap mr-15">
-                        <a class="categories-button-active p-15" href="#">
-                            <span class="fi-rs-apps m-0"></span>
-                        </a>
-                        <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
-                            <div class="d-flex categori-dropdown-inner">
-                                @php
-                                    $firstTen = $categories->take(10);
-                                    $remaining = $categories->skip(10);
-                                @endphp
-                                @foreach ($firstTen->split(2) as $chunk)
-                                    <ul>
-                                        @foreach ($chunk as $category)
-                                            <li>
-                                                {{-- Replace 'category.show' with your actual route name --}}
-                                                <a
-                                                    href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
-                                                    <img src="{{ asset('storage/' . $category->icon) }}"
-                                                        alt="{{ $category->name }}" />
-                                                    {{ $category->name }}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endforeach
-                            </div>
-                            @if ($categories->count() > 10)
-                                <div class="more_slide_open" style="display: none">
-                                    <div class="d-flex categori-dropdown-inner">
-                                        @foreach ($remaining->split(2) as $chunk)
-                                            <ul>
-                                                @foreach ($chunk as $category)
-                                                    <li>
-                                                        <a href="shop-grid-right.html"> <img
-                                                                src="{{ asset('storage/' . $category->icon) }}"
-                                                                alt="" />{{ $category->name }}</a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endforeach
-                                    </div>
-                                </div>
-                                <div class="more_categories"><span class="icon"></span> <span
-                                        class="heading-sm-1">Show more...</span></div>
-                            @endif
-                        </div>
-                    </div>
+                <div class="hotline d-none d-xl-flex align-items-center">
+                    <a href="tel:+91 87647 66553" class="d-flex align-items-center">
+                        <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-headphone.svg') }}"
+                            alt="hotline" style="width: 32px" class="img-color" />
+                        <p class="fs-18 text-dark fw-600">+91 87647 66553</p>
+                    </a>
+                </div>
+                <div class="d-none d-md-flex d-xl-none mx-5 w-100">
                     <div class="header-wrap justify-content-between w-100">
                         @livewire('user.component.search-component')
                     </div>
                 </div>
+                <div class="header-action-icon-2 d-block d-xl-none">
+                    <div class="burger-icon burger-icon-white">
+                        <span class="burger-icon-top"></span>
+                        <span class="burger-icon-mid"></span>
+                        <span class="burger-icon-bottom"></span>
+                    </div>
+                </div>
+                <div class="header-action-right d-block d-xl-none">
+                    @livewire('user.component.mobile-header-cart-component')
+                </div>
             </div>
+            <div
+                class="d-flex justify-content-between d-md-none mobile-category-options header-style-1 mt-15 mb-10 px-1">
+                <div class="main-categori-wrap mr-15">
+                    <a class="categories-button-active p-15" href="#">
+                        <span class="fi-rs-apps m-0"></span>
+                    </a>
+                    <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
+                        <div class="d-flex categori-dropdown-inner">
+                            @php
+                            $firstTen = $categories->take(10);
+                            $remaining = $categories->skip(10);
+                            @endphp
+                            @foreach ($firstTen->split(2) as $chunk)
+                            <ul>
+                                @foreach ($chunk as $category)
+                                <li>
+                                    {{-- Replace 'category.show' with your actual route name --}}
+                                    <a
+                                        href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
+                                        <img src="{{ asset('storage/' . $category->icon) }}"
+                                            alt="{{ $category->name }}" />
+                                        {{ $category->name }}
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                            @endforeach
+                        </div>
+                        @if ($categories->count() > 10)
+                        <div class="more_slide_open" style="display: none">
+                            <div class="d-flex categori-dropdown-inner">
+                                @foreach ($remaining->split(2) as $chunk)
+                                <ul>
+                                    @foreach ($chunk as $category)
+                                    <li>
+                                        <a href="shop-grid-right.html"> <img
+                                                src="{{ asset('storage/' . $category->icon) }}"
+                                                alt="" />{{ $category->name }}</a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="more_categories"><span class="icon"></span> <span
+                                class="heading-sm-1">Show more...</span></div>
+                        @endif
+                    </div>
+                </div>
+                <div class="header-wrap justify-content-between w-100">
+                    @livewire('user.component.search-component')
+                </div>
+            </div>
+        </div>
         </div>
     </header>
     <div class="mobile-header-active mobile-header-wrapper-style">
-        <div class="mobile-header-wrapper-inner">
+        <div class="mobile-header-wrapper-inner pb-2">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
                     <a href="/"><img src="{{ asset('assets/frontend/imgs/theme/logo.png') }}"
@@ -359,21 +364,15 @@
                 </div>
             </div>
             <div class="mobile-header-content-area">
-                <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="/shop" method="get">
-                        <input type="text" name="search" placeholder="Search for items…" />
-                        <button type="submit"><i class="fi-rs-search"></i></button>
-                    </form>
-                </div>
                 <div class="mobile-menu-wrap mobile-header-border">
                     <!-- mobile menu start -->
                     <nav>
                         <ul class="mobile-menu font-heading">
                             <li class="menu-item-has-children">
-                                <a href="/">Home</a>
+                                <a href="/" class="w-100">Home</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="/shop">shop</a>
+                                <a href="/shop" class="w-100">shop</a>
                                 {{-- <ul class="dropdown">
                                     <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
                                     <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
@@ -410,9 +409,9 @@
                             {{-- REMOVED 'menu-item-has-children' class --}}
                             <li>
                                 @if (Auth::check())
-                                    <a href="/my-account">My Account</a>
+                                    <a href="/my-account" class="w-100">My Account</a>
                                 @else
-                                    <a href="javascript:void(0)" class="mobile-login-trigger" data-bs-toggle="modal"
+                                    <a href="javascript:void(0)" class="mobile-login-trigger w-100" data-bs-toggle="modal"
                                         data-bs-target="#loginModal">
                                         Sign In
                                     </a>
@@ -481,10 +480,10 @@
                                 </ul>
                             </li> --}}
                             <li class="menu-item-has-children">
-                                <a href="/about">About Us</a>
+                                <a href="/about" class="w-100">About Us</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="/contact">Contact Us</a>
+                                <a href="/contact" class="w-100">Contact Us</a>
                             </li>
                         </ul>
                     </nav>
@@ -492,20 +491,16 @@
                 </div>
                 <div class="mobile-header-info-wrap border border-1 rounded-3">
                     <div class="single-mobile-header-info">
-                        <a href="/contact"><i class="fi-rs-marker"></i> 02 Floor, Taheri Complex, Opp. <br>
+                        <a href="https://maps.app.goo.gl/hasSGRbbo8o9oPNd7" target="_blank"><i
+                                class="fi-rs-marker"></i> 02 Floor, Taheri Complex, Opp. <br>
                             Gopi Restaurant, Sagwara, India </a>
-                    </div>
-                    <div class="single-mobile-header-info">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <i class="fi-rs-user"></i>Log In / Sign Up
-                        </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="tel:+91 87647 66553"><i class="fi-rs-headphones"></i>+91 87647 66553</a>
                     </div>
                 </div>
-                <div class="mobile-social-icon mb-50">
-                    <h6 class="mb-15">Follow Us</h6>
+                <div class="mobile-social-icon mb-3">
+                    <h6 class="mb-2">Follow Us</h6>
 
                     <a href="https://www.instagram.com/roll.mills/" target="_blank"><img
                             src="{{ asset('assets/frontend/imgs/theme/icons/icon-instagram-white.svg') }}"
@@ -537,89 +532,110 @@
                         <h5 class="section-title style-1 mb-30 underline"
                             style="color: var(--color-3); display: inline-block;">Category</h5>
                         <div class="category-list">
+
                             @foreach ($categories as $category)
-                                @php
-                                    $selectedCategory = 1;
-                                    $subCategories = \App\Models\ProductCategory::where(
-                                        'parent_id',
-                                        $category->id,
-                                    )->get();
-                                    $isActive = $selectedCategory == $category->id;
-                                    $isChildActive = $subCategories->contains('id', $selectedCategory);
-                                    $isOpen = $isActive || $isChildActive;
-                                @endphp
+                            @php
+                            // GET SELECTED CATEGORY FROM URL
+                            $selectedCategory = request('category_id');
 
-                                <div class="category-list-item" x-data="{ open: @json($isOpen) }">
+                            // GET SUBCATEGORIES
+                            $subCategories = \App\Models\ProductCategory::where('parent_id', $category->id)->get();
 
-                                    <a href="#" class="cat-link {{ $isActive ? 'active' : '' }}"
-                                        @if ($subCategories->count() > 0) @click.prevent="open = !open" @endif>
-                                        <div class="cat-left">
-                                            @if ($category->icon)
-                                                <img src="{{ asset('storage/' . $category->icon) }}" class="cat-icon"
-                                                    alt="{{ $category->name }}" />
-                                            @endif
-                                            <span class="cat-name">{{ $category->name }}</span>
-                                        </div>
+                            // CHECK ACTIVE STATES
+                            $isActive = $selectedCategory == $category->id;
+                            $isChildActive = $subCategories->contains('id', $selectedCategory);
 
-                                        <div class="cat-right">
-                                            @if ($subCategories->count() > 0)
-                                                <i class="fi-rs-angle-small-down toggle-arrow"
-                                                    :style="open ? 'transform: rotate(180deg); color: var(--color-2);' :
-                                                        'transition: 0.3s;'"></i>
-                                            @endif
-                                        </div>
-                                    </a>
+                            // OPEN IF ACTIVE OR CHILD SELECTED
+                            $isOpen = $isActive || $isChildActive;
+                            @endphp
 
-                                    {{-- Parent Category Radio --}}
+                            <div class="category-list-item" x-data="{ open: @json($isOpen) }">
+
+                                {{-- CATEGORY HEADER --}}
+                                <a href="#"
+                                    class="cat-link {{ $isActive ? 'active' : '' }}"
                                     @if ($subCategories->count() > 0)
-                                        <div class="sub-cat-container" x-show="open" x-collapse
-                                            style="display: none;">
+                                    @click.prevent="open = !open"
+                                    @endif>
+                                    <div class="cat-left">
+                                        @if ($category->icon)
+                                        <img src="{{ asset('storage/' . $category->icon) }}" class="cat-icon" />
+                                        @endif
+                                        <span class="cat-name">{{ $category->name }}</span>
+                                    </div>
 
-                                            <div
-                                                class="sub-cat-item {{ $selectedCategory == $category->id ? 'active' : '' }}">
-                                                {{-- ADDED value attribute here --}}
-                                                <input type="radio" id="all-cat-{{ $category->id }}-header"
-                                                    value="{{ $category->id }}" name="category_group"
-                                                    class="custom-check"
-                                                    {{ $selectedCategory == $category->id ? 'checked' : '' }}>
+                                    <div class="cat-right">
+                                        @if ($subCategories->count() > 0)
+                                        <i class="fi-rs-angle-small-down toggle-arrow"
+                                            :style="open ? 'transform: rotate(180deg); color: var(--color-2);' : ''"></i>
+                                        @endif
+                                    </div>
+                                </a>
 
-                                                <label for="all-cat-{{ $category->id }}-header"
-                                                    style="cursor: pointer; width: 100%; margin: 0;">
-                                                    All {{ $category->name }}
-                                                </label>
-                                            </div>
+                                {{-- If category has subcategories --}}
+                                @if ($subCategories->count() > 0)
 
-                                            @foreach ($subCategories as $sub_category)
-                                                <div
-                                                    class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
-                                                    {{-- ADDED value attribute here --}}
-                                                    <input type="radio" id="sub-category-{{ $sub_category->id }}"
-                                                        value="{{ $sub_category->id }}" name="category_group"
-                                                        class="custom-check"
-                                                        {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
+                                <div class="sub-cat-container" x-show="open" x-collapse style="display: none;">
 
-                                                    <label for="sub-category-{{ $sub_category->id }}"
-                                                        style="cursor: pointer; width: 100%; margin: 0;">
-                                                        {{ $sub_category->name }}
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        {{-- Case where there are no subcategories, we need a radio here too if you want it selectable --}}
-                                        <div class="sub-cat-container" style="padding: 5px 10px; margin-bottom: 5px;">
-                                            <div class="sub-cat-item">
-                                                <input type="radio" id="cat-only-{{ $category->id }}"
-                                                    value="{{ $category->id }}" name="category_group"
-                                                    class="custom-check">
-                                                <label for="cat-only-{{ $category->id }}"
-                                                    style="cursor: pointer; margin: 0;">Select</label>
-                                            </div>
-                                        </div>
-                                    @endif
+                                    {{-- ALL category (Parent) --}}
+                                    <div class="sub-cat-item {{ $isActive ? 'active' : '' }}">
+                                        <input type="radio"
+                                            id="all-cat-{{ $category->id }}-header"
+                                            value="{{ $category->id }}"
+                                            name="category_group"
+                                            class="custom-check"
+                                            onchange="window.location.href='/shop?category_id={{ $category->id }}&category_slug={{ $category->slug }}'"
+                                            {{ $isActive ? 'checked' : '' }}>
+
+                                        <label for="all-cat-{{ $category->id }}-header" style="cursor: pointer; width: 100%;">
+                                            All {{ $category->name }}
+                                        </label>
+                                    </div>
+
+                                    {{-- Child categories --}}
+                                    @foreach ($subCategories as $sub_category)
+                                    <div class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
+
+                                        <input type="radio"
+                                            id="sub-category-{{ $sub_category->id }}"
+                                            value="{{ $sub_category->id }}"
+                                            name="category_group"
+                                            class="custom-check"
+                                            onchange="window.location.href='/shop?category_id={{ $sub_category->id }}&category_slug={{ $sub_category->slug }}'"
+                                            {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
+
+                                        <label for="sub-category-{{ $sub_category->id }}" style="cursor: pointer; width:100%;">
+                                            {{ $sub_category->name }}
+                                        </label>
+                                    </div>
+                                    @endforeach
+
                                 </div>
+
+                                @else
+                                {{-- Category with NO child --}}
+                                <div class="sub-cat-container" style="padding: 5px 10px; margin-bottom: 5px;">
+                                    <div class="sub-cat-item">
+                                        <input type="radio"
+                                            id="cat-only-{{ $category->id }}"
+                                            value="{{ $category->id }}"
+                                            name="category_group"
+                                            class="custom-check"
+                                            onchange="window.location.href='/shop?category_id={{ $category->id }}&category_slug={{ $category->slug }}'"
+                                            {{ $selectedCategory == $category->id ? 'checked' : '' }}>
+
+                                        <label for="cat-only-{{ $category->id }}" style="cursor:pointer;">
+                                            Select
+                                        </label>
+                                    </div>
+                                </div>
+                                @endif
+
+                            </div>
                             @endforeach
+
                         </div>
+
                     </div>
                     <!-- Fillter By Price -->
                     {{-- <div class="sidebar-widget range mb-40">
@@ -646,9 +662,8 @@
                             </div>
                         </div>
                     </div> --}}
-                    <a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center"
-                        id="btn-apply-mobile-filters"><i class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply
-                        Fillters</a>
+                    {{--<a href="" class="btn btn-sm btn-default mt-20 d-inline-flex align-items-center"
+                        id="btn-apply-mobile-filters"><i class="fi-rs-filter mr-5 d-flex align-items-center"></i>Apply Fillters</a>--}}
                     <!-- mobile menu end -->
                 </div>
             </div>

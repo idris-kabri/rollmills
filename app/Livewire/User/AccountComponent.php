@@ -8,6 +8,11 @@ use Livewire\Component;
 
 class AccountComponent extends Component
 {
+    public function mount(){ 
+        if(!Auth::user()){ 
+            return redirect('/');
+        }
+    }
     public function logoutUser()
     {
         Auth::logout();

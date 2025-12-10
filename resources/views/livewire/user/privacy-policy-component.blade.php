@@ -328,14 +328,14 @@
                         <p>If you have any questions about this Privacy Policy, You can contact us:</p>
                         <ul>
                             <li>
-                                <p>By email: <a href="mailto:rollmills.rm@gmail.com" rel="external nofollow noopener"
+                                <p>By email: <a href="mailto:info@rollmills.store" rel="external nofollow noopener"
                                         target="_blank">
-                                        rollmills.rm@gmail.com</a></p>
+                                        info@rollmills.store</a></p>
                             </li>
                             <li>
-                                <p>By visiting this page on our website: <a href="http://www.rollmills.com/contact"
+                                <p>By visiting this page on our website: <a href="https://rollmills.store/contact"
                                         rel="external nofollow noopener"
-                                        target="_blank">http://www.rollmills.com/contact</a></p>
+                                        target="_blank">https://rollmills.store/contact</a></p>
                             </li>
                             <li>
                                 <p>By phone: <a href="tel:+91 87647 66553" rel="external nofollow noopener" target="_blank">

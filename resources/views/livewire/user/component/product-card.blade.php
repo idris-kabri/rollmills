@@ -28,11 +28,13 @@
                  @else
                  <a aria-label="Add To Wishlist" class="action-btn bg-brand" href="javascript:void(0);"><i
                          class="fi-rs-heart text-danger text-white"></i></a>
-                 @endif
+                 @endif 
+                 @if(empty($groupedAttributes))
                  <a aria-label="Quick view" class="action-btn quick-view"
                      wire:click.prevent="previewProduct({{ $product->id }})">
                      <i class="fi-rs-eye"></i>
-                 </a>
+                 </a> 
+                 @endif
 
                  <a class="d-none" data-bs-toggle="modal" data-bs-target="#quickViewModal"></a>
              </div>
