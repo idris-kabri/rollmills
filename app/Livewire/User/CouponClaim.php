@@ -8,6 +8,8 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Traits\HasToastNotification;
 use Livewire\Component;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CouponClaim extends Component
 {
@@ -40,6 +42,14 @@ class CouponClaim extends Component
             $this->step = 2;
         } else {
             $this->addError('mobile', 'User not found with this mobile number.');
+        }
+    }
+
+    public function mount(){
+        if(Auth::check()){
+            $this->step = 3;
+            $this->user_id = Auth::user()->id;
+            $this->dispatch('close-modal');
         }
     }
 
