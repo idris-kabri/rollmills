@@ -1,5 +1,8 @@
 <main class="main home-page-main">
     @livewire('user.quick-view', ['id' => $selectedProductId], key('quickview'))
+    @php
+        $array_random_parameter = ['hot', 'sale'];
+    @endphp
     <section class="home-slider style-2 position-relative mb-md-3" wire:ignore>
         <div class="container">
             <div class="row">
@@ -24,7 +27,7 @@
                                         <h1 class="display-2 mb-25">
                                             {!! $newHeading !!}
                                         </h1>
-                                       <p class="hidden-p-banner">{!! $slider->sub_heading !!}</p>
+                                        <p class="hidden-p-banner">{!! $slider->sub_heading !!}</p>
                                         <a href="{{ $slider->link ?? '#' }}"
                                             class="btn btn-ls mt-20">{{ $slider->button_text }} <i
                                                 class="fi-rs-arrow-small-right"></i></a>
@@ -203,7 +206,18 @@
     </section> --}}
 
     <!-- category wise product section  -->
-    @foreach ($parentCategory as $popular_category)
+    @php
+        // 1. Define the Category IDs you want to show FIRST
+        // Replace 5 and 10 with your actual Category IDs
+        $priority_ids = [29, 1]; 
+
+        // 2. Sort the collection
+        $sortedCategories = $parentCategory->sortBy(function($cat) use ($priority_ids) {
+            // If ID is in priority list, return 0 (top), else return 1 (bottom)
+            return in_array($cat->id, $priority_ids) ? 0 : 1;
+        });
+    @endphp
+    @foreach ($sortedCategories as $popular_category)
         <section class="product-tabs section-padding position-relative pt-md-4 pt-0">
             <div class="container" wire:ignore.self>
                 <div class="section-title style-2">
@@ -231,7 +245,10 @@
                     @if (count($category_popular_products) > 0)
                         @foreach ($category_popular_products as $popular_product)
                             <div class="col-lg-1-5 col-md-4 col-6 small-screen-padding">
-                                @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
+                                @php
+                                    $parameter = $array_random_parameter[array_rand($array_random_parameter)];
+                                @endphp
+                                @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => $parameter], key($popular_product->id . '-' . now()->timestamp))
                             </div>
                         @endforeach
                     @else
@@ -266,7 +283,10 @@
                     <div class="row">
                         @foreach ($sale_products as $sale_product)
                             <div class="col-md-3 col-lg-3 col-6 small-screen-padding">
-                                @livewire('user.component.product-card', ['product' => $sale_product, 'parameter' => 'sale'], key($sale_product->id . '-' . now()->timestamp))
+                                @php
+                                    $parameter = array_rand($array_random_parameter);
+                                @endphp
+                                @livewire('user.component.product-card', ['product' => $sale_product, 'parameter' => $parameter], key($sale_product->id . '-' . now()->timestamp))
                             </div>
                         @endforeach
                     </div>
@@ -286,7 +306,10 @@
                     <div class="row">
                         @foreach ($users_look_for as $user_look_for)
                             <div class="col-md-3 col-lg-3 col-6 small-screen-padding">
-                                @livewire('user.component.product-card', ['product' => $user_look_for, 'parameter' => 'hot'], key($user_look_for->id . '-' . now()->timestamp))
+                                @php
+                                    $parameter = array_rand($array_random_parameter);
+                                @endphp
+                                @livewire('user.component.product-card', ['product' => $user_look_for, 'parameter' => $parameter], key($user_look_for->id . '-' . now()->timestamp))
                             </div>
                         @endforeach
                     </div>
