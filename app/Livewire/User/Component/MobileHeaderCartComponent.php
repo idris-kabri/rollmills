@@ -14,6 +14,11 @@ class MobileHeaderCartComponent extends Component
     use HasToastNotification;
     public function removeFromCart($rowId)
     {
+        try {
+            $item = Cart::instance('cart')->get($rowId);
+        } catch (\Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException $e) {
+            return; // rowId not found — safely exit
+        }
         $qty = Cart::instance('cart')->get($rowId)->qty;
         $removeCart = finalRemoveFromCart($rowId);
         $productId = Cart::instance('cart')->get($rowId)->model->id;

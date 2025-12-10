@@ -46,12 +46,12 @@
                         <div class="shopping-cart-delete">
 
                             <!-- Normal delete icon (shown only when NOT loading) -->
-                            <a href="#"
+                            {{-- <a href="#"
                                 wire:click.prevent="removeFromCart('{{ $item->rowId }}')"
                                 wire:loading.remove
                                 wire:target="removeFromCart('{{ $item->rowId }}')">
                                 <i class="fi-rs-cross-small"></i>
-                            </a>
+                            </a> --}}
 
                             <!-- Loader (shown only when loading) -->
                             <span wire:loading
