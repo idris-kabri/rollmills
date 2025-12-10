@@ -85,7 +85,7 @@
                 </a> --}}
             </div>
             <div class="home-categories-cards-section">
-                <div class="row justify-content-center">
+                <div class="row justify-content-center feature-three-cards">
                     @foreach ($parentCategory as $index => $category)
                         <div class="col-xl-1 col-lg-2 col-md-2 col-sm-3 col-4 px-2">
                             <div class="card-2 wow animate__animated animate__fadeInUp"

@@ -2082,6 +2082,15 @@ input.qty-val {
     width: 30vw;
 }
 
+.hero-slider-1 .slider-content.custom-width-home-banner span {
+    font-size: 20px;
+    color: #253d4e;
+}
+
+.feature-three-cards h4 span {
+    color: #253d4e;
+}
+
 .custom-width-home-banner h1 {
     font-size: 50px !important;
 }
@@ -13066,7 +13075,7 @@ footer .hotline img {
     }
 
     .hero-slider-1 .slider-content.custom-width-home-banner {
-        width: 90vw !important;
+        width: 90vw;
     }
 
     .first-popup-modal .product-title {
