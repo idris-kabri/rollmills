@@ -1844,6 +1844,17 @@ input[type="number"] {
 
 @media (min-width: 1400px) {
 }
+@media (max-width: 500px) {
+    .custom-dropdown-home {
+        padding: 0 12px !important;
+        font-size: 13px !important;
+    }
+}
+@media (max-width: 477px) {
+    .custom-dropdown-home {
+        line-height: 20px !important;
+    }
+}
 
 /* ==================================================================== */
 /* Responsive Css End */

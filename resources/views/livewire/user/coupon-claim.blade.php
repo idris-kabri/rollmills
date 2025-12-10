@@ -103,7 +103,7 @@
                                     @foreach ($user_orders as $user_order)
                                         <tr class="pt-30">
                                             <td class="custome-checkbox pl-30">
-                                                <p class="small-screen-table-index">{{ $user_order->id }}</p>
+                                                <p class="small-screen-table-index">#{{ $user_order->id }}</p>
                                             </td>
                                             <td class="product-des product-name">
                                                 <h5 class="mb-3 fs-18 underline">Product List</h5>
@@ -163,8 +163,7 @@
                                                 </td>
                                             @else
                                                 <td class="text-right">
-                                                    <button class="btn btn-sm custom-btn-table-responsive">Coupon
-                                                        Claimed</button>
+                                                    <button class="btn btn-sm custom-btn-table-responsive" wire:click="applyCoupon({{ $user_order->id }})">View Coupon</button>
                                                 </td>
                                             @endif
 
