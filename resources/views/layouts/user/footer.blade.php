@@ -157,7 +157,8 @@
                         @endphp
                         @foreach ($categories as $category)
                             <li>
-                                <a href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">{{ $category->name }}</a>
+                                <a
+                                    href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">{{ $category->name }}</a>
                             </li>
                         @endforeach
                     </ul>
@@ -175,7 +176,8 @@
                         <li><a href="/wishlist">My Wishlist</a></li>
                     </ul>
                 </div>
-                <div class="footer-link-widget col-12 d-flex align-items-sm-end flex-column justify-content-center pe-sm-3">
+                <div
+                    class="footer-link-widget col-12 d-flex align-items-sm-end flex-column justify-content-center pe-sm-3">
                     {{-- <h4 class="widget-title">Install App</h4> --}}
                     <p class="mb-15 fw-500 text-muted">Secured Payment Gateways</p>
                     <img class="wow fadeIn animated" src="{{ asset('assets/frontend/imgs/theme/payment-method.png') }}"
@@ -287,6 +289,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
     integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 <script>
     // Add this to frontend/js/main.js

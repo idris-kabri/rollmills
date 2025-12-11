@@ -1612,6 +1612,12 @@ input[type="number"] {
 }
 
 @media (max-width: 575.98px) {
+    .custom-remove-item {
+        position: absolute;
+        top: -9px;
+        left: -9px;
+    }
+
     .home-slider.style-2 {
         padding: 0px 0;
     }
@@ -1707,6 +1713,11 @@ input[type="number"] {
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
+    .header-action-2 .header-action-icon-2 > a img {
+        width: 50px;
+        max-width: 100%;
+    }
+
     .hero-slider-1 .slider-content.custom-width-home-banner {
         width: 50vw;
     }
@@ -1800,6 +1811,11 @@ input[type="number"] {
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
+    .header-action-2 .header-action-icon-2 > a img {
+        width: 40px;
+        max-width: 100%;
+    }
+
     .hero-slider-1 .slider-content.custom-width-home-banner {
         width: 50vw;
     }
@@ -1844,12 +1860,14 @@ input[type="number"] {
 
 @media (min-width: 1400px) {
 }
+
 @media (max-width: 500px) {
     .custom-dropdown-home {
         padding: 0 12px !important;
         font-size: 13px !important;
     }
 }
+
 @media (max-width: 477px) {
     .custom-dropdown-home {
         line-height: 20px !important;
@@ -1858,4 +1876,36 @@ input[type="number"] {
 
 /* ==================================================================== */
 /* Responsive Css End */
+/* ==================================================================== */
+
+/* ==================================================================== */
+/* Iphone Mobile Responsive Hover None Css Start */
+/* ==================================================================== */
+@supports (-webkit-touch-callout: none) and (not (hover: hover)) {
+    .product-cart-wrap:hover,
+    .product-cart-wrap:hover *,
+    .product-cart-wrap .product-content-wrap h2 a:hover,
+    .product-cart-wrap .product-card-bottom .add-cart .add:hover {
+        box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        -webkit-transform: none !important;
+        transition: none !important;
+        -webkit-transition: none !important;
+    }
+
+    .product-cart-wrap .product-img-action-wrap .product-img a img.hover-img {
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+
+    .product-cart-wrap .product-img-action-wrap .product-action-1 {
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+}
+/* ==================================================================== */
+/* Iphone Mobile Responsive Hover None Css End */
 /* ==================================================================== */

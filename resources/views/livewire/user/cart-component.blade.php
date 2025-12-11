@@ -407,7 +407,7 @@
                                             alt="{{ $item->model->seo_meta }}" class="img-fluid">
                                         {{-- Mobile Remove Button (Hide if Gift) --}}
                                         @if (!$isGift)
-                                            <div class="display-visible-480 d-none custom-remove-item">
+                                            <div class="d-block d-sm-none custom-remove-item">
                                                 <a href="#"
                                                     class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
                                                     wire:click.prevent="askRemove('{{ $item->rowId }}')">
