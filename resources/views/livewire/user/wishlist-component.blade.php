@@ -84,7 +84,8 @@
                                                     wire:click.prevent="removeWishlist('{{ $item->rowId }}')"
                                                     wire:confirm="Are you sure you want to remove this item from your wishlist?"
                                                     class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content">
-                                                    <i class="fi-rs-trash text-white"></i></a>
+                                                    <i class="fi-rs-trash text-white"></i>
+                                                </a>
                                             </div>
                                         </td>
                                         <td class="product-des product-name">
@@ -166,11 +167,10 @@
                                     <div class="img-section position-relative">
                                         <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                             alt="{{ $item->model->seo_meta }}" class="img-fluid">
-                                        <div class="display-visible-480 d-none custom-remove-item">
+                                        <div class="d-block d-sm-none custom-remove-item">
                                             <a href="#"
                                                 class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                wire:click.prevent="askRemove('{{ $item->rowId }}')"
-                                                wire:confirm="Are you sure you want to remove this item from your cart?">
+                                                wire:click.prevent="askRemove('{{ $item->rowId }}')">
                                                 <i class="fi-rs-trash text-white fs-13"></i></a>
                                         </div>
                                     </div>
@@ -228,8 +228,7 @@
                                         @endif --}}
 
                                         <button class="btn btn-sm custom-btn-table-responsive mt-1 mb-0 fs-14"
-                                            style="width: max-content"
-                                            wire:click="addToCart('{{ $item->rowId }}')"
+                                            style="width: max-content" wire:click="addToCart('{{ $item->rowId }}')"
                                             wire:confirm="Are you sure you want to add this item to your cart?">
                                             Add to cart
                                         </button>

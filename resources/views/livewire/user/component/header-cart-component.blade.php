@@ -37,7 +37,7 @@
                                     src="{{ asset('storage/' . $item->model->featured_image) }}" /></a>
                         </div>
                         <div class="shopping-cart-title">
-                            <h4><a href="{{ $shop_detail_url }}">{{ Str::words($item->model->name, 2, ' ...') }}</a>
+                            <h4><a href="{{ $shop_detail_url }}">{{ Str::limit($item->model->name, 15) }}</a>
                             </h4>
                             <h4 class="fs-14 text-secondary fw-500"><span>{{ $item->qty }} ×
                                     ₹{{ number_format($item->price) }}</span>

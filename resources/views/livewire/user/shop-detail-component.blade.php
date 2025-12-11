@@ -337,7 +337,7 @@
                                         <div class="row">
                                             <div class="col-lg-8">
                                                 <h4 class="mb-30">Customer questions & answers</h4>
-                                                <div class="comment-list row">
+                                                <div class="comment-list comment-list-custom row">
                                                     @foreach ($mainProduct_reviews as $review)
                                                         @php
                                                             $rating = $review->ratings ?? 0;

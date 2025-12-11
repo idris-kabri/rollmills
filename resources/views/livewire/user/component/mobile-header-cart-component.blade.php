@@ -13,7 +13,8 @@
             <span class="pro-count white">{{ Cart::instance('cart')->count() }}</span>
         </a>
         <div class="cart-dropdown-wrap cart-dropdown-hm2">
-            <ul>
+            <ul
+                style="max-height: 200px; overflow: auto; scrollbar-color: var(--color-1) #fcfcfc; scrollbar-width: thin; scroll-behavior: smooth;">
                 @foreach (Cart::instance('cart')->content() as $item)
                     <li>
                         <div class="shopping-cart-img">
@@ -34,7 +35,7 @@
                             }
                         @endphp
                         <div class="shopping-cart-title">
-                            <h4><a href="{{ $shop_detail_url }}">{{ Str::words($item->model->name, 2, ' ...') }}</a>
+                            <h4><a href="{{ $shop_detail_url }}">{{ Str::limit($item->model->name, 20) }}</a>
                             </h4>
                             <h3><span>{{ $item->qty }} × </span>₹{{ number_format($item->price) }}</h3>
                         </div>
