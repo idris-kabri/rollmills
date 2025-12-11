@@ -29,8 +29,7 @@ class Dashboard extends Component
         ->where('is_guest_user', 0)
         ->get();
 
-        $current_guest_user_register = User::whereDate('created_at', $today) 
-        ->where('is_guest_user', 1)
+        $current_guest_user_register = User::where('is_guest_user', 1)
         ->get();
 
         return view('livewire.admin.dashboard', compact('orderCount', 'productCount', 'customerCount', 'reviewCount','current_date_orders','current_register_user','current_guest_user_register'))->layout('layouts.admin.app');
