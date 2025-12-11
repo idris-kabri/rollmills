@@ -7,8 +7,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="mb-0 d-inline-block fs-6 lh-1"
-                                        href="{{url("/admin")}}">Dashboard</a>
+                                    <a class="mb-0 d-inline-block fs-6 lh-1" href="{{ url('/admin') }}">Dashboard</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <h1 class="mb-0 d-inline-block fs-6 lh-1">Customers</h1>
@@ -67,19 +66,24 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($users as $user)
-                                    <tr>
-                                        <td>{{ $i++ }}</td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td><a href="{{ route("admin.customer.customer-detail",$user->id) }}"
-                                                        class="me-2">
-                                                        <i class="fa fa-eye"></i>
-                                                        <span class="sr-only">Edit</span>
-                                                    </a></td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ $i++ }}</td>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td><a href="{{ route('admin.customer.customer-detail', $user->id) }}"
+                                                    class="me-2">
+                                                    <i class="fa fa-eye"></i>
+                                                    <span class="sr-only">Edit</span>
+                                                </a></td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="table-actions">
+                            <div class="table-pagination">
+                                {{ $users->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
