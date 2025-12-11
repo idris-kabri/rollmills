@@ -309,6 +309,9 @@
                                                         Name
                                                     </th>
                                                     <th>
+                                                        Mobile
+                                                    </th>
+                                                    <th>
                                                         Email
                                                     </th>
                                                     <th class="text-end">
@@ -328,6 +331,9 @@
                                                     </td>
                                                     <td>
                                                         {{$guest_user->name}}
+                                                    </td>
+                                                    <td>
+                                                        {{$guest_user->mobile}}
                                                     </td>
                                                     <td>
                                                         {{$guest_user->email}}
