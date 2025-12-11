@@ -25,8 +25,7 @@ class Dashboard extends Component
         ->where('status', 1)
         ->get();
 
-        $current_register_user = User::whereDate('created_at', $today) 
-        ->where('is_guest_user', 0)
+        $current_register_user = User::where('is_guest_user', 0)
         ->get();
 
         $current_guest_user_register = User::where('is_guest_user', 1)
