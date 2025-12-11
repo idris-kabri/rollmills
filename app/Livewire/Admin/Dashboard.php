@@ -25,10 +25,10 @@ class Dashboard extends Component
         ->where('status', 1)
         ->get();
 
-        $current_register_user = User::where('is_guest_user', 0)->where('is_fake', 0)
+        $current_register_user = User::where('is_guest_user', 0)->where('is_fake', 0)->where('id', '!=', 1)
         ->get();
 
-        $current_guest_user_register = User::where('is_guest_user', 1)->where('is_fake', 0)
+        $current_guest_user_register = User::where('is_guest_user', 1)->where('is_fake', 0)->where('id', '!=', 1)
         ->get();
 
         return view('livewire.admin.dashboard', compact('orderCount', 'productCount', 'customerCount', 'reviewCount','current_date_orders','current_register_user','current_guest_user_register'))->layout('layouts.admin.app');
