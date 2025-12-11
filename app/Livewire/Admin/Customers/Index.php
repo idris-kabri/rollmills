@@ -16,7 +16,7 @@ class Index extends Component
             ->where(function ($query) {
                 $query->orWhere("name", "like", "%{$this->search}%")
                     ->orWhere("email", "like", "%{$this->search}%");
-            })
+            })->where('is_fake', 0)
             ->orderBy("id", "desc")
             ->paginate(10);
 

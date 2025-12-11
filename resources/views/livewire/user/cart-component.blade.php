@@ -238,10 +238,17 @@
                                             @endif
 
                                             <h6 class="mb-5">
-                                                <a class="product-name mb-10 text-heading two-liner-text"
-                                                    href="{{ $shop_detail_url }}">
-                                                    {{ $item->model->name }}
-                                                </a>
+                                                @if (!$isGift)
+                                                    <a class="product-name mb-10 text-heading two-liner-text"
+                                                        href="{{ $shop_detail_url }}">
+                                                        {{ $item->model->name }}
+                                                    </a>
+                                                @else
+                                                    <a class="product-name mb-10 text-heading two-liner-text"
+                                                        href="javascript:void(0);">
+                                                        {{ $item->model->name }}
+                                                    </a>
+                                                @endif
                                             </h6>
 
                                             {{-- Rating (Only show for real products, maybe hide for gift if desired, keeping it for now) --}}

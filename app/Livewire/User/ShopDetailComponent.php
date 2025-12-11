@@ -46,6 +46,10 @@ class ShopDetailComponent extends Component
     public function mount($slug = null, $id)
     {
         $this->id = $id;
+        $setting = Setting::where('label', 'surprise_gift_product_id')->first()->value;
+        if($id == (int)$setting){
+            return redirect('/');
+        }
         $this->selectedAttribute = [];
         $this->mainProduct = Product::findOrFail($id);
 
