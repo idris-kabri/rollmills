@@ -252,6 +252,9 @@
                                                     <th>
                                                         Email
                                                     </th>
+                                                    <th>
+                                                        Mobile
+                                                    </th>
                                                     <th class="text-end">
                                                         Action
                                                     </th>
@@ -272,6 +275,9 @@
                                                     </td>
                                                     <td>
                                                         {{$user->email}}
+                                                    </td>
+                                                    <td>
+                                                        {{$user->mobile}}
                                                     </td>
                                                     <td class="text-end text-nowrap">
                                                         <a href="{{ route('admin.customer.customer-detail',$user->id) }}" target="_blank">
