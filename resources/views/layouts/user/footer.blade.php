@@ -329,13 +329,13 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         let modalShown = localStorage.getItem("triggeredModal");
-
+        
         if (!modalShown) {
             // $("#preloader-active").delay(0).fadeOut("slow");
             // $("body").delay(0).css({ overflow: "visible" });
             var login_text = $("#login_condition").text();
             if (login_text == "false") {
-                $("#a-div-login-hide").click();
+                $('#loginModal').modal('show');
             }
             localStorage.setItem("triggeredModal", "true");
         }
