@@ -366,8 +366,8 @@
                                                 wire:model="ship_to_different_address.name">
                                         </div>
                                         <div class="form-group col-lg-6">
-                                            <input type="email" name="email"
-                                                placeholder="Email *" wire:model="ship_to_different_address.email">
+                                            <input type="email" name="email" placeholder="Email *"
+                                                wire:model="ship_to_different_address.email">
                                         </div>
                                         <div class="form-group col-lg-6">
                                             <input required="" type="text" name="mobile"
@@ -395,7 +395,8 @@
                                         <div class="form-group col-lg-6">
                                             <input required="" type="text" name="zipcode"
                                                 placeholder="Zipcode *" wire:model="ship_to_different_address.zipcode"
-                                                @if (session('shipping_charge')) disabled @endif wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
+                                                @if (session('shipping_charge')) disabled @endif
+                                                wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
                                         </div>
                                     </div>
                                 @endif
@@ -484,7 +485,7 @@
                                                 'id' => $item->model->id,
                                             ])
                                             : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
-                                            $total_original_price += $item->model->price * $item->qty;
+                                        $total_original_price += $item->model->price * $item->qty;
                                     @endphp
 
                                     <tr class="{{ $isGift ? 'gift-row-summary' : '' }}">
@@ -497,8 +498,13 @@
                                                 @if ($isGift)
                                                     <span class="gift-badge-small">Gift</span>
                                                 @endif
-                                                <a href="{{ $shop_detail_url }}"
-                                                    class="text-heading two-liner-text">{{ $item->model->name }}</a>
+                                                @if (!$isGift)
+                                                    <a href="{{ $shop_detail_url }}"
+                                                        class="text-heading two-liner-text">{{ $item->model->name }}</a>
+                                                @else
+                                                    <a href="javascript:void(0);"
+                                                        class="text-heading two-liner-text">{{ $item->model->name }}</a>
+                                                @endif
                                             </h6>
                                             @if (!$isGift)
                                                 @php
@@ -653,24 +659,24 @@
                                         </td>
                                     </tr>
                                 @endif
-                                    <tr class="d-flex justify-content-between border-0">
-                                        <td class="cart_total_label text-start">
-                                            <h6 class="text-muted">Shipping Charges</h6>
-                                        </td>
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">Shipping Charges</h6>
+                                    </td>
 
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-heading text-end fs-16">
-                                                @if(session('flat_rate_charge' )!= null)
+                                    <td class="cart_total_amount">
+                                        <h5 class="text-heading text-end fs-16">
+                                            @if (session('flat_rate_charge') != null)
                                                 {{ number_format(session('flat_rate_charge'), 2) }}
-                                                @elseif (floatval(session('shipping_charge')) == 0)
-                                                    Free Shipping
-                                                @else
-                                                    {{ number_format(session('shipping_charge'), 2) }}
-                                                @endif
-                                            </h5>
-                                        </td>
+                                            @elseif (floatval(session('shipping_charge')) == 0)
+                                                Free Shipping
+                                            @else
+                                                {{ number_format(session('shipping_charge'), 2) }}
+                                            @endif
+                                        </h5>
+                                    </td>
 
-                                    </tr>
+                                </tr>
                                 {{-- @if (session('latest_etd') != null)
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
@@ -685,9 +691,8 @@
 
                                 @php
                                     $cartTotal = (float) str_replace(',', '', Cart::total());
-                                    $mainDiscountAmount = (float)session('coupon_discount_amount');
-                                    $allCouponandOfferDiscount =
-                                        $cartTotal - $mainDiscountAmount;
+                                    $mainDiscountAmount = (float) session('coupon_discount_amount');
+                                    $allCouponandOfferDiscount = $cartTotal - $mainDiscountAmount;
                                 @endphp
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">

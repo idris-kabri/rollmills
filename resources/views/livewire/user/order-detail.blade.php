@@ -229,10 +229,17 @@
                                                                         </p>
                                                                     </div>
                                                                     @endif
+                                                                    @if($order_item->is_gift_item == 1)
+                                                                    <a href="javascript:void(0);"
+                                                                        class="fs-17 two-liner-text">
+                                                                        {{ $order_item->getProduct->name }}
+                                                                    </a>
+                                                                    @else
                                                                     <a href="{{ $shop_detail_url }}"
                                                                         class="fs-17 two-liner-text">
                                                                         {{ $order_item->getProduct->name }}
                                                                     </a>
+                                                                    @endif
                                                                 </h6>
 
                                                                 {{-- Rating Stars Display --}}
