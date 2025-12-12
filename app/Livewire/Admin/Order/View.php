@@ -18,7 +18,7 @@ class View extends Component
     public function mount($id)
     {
         $this->order = Order::find($id);
-        $this->order_transaction = Transaction::where('refrence_id', $id)->where('refrence_table', 'orders')->where('status', 1)->first();
+        $this->order_transaction = Transaction::where('refrence_id', $id)->where('refrence_table', 'orders')->first();
         $this->status = $this->order->status;
     }
 
