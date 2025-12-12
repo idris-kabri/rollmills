@@ -529,6 +529,7 @@
                                         </dd>
                                         <dd>{{$shippAddress->state}} </dd>
                                         <dd>{{$shippAddress->city}} </dd>
+                                        <dd>{{$shippAddress->zipcode}} </dd>
                                         @php
                                         $addressParts = [];
                                         if (!empty($shippAddress->address_line_1)) {
