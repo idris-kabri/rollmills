@@ -539,6 +539,7 @@
 
                                         $addressParts[] = $shippAddress->city;
                                         $addressParts[] = $shippAddress->state;
+                                        $addressParts[] = $shippAddress->zipcode;
 
                                         $fullAddress = implode(', ', $addressParts);
                                         @endphp
