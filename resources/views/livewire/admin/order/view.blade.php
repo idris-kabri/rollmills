@@ -523,7 +523,6 @@
                                         <dd>
                                             @if($shippAddress->address_line_1 != '')
                                             {{$shippAddress->address_line_1}}
-                                            @else
                                             {{$shippAddress->address_line_2}}
                                             @endif
                                         </dd>
