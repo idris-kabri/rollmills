@@ -1382,6 +1382,14 @@ input[type="number"] {
     letter-spacing: 2px;
     color: White;
 }
+.Checkout-modal .discount-text-price {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 2px;
+    color: White;
+}
 
 .Checkout-modal .subtitle {
     font-size: 1.1rem;
@@ -2057,6 +2065,86 @@ input[type="number"] {
     .custom-dropdown-home {
         line-height: 20px !important;
     }
+}
+
+/* --- NEW MODAL WHITE CARD STYLES --- */
+.summary-white-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 25px auto;
+    width: 100%;
+    max-width: 350px; /* Controls width of the white box */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: left; /* Aligns text to the left like the image */
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.summary-row.discount {
+    color: #e63946; /* Red color for discount */
+}
+
+.summary-row.total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    color: #000;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/* Ensure the modal background allows the white card to pop */
+.summary-white-card {
+    background-color: #ffffff;
+    border-radius: 12px;         /* Rounded corners */
+    padding: 20px;
+    margin: 20px auto;           /* Spacing from timer and button */
+    width: 100%;
+    max-width: 90%;              /* Keep it from touching edges */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15); /* Drop shadow for depth */
+    text-align: left;            /* Align text to left */
+    color: #333333;              /* Dark text for white bg */
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between; /* Spreads label and price apart */
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Specific style for the Green Discount */
+.summary-row.discount-row {
+    color: #28a745; /* Success Green */
+    font-weight: 700;
+}
+
+/* Specific style for the Final Total */
+.summary-row.total-row {
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #000;
+}
+
+/* Adjust Modal Background to make white pop */
+.Checkout-modal .modal-content {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%); /* Example gradient */
+    border: none;
+    border-radius: 20px;
 }
 
 /* ==================================================================== */

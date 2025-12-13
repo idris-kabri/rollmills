@@ -9,7 +9,7 @@ class Coupon extends Model
 {
     use SoftDeletes;
     protected $table = 'coupons';
-    protected $fillable = ['title', 'image', 'coupon_code', 'minimum_order_value', 'discount_type', 'discount_value', 'maximum_discount_amount', 'usage_limit', 'total_usage', 'order_id', 'expiry_date', 'category', 'is_global', 'description'];
+    protected $fillable = ['title', 'image', 'coupon_code', 'minimum_order_value', 'discount_type', 'discount_value', 'maximum_discount_amount', 'usage_limit', 'total_usage', 'order_id', 'expiry_date', 'category', 'is_global', 'description', 'start_date'];
 
     public function orders()
     {

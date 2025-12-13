@@ -102,49 +102,8 @@
             </div>
         </div>
     </div> --}}
-    <div class="modal fade Checkout-modal" id="saleModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-                    ×
-                </button>
-                <div class="modal-body">
-                    <h1 class="discount-text">10% OFF</h1>
-                    <p class="subtitle quicksand text-white">When you complete your order in...</p>
-
-                    <div class="countdown-container">
-                        <div class="countdown-box">
-                            <div class="countdown-number" id="minutes1">1</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="countdown-number" id="minutes2">5</div>
-                        </div>
-                        <div class="countdown-separator">:</div>
-                        <div class="countdown-box">
-                            <div class="countdown-number" id="seconds1">0</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div class="countdown-number" id="seconds2">0</div>
-                        </div>
-                    </div>
-
-                    <button class="cta-button quicksand">GET MY 10% OFF!</button>
-
-                    <a href="#" class="skip-link d-flex justify-content-center" data-bs-dismiss="modal">Thanks. I'll rather pay full
-                        price!</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     {{-- Checkout Model End --}}
-
-    <button class="btn btn-primary btn-lg demo-trigger" data-bs-toggle="modal" data-bs-target="#saleModal">
-        Show Modal
-    </button>
-
-
-
 
     <!--End hero slider-->
     <section class="popular-categories section-padding" wire:ignore>

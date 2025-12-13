@@ -1,4 +1,5 @@
 <main class="main">
+
     <style>
         /* --- GENERAL HELPER STYLES --- */
         .text-free-green {
@@ -260,7 +261,8 @@
                                 <!-- Phone -->
                                 <div class="form-group col-lg-6">
                                     <input required type="text" name="billing_address.mobile" placeholder="Phone *"
-                                        wire:model="billing_address.mobile">
+                                        wire:model="billing_address.mobile"
+                                        wire:keyup.debounce.800ms="billingAddressMobile">
                                     @error('billing_address.mobile')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -371,7 +373,8 @@
                                         </div>
                                         <div class="form-group col-lg-6">
                                             <input required="" type="text" name="mobile"
-                                                placeholder="Mobile *" wire:model="ship_to_different_address.mobile">
+                                                placeholder="Mobile *" wire:model="ship_to_different_address.mobile"
+                                                wire:keyup.debounce.800ms="shippingAddressMobile">
                                         </div>
                                         <div class="form-group col-lg-6">
                                             <input type="text" name="billing_address" required=""
@@ -710,18 +713,102 @@
                 </div>
 
                 <div class="payment ml-0 ml-sm-30">
-                    <button
-                        class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
-                        wire:click.prevent="placeOrder" wire:loading.attr="disabled" wire:target="placeOrder">
-                        <span wire:loading.remove wire:target="placeOrder">
-                            Place an Order
-                            <i class="fi-rs-sign-out ml-15"></i>
-                        </span>
-                        <span wire:loading wire:target="placeOrder">
-                            <span class="spinner-border spinner-border-sm mr-8"></span>
-                            Processing...
-                        </span>
-                    </button>
+                    @if (!$is_first_order)
+                        <button
+                            class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
+                            wire:click.prevent="placeOrder" wire:loading.attr="disabled" wire:target="placeOrder">
+                            <span wire:loading.remove wire:target="placeOrder">
+                                Place an Order
+                                <i class="fi-rs-sign-out ml-15"></i>
+                            </span>
+                            <span wire:loading wire:target="placeOrder">
+                                <span class="spinner-border spinner-border-sm mr-8"></span>
+                                Processing...
+                            </span>
+                        </button>
+                    @else
+                        <button
+                            class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
+                            wire:click.prevent="placeFirstOrder" wire:loading.attr="disabled"
+                            wire:target="placeFirstOrder">
+                            <span wire:loading.remove wire:target="placeFirstOrder">
+                                Place an Order
+                                <i class="fi-rs-sign-out ml-15"></i>
+                            </span>
+                            <span wire:loading wire:target="placeFirstOrder">
+                                <span class="spinner-border spinner-border-sm mr-8"></span>
+                                Processing...
+                            </span>
+                        </button>
+                    @endif
+                </div>
+
+                <div class="modal fade Checkout-modal" id="saleModal" tabindex="-1" aria-hidden="true"
+                    data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body text-center">
+
+                                <h1 class="discount-text">10% OFF</h1>
+                                <p class="subtitle quicksand text-white mb-4">When you complete your order in...</p>
+
+                                <div class="countdown-container mb-2">
+                                    <div class="countdown-box">
+                                        <div class="countdown-number" id="minutes1">1</div>
+                                    </div>
+                                    <div class="countdown-box">
+                                        <div class="countdown-number" id="minutes2">5</div>
+                                    </div>
+                                    <div class="countdown-separator text-white">:</div>
+                                    <div class="countdown-box">
+                                        <div class="countdown-number" id="seconds1">0</div>
+                                    </div>
+                                    <div class="countdown-box">
+                                        <div class="countdown-number" id="seconds2">0</div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-white-card quicksand">
+
+                                    <div class="summary-row">
+                                        <span class="text-muted">Total order value</span>
+                                        <span id="originalPrice">₹{{ number_format($finalTotal, 2) }}</span>
+                                    </div>
+
+                                    <div class="summary-row discount-row">
+                                        <span>Total discount (10%)</span>
+                                        <span>- ₹{{ number_format($item_sum_discount, 2) }}</span>
+                                    </div>
+
+                                    <div class="summary-row">
+                                        <span class="text-muted">Shipping charge</span>
+                                        <span>
+                                            @if (session('flat_rate_charge') > 0)
+                                                ₹{{ number_format(session('flat_rate_charge'), 2) }}
+                                            @elseif (session('shipping_charge') > 0)
+                                                ₹{{ number_format(session('shipping_charge'), 2) }}
+                                            @else
+                                                <span class="text-success">FREE</span>
+                                            @endif
+                                        </span>
+                                    </div>
+
+                                    <div class="summary-row total-row">
+                                        <span>Total Pay</span>
+                                        <span
+                                            id="discountedPrice">₹{{ number_format($finalTotal - $item_sum_discount, 2) }}</span>
+                                    </div>
+
+                                </div>
+                                <button class="cta-button quicksand mt-2" wire:loading.attr="disabled"
+                                    wire:target="placeNewFirstOrder" wire:click.prevent="placeNewFirstOrder">
+                                    <span wire:loading.remove wire:target="placeNewFirstOrder">Pay Now & GET 10% OFF!</span>
+                                    <span wire:loading wire:target="placeNewFirstOrder">Processing...</span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -731,6 +818,7 @@
 @push('scripts')
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
+        let totalSeconds = 240;
         document.addEventListener('livewire:init', function() {
             window.addEventListener('initiate-razorpay', function(event) {
                 const detail = event.detail[0] || event.detail;
@@ -757,6 +845,35 @@
                 var rzp1 = new Razorpay(options);
                 rzp1.open();
             });
+            window.addEventListener('trigger-first-order-modal', function(event) {
+                updateCountdown();
+                totalSeconds = 240
+                $("#saleModal").modal('show');
+            });
+
+            function updateCountdown() {
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+
+                const min1 = Math.floor(minutes / 10);
+                const min2 = minutes % 10;
+                const sec1 = Math.floor(seconds / 10);
+                const sec2 = seconds % 10;
+
+                document.getElementById('minutes1').textContent = min1;
+                document.getElementById('minutes2').textContent = min2;
+                document.getElementById('seconds1').textContent = sec1;
+                document.getElementById('seconds2').textContent = sec2;
+
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+                } else {
+                    totalSeconds = 900; // Reset to 15 minutes
+                }
+            }
+
+            // Update countdown every second
+            setInterval(updateCountdown, 1000);
         });
     </script>
 @endpush
