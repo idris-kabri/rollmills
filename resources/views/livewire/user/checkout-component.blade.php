@@ -772,7 +772,7 @@
 
                                     <div class="summary-row">
                                         <span class="text-muted">Total order value</span>
-                                        <span id="originalPrice">₹{{ number_format($finalTotal, 2) }}</span>
+                                        <span id="originalPrice">₹{{ Cart::instance('cart')->subtotal() }}</span>
                                     </div>
 
                                     <div class="summary-row discount-row">
