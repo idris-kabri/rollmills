@@ -139,7 +139,7 @@ class CheckoutComponent extends Component
     public function checkPlaceOrderFunction()
     {
         if (Auth::check()) {
-            if (Order::where('user_id', Auth::user()->id)->count() > 0) {
+            if (Order::where('logged_in_user_id', Auth::user()->id)->count() > 0) {
                 $this->is_first_order = false;
             } else {
                 $this->is_first_order = true;
