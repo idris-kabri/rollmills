@@ -35,7 +35,6 @@ class SendMessageCommand extends Command
                 ->where('created_at', '<=', now()->subHours(4))
                 ->get();
             foreach ($shoppingCarts as $cart) {
-                Log::info('Abandoned cart message ' . $cart->identifier);
 
                 $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy('id', 'desc')->first();
                 if ($check_condtion && now()->diffInDays($check_condtion->created_at) <= 3) {
