@@ -45,9 +45,13 @@ class CheckoutComponent extends Component
     public $pincode_validation_id = [];
     public $payment_button;
     public $free_shipping;
+    public $is_first_order = true;
+    public $item_sum;
+    public $item_sum_discount;
 
     public function mount()
     {
+        session()->forget('first_order');
         $this->billing_address['zipcode'] = session('shipping_pincode');
         $this->billing_address['email'] = '';
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
@@ -127,10 +131,48 @@ class CheckoutComponent extends Component
 
                 $items[] = $item;
             }
+            $this->checkPlaceOrderFunction();
             $this->dispatch('initiate-checkout', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
         }
     }
 
+    public function checkPlaceOrderFunction()
+    {
+        if (Auth::check()) {
+            if (Order::where('user_id', Auth::user()->id)->count() > 0) {
+                $this->is_first_order = false;
+            } else {
+                $this->is_first_order = true;
+            }
+        } else {
+            $mobile_number = '';
+            $address_type = '';
+            if (isset($this->billing_address['mobile']) && $this->billing_address['mobile'] != null) {
+                $mobile_number = $this->billing_address['mobile'];
+                $address_type = 'billing';
+            } else {
+                if (isset($this->ship_to_different_address['mobile']) && $this->ship_to_different_address['mobile'] != null) {
+                    $mobile_number = $this->ship_to_different_address['mobile'];
+                    $address_type = 'shipping';
+                }
+            }
+
+            if ($mobile_number != null && $mobile_number != '') {
+                $order_count = 0;
+                if ($address_type == 'billing') {
+                    $order_count = Order::where('billing_address_details', "LIKE", "%$mobile_number%")->where('status', "!=", 0)->count();
+                } else {
+                    $order_count = Order::where('ship_different_address_details', "LIKE", "%$mobile_number%")->where('status', "!=", 0)->count();
+                }
+
+                if ($order_count > 0) {
+                    $this->is_first_order = false;
+                } else {
+                    $this->is_first_order = true;
+                }
+            }
+        }
+    }
 
     public function calculateTotals()
     {
@@ -404,6 +446,14 @@ class CheckoutComponent extends Component
             $orderItem->sale_default_price = $item->model->sale_default_price ?? 0;
             $orderItem->sale_price_start_date = $item->model->sale_from_date;
             $orderItem->sale_price_end_date = $item->model->sale_to_date;
+            if(session()->has('first_order') && session()->get('first_order') == true){
+                $sale_default_price = $item->model->sale_default_price;
+                $bonus_amount = ($sale_default_price * 10) / 100;
+                $orderItem->bonus = floor($bonus_amount);
+                $orderItem->subtotal = $item->qty * ($productPrice['price'] - $bonus_amount);
+            }else{
+                $orderItem->subtotal = $item->qty * $productPrice['price'];
+            }
             // $orderItem->courier_id = $item->options['courier_id'];
             // $orderItem->courier = $item->options['courier'];
             // $orderItem->overall_rate = $item->options['overall_rate'];
@@ -411,7 +461,6 @@ class CheckoutComponent extends Component
             // $orderItem->shipping_margin_bear = $item->options['shipping_margin_bear'];
             // $orderItem->etd = $item->options['etd'];
 
-            $orderItem->subtotal = $item->qty * $productPrice['price'];
             $offerPrice = 0;
             if (!empty($item->options['discount_price'])) {
                 $offerPrice = $item->price * $item->qty - $item->options['discount_price'];
@@ -424,7 +473,7 @@ class CheckoutComponent extends Component
             $orderItem->item_return_days = $item->model->product_return_days;
             $orderItem->item_replacement_days = $item->model->product_replacement_days;
             $orderItem->delivery_at = now();
-            $orderItem->is_gift_item = ($item->options['is_gift_product'] ?? false) ? 1 : 0;
+            $orderItem->is_gift_item = $item->options['is_gift_product'] ?? false ? 1 : 0;
             $orderItem->save();
         }
     }
@@ -437,8 +486,8 @@ class CheckoutComponent extends Component
         if (!$user) {
             // Create new user
             $user = new User();
-            $user->email = $this->billing_address['email'];
-            $user->mobile = $this->billing_address['mobile'];
+            $user->email = $this->billing_address['email'] ? $this->billing_address['email'] : $this->ship_to_different_address['email'];
+            $user->mobile = $this->billing_address['mobile'] ? $this->billing_address['mobile'] : $this->ship_to_different_address['mobile'];
             $user->password = Hash::make($password);
             $user->password_view = $password;
             $user->is_guest_user = 1;
@@ -646,7 +695,7 @@ class CheckoutComponent extends Component
         $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
         if ($setting) {
             $outOfDeliveryPincodes = explode(',', $setting->value);
-            $pincode = "";
+            $pincode = '';
             if ($this->ship_to_different_address_enabled) {
                 $pincode = $this->ship_to_different_address['zipcode'];
             } else {
@@ -680,8 +729,9 @@ class CheckoutComponent extends Component
         $this->calculateTotals();
     }
 
-    public function updatedBillingAddressMobile($value)
+    public function billingAddressMobile()
     {
+        $value = $this->billing_address['mobile'];
         $value = str_replace(' ', '', $value);
 
         if (str_starts_with($value, '+91')) {
@@ -697,10 +747,12 @@ class CheckoutComponent extends Component
         }
 
         $this->billing_address['mobile'] = $value;
+        $this->checkPlaceOrderFunction();
     }
 
-    public function updatedShipToDifferentAddressMobile($value)
+    public function shippingAddressMobile()
     {
+        $value = $this->ship_to_different_address['mobile'];
         $value = str_replace(' ', '', $value);
 
         if (str_starts_with($value, '+91')) {
@@ -716,9 +768,214 @@ class CheckoutComponent extends Component
         }
 
         $this->ship_to_different_address['mobile'] = $value;
+        $this->checkPlaceOrderFunction();
     }
 
+    public function placeFirstOrder()
+    {
+        $this->validate(
+            [
+                'billing_address.name' => 'required|string|max:255',
+                'billing_address.email' => 'required|email',
+                'billing_address.state' => 'required|string|max:255',
+                'billing_address.city' => 'required|string|max:255',
+                'billing_address.billing_address1' => 'required|string|max:255',
+                'billing_address.billing_address2' => 'nullable|string|max:255',
+                'billing_address.zipcode' => 'required',
+                'billing_address.mobile' => 'required|digits_between:10,15',
+            ],
+            [],
+            [
+                'billing_address.name' => 'name',
+                'billing_address.email' => 'email address',
+                'billing_address.state' => 'state',
+                'billing_address.city' => 'city',
+                'billing_address.billing_address1' => 'address',
+                'billing_address.billing_address2' => 'address line 2',
+                'billing_address.zipcode' => 'zipcode',
+                'billing_address.mobile' => 'phone number',
+            ],
+        );
+        $cartTotal = (float) str_replace(',', '', Cart::instance('cart')->total());
+        $this->item_sum = $cartTotal;
+        $this->item_sum_discount = floor(($cartTotal * 10) / 100);
+        session()->put('first_order', true);
+        $this->dispatch('trigger-first-order-modal');
+    }
 
+    public function placeNewFirstOrder()
+    {
+        try {
+            $this->payment_method = 'upi';
+            $nonAuthUser = null;
+
+            // Create billing address
+            if (!Auth::check()) {
+                $nonAuthUser = $this->userCreate();
+                $billingAddress = $this->createBillingAddress($nonAuthUser['id']);
+            } else {
+                $billingAddress = $this->createBillingAddress();
+            }
+
+            $encdoeBillingAddress = json_encode($billingAddress);
+            //order create
+            $user_order = new Order();
+
+            //ship to different address create
+            if (!empty($this->ship_to_different_address['name']) && !empty($this->ship_to_different_address['billing_address1']) && !empty($this->ship_to_different_address['city']) && !empty($this->ship_to_different_address['state']) && !empty($this->ship_to_different_address['zipcode'])) {
+                if (!Auth::check()) {
+                    $shippingAddress = $this->createShippingAddress($nonAuthUser['id']);
+                } else {
+                    $shippingAddress = $this->createShippingAddress();
+                }
+                $encdoeShipDifferentAddress = json_encode($shippingAddress);
+                $user_order->ship_different_address_id = $shippingAddress['id'];
+                $user_order->ship_different_address_details = $encdoeShipDifferentAddress;
+            } else {
+                $user_order->ship_different_address_id = $billingAddress['id'];
+                $user_order->ship_different_address_details = $encdoeBillingAddress;
+            }
+
+            if (Auth::check()) {
+                $user_order->is_logged_in_user = 1;
+                $user_order->logged_in_user_id = Auth::user()->id;
+            } else {
+                $user_order->is_logged_in_user = 0;
+                $user_order->logged_in_user_id = $nonAuthUser['id'];
+            }
+
+            $user_order->subtotal = (float) str_replace(',', '', Cart::instance('cart')->total());
+
+            if ($this->couponDiscount > 0) {
+                $user_order->coupon_discount = $this->couponDiscount;
+                $user_order->coupon_id = $this->coupon_discount_id;
+            } else {
+                $user_order->coupon_discount = 0;
+            }
+
+            if ($this->offerDiscount > 0) {
+                $user_order->offer_discount = $this->offerDiscount;
+            } else {
+                $user_order->offer_discount = 0;
+            }
+
+            if (session('first_order') && session('first_order') == true) {
+                $user_order->total = $this->finalTotal - $this->item_sum_discount;
+                $user_order->total_bonus = $this->item_sum_discount;
+            } else {
+                $user_order->total = $this->finalTotal;
+            }
+            $user_order->status = 0;
+
+            if (session('free_shipping_pincode')) {
+                $user_order->is_manual_pickup = 1;
+            } else {
+                $user_order->is_manual_pickup = 0;
+            }
+
+            $user_order->additional_information = $this->additional_information;
+            $user_order->billing_address_id = $billingAddress['id'];
+            $user_order->billing_address_details = $encdoeBillingAddress;
+            $user_order->etd = session('latest_etd');
+            $user_order->shipping_charges = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
+            $user_order->shipping_bearable = session('shipping_bear_margin') ?? 0;
+
+            if ($this->gift_card_amount > 0) {
+                $user_order->gift_card_item_id = $this->applied_gift_card_ids;
+                $user_order->gift_card_discount = $this->gift_card_amount;
+            }
+
+            if ($this->payment_method == 'upi') {
+                if (session('first_order') && session('first_order') == true) {
+                    $user_order->paid_amount = $this->finalTotal  - $this->item_sum_discount;
+                } else {
+                    $user_order->paid_amount = $this->finalTotal;
+                }
+                $user_order->remaining_amount = 0;
+
+                $user_order->save();
+
+                $this->createOrderItem($user_order);
+                $coupon = Coupon::find($this->coupon_discount_id);
+
+                $total = $this->finalTotal;
+                if(session('first_order') && session('first_order') == true) {
+                    $total = $this->finalTotal - $this->item_sum_discount;
+                }
+
+                $order = razorPayPayment($total, Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using UPI');
+
+                $user =
+                    Auth::user() ??
+                    (object) [
+                        'name' => $nonAuthUser['name'],
+                        'email' => $nonAuthUser['email'],
+                    ];
+
+                $this->dispatch('initiate-razorpay', [
+                    'transaction_id' => $order->transaction_id,
+                    'razorpay_order_id' => $order->id,
+                    'amount' => $order->amount,
+                    'description' => $order->description,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'customer_name' => $user->name,
+                    'customer_email' => $user->email,
+                    'id' => $user_order->id,
+                    'success_url' => route('payment.success'),
+                ]);
+            } else {
+                $walletBalance = (int) Auth::user()->wallet_balance;
+
+                if ($walletBalance >= $this->finalTotal) {
+                    updateWalletBalance(Auth::user()->id, 'deduct', $this->finalTotal);
+                    $user_order->paid_amount = $this->finalTotal;
+                    $user_order->remaining_amount = 0;
+                    $user_order->save();
+
+                    $this->createOrderItem($user_order);
+
+                    walletPayment(Auth::user()->id, $user_order->id, 'orders', $this->finalTotal, 'WALLET-ORDER-' . Str::upper(Str::random(10)), 'Order Placed Using Wallet', 1);
+
+                    Cart::instance('cart')->destroy();
+                    if (Auth::check()) {
+                        Cart::instance('cart')->store(Auth::user()->mobile);
+                    }
+
+                    return redirect('/')->with('success', 'Order successful, and the details have been sent to ' . $billingAddress['name'] . ' email address.');
+                } else {
+                    $remainingAmount = $this->finalTotal - $walletBalance;
+                    $user_order->paid_amount = $remainingAmount;
+                    $user_order->remaining_amount = 0;
+                    $user_order->save();
+
+                    //hh
+                    $this->createOrderItem($user_order);
+
+                    if ($walletBalance > 0) {
+                        walletPayment(Auth::user()->id, $user_order->id, 'orders', $walletBalance, 'WALLET-ORDER-' . Str::upper(Str::random(10)), 'Order Placed Using Wallet', 1);
+                    }
+
+                    $order = razorPayPayment($remainingAmount, Auth::user()->id, $user_order->id, 'orders', 'Partial Wallet + Razorpay for Custom Gift Card');
+
+                    $this->dispatch('initiate-razorpay', [
+                        'transaction_id' => $order->transaction_id,
+                        'razorpay_order_id' => $order->id,
+                        'amount' => $order->amount,
+                        'description' => $order->description,
+                        'name' => Auth::user()->name,
+                        'email' => Auth::user()->email,
+                        'customer_name' => Auth::user()->name,
+                        'customer_email' => Auth::user()->email,
+                        'success_url' => route('payment.success'),
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            // dd($e);
+            $this->toastError($e->getMessage());
+        }
+    }
 
     public function render()
     {

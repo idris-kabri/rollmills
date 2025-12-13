@@ -73,6 +73,38 @@
             </div>
         </div>
     </section>
+
+    {{-- Checkout Model Start --}}
+    {{-- <div class="modal fade" id="CheckoutActionModal" tabindex="-1" aria-labelledby="CheckoutActionModal"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content-custom w-100">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{ asset('assets/frontend/imgs/icon&images/saving.png') }}" alt=""
+                            class="img-fluid mb-3 mt-4 modal-logo" />
+                    </div>
+                    <div class="modal-body p-0 d-flex justify-content-center text-center">
+                        <h1 class="fs-3 mb-2"> Unlock <span class="color-1 fs-2">10% Instant Savings</span></h1>
+                    </div>
+                    <p class="fs-6 mx-auto text-center w-md-75 w-75 quicksand">
+                        Complete your payment now and enjoy an
+                        <strong class="text-brand">instant 10% discount</strong>.
+                        No coupon needed — discount applied automatically.
+                    </p>
+                </div>
+                <div class="pb-4 d-flex flex-column justify-content-center">
+                    <button type="submit" class="btn checkout-modal-btn w-90-per pt-10 pb-10"
+                        wire:click.prevent="logoutUser">
+                        Pay Now & Save 10%
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+    {{-- Checkout Model End --}}
+
     <!--End hero slider-->
     <section class="popular-categories section-padding" wire:ignore>
         <div class="container wow animate__animated animate__fadeIn">
@@ -207,9 +239,9 @@
 
     <!-- category wise product section  -->
     @php
-        $priority_ids = [29, 1]; 
+        $priority_ids = [29, 1];
 
-        $sortedCategories = $parentCategory->sortBy(function($cat) use ($priority_ids) {
+        $sortedCategories = $parentCategory->sortBy(function ($cat) use ($priority_ids) {
             $index = array_search($cat->id, $priority_ids);
             return $index === false ? 999 : $index;
         });
@@ -612,5 +644,42 @@
 
             console.log("Modal opened for product:", e.detail.productId);
         });
+    </script>
+    <script>
+        // Auto-show modal on page load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var modal = new bootstrap.Modal(document.getElementById('saleModal'));
+                modal.show();
+            }, 500);
+        });
+
+        // Countdown Timer
+        let totalSeconds = 240; // 15 minutes = 900 seconds
+
+        function updateCountdown() {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+
+            const min1 = Math.floor(minutes / 10);
+            const min2 = minutes % 10;
+            const sec1 = Math.floor(seconds / 10);
+            const sec2 = seconds % 10;
+
+            document.getElementById('minutes1').textContent = min1;
+            document.getElementById('minutes2').textContent = min2;
+            document.getElementById('seconds1').textContent = sec1;
+            document.getElementById('seconds2').textContent = sec2;
+
+            if (totalSeconds > 0) {
+                totalSeconds--;
+            } else {
+                totalSeconds = 900; // Reset to 15 minutes
+            }
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
     </script>
 @endpush

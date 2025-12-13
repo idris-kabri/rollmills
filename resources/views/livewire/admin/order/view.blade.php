@@ -190,6 +190,12 @@
                                                     <td>₹{{ number_format($order->coupon_discount, 2) }}</td>
                                                 </tr>
                                                 @endif
+                                                @if($order->total_bonus && $order->total_bonus > 0)
+                                                <tr>
+                                                    <td>Bonus(on First Order)</td>
+                                                    <td>₹{{ number_format($order->total_bonus, 2) }}</td>
+                                                </tr>
+                                                @endif
 
                                                 @if($order->offer_discount && $order->offer_discount > 0)
                                                 <tr>
