@@ -30,55 +30,54 @@ class SendMessageCommand extends Command
     public function handle()
     {
         try {
-            Log::error("Hye There");
-            // $shoppingCarts = DB::table('shoppingcart')
-            //     ->where('instance', 'cart')
-            //     ->where('created_at', '<=', now()->subMinutes(3))
-            //     ->get();
-            // foreach ($shoppingCarts as $cart) {
-            //     Log::info('Abandoned cart message ' . $cart->identifier);
+            $shoppingCarts = DB::table('shoppingcart')
+                ->where('instance', 'cart')
+                ->where('created_at', '<=', now()->subHours(4))
+                ->get();
+            foreach ($shoppingCarts as $cart) {
+                Log::info('Abandoned cart message ' . $cart->identifier);
 
-            //     $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy('id', 'desc')->first();
-            //     if ($check_condtion && now()->diffInMinutes($check_condtion->created_at) <= 3) {
-            //         continue;
-            //     }
-            //     try {
-            //         $token = config('app.whatsapp_api_token');
-            //         $phoneNumberId = config('app.whatsapp_phone_number_id');
-            //         $apiVersion = config('app.whatsapp_api_version');
+                $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy('id', 'desc')->first();
+                if ($check_condtion && now()->diffInDays($check_condtion->created_at) <= 3) {
+                    continue;
+                }
+                try {
+                    $token = config('app.whatsapp_api_token');
+                    $phoneNumberId = config('app.whatsapp_phone_number_id');
+                    $apiVersion = config('app.whatsapp_api_version');
 
-            //         $url = "https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages";
+                    $url = "https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages";
 
-            //         $payload = [
-            //             'messaging_product' => 'whatsapp',
-            //             'to' => '91' . $cart->identifier,
-            //             'type' => 'template',
-            //             'template' => [
-            //                 'name' => 'abandoned_cart_1',
-            //                 'language' => ['code' => 'en_US'],
-            //             ],
-            //         ];
+                    $payload = [
+                        'messaging_product' => 'whatsapp',
+                        'to' => '91' . $cart->identifier,
+                        'type' => 'template',
+                        'template' => [
+                            'name' => 'abandoned_cart_1',
+                            'language' => ['code' => 'en_US'],
+                        ],
+                    ];
 
-            //         $response = Http::withToken($token)->post($url, $payload);
+                    $response = Http::withToken($token)->post($url, $payload);
 
-            //         if ($response->successful()) {
-            //             Log::info('Abandoned cart message sent', [
-            //                 'mobile' => $cart->identifier,
-            //             ]);
-            //         } else {
-            //             Log::warning('Failed sending WhatsApp message', [
-            //                 'body' => $response->body(),
-            //             ]);
-            //         }
-            //     } catch (\Exception $e) {
-            //         Log::error('WhatsApp exception: ' . $e->getMessage());
-            //     }
+                    if ($response->successful()) {
+                        Log::info('Abandoned cart message sent', [
+                            'mobile' => $cart->identifier,
+                        ]);
+                    } else {
+                        Log::warning('Failed sending WhatsApp message', [
+                            'body' => $response->body(),
+                        ]);
+                    }
+                } catch (\Exception $e) {
+                    Log::error('WhatsApp exception: ' . $e->getMessage());
+                }
 
-            //     $store = new AbendedCartMessage();
-            //     $store->mobile_number = $cart->identifier;
-            //     $store->send_at = now();
-            //     $store->save();
-            // }
+                $store = new AbendedCartMessage();
+                $store->mobile_number = $cart->identifier;
+                $store->send_at = now();
+                $store->save();
+            }
         } catch (Exception $e) {
             Log::error($e->getMessage());
         }
