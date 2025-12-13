@@ -731,44 +731,48 @@ class CheckoutComponent extends Component
 
     public function billingAddressMobile()
     {
-        $value = $this->billing_address['mobile'];
-        $value = str_replace(' ', '', $value);
-
-        if (str_starts_with($value, '+91')) {
-            $value = substr($value, 3);
+        if(isset($this->billing_address['mobile']) && $this->billing_address['mobile'] != null){
+            $value = $this->billing_address['mobile'];
+            $value = str_replace(' ', '', $value);
+    
+            if (str_starts_with($value, '+91')) {
+                $value = substr($value, 3);
+            }
+    
+            if (str_starts_with($value, '91') && strlen($value) > 10) {
+                $value = substr($value, 2);
+            }
+    
+            if (str_starts_with($value, '0')) {
+                $value = substr($value, 1);
+            }
+    
+            $this->billing_address['mobile'] = $value;
+            $this->checkPlaceOrderFunction();
         }
-
-        if (str_starts_with($value, '91') && strlen($value) > 10) {
-            $value = substr($value, 2);
-        }
-
-        if (str_starts_with($value, '0')) {
-            $value = substr($value, 1);
-        }
-
-        $this->billing_address['mobile'] = $value;
-        $this->checkPlaceOrderFunction();
     }
 
     public function shippingAddressMobile()
     {
-        $value = $this->ship_to_different_address['mobile'];
-        $value = str_replace(' ', '', $value);
-
-        if (str_starts_with($value, '+91')) {
-            $value = substr($value, 3);
+        if(isset($this->ship_to_different_address['mobile']) && $this->ship_to_different_address['mobile'] != null){
+            $value = $this->ship_to_different_address['mobile'];
+            $value = str_replace(' ', '', $value);
+    
+            if (str_starts_with($value, '+91')) {
+                $value = substr($value, 3);
+            }
+    
+            if (str_starts_with($value, '91') && strlen($value) > 10) {
+                $value = substr($value, 2);
+            }
+    
+            if (str_starts_with($value, '0')) {
+                $value = substr($value, 1);
+            }
+    
+            $this->ship_to_different_address['mobile'] = $value;
+            $this->checkPlaceOrderFunction();
         }
-
-        if (str_starts_with($value, '91') && strlen($value) > 10) {
-            $value = substr($value, 2);
-        }
-
-        if (str_starts_with($value, '0')) {
-            $value = substr($value, 1);
-        }
-
-        $this->ship_to_different_address['mobile'] = $value;
-        $this->checkPlaceOrderFunction();
     }
 
     public function placeFirstOrder()
