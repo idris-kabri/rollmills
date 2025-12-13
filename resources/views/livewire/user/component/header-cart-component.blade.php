@@ -1,6 +1,6 @@
 <div class="header-action-right ms-4">
     <div class="header-action-2">
-        <div class="header-action-icon-2" wire:poll.750ms>
+        <div class="header-action-icon-2" wire:poll.2s>
             <a href="/wishlist">
                 <img class="svgInject" alt="Roll Mills"
                     src="{{ asset('assets/frontend/imgs/theme/icons/icon-heart.svg') }}" />
@@ -8,14 +8,14 @@
             </a>
             <a href="/wishlist"><span class="lable">Wishlist</span></a>
         </div>
-        <div class="header-action-icon-2" wire:poll.750ms>
+        <div class="header-action-icon-2" wire:poll.2s>
             <a class="cart-img" href="/cart">
                 <img alt="Nest" src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}" />
                 <span class="pro-count blue">{{ Cart::instance('cart')->count() }}</span>
             </a>
             <a href="/cart"><span class="lable">Cart</span></a>
             <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                <ul wire:poll.750ms
+                <ul wire:poll.2s
                     style="max-height: 250px; overflow: auto; scrollbar-color: var(--color-1) #fcfcfc; scrollbar-width: thin;">
                     @foreach (Cart::instance('cart')->content() as $item)
                     <li>
