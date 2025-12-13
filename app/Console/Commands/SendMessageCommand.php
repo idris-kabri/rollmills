@@ -29,7 +29,8 @@ class SendMessageCommand extends Command
      */
     public function handle()
     {
-        $shoppingCarts = DB::table('shoppingcart')->where('instance', 'cart')->where('created_at', '<=', now()->subMinutes(3))->get();
+        try {
+            $shoppingCarts = DB::table('shoppingcart')->where('instance', 'cart')->where('created_at', '<=', now()->subMinutes(3))->get();
         foreach ($shoppingCarts as $cart) {
 
             if (!$cart->created_at) {
@@ -80,6 +81,9 @@ class SendMessageCommand extends Command
             $store->mobile_number = $cart->identifier;
             $store->send_at = now();
             $store->save();
+        }
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
     }
 }
