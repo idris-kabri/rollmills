@@ -36,6 +36,8 @@ class SendMessageCommand extends Command
                 continue;
             }
 
+            Log::info('Abandoned cart message ' . $cart->identifier);
+
             $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy("id", "desc")->first();
             if ($check_condtion && now()->diffInMinutes($check_condtion->created_at) <= 3) {
                 Log::error('Abandoned cart message already sent');
