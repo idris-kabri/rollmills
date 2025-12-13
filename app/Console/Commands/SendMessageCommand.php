@@ -30,17 +30,17 @@ class SendMessageCommand extends Command
     public function handle()
     {
         try {
-            $shoppingCarts = DB::table('shoppingcart')->where('instance', 'cart')->where('created_at', '<=', now()->subMinutes(3))->get();
-        foreach ($shoppingCarts as $cart) {
+            $shoppingCarts = DB::table('shoppingcart')
+                ->where('instance', 'cart')
+                ->where('created_at', '<=', now()->subMinutes(3))
+                ->get();
+            foreach ($shoppingCarts as $cart) {
+                Log::info('Abandoned cart message ' . $cart->identifier);
 
-            if (!$cart->created_at) {
-                continue;
-            }
-
-            Log::info('Abandoned cart message ' . $cart->identifier);
-
-            $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy("id", "desc")->first();
-            if ($check_condtion && now()->diffInMinutes($check_condtion->created_at) <= 3) {
+                $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy('id', 'desc')->first();
+                if ($check_condtion && now()->diffInMinutes($check_condtion->created_at) <= 3) {
+                    continue;
+                }
                 Log::error('Abandoned cart message already sent');
                 try {
                     $token = config('app.whatsapp_api_token');
@@ -60,28 +60,28 @@ class SendMessageCommand extends Command
                     ];
 
                     $response = Http::withToken($token)->post($url, $payload);
+                    if ($cart->identifier == '9358473253') {
+                        dd($cart, $check_condtion, $response->body());
+                    }
 
                     if ($response->successful()) {
                         Log::info('Abandoned cart message sent', [
-                            'mobile' => $cart->identifier
+                            'mobile' => $cart->identifier,
                         ]);
                     } else {
                         Log::warning('Failed sending WhatsApp message', [
-                            'body' => $response->body()
+                            'body' => $response->body(),
                         ]);
                     }
                 } catch (\Exception $e) {
                     Log::error('WhatsApp exception: ' . $e->getMessage());
                 }
 
-                continue;
+                $store = new AbendedCartMessage();
+                $store->mobile_number = $cart->identifier;
+                $store->send_at = now();
+                $store->save();
             }
-
-            $store = new AbendedCartMessage;
-            $store->mobile_number = $cart->identifier;
-            $store->send_at = now();
-            $store->save();
-        }
         } catch (Exception $e) {
             Log::error($e->getMessage());
         }
