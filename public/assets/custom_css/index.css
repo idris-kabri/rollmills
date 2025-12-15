@@ -1654,6 +1654,10 @@ input[type="number"] {
         padding-left: 12px;
         padding-right: 12px;
     }
+
+    .cod-alert-modal .modal-body {
+        padding: 28px 22px;
+    }
 }
 
 /* ==================================================================== */
