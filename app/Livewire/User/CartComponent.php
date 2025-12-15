@@ -149,9 +149,9 @@ class CartComponent extends Component
         $currentDate = Carbon::now()->format('Y-m-d');
         $checkCuponCode = Coupon::where('coupon_code', $this->couponCode)->first();
 
-        session()->forget('coupon_discount_amount');
-        session()->forget('coupon_discount_id');
-        session()->forget('coupon_code');
+        // session()->forget('coupon_discount_amount');
+        // session()->forget('coupon_discount_id');
+        // session()->forget('coupon_code');
 
         // Check if coupon exists
         if (!$checkCuponCode) {
@@ -246,14 +246,14 @@ class CartComponent extends Component
             $this->totalAfterDiscount = $eligibleProductsTotal - $this->mainDiscountAmount;
         }
 
+        if ($this->couponCode != session()->get('coupon_code')) {
+            $this->dispatch('coupon-applied');
+        }
+
         // Save coupon info in session
         session()->put('coupon_discount_amount', $this->mainDiscountAmount);
         session()->put('coupon_discount_id', $checkCuponCode->id);
         session()->put('coupon_code', $this->couponCode);
-
-        if ($show_dispatch_event == 'yes') {
-            $this->dispatch('coupon-applied');
-        }
 
         return true;
     }
