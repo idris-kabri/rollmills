@@ -16,6 +16,7 @@ use Carbon\Carbon;
 class CartComponent extends Component
 {
     use HasToastNotification;
+
     public $checkout_button = false;
     public $free_shipping = false;
     public $pincode = null;
@@ -41,11 +42,14 @@ class CartComponent extends Component
     public $to_be_applied_offer_id = [];
     public $offer_applied_cart_product_id = [];
     public $quantities = [];
-    public $display_coupons = [];
+    
+    // REMOVED: public $display_coupons = []; 
+    // We pass this in render() to avoid hydration 404s
+    
     public $surprise_gift_amount = 0;
-    public $surprise_gift_product_id = null;
+    public $surprise_gift_product_id = null; // Stores ID (Value), not Model
     public $productCategoryIds = [];
-    public $flat_rate;
+    public $flat_rate = 0; // Stores Value, not Model
 
     public $confirmMessage = '';
     public $confirmAction = '';
@@ -83,7 +87,7 @@ class CartComponent extends Component
             }
             $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
 
-            $item = [
+            $itemData = [
                 'item_id' => $product->id,
                 'item_name' => $product->name,
                 'affiliation' => '',
@@ -96,25 +100,25 @@ class CartComponent extends Component
             foreach ($category_assign as $key => $category) {
                 $this->productCategoryIds[] = $category->category_id;
                 if ($key == 0) {
-                    $item['item_category'] = $category->category->name;
+                    $itemData['item_category'] = $category->category->name;
                 } else {
-                    $item['item_category' . $key + 1] = $category->category->name;
+                    $itemData['item_category' . $key + 1] = $category->category->name;
                 }
             }
 
-            $item['item_list_id'] = '';
-            $item['item_list_name'] = '';
+            $itemData['item_list_id'] = '';
+            $itemData['item_list_name'] = '';
             if ($product->attributes_name != null) {
                 $attributes = explode(',', $product->attributes_name);
                 foreach ($attributes as $key => $attribute) {
-                    $item['item_variant'] = $attribute;
+                    $itemData['item_variant'] = $attribute;
                 }
             }
-            $item['location_id'] = '';
-            $item['price'] = (float) $price;
-            $item['quantity'] = $quantity;
+            $itemData['location_id'] = '';
+            $itemData['price'] = (float) $price;
+            $itemData['quantity'] = $quantity;
 
-            $items[] = $item;
+            $items[] = $itemData;
         }
         if (session()->has('shipping_pincode') && session('shipping_pincode') != null) {
             $this->pincode = session('shipping_pincode');
@@ -122,14 +126,22 @@ class CartComponent extends Component
         }
         $this->productCategoryIds = array_unique($this->productCategoryIds);
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
-        $this->surprise_gift_amount = (int) Setting::where('label', 'surprise_gift_minimum_amount')->first()->value;
-        $this->surprise_gift_product_id = Setting::where('label', 'surprise_gift_product_id')->first();
-        $this->getDisplayCoupons();
-        $this->checkSurpriseGift();
-        $this->flat_rate = Setting::where('label', 'Flat Rate')->first();
-        if ($this->flat_rate) {
-            session()->put('flat_rate_charge', (int) $this->flat_rate->value);
+
+        // FIX: Extract values immediately to avoid storing Models
+        $giftAmountSetting = Setting::where('label', 'surprise_gift_minimum_amount')->first();
+        $this->surprise_gift_amount = $giftAmountSetting ? (int) $giftAmountSetting->value : 0;
+
+        $giftProductSetting = Setting::where('label', 'surprise_gift_product_id')->first();
+        $this->surprise_gift_product_id = $giftProductSetting ? $giftProductSetting->value : null;
+
+        $flatRateSetting = Setting::where('label', 'Flat Rate')->first();
+        if ($flatRateSetting) {
+            $this->flat_rate = (int) $flatRateSetting->value;
+            session()->put('flat_rate_charge', (int) $this->flat_rate);
         }
+
+        // We do not call getDisplayCoupons() here anymore; it's handled in render()
+        $this->checkSurpriseGift();
     }
 
     public function applyCoupon($show_dispatch_event = 'no')
@@ -137,9 +149,9 @@ class CartComponent extends Component
         $currentDate = Carbon::now()->format('Y-m-d');
         $checkCuponCode = Coupon::where('coupon_code', $this->couponCode)->first();
 
-        session()->forget('coupon_discount_amount');
-        session()->forget('coupon_discount_id');
-        session()->forget('coupon_code');
+        // session()->forget('coupon_discount_amount');
+        // session()->forget('coupon_discount_id');
+        // session()->forget('coupon_code');
 
         // Check if coupon exists
         if (!$checkCuponCode) {
@@ -149,6 +161,15 @@ class CartComponent extends Component
 
         // Count total usage of this coupon
         $orderCount = Order::where('coupon_id', $checkCuponCode->id)->where('status', 1)->count();
+
+        if($checkCuponCode->start_date != null){
+            $start_date = Carbon::parse($checkCuponCode->start_date);
+            $todays_date = Carbon::now();
+            if($start_date->gt($todays_date)){
+                $this->toastError('You can use these coupon after '.Carbon::parse($checkCuponCode->start_date)->format('d M Y'));
+                return false;
+            }
+        }
 
         if ((int) $checkCuponCode->total_usage <= $orderCount) {
             $this->toastError('This Coupon has been Expired!!!');
@@ -225,19 +246,20 @@ class CartComponent extends Component
             $this->totalAfterDiscount = $eligibleProductsTotal - $this->mainDiscountAmount;
         }
 
+        if ($this->couponCode != session()->get('coupon_code')) {
+            $this->dispatch('coupon-applied');
+        }
+
         // Save coupon info in session
         session()->put('coupon_discount_amount', $this->mainDiscountAmount);
         session()->put('coupon_discount_id', $checkCuponCode->id);
         session()->put('coupon_code', $this->couponCode);
 
-        if ($show_dispatch_event == 'yes') {
-            $this->dispatch('coupon-applied');
-        }
-
         return true;
     }
 
-    public function getDisplayCoupons()
+    // Renamed to fetch and return array, NOT set property
+    public function fetchDisplayCoupons()
     {
         $cartTotal = (float) str_replace(',', '', Cart::total());
         $display_coupons = [];
@@ -250,7 +272,6 @@ class CartComponent extends Component
             // Check total usage limit
             $totalUsage = Order::where('coupon_id', $coupon->id)->count();
             if ($totalUsage >= $coupon->total_usage) {
-                // dd($coupon, $coupon->total_usage, $totalUsage);
                 continue;
             }
 
@@ -267,7 +288,13 @@ class CartComponent extends Component
 
         // Second Condition: User-Specific Coupons
         if (Auth::check()) {
-            $user_coupons = Coupon::where('is_global', 0)->whereNotNull('order_id')->where('expiry_date', '>', $currentDate)->join('orders', 'coupons.order_id', '=', 'orders.id')->where('orders.logged_in_user_id', Auth::id())->get();
+            $user_coupons = Coupon::where('is_global', 0)
+                ->whereNotNull('order_id')
+                ->where('expiry_date', '>', $currentDate)
+                ->join('orders', 'coupons.order_id', '=', 'orders.id')
+                ->where('orders.logged_in_user_id', Auth::id())
+                ->select('coupons.*') // Ensure we get coupon fields, not order fields
+                ->get();
 
             foreach ($user_coupons as $coupon) {
                 // Check total usage limit
@@ -285,6 +312,7 @@ class CartComponent extends Component
                 $display_coupons[] = $coupon;
             }
         }
+        
         // New Code
         $non_global_coupons = Coupon::where('is_global', 0)
             ->whereNull('order_id')
@@ -328,16 +356,16 @@ class CartComponent extends Component
             $display_coupons[] = $coupon;
         }
 
-        $this->display_coupons = $display_coupons;
+        return $display_coupons;
     }
 
     public function checkSurpriseGift()
     {
         // 1. Validate that the setting exists and has a value
-        if (!$this->surprise_gift_product_id || empty($this->surprise_gift_product_id->value)) {
+        if (!$this->surprise_gift_product_id) {
             return;
         }
-        $giftProductId = $this->surprise_gift_product_id->value;
+        $giftProductId = $this->surprise_gift_product_id;
         $threshold = (float) $this->surprise_gift_amount;
 
         // 2. Calculate Current Cart Total (Excluding the gift itself)
@@ -430,7 +458,7 @@ class CartComponent extends Component
                 $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
 
                 $items = [];
-                $item = [
+                $itemData = [
                     'item_id' => $product->id,
                     'item_name' => $product->name,
                     'affiliation' => '',
@@ -442,25 +470,25 @@ class CartComponent extends Component
 
                 foreach ($category_assign as $key => $category) {
                     if ($key == 0) {
-                        $item['item_category'] = $category->category->name;
+                        $itemData['item_category'] = $category->category->name;
                     } else {
-                        $item['item_category' . $key + 1] = $category->category->name;
+                        $itemData['item_category' . $key + 1] = $category->category->name;
                     }
                 }
 
-                $item['item_list_id'] = '';
-                $item['item_list_name'] = '';
+                $itemData['item_list_id'] = '';
+                $itemData['item_list_name'] = '';
                 if ($product->attributes_name != null) {
                     $attributes = explode(',', $product->attributes_name);
                     foreach ($attributes as $key => $attribute) {
-                        $item['item_variant'] = $attribute;
+                        $itemData['item_variant'] = $attribute;
                     }
                 }
-                $item['location_id'] = '';
-                $item['price'] = (float) $price;
-                $item['quantity'] = $qty;
+                $itemData['location_id'] = '';
+                $itemData['price'] = (float) $price;
+                $itemData['quantity'] = $qty;
 
-                $items[] = $item;
+                $items[] = $itemData;
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
                 if ($this->pincode != null) {
@@ -472,7 +500,7 @@ class CartComponent extends Component
             }
         }
         $this->checkSurpriseGift();
-        $this->getDisplayCoupons();
+        // Removed explicit call to getDisplayCoupons, render handles it
     }
 
     public function updateQuantity($rowId)
@@ -507,7 +535,7 @@ class CartComponent extends Component
                 $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
 
                 $items = [];
-                $item = [
+                $itemData = [
                     'item_id' => $product->id,
                     'item_name' => $product->name,
                     'affiliation' => '',
@@ -519,25 +547,25 @@ class CartComponent extends Component
 
                 foreach ($category_assign as $key => $category) {
                     if ($key == 0) {
-                        $item['item_category'] = $category->category->name;
+                        $itemData['item_category'] = $category->category->name;
                     } else {
-                        $item['item_category' . $key + 1] = $category->category->name;
+                        $itemData['item_category' . $key + 1] = $category->category->name;
                     }
                 }
 
-                $item['item_list_id'] = '';
-                $item['item_list_name'] = '';
+                $itemData['item_list_id'] = '';
+                $itemData['item_list_name'] = '';
                 if ($product->attributes_name != null) {
                     $attributes = explode(',', $product->attributes_name);
                     foreach ($attributes as $key => $attribute) {
-                        $item['item_variant'] = $attribute;
+                        $itemData['item_variant'] = $attribute;
                     }
                 }
-                $item['location_id'] = '';
-                $item['price'] = (float) $price;
-                $item['quantity'] = $qty;
+                $itemData['location_id'] = '';
+                $itemData['price'] = (float) $price;
+                $itemData['quantity'] = $qty;
 
-                $items[] = $item;
+                $items[] = $itemData;
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
                 if ($this->pincode != null) {
@@ -549,7 +577,7 @@ class CartComponent extends Component
             }
         }
         $this->checkSurpriseGift();
-        $this->getDisplayCoupons();
+        // Removed explicit call to getDisplayCoupons
     }
 
     public function decrementQuantity($rowId)
@@ -586,7 +614,7 @@ class CartComponent extends Component
                 $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
 
                 $items = [];
-                $item = [
+                $itemData = [
                     'item_id' => $product->id,
                     'item_name' => $product->name,
                     'affiliation' => '',
@@ -598,25 +626,25 @@ class CartComponent extends Component
 
                 foreach ($category_assign as $key => $category) {
                     if ($key == 0) {
-                        $item['item_category'] = $category->category->name;
+                        $itemData['item_category'] = $category->category->name;
                     } else {
-                        $item['item_category' . $key + 1] = $category->category->name;
+                        $itemData['item_category' . $key + 1] = $category->category->name;
                     }
                 }
 
-                $item['item_list_id'] = '';
-                $item['item_list_name'] = '';
+                $itemData['item_list_id'] = '';
+                $itemData['item_list_name'] = '';
                 if ($product->attributes_name != null) {
                     $attributes = explode(',', $product->attributes_name);
                     foreach ($attributes as $key => $attribute) {
-                        $item['item_variant'] = $attribute;
+                        $itemData['item_variant'] = $attribute;
                     }
                 }
-                $item['location_id'] = '';
-                $item['price'] = (float) $price;
-                $item['quantity'] = $qty;
+                $itemData['location_id'] = '';
+                $itemData['price'] = (float) $price;
+                $itemData['quantity'] = $qty;
 
-                $items[] = $item;
+                $items[] = $itemData;
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
                 if ($this->pincode != null) {
@@ -628,7 +656,7 @@ class CartComponent extends Component
             }
         }
         $this->checkSurpriseGift();
-        $this->getDisplayCoupons();
+        // Removed explicit call to getDisplayCoupons
     }
 
     public function removeFromCart($rowId)
@@ -661,7 +689,7 @@ class CartComponent extends Component
         $category_assign = ProductCategoryAssign::where('product_id', $product->id)->orderBy('category_id', 'asc')->get();
 
         $items = [];
-        $item = [
+        $itemData = [
             'item_id' => $product->id,
             'item_name' => $product->name,
             'affiliation' => '',
@@ -673,25 +701,25 @@ class CartComponent extends Component
 
         foreach ($category_assign as $key => $category) {
             if ($key == 0) {
-                $item['item_category'] = $category->category->name;
+                $itemData['item_category'] = $category->category->name;
             } else {
-                $item['item_category' . $key + 1] = $category->category->name;
+                $itemData['item_category' . $key + 1] = $category->category->name;
             }
         }
 
-        $item['item_list_id'] = '';
-        $item['item_list_name'] = '';
+        $itemData['item_list_id'] = '';
+        $itemData['item_list_name'] = '';
         if ($product->attributes_name != null) {
             $attributes = explode(',', $product->attributes_name);
             foreach ($attributes as $key => $attribute) {
-                $item['item_variant'] = $attribute;
+                $itemData['item_variant'] = $attribute;
             }
         }
-        $item['location_id'] = '';
-        $item['price'] = (float) $price;
-        $item['quantity'] = (float) $qty;
+        $itemData['location_id'] = '';
+        $itemData['price'] = (float) $price;
+        $itemData['quantity'] = (float) $qty;
 
-        $items[] = $item;
+        $items[] = $itemData;
         $this->dispatch('remove-from-cart', $items);
         if ($removeCart) {
             $this->toastError('Product Remove Successfully From Your Cart!');
@@ -700,7 +728,7 @@ class CartComponent extends Component
         // $this->offerCheckEligibility();
         $this->pincodeCheckFunction();
         $this->checkSurpriseGift();
-        $this->getDisplayCoupons();
+        // Removed explicit call to getDisplayCoupons
     }
 
     public function pincodeCheckFunction($show_toast = 'no')
@@ -808,6 +836,11 @@ class CartComponent extends Component
                 break;
             }
         }
-        return view('livewire.user.cart-component', compact('giftAlreadyAdded'))->layout('layouts.user.app');
+        
+        // Fetch coupons here and pass variable to view
+        $display_coupons = $this->fetchDisplayCoupons();
+
+        return view('livewire.user.cart-component', compact('giftAlreadyAdded', 'display_coupons'))
+            ->layout('layouts.user.app');
     }
 }
