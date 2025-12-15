@@ -538,7 +538,7 @@
 
                     {{-- <div class="divider-2 mb-30"></div> --}}
                     <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
-                        <a href="/shop" class="btn d-flex align-items-center custom-pad"><i
+                        <a href="/shop" class="btn d-flex align-items-center custom-pad" style="max-width: fit-content"><i
                                 class="fi-rs-add mr-10"></i>Add More</a>
                     </div>
                 </div>
@@ -755,32 +755,32 @@
         <div class="d-flex justify-content-between mb-10">
             <div class="d-flex gap-2 border-0">
                 <td class="cart_total_label text-start">
-                    <h6 class="text-muted">Subtotal :</h6>
+                    <h6 class="text-muted fs-14">Subtotal :</h6>
                 </td>
                 <td class="cart_total_amount">
-                    <h4 class="text-brand text-end fs-16">
+                    <h4 class="text-brand text-end fs-14">
                         ₹{{ Cart::instance('cart')->subtotal() }}</h4>
                 </td>
             </div>
             <div class="d-flex gap-2 border-0">
                 <td class="cart_total_label text-start">
-                    <h6 class="text-muted">Payable Amount :</h6>
+                    <h6 class="text-muted fs-14">Payable Amount :</h6>
                 </td>
                 <td class="cart_total_amount">
                     @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @elseif($totalAfterDiscount != 0)
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @elseif($totalOfferDiscountedPrice != 0)
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @else
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($total + (session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @endif
