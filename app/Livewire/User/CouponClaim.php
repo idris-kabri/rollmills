@@ -21,12 +21,22 @@ class CouponClaim extends Component
     public $user_id;
     public $couponCode;
     public $coupon;
+    public $confirmMessage = '';
+    public $confirmAction = '';
 
     // Validation rules
     protected $rules = [
         'mobile' => 'required|digits:10',
         'otp.*' => 'required|numeric|digits:1',
     ];
+
+    public function askClaim($order_id)
+    {
+        $this->confirmMessage = 'Are you sure you want to avail coupon for Order #'.$order_id.'?';
+        $this->confirmAction = "applyCoupon('$order_id')";
+
+        $this->dispatch('open-coupon-claim-modal');
+    }
 
     public function sendOTP()
     {
@@ -57,6 +67,11 @@ class CouponClaim extends Component
             $this->step = 3;
             $this->user_id = Auth::user()->id;
         }
+    }
+
+    public function backMain()
+    {
+        $this->step = 3;
     }
 
     public function verifyOTP()
@@ -168,6 +183,7 @@ class CouponClaim extends Component
             $this->coupon = Coupon::where('order_id',$order->id)->first();
             $this->couponCode = $this->coupon->coupon_code;
         }
+        $this->dispatch('close-coupon-claim-modal');
         $this->step = 4;
     }
 
