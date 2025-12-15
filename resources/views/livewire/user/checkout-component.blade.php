@@ -99,8 +99,35 @@
             display: flex;
         }
 
-        input {
+        input[type="text"] {
             height: 50px !important;
+        }
+
+        .checkout-radio.form-check-input:checked[type=radio] {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23dca915'/%3e%3c/svg%3e");
+        }
+
+        .checkout-radio.form-check-input:checked {
+            background-color: #fff;
+            border-color: #dca915;
+        }
+
+        .checkout-radio.form-check-input:focus {
+            border-color: #dca915;
+            outline: 0;
+            box-shadow: 0 0 0 .25rem #dcaa1540;
+            background-position: center;
+        }
+
+        .checkout-radio.form-check-input {
+            width: 18px;
+            height: 18px;
+            margin-top: .25em;
+            background-size: 22px;
+        }
+
+        .form-check.form-radio-checkout {
+            display: flex;
         }
     </style>
 
@@ -678,7 +705,23 @@
                                             @endif
                                         </h5>
                                     </td>
+                                </tr>
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start">
+                                        <h6 class="text-muted">Cash On Delivery Charges</h6>
+                                    </td>
 
+                                    <td class="cart_total_amount">
+                                        <h5 class="text-heading text-end fs-16">
+                                            @if (session('flat_rate_charge') != null)
+                                                {{ number_format(session('flat_rate_charge'), 2) }}
+                                            @elseif (floatval(session('shipping_charge')) == 0)
+                                                Free Shipping
+                                            @else
+                                                {{ number_format(session('shipping_charge'), 2) }}
+                                            @endif
+                                        </h5>
+                                    </td>
                                 </tr>
                                 {{-- @if (session('latest_etd') != null)
                                     <tr class="d-flex justify-content-between border-0">
@@ -707,8 +750,35 @@
                                         </h4>
                                     </td>
                                 </tr>
+                                <tr class="d-flex justify-content-between border-0">
+                                    <td class="cart_total_label text-start py-0">
+                                        <h6 class="text-success fs-14">You have saved 10% on every product!!</h6>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
+                        <div class="px-2 pt-4" style="border-top: 2px dashed #ddd;">
+                            <div class="heading mb-4">
+                                <h5 class="underline pb-2">Select Payment Method</h5>
+                            </div>
+                            <div class="d-md-flex gap-5">
+                                <div class="form-check form-radio-checkout">
+                                    <input class="form-check-input checkout-radio me-2" type="radio"
+                                        name="flexRadioDefault" id="flexRadioDefault1">
+                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault1">
+                                        Cash On Delivery
+                                    </label>
+                                </div>
+                                <div class="form-check form-radio-checkout">
+                                    <input class="form-check-input checkout-radio me-2" type="radio"
+                                        name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault2">
+                                        Pay Online <span class="fs-12 ms-md-2 ms-1 text-muted">(Get Instant <strong
+                                                class="color-1">10% Off</strong> on each product.)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -741,9 +811,13 @@
                             </span>
                         </button>
                     @endif
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#codAlertModal2">
+                        Checkout
+                    </button>
                 </div>
 
-                <div class="modal fade Checkout-modal" id="saleModal" tabindex="-1" aria-hidden="true"
+                {{-- <div class="modal fade Checkout-modal" id="saleModal" tabindex="-1" aria-hidden="true"
                     data-bs-backdrop="static" data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -802,14 +876,96 @@
                                 </div>
                                 <button class="cta-button quicksand mt-2" wire:loading.attr="disabled"
                                     wire:target="placeNewFirstOrder" wire:click.prevent="placeNewFirstOrder">
-                                    <span wire:loading.remove wire:target="placeNewFirstOrder">Pay Now & GET 10% OFF!</span>
+                                    <span wire:loading.remove wire:target="placeNewFirstOrder">Pay Now & GET 10%
+                                        OFF!</span>
                                     <span wire:loading wire:target="placeNewFirstOrder">Processing...</span>
                                 </button>
 
                             </div>
                         </div>
                     </div>
+                </div> --}}
+
+
+                <div class="modal fade cod-alert-modal" id="codAlertModal2" tabindex="-1" aria-hidden="true"
+                    data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body text-center">
+                                <!-- Warning Icon -->
+                                <div class="warning-icon mb-3">
+                                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none"
+                                        stroke="#dca915" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+                                </div>
+
+                                <!-- Alert Heading -->
+                                <h2 class="alert-heading mb-2">Are You Sure?</h2>
+                                <p class="alert-subheading quicksand">You're about to lose your <strong>10%
+                                        OFF</strong> discount on each item!.</p>
+                                <p class="alert-subheading quicksand mb-4">Pay online now and save ₹0.00 instantly!</p>
+
+                                <!-- Price Bifurcation Card -->
+                                <div class="summary-white-card quicksand mb-4 shadow-sm border">
+                                    <div class="summary-row">
+                                        <span class="text-muted fw-500">Total order value</span>
+                                        <span>₹{{ Cart::instance('cart')->subtotal() }}</span>
+                                    </div>
+                                    <div class="summary-row discount-row text-danger">
+                                        <span>You'll miss discount (10%)</span>
+                                        <span>- ₹{{ number_format($item_sum_discount, 2) }}</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="text-muted fw-500">Shipping charge</span>
+                                        <span>
+                                            @if (session('flat_rate_charge') > 0)
+                                                ₹{{ number_format(session('flat_rate_charge'), 2) }}
+                                            @elseif (session('shipping_charge') > 0)
+                                                ₹{{ number_format(session('shipping_charge'), 2) }}
+                                            @else
+                                                <span class="text-success">FREE</span>
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="text-muted fw-500">With Online Payment</span>
+                                        <span
+                                            class="text-success fw-bold">₹{{ number_format($finalTotal - $item_sum_discount, 2) }}</span>
+                                    </div>
+                                    <div class="summary-row total-row">
+                                        <span>With Cash on Delivery</span>
+                                        <span class="text-brand fw-bold">₹{{ number_format($finalTotal, 2) }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="button-group">
+                                    <button class="btn-secondary quicksand" data-bs-dismiss="modal">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <line x1="19" y1="12" x2="5" y2="12">
+                                            </line>
+                                            <polyline points="12 19 5 12 12 5"></polyline>
+                                        </svg>
+                                        Go Back & Save 10%
+                                    </button>
+                                    <button class="btn-danger quicksand" wire:loading.attr="disabled"
+                                        wire:target="proceedWithCOD" wire:click.prevent="proceedWithCOD">
+                                        <span wire:loading.remove wire:target="proceedWithCOD">Proceed with COD</span>
+                                        <span wire:loading wire:target="proceedWithCOD">Processing...</span>
+                                    </button>
+                                </div>
+
+                                <p class="small-text text-muted mt-3">💡 Pay online now and save
+                                    ₹{{ number_format($item_sum_discount, 2) }} instantly!</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
