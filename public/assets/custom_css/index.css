@@ -1635,6 +1635,7 @@ input[type="number"] {
         margin-right: 0;
         max-width: 100%;
         width: 100%;
+        padding: 12px;
     }
     .cod-alert-modal .warning-icon img {
         width: 90px;
@@ -1645,6 +1646,13 @@ input[type="number"] {
         font-size: 14px;
         color: #5a6c7d;
         line-height: 1.3;
+    }
+
+    .cod-alert-modal .summary-row.discount-row {
+        margin-left: -12px;
+        margin-right: -12px;
+        padding-left: 12px;
+        padding-right: 12px;
     }
 }
 
