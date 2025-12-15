@@ -85,7 +85,7 @@ return [
 
     'secret_key' => env('ITHINK_SECRET_KEY', ''),
 
-    'access_token' => env('ITHINK_ACCESS_TOKEN', ''),
+    'ithink_access_token' => env('ITHINK_ACCESS_TOKEN', ''),
 
     'razorpay_secret_key' => env('RAZORPAY_SECRET_KEY'),
     'razorpay_key_id' => env('RAZORPAY_KEY_ID'),
