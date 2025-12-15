@@ -103,6 +103,23 @@ class CouponClaim extends Component
     {
         $order = Order::find($id);
         if ($order->is_coupon_avail == 0) {
+            $shipping_days = Setting::where('label', 'shipping_days')->first()->value ?? 7;
+
+            $max_return_replacement_days = 0;
+            foreach ($order->getOrderItems as $key => $item) {
+                $return_days = $item->item_return_days;
+                $replacement_days = $item->item_replacement_days;
+                if($return_days == 0 && $replacement_days == 0){
+                    continue;
+                }else{
+                    $days = max($return_days, $replacement_days);
+                    if($days > $max_return_replacement_days){
+                        $max_return_replacement_days = $days;
+                    }
+                }
+            }
+
+            $max_return_replacement_days += $shipping_days;
 
 
             if ($order && $order->logged_in_user_id == $this->user_id) {
@@ -125,6 +142,8 @@ class CouponClaim extends Component
             // Build coupon code with first name only
             $couponCode = $firstName . $randomNumber;
 
+            $start_date = Carbon::parse($order->shipped_at)->addDays($max_return_replacement_days)->format('Y-m-d');
+
 
             $coupon = new Coupon;
             $coupon->title = "Coupon for Order #" . $order->id;
@@ -136,6 +155,7 @@ class CouponClaim extends Component
             $coupon->usage_limit = 1;
             $coupon->total_usage = 1;
             $coupon->category = "";
+            $coupon->start_date = $start_date;
             $coupon->expiry_date = Carbon::now()->addDays((int)$settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
             $coupon->order_id = $order->id;
             $coupon->save();
