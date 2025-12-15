@@ -155,14 +155,16 @@
             <div class="row">
                 <div class="col-xl-8 col-lg-11 m-auto">
 
-                    <div class="coupon-card p-4 text-center">
+                    <div class="coupon-card p-4 text-center position-relative">
+                        
                         {{-- BACK BUTTON --}}
-                        <div class="d-flex justify-content-start mb-2 position-relative" style="z-index: 10;">
+                        {{-- Added position-relative and z-index: 1000 to ensure clickable --}}
+                        <div class="w-100 text-start mb-4 position-relative" style="z-index: 1000;">
                             <button
                                 type="button"
-                                class="btn btn-sm btn-outline-secondary d-flex align-items-center"
+                                class="btn btn-sm btn-light border rounded-pill shadow-sm px-3 d-inline-flex align-items-center gap-2"
                                 wire:click="backMain">
-                                <i class="fas fa-arrow-left me-2"></i> Back to offers
+                                <i class="fas fa-arrow-left"></i> <span>Back to Orders</span>
                             </button>
                         </div>
 
