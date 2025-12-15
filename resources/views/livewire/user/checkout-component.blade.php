@@ -894,12 +894,7 @@
                             <div class="modal-body text-center">
                                 <!-- Warning Icon -->
                                 <div class="warning-icon mb-3">
-                                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none"
-                                        stroke="#dca915" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                    </svg>
+                                    <img src="assets\frontend\imgs\icon&images\loose-money.png" alt="" class="img-fluid">
                                 </div>
 
                                 <!-- Alert Heading -->
@@ -952,15 +947,12 @@
                                         </svg>
                                         Go Back & Save 10%
                                     </button>
-                                    <button class="btn-danger quicksand" wire:loading.attr="disabled"
+                                    <button class="btn-brand btn quicksand" style="border-radius: 10px" wire:loading.attr="disabled"
                                         wire:target="proceedWithCOD" wire:click.prevent="proceedWithCOD">
                                         <span wire:loading.remove wire:target="proceedWithCOD">Proceed with COD</span>
                                         <span wire:loading wire:target="proceedWithCOD">Processing...</span>
                                     </button>
                                 </div>
-
-                                <p class="small-text text-muted mt-3">💡 Pay online now and save
-                                    ₹{{ number_format($item_sum_discount, 2) }} instantly!</p>
                             </div>
                         </div>
                     </div>

@@ -1537,7 +1537,7 @@ input[type="number"] {
 }
 
 .cod-alert-modal .summary-row.discount-row {
-    background: #fff3f3;
+    background: #fff3f387;
     padding: 10px;
     border-radius: 6px;
     margin-left: -20px;
@@ -1589,7 +1589,8 @@ input[type="number"] {
 
 .cod-alert-modal .btn-secondary:hover {
     background: #f8f9fa;
-    border-color: #2c3e50;
+    border-color: var(--color-1);
+    color: var(--color-1);
     transform: translateY(-2px);
 }
 
@@ -1621,10 +1622,29 @@ input[type="number"] {
     .cod-alert-modal .btn-secondary,
     .cod-alert-modal .btn-danger {
         width: 100%;
+        padding: 10px 15px;
+        font-size: 14px;
     }
 
     .cod-alert-modal .alert-heading {
         font-size: 24px;
+    }
+
+    .cod-alert-modal .summary-white-card {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+        width: 100%;
+    }
+    .cod-alert-modal .warning-icon img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .cod-alert-modal .alert-subheading {
+        font-size: 14px;
+        color: #5a6c7d;
+        line-height: 1.3;
     }
 }
 
