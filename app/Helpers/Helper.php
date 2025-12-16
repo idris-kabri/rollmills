@@ -382,12 +382,50 @@ function placeShipment($order_id)
     }
 }
 
+function getEstimation($products, $pincode, $payment_method)
+{
+    $weight = 0;
+    $price = 0;
+    foreach ($products as $cart_item) {
+        $weight += $cart_item->model->weight > 0 ? (float) $cart_item->model->weight : 1;
+        $price += $cart_item->price * $cart_item->qty;
+    }
+    $innerPayload = [
+        'from_pincode' => '314025',
+        'to_pincode' => $pincode,
+        'shipping_weight_kg' => $weight / 1000,
+        'order_type' => 'forward',
+        'payment_method' => $payment_method,
+        'product_mrp' => $price,
+        'access_token' => config('app.ithink_access_token'),
+        'secret_key' => config('app.secret_key'),
+    ];
+
+    $wrappedPayload = [
+        'data' => $innerPayload,
+    ];
+
+    $response = Http::post('https://my.ithinklogistics.com/api_v3/rate/check.json', $wrappedPayload);
+    if ($response->successful()) {
+        $shippingData = $response->json();
+        if ($shippingData['status'] !== 'success') {
+            return "We don't deliver to this pincode";
+        }
+        $couriers = $shippingData['data'] ?? [];
+        $lowest = collect($couriers)->where('rate', '>', 0)->sortBy('rate')->first();
+        $rate = $lowest['rate'] ?? 0;
+        return $rate;
+    } else {
+        return "We don't deliver to this pincode";
+    }
+}
+
 function calculateRates($products, $pincode, $payment_method)
 {
     $latestEtd = null;
     $shippingCharge = 0;
     // $shipping_bear_margin = 0;
-    $checkout_condition_fail = false; 
+    $checkout_condition_fail = false;
     foreach ($products as $cart_item) {
         $weightInKg = $cart_item->model->weight > 0 ? (float) $cart_item->model->weight / 1000 : 1;
 
@@ -412,7 +450,7 @@ function calculateRates($products, $pincode, $payment_method)
                 $checkout_condition_fail = true;
                 break;
             }
-            $couriers = $shippingData['data'] ?? []; 
+            $couriers = $shippingData['data'] ?? [];
             $lowest = collect($couriers)->where('rate', '>', 0)->sortBy('rate')->first();
             if ($lowest) {
                 $options = $cart_item->options->all();
@@ -442,8 +480,8 @@ function calculateRates($products, $pincode, $payment_method)
         } else {
             logger()->error("Shiprocket API error for item {$cart_item->id}", [
                 'response' => $response->body(),
-            ]); 
-            dd('error',$response->body());
+            ]);
+            dd('error', $response->body());
             return false;
         }
     }

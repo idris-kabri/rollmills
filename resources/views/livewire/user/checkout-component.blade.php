@@ -208,7 +208,6 @@
                         <form method="post">
                             <div class="row">
 
-                                <!-- Name -->
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="billing_address.name" placeholder="Name *"
                                         wire:model="billing_address.name">
@@ -217,7 +216,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Email -->
                                 <div class="form-group col-lg-6">
                                     <input required type="email" name="billing_address.email"
                                         placeholder="Email address *" wire:model="billing_address.email">
@@ -230,7 +228,6 @@
 
                             <div class="row">
 
-                                <!-- State -->
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="billing_address.state" placeholder="State *"
                                         wire:model="billing_address.state">
@@ -239,7 +236,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- City -->
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="billing_address.city" placeholder="City *"
                                         wire:model="billing_address.city">
@@ -252,7 +248,6 @@
 
                             <div class="row">
 
-                                <!-- Address 1 -->
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="billing_address.billing_address1"
                                         placeholder="Address *" wire:model="billing_address.billing_address1">
@@ -261,7 +256,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Address 2 -->
                                 <div class="form-group col-lg-6">
                                     <input type="text" name="billing_address.billing_address2"
                                         placeholder="Address line 2" wire:model="billing_address.billing_address2">
@@ -274,9 +268,8 @@
 
                             <div class="row">
 
-                                <!-- Zipcode -->
                                 <div class="form-group col-lg-6">
-                                    <input type="text" @if (session('shipping_charge')) disabled @endif
+                                    <input type="text" @if (session('shipping_charge'))  @endif
                                         name="billing_address.zipcode" placeholder="Postcode / ZIP *"
                                         wire:model="billing_address.zipcode"
                                         wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
@@ -285,7 +278,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Phone -->
                                 <div class="form-group col-lg-6">
                                     <input required type="text" name="billing_address.mobile" placeholder="Phone *"
                                         wire:model="billing_address.mobile"
@@ -689,6 +681,24 @@
                                         </td>
                                     </tr>
                                 @endif
+
+                                {{-- NEW ROW FOR ONLINE 10% DISCOUNT --}}
+                                @if ($is_first_order && $payment_method == 'online')
+                                    <tr class="d-flex justify-content-between border-0 align-items-center">
+                                        <td class="cart_total_label text-start">
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-info me-2">First Order Online</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-end fs-16 text-success fw-bold">
+                                                - ₹{{ number_format($onlineDiscountAmount, 2) }}
+                                            </h5>
+                                        </td>
+                                    </tr>
+                                @endif
+
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Shipping Charges</h6>
@@ -701,44 +711,34 @@
                                             @elseif (floatval(session('shipping_charge')) == 0)
                                                 Free Shipping
                                             @else
-                                                {{ number_format(session('shipping_charge'), 2) }}
+                                                {{-- Displays the active shipping charge in session (swapped by payment method) --}}
+                                                ₹{{ number_format(ceil($online_payment_amount), 2) }}
                                             @endif
                                         </h5>
                                     </td>
                                 </tr>
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Cash On Delivery Charges</h6>
-                                    </td>
 
-                                    <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16">
-                                            @if (session('flat_rate_charge') != null)
-                                                {{ number_format(session('flat_rate_charge'), 2) }}
-                                            @elseif (floatval(session('shipping_charge')) == 0)
-                                                Free Shipping
-                                            @else
-                                                {{ number_format(session('shipping_charge'), 2) }}
-                                            @endif
-                                        </h5>
-                                    </td>
-                                </tr>
-                                {{-- @if (session('latest_etd') != null)
+                                @if ($payment_method == 'cod' && floatval(session('shipping_charge')) != 0)
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
-                                            <h6 class="text-muted">Etd</h6>
+                                            <h6 class="text-muted">COD charges</h6>
                                         </td>
+
                                         <td class="cart_total_amount">
-                                            <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}
-                                                </h4>
+                                            <h5 class="text-heading text-end fs-16">
+                                                ₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount), 2) }}
+                                            </h5>
                                         </td>
                                     </tr>
-                                @endif --}}
+                                @endif
 
                                 @php
                                     $cartTotal = (float) str_replace(',', '', Cart::total());
                                     $mainDiscountAmount = (float) session('coupon_discount_amount');
                                     $allCouponandOfferDiscount = $cartTotal - $mainDiscountAmount;
+                                    if($is_first_order && $payment_method == 'online') {
+                                        $finalTotal = $finalTotal - $onlineDiscountAmount;
+                                    }
                                 @endphp
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
@@ -746,35 +746,44 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end fs-16">
-                                            ₹{{ number_format($finalTotal, 2) }}
+                                            @if($payment_method == 'online')
+                                            ₹{{ number_format(ceil($finalTotal + $online_payment_amount), 2) }}
+                                            @else
+                                            ₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}
+                                            @endif
                                         </h4>
                                     </td>
                                 </tr>
+                                @if($is_first_order && $payment_method == 'online')
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start py-0">
                                         <h6 class="text-success fs-14">You have saved 10% on every product!!</h6>
                                     </td>
                                 </tr>
+                                @endif
                             </tbody>
                         </table>
                         <div class="px-2 pt-4" style="border-top: 2px dashed #ddd;">
                             <div class="heading mb-4">
                                 <h5 class="underline pb-2">Select Payment Method</h5>
                             </div>
-                            <div class="d-md-flex gap-5">
+                            <div class="">
                                 <div class="form-check form-radio-checkout">
                                     <input class="form-check-input checkout-radio me-2" type="radio"
-                                        name="flexRadioDefault" id="flexRadioDefault1">
-                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault1">
-                                        Cash On Delivery
+                                        name="flexRadioDefault" wire:click="paymentMethod('online')"
+                                        id="flexRadioDefault2" {{ $payment_method == 'online' ? 'checked' : '' }}>
+                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault2">
+                                        Pay Online <span class="fs-12 ms-md-2 ms-1 text-muted">(Get Instant <strong
+                                                class="color-1">10% Off</strong> on each product.)</span>
                                     </label>
                                 </div>
                                 <div class="form-check form-radio-checkout">
                                     <input class="form-check-input checkout-radio me-2" type="radio"
-                                        name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault2">
-                                        Pay Online <span class="fs-12 ms-md-2 ms-1 text-muted">(Get Instant <strong
-                                                class="color-1">10% Off</strong> on each product.)</span>
+                                        name="flexRadioDefault" id="flexRadioDefault1"
+                                        wire:click="paymentMethod('cod')"
+                                        {{ $payment_method == 'cod' ? 'checked' : '' }}>
+                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault1">
+                                        Cash On Delivery
                                     </label>
                                 </div>
                             </div>
@@ -783,181 +792,84 @@
                 </div>
 
                 <div class="payment ml-0 ml-sm-30">
-                    @if (!$is_first_order)
-                        <button
-                            class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
-                            wire:click.prevent="placeOrder" wire:loading.attr="disabled" wire:target="placeOrder">
-                            <span wire:loading.remove wire:target="placeOrder">
-                                Place an Order
-                                <i class="fi-rs-sign-out ml-15"></i>
-                            </span>
-                            <span wire:loading wire:target="placeOrder">
-                                <span class="spinner-border spinner-border-sm mr-8"></span>
-                                Processing...
-                            </span>
-                        </button>
-                    @else
-                        <button
-                            class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
-                            wire:click.prevent="placeFirstOrder" wire:loading.attr="disabled"
-                            wire:target="placeFirstOrder">
-                            <span wire:loading.remove wire:target="placeFirstOrder">
-                                Place an Order
-                                <i class="fi-rs-sign-out ml-15"></i>
-                            </span>
-                            <span wire:loading wire:target="placeFirstOrder">
-                                <span class="spinner-border spinner-border-sm mr-8"></span>
-                                Processing...
-                            </span>
-                        </button>
-                    @endif
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#codAlertModal2">
-                        Checkout
+                    <button
+                        class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
+                        wire:click.prevent="verifyCheckout" wire:loading.attr="disabled"
+                        wire:target="verifyCheckout, placeOrder, proceedWithCOD">
+                        <span wire:loading.remove wire:target="verifyCheckout, placeOrder, proceedWithCOD">
+                            Place an Order
+                            <i class="fi-rs-sign-out ml-15"></i>
+                        </span>
+                        <span wire:loading wire:target="verifyCheckout, placeOrder, proceedWithCOD">
+                            <span class="spinner-border spinner-border-sm mr-8"></span>
+                            Processing...
+                        </span>
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                {{-- <div class="modal fade Checkout-modal" id="saleModal" tabindex="-1" aria-hidden="true"
-                    data-bs-backdrop="static" data-bs-keyboard="false">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body text-center">
+    <div class="modal fade cod-alert-modal" id="codAlertModal2" tabindex="-1" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <div class="warning-icon mb-3">
+                        <img src="assets/frontend/imgs/icon&images/loose-money.png" alt="" class="img-fluid"
+                            style="max-height: 80px;">
+                    </div>
 
-                                <h1 class="discount-text">10% OFF</h1>
-                                <p class="subtitle quicksand text-white mb-4">When you complete your order in...</p>
+                    <h2 class="alert-heading mb-2">Are You Sure?</h2>
+                    <p class="alert-subheading quicksand">You're about to lose your <strong>10% OFF</strong> discount on each item!</p>
+                    <p class="alert-subheading quicksand mb-4">Pay online now and save big instantly!</p>
 
-                                <div class="countdown-container mb-2">
-                                    <div class="countdown-box">
-                                        <div class="countdown-number" id="minutes1">1</div>
-                                    </div>
-                                    <div class="countdown-box">
-                                        <div class="countdown-number" id="minutes2">5</div>
-                                    </div>
-                                    <div class="countdown-separator text-white">:</div>
-                                    <div class="countdown-box">
-                                        <div class="countdown-number" id="seconds1">0</div>
-                                    </div>
-                                    <div class="countdown-box">
-                                        <div class="countdown-number" id="seconds2">0</div>
-                                    </div>
-                                </div>
+                    <div class="summary-white-card quicksand mb-4 shadow-sm border p-3 rounded text-start">
+                        @php
+                            // Calculate amounts for display
+                            $currentTotal = $finalTotal; 
+                            
+                            // To show the comparison properly, we need to calculate:
+                            // 1. The potential discount (10% of cart total)
+                            // 2. The Potential Online Total = Current (COD) Total - COD Shipping Diff - Discount
+                            
+                            $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
+                            $potentialDiscount = round($cartTotalForCalc * 0.10, 2);
+                            
+                            // Assuming finalTotal in COD mode already includes the COD shipping charge
+                            $codShip = $cash_on_delivery_amount ?? 0;
+                            $onlineShip = $online_payment_amount ?? 0;
+                            
+                            // Potential Online Total
+                            $potentialOnlineTotal = ($currentTotal - $codShip + $onlineShip) - $potentialDiscount;
+                        @endphp
 
-                                <div class="summary-white-card quicksand">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted fw-500">Total with Cash on Delivery</span>
+                            <span class="text-brand fw-bold">₹{{ number_format($currentTotal, 2) }}</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2 text-danger">
+                            <span>You lose discount</span>
+                            <span>- ₹{{ number_format($potentialDiscount, 2) }}</span>
+                        </div>
 
-                                    <div class="summary-row">
-                                        <span class="text-muted">Total order value</span>
-                                        <span id="originalPrice">₹{{ Cart::instance('cart')->subtotal() }}</span>
-                                    </div>
-
-                                    <div class="summary-row discount-row">
-                                        <span>Total discount (10%)</span>
-                                        <span>- ₹{{ number_format($item_sum_discount, 2) }}</span>
-                                    </div>
-
-                                    <div class="summary-row">
-                                        <span class="text-muted">Shipping charge</span>
-                                        <span>
-                                            @if (session('flat_rate_charge') > 0)
-                                                ₹{{ number_format(session('flat_rate_charge'), 2) }}
-                                            @elseif (session('shipping_charge') > 0)
-                                                ₹{{ number_format(session('shipping_charge'), 2) }}
-                                            @else
-                                                <span class="text-success">FREE</span>
-                                            @endif
-                                        </span>
-                                    </div>
-
-                                    <div class="summary-row total-row">
-                                        <span>Total Pay</span>
-                                        <span
-                                            id="discountedPrice">₹{{ number_format($finalTotal - $item_sum_discount, 2) }}</span>
-                                    </div>
-
-                                </div>
-                                <button class="cta-button quicksand mt-2" wire:loading.attr="disabled"
-                                    wire:target="placeNewFirstOrder" wire:click.prevent="placeNewFirstOrder">
-                                    <span wire:loading.remove wire:target="placeNewFirstOrder">Pay Now & GET 10%
-                                        OFF!</span>
-                                    <span wire:loading wire:target="placeNewFirstOrder">Processing...</span>
-                                </button>
-
-                            </div>
+                        <div class="d-flex justify-content-between border-top pt-2 mt-2">
+                            <span class="text-muted fw-500">Pay Online & Get it for</span>
+                            <span class="text-success fw-bold">₹{{ number_format($potentialOnlineTotal, 2) }}</span>
                         </div>
                     </div>
-                </div> --}}
 
-
-                <div class="modal fade cod-alert-modal" id="codAlertModal2" tabindex="-1" aria-hidden="true"
-                    data-bs-backdrop="static" data-bs-keyboard="false">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body text-center">
-                                <!-- Warning Icon -->
-                                <div class="warning-icon mb-3">
-                                    <img src="assets\frontend\imgs\icon&images\loose-money.png" alt="" class="img-fluid">
-                                </div>
-
-                                <!-- Alert Heading -->
-                                <h2 class="alert-heading mb-2">Are You Sure?</h2>
-                                <p class="alert-subheading quicksand">You're about to lose your <strong>10%
-                                        OFF</strong> discount on each item!.</p>
-                                <p class="alert-subheading quicksand mb-4">Pay online now and save ₹0.00 instantly!</p>
-
-                                <!-- Price Bifurcation Card -->
-                                <div class="summary-white-card quicksand mb-4 shadow-sm border">
-                                    <div class="summary-row">
-                                        <span class="text-muted fw-500">Total order value</span>
-                                        <span>₹{{ Cart::instance('cart')->subtotal() }}</span>
-                                    </div>
-                                    <div class="summary-row discount-row text-danger">
-                                        <span>You'll miss discount (10%)</span>
-                                        <span>- ₹{{ number_format($item_sum_discount, 2) }}</span>
-                                    </div>
-                                    <div class="summary-row">
-                                        <span class="text-muted fw-500">Shipping charge</span>
-                                        <span>
-                                            @if (session('flat_rate_charge') > 0)
-                                                ₹{{ number_format(session('flat_rate_charge'), 2) }}
-                                            @elseif (session('shipping_charge') > 0)
-                                                ₹{{ number_format(session('shipping_charge'), 2) }}
-                                            @else
-                                                <span class="text-success">FREE</span>
-                                            @endif
-                                        </span>
-                                    </div>
-                                    <div class="summary-row">
-                                        <span class="text-muted fw-500">With Online Payment</span>
-                                        <span
-                                            class="text-success fw-bold">₹{{ number_format($finalTotal - $item_sum_discount, 2) }}</span>
-                                    </div>
-                                    <div class="summary-row total-row">
-                                        <span>With Cash on Delivery</span>
-                                        <span class="text-brand fw-bold">₹{{ number_format($finalTotal, 2) }}</span>
-                                    </div>
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="button-group">
-                                    <button class="btn-secondary quicksand" data-bs-dismiss="modal">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2">
-                                            <line x1="19" y1="12" x2="5" y2="12">
-                                            </line>
-                                            <polyline points="12 19 5 12 12 5"></polyline>
-                                        </svg>
-                                        Go Back & Save 10%
-                                    </button>
-                                    <button class="btn-brand btn quicksand" style="border-radius: 10px" wire:loading.attr="disabled"
-                                        wire:target="proceedWithCOD" wire:click.prevent="proceedWithCOD">
-                                        <span wire:loading.remove wire:target="proceedWithCOD">Proceed with COD</span>
-                                        <span wire:loading wire:target="proceedWithCOD">Processing...</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+                            Go Back & Pay Online
+                        </button>
+                        <button type="button" class="btn btn-brand btn-sm" wire:click="proceedWithCOD"
+                            data-bs-dismiss="modal">
+                            Proceed with COD
+                        </button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -968,6 +880,12 @@
     <script>
         let totalSeconds = 240;
         document.addEventListener('livewire:init', function() {
+            // Trigger COD Confirmation Modal
+            window.addEventListener('open-cod-modal', function(event) {
+                var myModal = new bootstrap.Modal(document.getElementById('codAlertModal2'));
+                myModal.show();
+            });
+
             window.addEventListener('initiate-razorpay', function(event) {
                 const detail = event.detail[0] || event.detail;
                 var options = {
@@ -1008,10 +926,13 @@
                 const sec1 = Math.floor(seconds / 10);
                 const sec2 = seconds % 10;
 
-                document.getElementById('minutes1').textContent = min1;
-                document.getElementById('minutes2').textContent = min2;
-                document.getElementById('seconds1').textContent = sec1;
-                document.getElementById('seconds2').textContent = sec2;
+                // Elements might not exist if modal is removed, added check
+                if (document.getElementById('minutes1')) {
+                    document.getElementById('minutes1').textContent = min1;
+                    document.getElementById('minutes2').textContent = min2;
+                    document.getElementById('seconds1').textContent = sec1;
+                    document.getElementById('seconds2').textContent = sec2;
+                }
 
                 if (totalSeconds > 0) {
                     totalSeconds--;
