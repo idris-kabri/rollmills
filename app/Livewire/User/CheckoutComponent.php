@@ -54,6 +54,10 @@ class CheckoutComponent extends Component
     public $online_payment_amount;
     public $cash_on_delivery_user_additional_pay;
 
+    // Properties for generic modal
+    public $confirmMessage = '';
+    public $confirmAction = '';
+
     public function mount()
     {
         session()->forget('first_order');
@@ -544,11 +548,18 @@ class CheckoutComponent extends Component
             ]
         );
 
-        // 2. Check Logic: First Order + COD = Trigger Popup
-        if ($this->is_first_order && $this->payment_method == 'cod') {
-            $this->dispatch('open-cod-modal');
+        if ($this->payment_method == 'cod') {
+            if ($this->is_first_order) {
+                // First order, COD logic
+                $this->dispatch('open-cod-modal');
+            } else {
+                // Not first order, COD logic (Trigger placeOrderModal)
+                $this->confirmMessage = "Are you sure you want to proceed with Cash on Delivery?";
+                $this->confirmAction = "proceedWithCOD"; // Action method to call
+                $this->dispatch('open-place-order-modal');
+            }
         } else {
-            // 3. Otherwise proceed normally
+            // Online payment, proceed immediately
             $this->placeOrder();
         }
     }
@@ -628,7 +639,13 @@ class CheckoutComponent extends Component
                 $user_order->offer_discount = 0;
             }
 
-            $user_order->total = $this->finalTotal;
+            if($this->payment_method == 'online') {
+                $user_order->total = ceil($this->finalTotal + $this->online_payment_amount);
+                $user_order->shipping_charges = (float) $this->online_payment_amount;
+            }else{
+                $user_order->total = ceil($this->finalTotal + $this->cash_on_delivery_amount);
+                $user_order->shipping_charges = (float) $this->cash_on_delivery_amount;
+            }
             $user_order->status = 0;
 
             if (session('free_shipping_pincode')) {
@@ -641,7 +658,6 @@ class CheckoutComponent extends Component
             $user_order->billing_address_id = $billingAddress['id'];
             $user_order->billing_address_details = $encdoeBillingAddress;
             $user_order->etd = session('latest_etd');
-            $user_order->shipping_charges = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
             $user_order->shipping_bearable = session('shipping_bear_margin') ?? 0;
 
             if ($this->gift_card_amount > 0) {
@@ -651,7 +667,7 @@ class CheckoutComponent extends Component
 
             // --- PAYMENT METHOD CHECK ---
             if ($this->payment_method == 'online') {
-                $user_order->paid_amount = $this->finalTotal;
+                $user_order->paid_amount = ceil($this->finalTotal + $this->online_payment_amount);
                 $user_order->remaining_amount = 0;
                 $user_order->is_cod = 0;
 
@@ -660,7 +676,7 @@ class CheckoutComponent extends Component
                 $this->createOrderItem($user_order);
                 $coupon = Coupon::find($this->coupon_discount_id);
 
-                $order = razorPayPayment($this->finalTotal, Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using Online Payment');
+                $order = razorPayPayment(ceil($this->finalTotal + $this->online_payment_amount), Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using Online Payment');
 
                 $user =
                     Auth::user() ??
@@ -684,8 +700,10 @@ class CheckoutComponent extends Component
             } else {
                 // COD FLOW
                 $user_order->paid_amount = 0;
-                $user_order->remaining_amount = $this->finalTotal;
+                $user_order->remaining_amount = ceil($this->finalTotal + $this->cash_on_delivery_amount);
+                $user_order->cod_charges = (int)$this->cash_on_delivery_amount - $this->online_payment_amount;
                 $user_order->is_cod = 1;
+                $user_order->status = 1;
                 $user_order->save();
 
                 $this->createOrderItem($user_order);
@@ -695,7 +713,8 @@ class CheckoutComponent extends Component
                     Cart::instance('cart')->store(Auth::user()->mobile);
                 }
 
-                return redirect('/')->with('success', 'Order Place successful');
+                return redirect('/order-completed?id=' . $user_order->id)
+                    ->with('success', 'Your order placed successfully!');
             }
         } catch (\Exception $e) {
             $this->toastError($e->getMessage());
@@ -734,22 +753,27 @@ class CheckoutComponent extends Component
                     $this->online_payment_amount = 0;
                 }
                 
-                $this->cash_on_delivery_amount = getEstimation(
+                $cash_on_delivery_amount_response = getEstimation(
                     $cart_items,
                     $pincode,
                     'cod'
                 );
+                if(is_numeric($online_payment_amount_response)){
+                    $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
+                }else{
+                    $this->cash_on_delivery_amount = 0;
+                }
 
                 session()->forget('free_shipping_pincode');
                 session()->forget('show_deleviery_time');
                 session()->forget('shipping_pincode');
                 
                 // --- SET SHIPPING BASED ON ACTIVE METHOD ---
-                if($this->payment_method == 'cod') {
-                    session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
-                } else {
-                    session()->put('shipping_charge', ceil($this->online_payment_amount));
-                }
+                // if($this->payment_method == 'cod') {
+                //     session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
+                // } else {
+                //     session()->put('shipping_charge', ceil($this->online_payment_amount));
+                // }
             }
         } else {
             session()->forget('free_shipping_pincode');
@@ -772,6 +796,7 @@ class CheckoutComponent extends Component
             if (str_starts_with($value, '0')) { $value = substr($value, 1); }
             $this->billing_address['mobile'] = $value;
             $this->checkPlaceOrderFunction();
+            $this->calculateTotals();
         }
     }
 
@@ -785,6 +810,7 @@ class CheckoutComponent extends Component
             if (str_starts_with($value, '0')) { $value = substr($value, 1); }
             $this->ship_to_different_address['mobile'] = $value;
             $this->checkPlaceOrderFunction();
+            $this->calculateTotals();
         }
     }
 

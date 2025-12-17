@@ -708,7 +708,7 @@
                                         <h5 class="text-heading text-end fs-16">
                                             @if (session('flat_rate_charge') != null)
                                                 {{ number_format(session('flat_rate_charge'), 2) }}
-                                            @elseif (floatval(session('shipping_charge')) == 0)
+                                            @elseif (floatval($online_payment_amount) == 0)
                                                 Free Shipping
                                             @else
                                                 {{-- Displays the active shipping charge in session (swapped by payment method) --}}
@@ -736,9 +736,6 @@
                                     $cartTotal = (float) str_replace(',', '', Cart::total());
                                     $mainDiscountAmount = (float) session('coupon_discount_amount');
                                     $allCouponandOfferDiscount = $cartTotal - $mainDiscountAmount;
-                                    if($is_first_order && $payment_method == 'online') {
-                                        $finalTotal = $finalTotal - $onlineDiscountAmount;
-                                    }
                                 @endphp
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
@@ -746,20 +743,20 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end fs-16">
-                                            @if($payment_method == 'online')
-                                            ₹{{ number_format(ceil($finalTotal + $online_payment_amount), 2) }}
+                                            @if ($payment_method == 'online')
+                                                ₹{{ number_format(ceil($finalTotal + $online_payment_amount), 2) }}
                                             @else
-                                            ₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}
+                                                ₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}
                                             @endif
                                         </h4>
                                     </td>
                                 </tr>
-                                @if($is_first_order && $payment_method == 'online')
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start py-0">
-                                        <h6 class="text-success fs-14">You have saved 10% on every product!!</h6>
-                                    </td>
-                                </tr>
+                                @if ($is_first_order && $payment_method == 'online')
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start py-0">
+                                            <h6 class="text-success fs-14">You have saved 10% on every product!!</h6>
+                                        </td>
+                                    </tr>
                                 @endif
                             </tbody>
                         </table>
@@ -773,8 +770,11 @@
                                         name="flexRadioDefault" wire:click="paymentMethod('online')"
                                         id="flexRadioDefault2" {{ $payment_method == 'online' ? 'checked' : '' }}>
                                     <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault2">
-                                        Pay Online <span class="fs-12 ms-md-2 ms-1 text-muted">(Get Instant <strong
-                                                class="color-1">10% Off</strong> on each product.)</span>
+                                        Pay Online
+                                        @if ($is_first_order)
+                                            <span class="fs-12 ms-md-2 ms-1 text-muted">(Get Instant <strong
+                                                    class="color-1">10% Off</strong> on each product.)</span>
+                                        @endif
                                     </label>
                                 </div>
                                 <div class="form-check form-radio-checkout">
@@ -810,6 +810,7 @@
         </div>
     </div>
 
+    {{-- MODAL 1: COD ALERT (FIRST ORDER) --}}
     <div class="modal fade cod-alert-modal" id="codAlertModal2" tabindex="-1" aria-hidden="true"
         data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
@@ -821,34 +822,31 @@
                     </div>
 
                     <h2 class="alert-heading mb-2">Are You Sure?</h2>
-                    <p class="alert-subheading quicksand">You're about to lose your <strong>10% OFF</strong> discount on each item!</p>
+                    <p class="alert-subheading quicksand">You're about to lose your <strong>10% OFF</strong> discount
+                        on each item!</p>
                     <p class="alert-subheading quicksand mb-4">Pay online now and save big instantly!</p>
 
                     <div class="summary-white-card quicksand mb-4 shadow-sm border p-3 rounded text-start">
                         @php
-                            // Calculate amounts for display
-                            $currentTotal = $finalTotal; 
-                            
-                            // To show the comparison properly, we need to calculate:
-                            // 1. The potential discount (10% of cart total)
-                            // 2. The Potential Online Total = Current (COD) Total - COD Shipping Diff - Discount
-                            
+                            $currentTotal = $finalTotal;
+
                             $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
-                            $potentialDiscount = round($cartTotalForCalc * 0.10, 2);
-                            
+                            $potentialDiscount = ceil($cartTotalForCalc * 0.1);
+
                             // Assuming finalTotal in COD mode already includes the COD shipping charge
                             $codShip = $cash_on_delivery_amount ?? 0;
                             $onlineShip = $online_payment_amount ?? 0;
-                            
+
                             // Potential Online Total
-                            $potentialOnlineTotal = ($currentTotal - $codShip + $onlineShip) - $potentialDiscount;
+                            $potentialOnlineTotal = $currentTotal - $codShip + $onlineShip - $potentialDiscount;
                         @endphp
 
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted fw-500">Total with Cash on Delivery</span>
-                            <span class="text-brand fw-bold">₹{{ number_format($currentTotal, 2) }}</span>
+                            <span
+                                class="text-brand fw-bold">₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}</span>
                         </div>
-                        
+
                         <div class="d-flex justify-content-between mb-2 text-danger">
                             <span>You lose discount</span>
                             <span>- ₹{{ number_format($potentialDiscount, 2) }}</span>
@@ -856,19 +854,59 @@
 
                         <div class="d-flex justify-content-between border-top pt-2 mt-2">
                             <span class="text-muted fw-500">Pay Online & Get it for</span>
-                            <span class="text-success fw-bold">₹{{ number_format($potentialOnlineTotal, 2) }}</span>
+                            <span
+                                class="text-success fw-bold">₹{{ number_format(ceil($finalTotal + ceil($online_payment_amount) - ceil($potentialDiscount)), 2) }}</span>
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2 justify-content-center">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
-                            Go Back & Pay Online
+                    <div class="button-group">
+                        <button class="btn-secondary quicksand" data-bs-dismiss="modal">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12">
+                                </line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            Go Back & Save 10%
                         </button>
-                        <button type="button" class="btn btn-brand btn-sm" wire:click="proceedWithCOD"
-                            data-bs-dismiss="modal">
-                            Proceed with COD
+                        <button class="btn-brand btn quicksand" style="border-radius: 10px"
+                            wire:loading.attr="disabled" wire:target="proceedWithCOD"
+                            wire:click.prevent="proceedWithCOD">
+                            <span wire:loading.remove wire:target="proceedWithCOD">Proceed with COD</span>
+                            <span wire:loading wire:target="proceedWithCOD">Processing...</span>
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL 2: GENERIC PLACE ORDER CONFIRMATION --}}
+    <div wire:ignore.self class="modal fade" id="placeOrderModal" tabindex="-1" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content-custom w-100">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{ asset('assets/frontend/imgs/page/coupon-claim.png') }}"
+                            class="img-fluid mb-3 mt-4 modal-logo" style="height: 130px" />
+                    </div>
+
+                    <h1 class="fs-3 text-center">Are you Sure?</h1>
+                    <p class="fs-6 mx-auto text-center quicksand">
+                        {{ $confirmMessage }}
+                    </p>
+                </div>
+
+                <div class="pb-4 d-flex flex-column justify-content-center">
+                    <button class="btn mb-3 w-90-per pt-10 pb-10" wire:click.prevent="{{ $confirmAction }}"
+                        style="background-color: #1e9663;">
+                        Confirm Order
+                    </button>
+
+                    <button class="btn mx-auto pt-10 pb-10 w-90-per" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -880,9 +918,23 @@
     <script>
         let totalSeconds = 240;
         document.addEventListener('livewire:init', function() {
-            // Trigger COD Confirmation Modal
+            // Trigger COD Confirmation Modal for First Order
             window.addEventListener('open-cod-modal', function(event) {
-                var myModal = new bootstrap.Modal(document.getElementById('codAlertModal2'));
+                var el = document.getElementById('codAlertModal2');
+                var myModal = new bootstrap.Modal(el, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                myModal.show();
+            });
+
+            // Trigger Confirmation Modal for Generic/Non-First Order COD
+            window.addEventListener('open-place-order-modal', function(event) {
+                var el = document.getElementById('placeOrderModal');
+                var myModal = new bootstrap.Modal(el, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
                 myModal.show();
             });
 

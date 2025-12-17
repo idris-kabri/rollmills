@@ -29,6 +29,10 @@ class View extends Component
             $this->order->shipped_at = now();
         } elseif ($this->status == 3) {
             $this->order->complete_at = now();
+            if($this->order->is_cod == 1){
+                $this->order->paid_amount = $this->order->total;
+                $this->order->remaining_amount = 0;
+            }
         }
         $this->order->save();
         $this->toastSuccess('Order Status Change Successfully!');

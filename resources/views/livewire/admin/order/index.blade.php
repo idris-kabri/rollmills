@@ -99,6 +99,9 @@
                                             PAID AMOUNT
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
+                                            PAYMENT METHOD
+                                        </th>
+                                        <th title="Name" class="text-start column-key-2">
                                             STATUS
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
@@ -122,6 +125,13 @@
                                         <td>{{$order->offer_discount ?? 0}}</td>
                                         <td>{{$order->gift_card_discount ?? 0}}</td>
                                         <td>{{$order->paid_amount}}</td>
+                                        <td>
+                                            @if($order->is_cod == 1)
+                                            <p class="text text-info">COD</p>
+                                            @else
+                                            <p class="text text-success">Online</p>
+                                            @endif
+                                        </td>
                                         <td>
                                             @if($order->status == 0)
                                             <p class="text text-warning">Pending</p>

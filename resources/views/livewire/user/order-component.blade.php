@@ -301,6 +301,14 @@
                                                                         class="text-muted">{{ \Carbon\Carbon::parse($user_order->created_at)->format('d M Y') }}</span>
                                                                 </p>
                                                             </div>
+                                                            <div class="content mb-2 mb-md-0">
+                                                                <p
+                                                                    class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center fit-content">
+                                                                    <i class="fa-solid fa-credit-card me-1"></i>
+                                                                    Payment Method : &nbsp; <span
+                                                                        class="text-muted">{{ $user_order->is_cod == 1 ? 'COD' : 'Online' }}</span>
+                                                                </p>
+                                                            </div>
                                                             <div class="content">
                                                                 <p
                                                                     class="border rounded-pill px-3 py-1 fs-14 text-secondary fw-600 quicksand d-flex align-items-center fit-content">
