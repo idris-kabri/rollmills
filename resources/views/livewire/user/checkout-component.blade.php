@@ -718,7 +718,7 @@
                                     </td>
                                 </tr>
 
-                                @if ($payment_method == 'cod' && floatval(session('shipping_charge')) != 0)
+                                @if ($payment_method == 'cod')
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">COD charges</h6>
