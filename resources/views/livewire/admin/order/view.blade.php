@@ -216,10 +216,23 @@
                                                         Shipping fee
                                                     </td>
                                                     <td>
+                                                        @if($order->is_cod == 1)
+                                                        <p>₹{{ number_format($order->shipping_charges - $order->cod_charges, 2) }}</p>
+                                                        @else
                                                         <p>₹{{ number_format($order->shipping_charges, 2) }}</p>
-                                                        Etd: {{$order->etd}}
+                                                        @endif
                                                     </td>
                                                 </tr>
+                                                @if($order->is_cod == 1)
+                                                <tr>
+                                                    <td>
+                                                        Cash on delivery charges
+                                                    </td>
+                                                    <td>
+                                                        <p>₹{{ number_format($order->cod_charges, 2) }}</p>
+                                                    </td>
+                                                </tr>
+                                                @endif
 
                                                 {{--<tr>
                                                     <td>
@@ -291,6 +304,20 @@
                                                         </span>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td>
+                                                        Payment method
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge {{$order->is_cod == 0 ? 'bg-warning text-warning-fg' : 'bg-success text-success-fg'}}">
+                                                            @if($order->status == 0 )
+                                                            COD
+                                                            @else
+                                                            Online
+                                                            @endif
+                                                        </span>
+                                                    </td>
+                                                </tr>
 
 
 
@@ -352,6 +379,7 @@
                                 </div>
                             </div>
                         </div>
+                        @if($order_transaction != null)
                         <div class="card">
 
                             <div class="crad-header">
@@ -430,6 +458,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
 
                     <div class="col-md-3">

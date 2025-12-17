@@ -538,7 +538,7 @@
 
                     {{-- <div class="divider-2 mb-30"></div> --}}
                     <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
-                        <a href="/shop" class="btn d-flex align-items-center custom-pad"><i
+                        <a href="/shop" class="btn d-flex align-items-center custom-pad" style="max-width: fit-content"><i
                                 class="fi-rs-add mr-10"></i>Add More</a>
                     </div>
                 </div>
@@ -669,32 +669,12 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if ($checkout_button || $flat_rate)
+                        {{-- @if ($checkout_button) --}}
                             <a href="/checkout"
                                 class="btn mb-20 w-100 d-sm-flex d-none justify-content-center align-items-center">Proceed
                                 To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
-                        @endif
+                        {{-- @endif --}}
                     </div>
-                    @if (!$flat_rate)
-                        <div class="calculate-shiping p-20 border-radius-15 border mb-20">
-                            <h4 class="mb-10 underline pb-2">Calculate Shipping</h4>
-                            {{-- <p class="mb-30"><span class="font-lg text-muted">Flat rate:</span><strong
-                            class="text-brand">5%</strong></p> --}}
-                            <form class="field_form shipping_calculator mt-30" method="POST"
-                                wire:submit.prevent="pincodeCheckFunction('yes')">
-                                <div class="form-row row">
-                                    <div class="form-group col-lg-12">
-                                        <input placeholder="PostCode / ZIP" name="name" type="text"
-                                            class="pl-15" wire:model="pincode"
-                                            wire:keydown.enter="pincodeCheckFunction('yes')">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn">Update Zip Code</button>
-                                </div>
-                            </form>
-                        </div>
-                    @endif
                     <div class="p-20 border-radius-15 border mb-20">
                         <h4 class="mb-30 pb-2 underline">Apply Coupon</h4>
                         <div class="d-flex justify-content-between mb-4">
@@ -740,12 +720,6 @@
                     </div>
                 </div>
             </div>
-            {{-- @if ($checkout_button)
-            <a href="javascript:void(0);"
-                class="btn mb-20 w-100 d-flex justify-content-center align-items-center">
-                Proceed To CheckOut <i class="fi-rs-sign-out ml-15"></i>
-            </a>
-            @endif  --}}
         @else
             <livewire:user.component.no-item-found-component />
     @endif
@@ -755,42 +729,42 @@
         <div class="d-flex justify-content-between mb-10">
             <div class="d-flex gap-2 border-0">
                 <td class="cart_total_label text-start">
-                    <h6 class="text-muted">Subtotal :</h6>
+                    <h6 class="text-muted fs-14">Subtotal :</h6>
                 </td>
                 <td class="cart_total_amount">
-                    <h4 class="text-brand text-end fs-16">
+                    <h4 class="text-brand text-end fs-14">
                         ₹{{ Cart::instance('cart')->subtotal() }}</h4>
                 </td>
             </div>
             <div class="d-flex gap-2 border-0">
                 <td class="cart_total_label text-start">
-                    <h6 class="text-muted">Payable Amount :</h6>
+                    <h6 class="text-muted fs-14">Payable Amount :</h6>
                 </td>
                 <td class="cart_total_amount">
                     @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @elseif($totalAfterDiscount != 0)
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @elseif($totalOfferDiscountedPrice != 0)
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @else
-                        <h4 class="text-brand text-end fs-16">
+                        <h4 class="text-brand text-end fs-14">
                             ₹{{ number_format($total + (session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @endif
                 </td>
             </div>
         </div>
-        @if ($checkout_button || $flat_rate)
+        {{-- @if ($checkout_button) --}}
             <a href="/checkout" class="btn w-100 d-flex d-sm-none justify-content-center align-items-center">Proceed
                 To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
-        @endif
+        {{-- @endif --}}
     </div>
 </main>
 

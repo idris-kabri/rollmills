@@ -313,6 +313,14 @@
                                                     <h4 class="text-brand text-end fs-16">#{{ $order->id }}</h4>
                                                 </td>
                                             </tr>
+                                            <tr class="d-flex justify-content-between border-0">
+                                                <td class="px-0 cart_total_label text-start">
+                                                    <h6 class="text-muted">Payment Method</h6>
+                                                </td>
+                                                <td class="px-0 cart_total_amount">
+                                                    <h4 class="text-brand text-end fs-16">{{ $order->is_cod == 1 ? 'COD' : 'Online' }}</h4>
+                                                </td>
+                                            </tr>
 
                                             <tr class="d-flex justify-content-between border-0 mt-1">
                                                 <td class="px-0 cart_total_label text-start">
@@ -381,12 +389,26 @@
                                                     <h5 class="text-heading text-end fs-16">
                                                         @if ($order->shipping_charges == 0)
                                                             Free Shipping
-                                                        @else
-                                                            ₹{{ number_format($order->shipping_charges, 2) }}
+                                                        @elseif($order->is_cod == 1)
+                                                            ₹{{ number_format(ceil($order->shipping_charges -  $order->cod_charges), 2) }}
+                                                            @else
+                                                            ₹{{ number_format(ceil($order->shipping_charges), 2) }}
                                                         @endif
                                                     </h5>
                                                 </td>
                                             </tr>
+                                            @if($order->is_cod == 1)
+                                            <tr class="d-flex justify-content-between border-0 mt-1">
+                                                <td class="px-0 cart_total_label text-start">
+                                                    <h6 class="text-muted">COD Charges</h6>
+                                                </td>
+                                                <td class="px-0 cart_total_amount">
+                                                    <h5 class="text-heading text-end fs-16">
+                                                        ₹{{ number_format($order->cod_charges, 2) }}
+                                                    </h5>
+                                                </td>
+                                            </tr>
+                                            @endif
 
                                             @if ($order->etd)
                                                 <tr class="d-flex justify-content-between border-0 mt-1">

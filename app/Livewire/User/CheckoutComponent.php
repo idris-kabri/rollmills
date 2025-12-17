@@ -22,6 +22,7 @@ use Carbon\Carbon;
 class CheckoutComponent extends Component
 {
     use HasToastNotification;
+
     public $billing_address = [];
     public $ship_to_different_address = [];
     public $fetch_user_address = [];
@@ -32,7 +33,7 @@ class CheckoutComponent extends Component
     public $finalTotal = 0;
     public $offerDiscount = 0;
     public $couponDiscount = 0;
-    public $payment_method;
+    public $payment_method = "online";
     public $gift_card_item;
     public $coupon_discount_id;
     public $add_new_address = false;
@@ -40,6 +41,7 @@ class CheckoutComponent extends Component
     public $ship_to_different_address_enabled = false;
     public $gift_card_code;
     public $mainDiscountAmount = 0;
+    public $onlineDiscountAmount = 0; // Stores the 10% discount value
     public $items_checkout_event_array = [];
     public $out_of_stock_id = [];
     public $pincode_validation_id = [];
@@ -48,6 +50,13 @@ class CheckoutComponent extends Component
     public $is_first_order = true;
     public $item_sum;
     public $item_sum_discount;
+    public $cash_on_delivery_amount;
+    public $online_payment_amount;
+    public $cash_on_delivery_user_additional_pay;
+
+    // Properties for generic modal
+    public $confirmMessage = '';
+    public $confirmAction = '';
 
     public function mount()
     {
@@ -188,9 +197,28 @@ class CheckoutComponent extends Component
         $this->offerDiscount = (float) ($totalOfferDiscount ?? 0);
         $this->couponDiscount = (float) (session('coupon_discount_amount') ?? 0);
         $this->coupon_discount_id = (int) session('coupon_discount_id');
-        $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount + (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
+        
+        $shippingCharge = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
+
+        // --- NEW LOGIC: 10% Discount for First Order on Online Payment ---
+        if ($this->is_first_order && $this->payment_method == 'online') {
+            // Calculate 10% of the Cart Total
+            $this->onlineDiscountAmount = round($cartTotal * 0.10, 2);
+        } else {
+            $this->onlineDiscountAmount = 0;
+        }
+
+        // Final Calculation
+        $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->onlineDiscountAmount + $shippingCharge;
+        
+        // Ensure total doesn't go negative
+        if($this->finalTotal < 0) {
+            $this->finalTotal = 0;
+        }
+
         $this->mainDiscountAmount = (float) session('coupon_discount_amount');
     }
+
     public function addNewAddress()
     {
         $this->add_new_address = true;
@@ -204,7 +232,6 @@ class CheckoutComponent extends Component
     public function cancelNewAddress()
     {
         $this->add_new_address = false;
-        // Re-select first address to prevent empty array state if needed
         if ($this->fetch_user_address->count() > 0) {
             $this->storeAddressInToBilling($this->fetch_user_address->first()->id);
         }
@@ -227,7 +254,6 @@ class CheckoutComponent extends Component
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
         $this->ship_to_different_address_enabled = !$this->ship_to_different_address_enabled;
 
-        // Reset shipping address state when toggled
         if ($this->ship_to_different_address_enabled) {
             $this->add_new_shipp_address = false;
         }
@@ -251,7 +277,7 @@ class CheckoutComponent extends Component
                 'is_user_logged_in_user' => $address->is_user_logged_in_user,
                 'user_id' => $address->user_id,
             ];
-            $this->add_new_address = false; // Close form view
+            $this->add_new_address = false;
         }
         $this->checkBillingEmail();
         $this->pincodeCheckFunction('yes');
@@ -272,8 +298,9 @@ class CheckoutComponent extends Component
                 'state' => $address->state,
                 'zipcode' => $address->zipcode,
             ];
-            $this->add_new_shipp_address = false; // Close form view
+            $this->add_new_shipp_address = false;
         }
+        $this->pincodeCheckFunction('yes');
     }
 
     public function checkBillingEmail()
@@ -297,7 +324,6 @@ class CheckoutComponent extends Component
                 $coupon_id = session()->get('coupon_discount_id');
                 if ($coupon_id) {
                     $coupon_get = Coupon::find($coupon_id);
-                    // Check if coupon exists before accessing properties to prevent crash
                     if ($coupon_get) {
                         $order_count = Order::where('logged_in_user_id', $user->id)->where('coupon_id', $coupon_id)->where('status', 1)->count();
                         if ($coupon_get->usage_limit <= $order_count) {
@@ -316,10 +342,9 @@ class CheckoutComponent extends Component
         }
     }
 
-    // ... [Rest of your existing methods: applyGiftCard, createBillingAddress, createShippingAddress, createOrderItem, userCreate, placeOrder, render] ...
-
     public function applyGiftCard($gift_card_item_id = null)
     {
+        // Existing gift card logic...
         if ($this->gift_card_code && $gift_card_item_id == null) {
             if (isset($this->billing_address['email']) && $this->billing_address['email'] != '') {
                 $this->gift_card_item = GiftCardItem::where('gift_code', $this->gift_card_code)->first();
@@ -369,6 +394,7 @@ class CheckoutComponent extends Component
 
     public function createBillingAddress($userId = null)
     {
+        // Create address logic...
         $address = isset($this->billing_address['id']) ? Address::find($this->billing_address['id']) ?? new Address() : new Address();
         $address->name = $this->billing_address['name'];
         $address->email = $this->billing_address['email'];
@@ -401,6 +427,7 @@ class CheckoutComponent extends Component
 
     public function createShippingAddress($userId = null)
     {
+        // Create shipping logic...
         $ship_different_address = isset($this->ship_to_different_address['id']) ? Address::find($this->ship_to_different_address['id']) ?? new Address() : new Address();
         $ship_different_address->name = $this->ship_to_different_address['name'];
         $ship_different_address->email = $this->ship_to_different_address['email'] ?? $this->billing_address['email'];
@@ -446,21 +473,11 @@ class CheckoutComponent extends Component
             $orderItem->sale_default_price = $item->model->sale_default_price ?? 0;
             $orderItem->sale_price_start_date = $item->model->sale_from_date;
             $orderItem->sale_price_end_date = $item->model->sale_to_date;
-            if(session()->has('first_order') && session()->get('first_order') == true){
-                $sale_default_price = $item->model->sale_default_price;
-                $bonus_amount = ($sale_default_price * 10) / 100;
-                $orderItem->bonus = floor($bonus_amount);
-                $orderItem->subtotal = $item->qty * ($productPrice['price'] - $bonus_amount);
-            }else{
-                $orderItem->subtotal = $item->qty * $productPrice['price'];
-            }
-            // $orderItem->courier_id = $item->options['courier_id'];
-            // $orderItem->courier = $item->options['courier'];
-            // $orderItem->overall_rate = $item->options['overall_rate'];
-            // $orderItem->rate = $item->options['rate'];
-            // $orderItem->shipping_margin_bear = $item->options['shipping_margin_bear'];
-            // $orderItem->etd = $item->options['etd'];
-
+            
+            // Note: Original code had logic for 'first_order' bonus inside OrderItem. 
+            // Since we are changing the main discount logic, I am keeping this standard.
+            $orderItem->subtotal = $item->qty * $productPrice['price'];
+    
             $offerPrice = 0;
             if (!empty($item->options['discount_price'])) {
                 $offerPrice = $item->price * $item->qty - $item->options['discount_price'];
@@ -484,7 +501,6 @@ class CheckoutComponent extends Component
         $user = User::where('mobile', $this->billing_address['mobile'])->first();
 
         if (!$user) {
-            // Create new user
             $user = new User();
             $user->email = $this->billing_address['email'] ? $this->billing_address['email'] : $this->ship_to_different_address['email'];
             $user->mobile = $this->billing_address['mobile'] ? $this->billing_address['mobile'] : $this->ship_to_different_address['mobile'];
@@ -505,8 +521,11 @@ class CheckoutComponent extends Component
             'mobile' => $user->mobile,
         ];
     }
-    public function placeOrder()
+
+    // --- NEW VALIDATION AND POPUP TRIGGER ---
+    public function verifyCheckout()
     {
+        // 1. Validate inputs first
         $this->validate(
             [
                 'billing_address.name' => 'required|string|max:255',
@@ -514,7 +533,6 @@ class CheckoutComponent extends Component
                 'billing_address.state' => 'required|string|max:255',
                 'billing_address.city' => 'required|string|max:255',
                 'billing_address.billing_address1' => 'required|string|max:255',
-                'billing_address.billing_address2' => 'nullable|string|max:255',
                 'billing_address.zipcode' => 'required',
                 'billing_address.mobile' => 'required|digits_between:10,15',
             ],
@@ -525,14 +543,50 @@ class CheckoutComponent extends Component
                 'billing_address.state' => 'state',
                 'billing_address.city' => 'city',
                 'billing_address.billing_address1' => 'address',
-                'billing_address.billing_address2' => 'address line 2',
                 'billing_address.zipcode' => 'zipcode',
                 'billing_address.mobile' => 'phone number',
-            ],
+            ]
+        );
+
+        if ($this->payment_method == 'cod') {
+            if ($this->is_first_order) {
+                // First order, COD logic
+                $this->dispatch('open-cod-modal');
+            } else {
+                // Not first order, COD logic (Trigger placeOrderModal)
+                $this->confirmMessage = "Are you sure you want to proceed with Cash on Delivery?";
+                $this->confirmAction = "proceedWithCOD"; // Action method to call
+                $this->dispatch('open-place-order-modal');
+            }
+        } else {
+            // Online payment, proceed immediately
+            $this->placeOrder();
+        }
+    }
+
+    // --- CALLED FROM MODAL CONFIRMATION ---
+    public function proceedWithCOD()
+    {
+        $this->placeOrder();
+    }
+
+    public function placeOrder()
+    {
+        // Redundant validation to be safe, though verifyCheckout handles it too
+        $this->validate(
+            [
+                'billing_address.name' => 'required|string|max:255',
+                'billing_address.email' => 'required|email',
+                'billing_address.state' => 'required|string|max:255',
+                'billing_address.city' => 'required|string|max:255',
+                'billing_address.billing_address1' => 'required|string|max:255',
+                'billing_address.billing_address2' => 'nullable|string|max:255',
+                'billing_address.zipcode' => 'required',
+                'billing_address.mobile' => 'required|digits_between:10,15',
+            ]
         );
 
         try {
-            $this->payment_method = 'upi';
             $nonAuthUser = null;
 
             // Create billing address
@@ -585,7 +639,13 @@ class CheckoutComponent extends Component
                 $user_order->offer_discount = 0;
             }
 
-            $user_order->total = $this->finalTotal;
+            if($this->payment_method == 'online') {
+                $user_order->total = ceil($this->finalTotal + $this->online_payment_amount);
+                $user_order->shipping_charges = (float) $this->online_payment_amount;
+            }else{
+                $user_order->total = ceil($this->finalTotal + $this->cash_on_delivery_amount);
+                $user_order->shipping_charges = (float) $this->cash_on_delivery_amount;
+            }
             $user_order->status = 0;
 
             if (session('free_shipping_pincode')) {
@@ -598,7 +658,6 @@ class CheckoutComponent extends Component
             $user_order->billing_address_id = $billingAddress['id'];
             $user_order->billing_address_details = $encdoeBillingAddress;
             $user_order->etd = session('latest_etd');
-            $user_order->shipping_charges = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
             $user_order->shipping_bearable = session('shipping_bear_margin') ?? 0;
 
             if ($this->gift_card_amount > 0) {
@@ -606,16 +665,18 @@ class CheckoutComponent extends Component
                 $user_order->gift_card_discount = $this->gift_card_amount;
             }
 
-            if ($this->payment_method == 'upi') {
-                $user_order->paid_amount = $this->finalTotal;
+            // --- PAYMENT METHOD CHECK ---
+            if ($this->payment_method == 'online') {
+                $user_order->paid_amount = ceil($this->finalTotal + $this->online_payment_amount);
                 $user_order->remaining_amount = 0;
+                $user_order->is_cod = 0;
 
                 $user_order->save();
 
                 $this->createOrderItem($user_order);
                 $coupon = Coupon::find($this->coupon_discount_id);
 
-                $order = razorPayPayment($this->finalTotal, Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using UPI');
+                $order = razorPayPayment(ceil($this->finalTotal + $this->online_payment_amount), Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using Online Payment');
 
                 $user =
                     Auth::user() ??
@@ -637,62 +698,33 @@ class CheckoutComponent extends Component
                     'success_url' => route('payment.success'),
                 ]);
             } else {
-                $walletBalance = (int) Auth::user()->wallet_balance;
+                // COD FLOW
+                $user_order->paid_amount = 0;
+                $user_order->remaining_amount = ceil($this->finalTotal + $this->cash_on_delivery_amount);
+                $user_order->cod_charges = (int)$this->cash_on_delivery_amount - $this->online_payment_amount;
+                $user_order->is_cod = 1;
+                $user_order->status = 1;
+                $user_order->save();
 
-                if ($walletBalance >= $this->finalTotal) {
-                    updateWalletBalance(Auth::user()->id, 'deduct', $this->finalTotal);
-                    $user_order->paid_amount = $this->finalTotal;
-                    $user_order->remaining_amount = 0;
-                    $user_order->save();
+                $this->createOrderItem($user_order);
 
-                    $this->createOrderItem($user_order);
-
-                    walletPayment(Auth::user()->id, $user_order->id, 'orders', $this->finalTotal, 'WALLET-ORDER-' . Str::upper(Str::random(10)), 'Order Placed Using Wallet', 1);
-
-                    Cart::instance('cart')->destroy();
-                    if (Auth::check()) {
-                        Cart::instance('cart')->store(Auth::user()->mobile);
-                    }
-
-                    return redirect('/')->with('success', 'Order successful, and the details have been sent to ' . $billingAddress['name'] . ' email address.');
-                } else {
-                    $remainingAmount = $this->finalTotal - $walletBalance;
-                    $user_order->paid_amount = $remainingAmount;
-                    $user_order->remaining_amount = 0;
-                    $user_order->save();
-
-                    //hh
-                    $this->createOrderItem($user_order);
-
-                    if ($walletBalance > 0) {
-                        walletPayment(Auth::user()->id, $user_order->id, 'orders', $walletBalance, 'WALLET-ORDER-' . Str::upper(Str::random(10)), 'Order Placed Using Wallet', 1);
-                    }
-
-                    $order = razorPayPayment($remainingAmount, Auth::user()->id, $user_order->id, 'orders', 'Partial Wallet + Razorpay for Custom Gift Card');
-
-                    $this->dispatch('initiate-razorpay', [
-                        'transaction_id' => $order->transaction_id,
-                        'razorpay_order_id' => $order->id,
-                        'amount' => $order->amount,
-                        'description' => $order->description,
-                        'name' => Auth::user()->name,
-                        'email' => Auth::user()->email,
-                        'customer_name' => Auth::user()->name,
-                        'customer_email' => Auth::user()->email,
-                        'success_url' => route('payment.success'),
-                    ]);
+                Cart::instance('cart')->destroy();
+                if (Auth::check()) {
+                    Cart::instance('cart')->store(Auth::user()->mobile);
                 }
+
+                return redirect('/order-completed?id=' . $user_order->id)
+                    ->with('success', 'Your order placed successfully!');
             }
         } catch (\Exception $e) {
-            // dd($e);
             $this->toastError($e->getMessage());
         }
     }
 
     public function pincodeCheckFunction($show_toast = 'no')
     {
-        $checkoutconditionFail = false;
         $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
+        $cart_items = Cart::instance('cart')->content();
         if ($setting) {
             $outOfDeliveryPincodes = explode(',', $setting->value);
             $pincode = '';
@@ -707,278 +739,102 @@ class CheckoutComponent extends Component
                 session()->put('free_shipping_pincode', $pincode);
                 session()->forget('show_deleviery_time');
                 session()->put('shipping_pincode', $pincode);
+                session()->forget('shipping_charge');
                 session()->forget('flat_rate_charge');
             } else {
+                $online_payment_amount_response = getEstimation(
+                    $cart_items,
+                    $pincode,
+                    'prepaid'
+                );
+                if(is_numeric($online_payment_amount_response)){
+                    $this->online_payment_amount = $online_payment_amount_response;
+                }else{
+                    $this->online_payment_amount = 0;
+                }
+                
+                $cash_on_delivery_amount_response = getEstimation(
+                    $cart_items,
+                    $pincode,
+                    'cod'
+                );
+                if(is_numeric($online_payment_amount_response)){
+                    $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
+                }else{
+                    $this->cash_on_delivery_amount = 0;
+                }
+
                 session()->forget('free_shipping_pincode');
                 session()->forget('show_deleviery_time');
                 session()->forget('shipping_pincode');
-                $flat_rate = Setting::where('label', 'Flat Rate')->first();
-                if ($flat_rate) {
-                    session()->put('flat_rate_charge', (int) $flat_rate->value);
-                }
+                
+                // --- SET SHIPPING BASED ON ACTIVE METHOD ---
+                // if($this->payment_method == 'cod') {
+                //     session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
+                // } else {
+                //     session()->put('shipping_charge', ceil($this->online_payment_amount));
+                // }
             }
         } else {
             session()->forget('free_shipping_pincode');
             session()->forget('show_deleviery_time');
             session()->forget('shipping_pincode');
-            $flat_rate = Setting::where('label', 'Flat Rate')->first();
-            if ($flat_rate) {
-                session()->put('flat_rate_charge', (int) $flat_rate->value);
-            }
+            
+            session()->put('shipping_charge', (int) $this->online_payment_amount);
         }
         $this->calculateTotals();
     }
 
+    // --- OTHER HELPERS ---
     public function billingAddressMobile()
     {
-        if(isset($this->billing_address['mobile']) && $this->billing_address['mobile'] != null){
+        if (isset($this->billing_address['mobile']) && $this->billing_address['mobile'] != null) {
             $value = $this->billing_address['mobile'];
             $value = str_replace(' ', '', $value);
-    
-            if (str_starts_with($value, '+91')) {
-                $value = substr($value, 3);
-            }
-    
-            if (str_starts_with($value, '91') && strlen($value) > 10) {
-                $value = substr($value, 2);
-            }
-    
-            if (str_starts_with($value, '0')) {
-                $value = substr($value, 1);
-            }
-    
+            if (str_starts_with($value, '+91')) { $value = substr($value, 3); }
+            if (str_starts_with($value, '91') && strlen($value) > 10) { $value = substr($value, 2); }
+            if (str_starts_with($value, '0')) { $value = substr($value, 1); }
             $this->billing_address['mobile'] = $value;
             $this->checkPlaceOrderFunction();
+            $this->calculateTotals();
         }
     }
 
     public function shippingAddressMobile()
     {
-        if(isset($this->ship_to_different_address['mobile']) && $this->ship_to_different_address['mobile'] != null){
+        if (isset($this->ship_to_different_address['mobile']) && $this->ship_to_different_address['mobile'] != null) {
             $value = $this->ship_to_different_address['mobile'];
             $value = str_replace(' ', '', $value);
-    
-            if (str_starts_with($value, '+91')) {
-                $value = substr($value, 3);
-            }
-    
-            if (str_starts_with($value, '91') && strlen($value) > 10) {
-                $value = substr($value, 2);
-            }
-    
-            if (str_starts_with($value, '0')) {
-                $value = substr($value, 1);
-            }
-    
+            if (str_starts_with($value, '+91')) { $value = substr($value, 3); }
+            if (str_starts_with($value, '91') && strlen($value) > 10) { $value = substr($value, 2); }
+            if (str_starts_with($value, '0')) { $value = substr($value, 1); }
             $this->ship_to_different_address['mobile'] = $value;
             $this->checkPlaceOrderFunction();
+            $this->calculateTotals();
         }
     }
 
-    public function placeFirstOrder()
-    {
-        $this->validate(
-            [
-                'billing_address.name' => 'required|string|max:255',
-                'billing_address.email' => 'required|email',
-                'billing_address.state' => 'required|string|max:255',
-                'billing_address.city' => 'required|string|max:255',
-                'billing_address.billing_address1' => 'required|string|max:255',
-                'billing_address.billing_address2' => 'nullable|string|max:255',
-                'billing_address.zipcode' => 'required',
-                'billing_address.mobile' => 'required|digits_between:10,15',
-            ],
-            [],
-            [
-                'billing_address.name' => 'name',
-                'billing_address.email' => 'email address',
-                'billing_address.state' => 'state',
-                'billing_address.city' => 'city',
-                'billing_address.billing_address1' => 'address',
-                'billing_address.billing_address2' => 'address line 2',
-                'billing_address.zipcode' => 'zipcode',
-                'billing_address.mobile' => 'phone number',
-            ],
-        );
-        $cartTotal = (float) str_replace(',', '', Cart::instance('cart')->total());
-        $this->item_sum = $cartTotal;
-        $this->item_sum_discount = floor(($cartTotal * 10) / 100);
-        session()->put('first_order', true);
-        $this->dispatch('trigger-first-order-modal');
+    public function placeFirstOrder() {
+        // Kept for backward compatibility if needed, but verifyCheckout replaces this
+        $this->placeOrder();
     }
 
-    public function placeNewFirstOrder()
+    public function placeNewFirstOrder() {
+         $this->placeOrder();
+    }
+
+    // --- SWITCH PAYMENT METHOD AND RECALCULATE ---
+    public function paymentMethod($method)
     {
-        try {
-            $this->payment_method = 'upi';
-            $nonAuthUser = null;
+        $this->payment_method = $method;
 
-            // Create billing address
-            if (!Auth::check()) {
-                $nonAuthUser = $this->userCreate();
-                $billingAddress = $this->createBillingAddress($nonAuthUser['id']);
-            } else {
-                $billingAddress = $this->createBillingAddress();
-            }
-
-            $encdoeBillingAddress = json_encode($billingAddress);
-            //order create
-            $user_order = new Order();
-
-            //ship to different address create
-            if (!empty($this->ship_to_different_address['name']) && !empty($this->ship_to_different_address['billing_address1']) && !empty($this->ship_to_different_address['city']) && !empty($this->ship_to_different_address['state']) && !empty($this->ship_to_different_address['zipcode'])) {
-                if (!Auth::check()) {
-                    $shippingAddress = $this->createShippingAddress($nonAuthUser['id']);
-                } else {
-                    $shippingAddress = $this->createShippingAddress();
-                }
-                $encdoeShipDifferentAddress = json_encode($shippingAddress);
-                $user_order->ship_different_address_id = $shippingAddress['id'];
-                $user_order->ship_different_address_details = $encdoeShipDifferentAddress;
-            } else {
-                $user_order->ship_different_address_id = $billingAddress['id'];
-                $user_order->ship_different_address_details = $encdoeBillingAddress;
-            }
-
-            if (Auth::check()) {
-                $user_order->is_logged_in_user = 1;
-                $user_order->logged_in_user_id = Auth::user()->id;
-            } else {
-                $user_order->is_logged_in_user = 0;
-                $user_order->logged_in_user_id = $nonAuthUser['id'];
-            }
-
-            $user_order->subtotal = (float) str_replace(',', '', Cart::instance('cart')->total());
-
-            if ($this->couponDiscount > 0) {
-                $user_order->coupon_discount = $this->couponDiscount;
-                $user_order->coupon_id = $this->coupon_discount_id;
-            } else {
-                $user_order->coupon_discount = 0;
-            }
-
-            if ($this->offerDiscount > 0) {
-                $user_order->offer_discount = $this->offerDiscount;
-            } else {
-                $user_order->offer_discount = 0;
-            }
-
-            if (session('first_order') && session('first_order') == true) {
-                $user_order->total = $this->finalTotal - $this->item_sum_discount;
-                $user_order->total_bonus = $this->item_sum_discount;
-            } else {
-                $user_order->total = $this->finalTotal;
-            }
-            $user_order->status = 0;
-
-            if (session('free_shipping_pincode')) {
-                $user_order->is_manual_pickup = 1;
-            } else {
-                $user_order->is_manual_pickup = 0;
-            }
-
-            $user_order->additional_information = $this->additional_information;
-            $user_order->billing_address_id = $billingAddress['id'];
-            $user_order->billing_address_details = $encdoeBillingAddress;
-            $user_order->etd = session('latest_etd');
-            $user_order->shipping_charges = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
-            $user_order->shipping_bearable = session('shipping_bear_margin') ?? 0;
-
-            if ($this->gift_card_amount > 0) {
-                $user_order->gift_card_item_id = $this->applied_gift_card_ids;
-                $user_order->gift_card_discount = $this->gift_card_amount;
-            }
-
-            if ($this->payment_method == 'upi') {
-                if (session('first_order') && session('first_order') == true) {
-                    $user_order->paid_amount = $this->finalTotal  - $this->item_sum_discount;
-                } else {
-                    $user_order->paid_amount = $this->finalTotal;
-                }
-                $user_order->remaining_amount = 0;
-
-                $user_order->save();
-
-                $this->createOrderItem($user_order);
-                $coupon = Coupon::find($this->coupon_discount_id);
-
-                $total = $this->finalTotal;
-                if(session('first_order') && session('first_order') == true) {
-                    $total = $this->finalTotal - $this->item_sum_discount;
-                }
-
-                $order = razorPayPayment($total, Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using UPI');
-
-                $user =
-                    Auth::user() ??
-                    (object) [
-                        'name' => $nonAuthUser['name'],
-                        'email' => $nonAuthUser['email'],
-                    ];
-
-                $this->dispatch('initiate-razorpay', [
-                    'transaction_id' => $order->transaction_id,
-                    'razorpay_order_id' => $order->id,
-                    'amount' => $order->amount,
-                    'description' => $order->description,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'customer_name' => $user->name,
-                    'customer_email' => $user->email,
-                    'id' => $user_order->id,
-                    'success_url' => route('payment.success'),
-                ]);
-            } else {
-                $walletBalance = (int) Auth::user()->wallet_balance;
-
-                if ($walletBalance >= $this->finalTotal) {
-                    updateWalletBalance(Auth::user()->id, 'deduct', $this->finalTotal);
-                    $user_order->paid_amount = $this->finalTotal;
-                    $user_order->remaining_amount = 0;
-                    $user_order->save();
-
-                    $this->createOrderItem($user_order);
-
-                    walletPayment(Auth::user()->id, $user_order->id, 'orders', $this->finalTotal, 'WALLET-ORDER-' . Str::upper(Str::random(10)), 'Order Placed Using Wallet', 1);
-
-                    Cart::instance('cart')->destroy();
-                    if (Auth::check()) {
-                        Cart::instance('cart')->store(Auth::user()->mobile);
-                    }
-
-                    return redirect('/')->with('success', 'Order successful, and the details have been sent to ' . $billingAddress['name'] . ' email address.');
-                } else {
-                    $remainingAmount = $this->finalTotal - $walletBalance;
-                    $user_order->paid_amount = $remainingAmount;
-                    $user_order->remaining_amount = 0;
-                    $user_order->save();
-
-                    //hh
-                    $this->createOrderItem($user_order);
-
-                    if ($walletBalance > 0) {
-                        walletPayment(Auth::user()->id, $user_order->id, 'orders', $walletBalance, 'WALLET-ORDER-' . Str::upper(Str::random(10)), 'Order Placed Using Wallet', 1);
-                    }
-
-                    $order = razorPayPayment($remainingAmount, Auth::user()->id, $user_order->id, 'orders', 'Partial Wallet + Razorpay for Custom Gift Card');
-
-                    $this->dispatch('initiate-razorpay', [
-                        'transaction_id' => $order->transaction_id,
-                        'razorpay_order_id' => $order->id,
-                        'amount' => $order->amount,
-                        'description' => $order->description,
-                        'name' => Auth::user()->name,
-                        'email' => Auth::user()->email,
-                        'customer_name' => Auth::user()->name,
-                        'customer_email' => Auth::user()->email,
-                        'success_url' => route('payment.success'),
-                    ]);
-                }
-            }
-        } catch (\Exception $e) {
-            // dd($e);
-            $this->toastError($e->getMessage());
+        if ($method == 'cod') {
+            session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
+        } else {
+            session()->put('shipping_charge', ceil($this->online_payment_amount));
         }
+
+        $this->calculateTotals();
     }
 
     public function render()

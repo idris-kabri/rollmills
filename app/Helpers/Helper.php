@@ -382,76 +382,114 @@ function placeShipment($order_id)
     }
 }
 
-function calculateRates($products, $pincode)
+function getEstimation($products, $pincode, $payment_method)
 {
-    // $latestEtd = null;
-    // $shippingCharge = 0;
+    $weight = 0;
+    $price = 0;
+    foreach ($products as $cart_item) {
+        $weight += $cart_item->model->weight > 0 ? (float) $cart_item->model->weight : 1;
+        $price += $cart_item->price * $cart_item->qty;
+    }
+    $innerPayload = [
+        'from_pincode' => '314025',
+        'to_pincode' => $pincode,
+        'shipping_weight_kg' => $weight / 1000,
+        'order_type' => 'forward',
+        'payment_method' => $payment_method,
+        'product_mrp' => $price,
+        'access_token' => config('app.ithink_access_token'),
+        'secret_key' => config('app.secret_key'),
+    ];
+
+    $wrappedPayload = [
+        'data' => $innerPayload,
+    ];
+
+    $response = Http::post('https://my.ithinklogistics.com/api_v3/rate/check.json', $wrappedPayload);
+    if ($response->successful()) {
+        $shippingData = $response->json();
+        if ($shippingData['status'] !== 'success') {
+            return "We don't deliver to this pincode";
+        }
+        $couriers = $shippingData['data'] ?? [];
+        $lowest = collect($couriers)->where('rate', '>', 0)->sortBy('rate')->first();
+        $rate = $lowest['rate'] ?? 0;
+        return $rate;
+    } else {
+        return "We don't deliver to this pincode";
+    }
+}
+
+function calculateRates($products, $pincode, $payment_method)
+{
+    $latestEtd = null;
+    $shippingCharge = 0;
     // $shipping_bear_margin = 0;
-    // $checkout_condition_fail = false;
-    // foreach ($products as $cart_item) {
-    //     $weightInKg = (float) $cart_item->model->weight / 1000;
+    $checkout_condition_fail = false;
+    foreach ($products as $cart_item) {
+        $weightInKg = $cart_item->model->weight > 0 ? (float) $cart_item->model->weight / 1000 : 1;
 
-    //     $innerPayload = [
-    //         'from_pincode' => '314025',
-    //         'to_pincode' => $pincode,
-    //         'shipping_weight_kg' => $weightInKg,
-    //         'order_type' => 'forward',
-    //         'payment_method' => 'prepaid',
-    //         'product_mrp' => $cart_item->model->price * $cart_item->qty,
-    //         'access_token' => config('app.access_token'),
-    //         'secret_key' => config('app.secret_key'),
-    //     ];
+        $innerPayload = [
+            'from_pincode' => '314025',
+            'to_pincode' => $pincode,
+            'shipping_weight_kg' => $weightInKg,
+            'order_type' => 'forward',
+            'payment_method' => $payment_method,
+            'product_mrp' => $cart_item->model->price * $cart_item->qty,
+            'access_token' => config('app.ithink_access_token'),
+            'secret_key' => config('app.secret_key'),
+        ];
 
-    //     $wrappedPayload = [
-    //         'data' => $innerPayload,
-    //     ];
-    //     $response = Http::post('https://my.ithinklogistics.com/api_v3/rate/check.json', $wrappedPayload);
-    //     if ($response->successful()) {
-    //         $shippingData = $response->json();
-    //         if ($shippingData['status'] !== 'success') {
-    //             $checkout_condition_fail = true;
-    //             break;
-    //         }
-    //         $couriers = $shippingData['data'] ?? [];
-    //         Log::error($couriers);
-    //         $lowest = collect($couriers)->where('rate', '>', 0)->sortBy('rate')->first();
-    //         if ($lowest) {
-    //             $options = $cart_item->options->all();
-    //             $options['courier_id'] = $lowest['logistic_id'];
-    //             $options['courier'] = $lowest['logistic_name'];
-    //             $options['overall_rate'] = $lowest['rate'];
-    //             $options['rate'] = $lowest['rate'] - ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
-    //             $options['shipping_margin_bear'] = ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
-    //             $options['etd'] = $lowest['delivery_tat'];
-    //             Cart::instance('cart')->update($cart_item->rowId, [
-    //                 'options' => $options,
-    //             ]);
+        $wrappedPayload = [
+            'data' => $innerPayload,
+        ];
+        $response = Http::post('https://my.ithinklogistics.com/api_v3/rate/check.json', $wrappedPayload);
+        if ($response->successful()) {
+            $shippingData = $response->json();
+            if ($shippingData['status'] !== 'success') {
+                $checkout_condition_fail = true;
+                break;
+            }
+            $couriers = $shippingData['data'] ?? [];
+            $lowest = collect($couriers)->where('rate', '>', 0)->sortBy('rate')->first();
+            if ($lowest) {
+                $options = $cart_item->options->all();
+                $options['courier_id'] = $lowest['logistic_id'];
+                $options['courier'] = $lowest['logistic_name'];
+                $options['overall_rate'] = $lowest['rate'];
+                $options['rate'] = $lowest['rate'] - ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                $options['shipping_margin_bear'] = ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                $options['etd'] = $lowest['delivery_tat'];
+                Cart::instance('cart')->update($cart_item->rowId, [
+                    'options' => $options,
+                ]);
 
-    //             $shippingCharge += $lowest['rate'] - ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
-    //             $shipping_bear_margin += ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                $shippingCharge += $lowest['rate'] - ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
+                // $shipping_bear_margin += ((float) $cart_item->model->shipping_margin_br ?? 0) * $cart_item->qty;
 
-    //             foreach ($couriers as $courier) {
-    //                 if (!empty($courier['delivery_tat'])) {
-    //                     $now = Carbon::now();
-    //                     $etdDate = $now->copy()->addDays((int) $courier['delivery_tat']);
-    //                     if (!$latestEtd || $etdDate->gt($latestEtd)) {
-    //                         $latestEtd = Carbon::parse($etdDate)->format('d F Y');
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     } else {
-    //         logger()->error("Shiprocket API error for item {$cart_item->id}", [
-    //             'response' => $response->body(),
-    //         ]);
-    //         return false;
-    //     }
-    // }
+                foreach ($couriers as $courier) {
+                    if (!empty($courier['delivery_tat'])) {
+                        $now = Carbon::now();
+                        $etdDate = $now->copy()->addDays((int) $courier['delivery_tat']);
+                        if (!$latestEtd || $etdDate->gt($latestEtd)) {
+                            $latestEtd = Carbon::parse($etdDate)->format('d F Y');
+                        }
+                    }
+                }
+            }
+        } else {
+            logger()->error("Shiprocket API error for item {$cart_item->id}", [
+                'response' => $response->body(),
+            ]);
+            dd('error', $response->body());
+            return false;
+        }
+    }
     // session()->put('shipping_charge', $shippingCharge);
     // session()->put('latest_etd', $latestEtd);
     // session()->put('shipping_bear_margin', $shipping_bear_margin);
 
-    // return $checkout_condition_fail;
+    return $shippingCharge;
 }
 
 function isInCart($id)

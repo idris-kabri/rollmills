@@ -751,11 +751,6 @@ class CartComponent extends Component
                 session()->put('latest_etd', '5 to 7 days');
                 session()->put('shipping_bear_margin', 0);
 
-                // $checkoutconditionFail = calculateRates($cart_items, $this->pincode);
-                // if ($checkoutconditionFail) {
-                //     $this->toastError('Sorry ! Delivery is currently unavailable to the selected pincode.');
-                // } else {
-                //     $this->free_shipping = false;
                 session()->forget('free_shipping_pincode');
                 session()->put('show_deleviery_time', true);
                 if ($show_toast == 'yes') {
@@ -767,7 +762,7 @@ class CartComponent extends Component
         }
         if (!$checkoutconditionFail) {
             $this->checkout_button = true;
-            $this->checkoutCondition();
+            // $this->checkoutCondition();
         } else {
             $this->checkout_button = false;
         }
@@ -809,7 +804,7 @@ class CartComponent extends Component
                 $this->checkout_button = false;
             }
         } else {
-            $this->checkout_button = false;
+            $this->checkout_button = true;
         }
     }
 

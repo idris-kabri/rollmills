@@ -33,7 +33,8 @@ class Order extends Model
         "shipping_bear_margin",
         'etd',
         "shipped_at",
-        "complete_at",
+        "complete_at", 
+        'delivery_charges'
     ];
 
     public function getUser()
