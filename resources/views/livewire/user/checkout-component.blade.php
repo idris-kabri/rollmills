@@ -718,7 +718,7 @@
                                     </td>
                                 </tr>
 
-                                @if ($payment_method == 'cod')
+                                @if ($payment_method == 'cod' && floatval($online_payment_amount) != 0)
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">COD charges</h6>
@@ -830,15 +830,17 @@
                         @php
                             $currentTotal = $finalTotal;
 
+                            $couponDiscount = $couponDiscount ?? 0;
                             $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
-                            $potentialDiscount = ceil($cartTotalForCalc * 0.1);
+                            $potentialDiscount = ($cartTotalForCalc * 0.1) + $couponDiscount;
 
                             // Assuming finalTotal in COD mode already includes the COD shipping charge
                             $codShip = $cash_on_delivery_amount ?? 0;
                             $onlineShip = $online_payment_amount ?? 0;
 
+
                             // Potential Online Total
-                            $potentialOnlineTotal = $currentTotal - $codShip + $onlineShip - $potentialDiscount;
+                            $potentialOnlineTotal = $currentTotal - $codShip + $onlineShip - $potentialDiscount + ceil($couponDiscount);
                         @endphp
 
                         <div class="d-flex justify-content-between mb-2">
@@ -855,7 +857,7 @@
                         <div class="d-flex justify-content-between border-top pt-2 mt-2">
                             <span class="text-muted fw-500">Pay Online & Get it for</span>
                             <span
-                                class="text-success fw-bold">₹{{ number_format(ceil($finalTotal + ceil($online_payment_amount) - ceil($potentialDiscount)), 2) }}</span>
+                                class="text-success fw-bold">₹{{ number_format(ceil($finalTotal + $online_payment_amount - $potentialDiscount), 2) }}</span>
                         </div>
                     </div>
 

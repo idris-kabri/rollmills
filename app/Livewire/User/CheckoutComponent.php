@@ -33,7 +33,7 @@ class CheckoutComponent extends Component
     public $finalTotal = 0;
     public $offerDiscount = 0;
     public $couponDiscount = 0;
-    public $payment_method = "online";
+    public $payment_method = 'online';
     public $gift_card_item;
     public $coupon_discount_id;
     public $add_new_address = false;
@@ -64,8 +64,6 @@ class CheckoutComponent extends Component
         $this->billing_address['zipcode'] = session('shipping_pincode');
         $this->billing_address['email'] = '';
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
-
-        $this->calculateTotals();
 
         if (Auth::check()) {
             $this->fetch_user_address = Address::where('user_id', Auth::user()->id)->get();
@@ -141,6 +139,7 @@ class CheckoutComponent extends Component
                 $items[] = $item;
             }
             $this->checkPlaceOrderFunction();
+            $this->calculateTotals();
             $this->dispatch('initiate-checkout', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
         }
     }
@@ -169,9 +168,13 @@ class CheckoutComponent extends Component
             if ($mobile_number != null && $mobile_number != '') {
                 $order_count = 0;
                 if ($address_type == 'billing') {
-                    $order_count = Order::where('billing_address_details', "LIKE", "%$mobile_number%")->where('status', "!=", 0)->count();
+                    $order_count = Order::where('billing_address_details', 'LIKE', "%$mobile_number%")
+                        ->where('status', '!=', 0)
+                        ->count();
                 } else {
-                    $order_count = Order::where('ship_different_address_details', "LIKE", "%$mobile_number%")->where('status', "!=", 0)->count();
+                    $order_count = Order::where('ship_different_address_details', 'LIKE', "%$mobile_number%")
+                        ->where('status', '!=', 0)
+                        ->count();
                 }
 
                 if ($order_count > 0) {
@@ -197,26 +200,34 @@ class CheckoutComponent extends Component
         $this->offerDiscount = (float) ($totalOfferDiscount ?? 0);
         $this->couponDiscount = (float) (session('coupon_discount_amount') ?? 0);
         $this->coupon_discount_id = (int) session('coupon_discount_id');
-        
+
         $shippingCharge = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
 
         // --- NEW LOGIC: 10% Discount for First Order on Online Payment ---
         if ($this->is_first_order && $this->payment_method == 'online') {
             // Calculate 10% of the Cart Total
-            $this->onlineDiscountAmount = round($cartTotal * 0.10, 2);
+            $this->onlineDiscountAmount = round($cartTotal * 0.1, 2);
         } else {
             $this->onlineDiscountAmount = 0;
         }
 
-        // Final Calculation
-        $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->onlineDiscountAmount + $shippingCharge;
-        
+        if ($this->payment_method == 'online') {
+            $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->onlineDiscountAmount + $shippingCharge;
+        } else {
+            // Final Calculation
+            $this->finalTotal = $cartTotal - $this->offerDiscount - $this->onlineDiscountAmount + $shippingCharge;
+        }
+
         // Ensure total doesn't go negative
-        if($this->finalTotal < 0) {
+        if ($this->finalTotal < 0) {
             $this->finalTotal = 0;
         }
 
-        $this->mainDiscountAmount = (float) session('coupon_discount_amount');
+        if ($this->payment_method == 'online') {
+            $this->mainDiscountAmount = (float) session('coupon_discount_amount');
+        } else {
+            $this->mainDiscountAmount = 0;
+        }
     }
 
     public function addNewAddress()
@@ -473,11 +484,11 @@ class CheckoutComponent extends Component
             $orderItem->sale_default_price = $item->model->sale_default_price ?? 0;
             $orderItem->sale_price_start_date = $item->model->sale_from_date;
             $orderItem->sale_price_end_date = $item->model->sale_to_date;
-            
-            // Note: Original code had logic for 'first_order' bonus inside OrderItem. 
+
+            // Note: Original code had logic for 'first_order' bonus inside OrderItem.
             // Since we are changing the main discount logic, I am keeping this standard.
             $orderItem->subtotal = $item->qty * $productPrice['price'];
-    
+
             $offerPrice = 0;
             if (!empty($item->options['discount_price'])) {
                 $offerPrice = $item->price * $item->qty - $item->options['discount_price'];
@@ -545,7 +556,7 @@ class CheckoutComponent extends Component
                 'billing_address.billing_address1' => 'address',
                 'billing_address.zipcode' => 'zipcode',
                 'billing_address.mobile' => 'phone number',
-            ]
+            ],
         );
 
         if ($this->payment_method == 'cod') {
@@ -554,8 +565,8 @@ class CheckoutComponent extends Component
                 $this->dispatch('open-cod-modal');
             } else {
                 // Not first order, COD logic (Trigger placeOrderModal)
-                $this->confirmMessage = "Are you sure you want to proceed with Cash on Delivery?";
-                $this->confirmAction = "proceedWithCOD"; // Action method to call
+                $this->confirmMessage = 'Are you sure you want to proceed with Cash on Delivery?';
+                $this->confirmAction = 'proceedWithCOD'; // Action method to call
                 $this->dispatch('open-place-order-modal');
             }
         } else {
@@ -573,18 +584,16 @@ class CheckoutComponent extends Component
     public function placeOrder()
     {
         // Redundant validation to be safe, though verifyCheckout handles it too
-        $this->validate(
-            [
-                'billing_address.name' => 'required|string|max:255',
-                'billing_address.email' => 'required|email',
-                'billing_address.state' => 'required|string|max:255',
-                'billing_address.city' => 'required|string|max:255',
-                'billing_address.billing_address1' => 'required|string|max:255',
-                'billing_address.billing_address2' => 'nullable|string|max:255',
-                'billing_address.zipcode' => 'required',
-                'billing_address.mobile' => 'required|digits_between:10,15',
-            ]
-        );
+        $this->validate([
+            'billing_address.name' => 'required|string|max:255',
+            'billing_address.email' => 'required|email',
+            'billing_address.state' => 'required|string|max:255',
+            'billing_address.city' => 'required|string|max:255',
+            'billing_address.billing_address1' => 'required|string|max:255',
+            'billing_address.billing_address2' => 'nullable|string|max:255',
+            'billing_address.zipcode' => 'required',
+            'billing_address.mobile' => 'required|digits_between:10,15',
+        ]);
 
         try {
             $nonAuthUser = null;
@@ -626,7 +635,7 @@ class CheckoutComponent extends Component
 
             $user_order->subtotal = (float) str_replace(',', '', Cart::instance('cart')->total());
 
-            if ($this->couponDiscount > 0) {
+            if ($this->couponDiscount > 0 && $this->payment_method == 'online') {
                 $user_order->coupon_discount = $this->couponDiscount;
                 $user_order->coupon_id = $this->coupon_discount_id;
             } else {
@@ -639,10 +648,10 @@ class CheckoutComponent extends Component
                 $user_order->offer_discount = 0;
             }
 
-            if($this->payment_method == 'online') {
+            if ($this->payment_method == 'online') {
                 $user_order->total = ceil($this->finalTotal + $this->online_payment_amount);
                 $user_order->shipping_charges = (float) $this->online_payment_amount;
-            }else{
+            } else {
                 $user_order->total = ceil($this->finalTotal + $this->cash_on_delivery_amount);
                 $user_order->shipping_charges = (float) $this->cash_on_delivery_amount;
             }
@@ -701,7 +710,7 @@ class CheckoutComponent extends Component
                 // COD FLOW
                 $user_order->paid_amount = 0;
                 $user_order->remaining_amount = ceil($this->finalTotal + $this->cash_on_delivery_amount);
-                $user_order->cod_charges = (int)$this->cash_on_delivery_amount - $this->online_payment_amount;
+                $user_order->cod_charges = (int) $this->cash_on_delivery_amount - $this->online_payment_amount;
                 $user_order->is_cod = 1;
                 $user_order->status = 1;
                 $user_order->save();
@@ -713,8 +722,11 @@ class CheckoutComponent extends Component
                     Cart::instance('cart')->store(Auth::user()->mobile);
                 }
 
-                return redirect('/order-completed?id=' . $user_order->id)
-                    ->with('success', 'Your order placed successfully!');
+                session()->forget('coupon_discount_amount');
+                session()->forget('coupon_discount_id');
+                session()->forget('coupon_code');
+
+                return redirect('/order-completed?id=' . $user_order->id)->with('success', 'Your order placed successfully!');
             }
         } catch (\Exception $e) {
             $this->toastError($e->getMessage());
@@ -736,38 +748,32 @@ class CheckoutComponent extends Component
 
             if (in_array($pincode, $outOfDeliveryPincodes)) {
                 $this->free_shipping = true;
+                $this->online_payment_amount = 0;
+                $this->cash_on_delivery_amount = 0;
                 session()->put('free_shipping_pincode', $pincode);
                 session()->forget('show_deleviery_time');
                 session()->put('shipping_pincode', $pincode);
                 session()->forget('shipping_charge');
                 session()->forget('flat_rate_charge');
             } else {
-                $online_payment_amount_response = getEstimation(
-                    $cart_items,
-                    $pincode,
-                    'prepaid'
-                );
-                if(is_numeric($online_payment_amount_response)){
+                $online_payment_amount_response = getEstimation($cart_items, $pincode, 'prepaid');
+                if (is_numeric($online_payment_amount_response)) {
                     $this->online_payment_amount = $online_payment_amount_response;
-                }else{
+                } else {
                     $this->online_payment_amount = 0;
                 }
-                
-                $cash_on_delivery_amount_response = getEstimation(
-                    $cart_items,
-                    $pincode,
-                    'cod'
-                );
-                if(is_numeric($online_payment_amount_response)){
+
+                $cash_on_delivery_amount_response = getEstimation($cart_items, $pincode, 'cod');
+                if (is_numeric($online_payment_amount_response)) {
                     $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
-                }else{
+                } else {
                     $this->cash_on_delivery_amount = 0;
                 }
 
                 session()->forget('free_shipping_pincode');
                 session()->forget('show_deleviery_time');
                 session()->forget('shipping_pincode');
-                
+
                 // --- SET SHIPPING BASED ON ACTIVE METHOD ---
                 // if($this->payment_method == 'cod') {
                 //     session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
@@ -779,7 +785,7 @@ class CheckoutComponent extends Component
             session()->forget('free_shipping_pincode');
             session()->forget('show_deleviery_time');
             session()->forget('shipping_pincode');
-            
+
             session()->put('shipping_charge', (int) $this->online_payment_amount);
         }
         $this->calculateTotals();
@@ -791,9 +797,15 @@ class CheckoutComponent extends Component
         if (isset($this->billing_address['mobile']) && $this->billing_address['mobile'] != null) {
             $value = $this->billing_address['mobile'];
             $value = str_replace(' ', '', $value);
-            if (str_starts_with($value, '+91')) { $value = substr($value, 3); }
-            if (str_starts_with($value, '91') && strlen($value) > 10) { $value = substr($value, 2); }
-            if (str_starts_with($value, '0')) { $value = substr($value, 1); }
+            if (str_starts_with($value, '+91')) {
+                $value = substr($value, 3);
+            }
+            if (str_starts_with($value, '91') && strlen($value) > 10) {
+                $value = substr($value, 2);
+            }
+            if (str_starts_with($value, '0')) {
+                $value = substr($value, 1);
+            }
             $this->billing_address['mobile'] = $value;
             $this->checkPlaceOrderFunction();
             $this->calculateTotals();
@@ -805,22 +817,30 @@ class CheckoutComponent extends Component
         if (isset($this->ship_to_different_address['mobile']) && $this->ship_to_different_address['mobile'] != null) {
             $value = $this->ship_to_different_address['mobile'];
             $value = str_replace(' ', '', $value);
-            if (str_starts_with($value, '+91')) { $value = substr($value, 3); }
-            if (str_starts_with($value, '91') && strlen($value) > 10) { $value = substr($value, 2); }
-            if (str_starts_with($value, '0')) { $value = substr($value, 1); }
+            if (str_starts_with($value, '+91')) {
+                $value = substr($value, 3);
+            }
+            if (str_starts_with($value, '91') && strlen($value) > 10) {
+                $value = substr($value, 2);
+            }
+            if (str_starts_with($value, '0')) {
+                $value = substr($value, 1);
+            }
             $this->ship_to_different_address['mobile'] = $value;
             $this->checkPlaceOrderFunction();
             $this->calculateTotals();
         }
     }
 
-    public function placeFirstOrder() {
+    public function placeFirstOrder()
+    {
         // Kept for backward compatibility if needed, but verifyCheckout replaces this
         $this->placeOrder();
     }
 
-    public function placeNewFirstOrder() {
-         $this->placeOrder();
+    public function placeNewFirstOrder()
+    {
+        $this->placeOrder();
     }
 
     // --- SWITCH PAYMENT METHOD AND RECALCULATE ---
