@@ -6,6 +6,7 @@
     <title>{{ strip_tags($og_title ?? ($meta_title ?? 'RollMills - Household & Decoration')) }}</title>
 
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="turbolinks-cache-control" content="no-cache">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
