@@ -387,7 +387,7 @@ function getEstimation($products, $pincode, $payment_method)
     $weight = 0;
     $price = 0;
     foreach ($products as $cart_item) {
-        $weight += $cart_item->model->weight > 0 ? (float) $cart_item->model->weight : 1;
+        $weight += $cart_item->model->weight > 0 ? (float) $cart_item->model->weight * $cart_item->qty : 1;
         $price += $cart_item->price * $cart_item->qty;
     }
     $innerPayload = [
