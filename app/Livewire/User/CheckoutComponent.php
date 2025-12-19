@@ -138,9 +138,42 @@ class CheckoutComponent extends Component
 
                 $items[] = $item;
             }
+            $this->defaultShippingCharge();
             $this->checkPlaceOrderFunction();
             $this->calculateTotals();
             $this->dispatch('initiate-checkout', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
+        }
+    }
+
+    public function defaultShippingCharge()
+    {
+        $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
+        $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
+
+        $weight = 0;
+        foreach (Cart::instance('cart')->content() as $item) {
+            $weight += $item->model->weight * $item->qty;
+        }
+
+        $weight = $weight / 1000;
+        $lookupWeight = (string) (ceil($weight * 2) / 2);
+
+        $online_charges = config('rates.online_rates');
+        $cod_charges = config('rates.cod_rates');
+
+        $online_charge = $online_charges[$lookupWeight] ?? $minimum_online_charge;
+        $cod_charge = $cod_charges[$lookupWeight] ?? $minimum_cod_charge;
+
+        if ($online_charge > (int) $minimum_online_charge) {
+            $this->online_payment_amount = $online_charge;
+        } else {
+            $this->online_payment_amount = $minimum_online_charge;
+        }
+
+        if ($cod_charge > (int) $minimum_cod_charge) {
+            $this->cash_on_delivery_amount = $cod_charge;
+        } else {
+            $this->cash_on_delivery_amount = $minimum_cod_charge;
         }
     }
 
@@ -488,6 +521,7 @@ class CheckoutComponent extends Component
             // Note: Original code had logic for 'first_order' bonus inside OrderItem.
             // Since we are changing the main discount logic, I am keeping this standard.
             $orderItem->subtotal = $item->qty * $productPrice['price'];
+            
 
             $offerPrice = 0;
             if (!empty($item->options['discount_price'])) {
@@ -497,7 +531,14 @@ class CheckoutComponent extends Component
                 $orderItem->offer_id = null;
             }
             $orderItem->offer_discount = $offerPrice;
-            $orderItem->total = $orderItem->subtotal - $orderItem->offer_discount;
+            if($this->is_first_order == true && $this->payment_method == 'online' && (!isset($item->options['is_gift_product']) ||  $item->options['is_gift_product'] == false)){
+                $item_discount = ($orderItem->subtotal * 10) / 100;
+                $this->item_sum_discount += $item_discount;
+                $orderItem->total = $orderItem->subtotal - $orderItem->offer_discount - $item_discount;
+                $orderItem->bonus = $item_discount;
+            }else{
+                $orderItem->total = $orderItem->subtotal - $orderItem->offer_discount;
+            }
             $orderItem->item_return_days = $item->model->product_return_days;
             $orderItem->item_replacement_days = $item->model->product_replacement_days;
             $orderItem->delivery_at = now();
@@ -681,8 +722,12 @@ class CheckoutComponent extends Component
                 $user_order->is_cod = 0;
 
                 $user_order->save();
-
+                
                 $this->createOrderItem($user_order);
+                if($this->is_first_order == true && $this->payment_method == 'online'){
+                    $user_order->total_bonus = $this->item_sum_discount;
+                }
+                $user_order->save();
                 $coupon = Coupon::find($this->coupon_discount_id);
 
                 $order = razorPayPayment(ceil($this->finalTotal + $this->online_payment_amount), Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using Online Payment');
@@ -746,6 +791,9 @@ class CheckoutComponent extends Component
                 $pincode = $this->billing_address['zipcode'];
             }
 
+            $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
+            $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
+
             if (in_array($pincode, $outOfDeliveryPincodes)) {
                 $this->free_shipping = true;
                 $this->online_payment_amount = 0;
@@ -758,16 +806,20 @@ class CheckoutComponent extends Component
             } else {
                 $online_payment_amount_response = getEstimation($cart_items, $pincode, 'prepaid');
                 if (is_numeric($online_payment_amount_response)) {
-                    $this->online_payment_amount = $online_payment_amount_response;
-                } else {
-                    $this->online_payment_amount = 0;
+                    if ($online_payment_amount_response < $minimum_online_charge) {
+                        $this->online_payment_amount = $minimum_online_charge;
+                    } else {
+                        $this->online_payment_amount = $online_payment_amount_response;
+                    }
                 }
 
                 $cash_on_delivery_amount_response = getEstimation($cart_items, $pincode, 'cod');
                 if (is_numeric($online_payment_amount_response)) {
-                    $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
-                } else {
-                    $this->cash_on_delivery_amount = 0;
+                    if ($cash_on_delivery_amount_response < $minimum_cod_charge) {
+                        $this->cash_on_delivery_amount = $minimum_cod_charge;
+                    } else {
+                        $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
+                    }
                 }
 
                 session()->forget('free_shipping_pincode');
@@ -785,8 +837,6 @@ class CheckoutComponent extends Component
             session()->forget('free_shipping_pincode');
             session()->forget('show_deleviery_time');
             session()->forget('shipping_pincode');
-
-            session()->put('shipping_charge', (int) $this->online_payment_amount);
         }
         $this->calculateTotals();
     }
