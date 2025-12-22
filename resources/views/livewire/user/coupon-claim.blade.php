@@ -117,6 +117,61 @@
             background: #ccc;
             border-radius: 4px;
         }
+
+        /* --- NEW STYLES FOR EMPTY STATE PROMO (UPDATED COLOR) --- */
+        .empty-promo-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            padding: 50px 30px;
+            position: relative;
+            border: 1px solid #eee;
+            overflow: hidden;
+        }
+
+        .dashed-offer-box {
+            /* Updated to Brand Color rgb(220, 169, 22) */
+            border: 2px dashed rgb(220, 169, 22);
+            background-color: rgba(220, 169, 22, 0.05); /* Very light gold background */
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px auto;
+            max-width: 400px;
+        }
+
+        .discount-big-text {
+            font-size: 3rem;
+            font-weight: 800;
+            /* Updated to Brand Color */
+            color: rgb(220, 169, 22);
+            line-height: 1;
+        }
+
+        .shop-now-btn-lg {
+            padding: 12px 40px;
+            font-size: 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            /* Updated to Brand Color */
+            background-color: rgb(220, 169, 22);
+            box-shadow: 0 4px 15px rgba(220, 169, 22, 0.3);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .shop-now-btn-lg:hover {
+            transform: translateY(-3px);
+            /* Slightly darker gold for hover */
+            background-color: rgb(195, 149, 19); 
+            box-shadow: 0 8px 20px rgba(220, 169, 22, 0.4);
+            color: white;
+        }
+        
+        .text-brand-custom {
+            color: rgb(220, 169, 22) !important;
+        }
     </style>
 
     @if ($user_id != null)
@@ -242,13 +297,14 @@
             <div class="container-lg mb-30 mt-50">
                 <div class="row">
                     <div class="col-xl-10 col-lg-12 m-auto">
-                        <div class="content mb-40 text-center">
-                            <h1 class="title style-3 mb-10">Select an Order</h1>
-                            <p class="text-muted quicksand">Choose a previous order to unlock your exclusive rewards!
-                            </p>
-                        </div>
-
+                        
                         @if ($user_orders->count() > 0)
+                            <div class="content mb-40 text-center">
+                                <h1 class="title style-3 mb-10">Select an Order</h1>
+                                <p class="text-muted quicksand">Choose a previous order to unlock your exclusive rewards!
+                                </p>
+                            </div>
+
                             {{-- DESKTOP VIEW: TABLE --}}
                             <div
                                 class="table-responsive table-custom-responsive d-none d-md-block shadow-sm rounded-3 bg-white border">
@@ -419,14 +475,41 @@
                                 @endforeach
                             </div>
                         @else
-                            {{-- EMPTY STATE --}}
-                            <div class="text-center py-5">
-                                <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}"
-                                    alt="Empty" style="width: 60px; opacity: 0.5; margin-bottom: 20px;">
-                                <h4 class="mb-2">No Eligible Orders Found</h4>
-                                <p class="text-muted mb-4">You need to make a purchase before you can claim rewards!
-                                </p>
-                                <a href="/shop" class="btn btn-brand">Shop Now</a>
+                            {{-- NEW: EMPTY STATE 10% DISCOUNT PROMO (GOLD THEME) --}}
+                            <div class="row">
+                                <div class="col-lg-8 col-md-10 m-auto">
+                                    <div class="empty-promo-card text-center">
+
+                                        {{-- Icon/Image --}}
+                                        <div class="mb-4">
+                                            <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}"
+                                                alt="Shopping Bag"
+                                                style="width: 80px; filter: hue-rotate(30deg) sepia(100%) saturate(1000%) hue-rotate(350deg) opacity(0.8);">
+                                        </div>
+
+                                        <h2 class="mb-2 fw-800 text-dark">Welcome to Roll Mills!</h2>
+                                        <p class="text-muted quicksand fs-16 mb-0">
+                                            It looks like you haven't placed an order yet. <br class="d-none d-md-block">
+                                            Start your journey with us today and grab a special welcome reward.
+                                        </p>
+
+                                        {{-- The Offer Box --}}
+                                        <div class="dashed-offer-box">
+                                            <span class="text-uppercase text-muted fs-12 fw-700 ls-1">Exclusive First Order
+                                                Offer</span>
+                                            <div class="discount-big-text my-2">10% OFF</div>
+                                        </div>
+
+                                        {{-- CTA Button --}}
+                                        <a href="/shop" class="shop-now-btn-lg quicksand fw-700">
+                                            Shop Now & Save 10% <i class="fi-rs-arrow-right ms-2"></i>
+                                        </a>
+
+                                        <p class="mt-4 fs-12 text-muted fst-italic">
+                                            *Terms and conditions apply. Valid on your first purchase only.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     </div>
