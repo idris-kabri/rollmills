@@ -309,19 +309,19 @@
                                                         Payment method
                                                     </td>
                                                     <td>
-                                                        <span class="badge {{$order->is_cod == 0 ? 'bg-warning text-warning-fg' : 'bg-success text-success-fg'}}">
-                                                            @if($order->status == 0 )
+                                                        <span class="badge {{$order->is_cod == 0 ? 'bg-info text-info-fg' : 'bg-success text-success-fg'}}">
+                                                            @if($order->status == 0)
+                                                            Remaining
+                                                            @else
+                                                            @if($order->is_cod == 0)
                                                             COD
                                                             @else
                                                             Online
                                                             @endif
+                                                            @endif
                                                         </span>
                                                     </td>
                                                 </tr>
-
-
-
-
                                                 <tr>
                                                     <td colspan="2">
                                                         <hr class="my-0">
