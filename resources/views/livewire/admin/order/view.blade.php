@@ -313,7 +313,7 @@
                                                             @if($order->status == 0)
                                                             Remaining
                                                             @else
-                                                            @if($order->is_cod == 0)
+                                                            @if($order->is_cod == 1)
                                                             COD
                                                             @else
                                                             Online
