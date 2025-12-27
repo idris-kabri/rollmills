@@ -427,6 +427,9 @@
             }
         });
     })
+    window.addEventListener('refresh-login', (event) => {
+        window.location.reload();
+    })
     window.addEventListener('initiate-checkout', (event) => {
         var data = event.detail[0];
         window.dataLayer = window.dataLayer || [];
