@@ -93,7 +93,7 @@ class LoginComponent extends Component
                     Cart::instance('cart')->restore(Auth::user()->mobile);
                     Cart::instance('cart')->store(Auth::user()->mobile);
 
-                    return redirect('/');
+                    return $this->dispatch('refresh-login');
                 } else {
                     $this->addError('otp', 'You Enter Wrong Otp!');
                 }
