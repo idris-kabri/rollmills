@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutComponent extends Component
 {
@@ -441,7 +442,7 @@ class CheckoutComponent extends Component
         // Create address logic...
         $address = isset($this->billing_address['id']) ? Address::find($this->billing_address['id']) ?? new Address() : new Address();
         $address->name = $this->billing_address['name'];
-        $address->email = $this->billing_address['email'];
+        $address->email = $this->billing_address['email'] ?? null;
         $address->mobile = $this->billing_address['mobile'];
         $address->address_line_1 = $this->billing_address['billing_address1'];
         $address->address_line_2 = $this->billing_address['billing_address2'] ?? null;
@@ -521,7 +522,6 @@ class CheckoutComponent extends Component
             // Note: Original code had logic for 'first_order' bonus inside OrderItem.
             // Since we are changing the main discount logic, I am keeping this standard.
             $orderItem->subtotal = $item->qty * $productPrice['price'];
-            
 
             $offerPrice = 0;
             if (!empty($item->options['discount_price'])) {
@@ -531,12 +531,12 @@ class CheckoutComponent extends Component
                 $orderItem->offer_id = null;
             }
             $orderItem->offer_discount = $offerPrice;
-            if($this->is_first_order == true && $this->payment_method == 'online' && (!isset($item->options['is_gift_product']) ||  $item->options['is_gift_product'] == false)){
+            if ($this->is_first_order == true && $this->payment_method == 'online' && (!isset($item->options['is_gift_product']) || $item->options['is_gift_product'] == false)) {
                 $item_discount = ($orderItem->subtotal * 10) / 100;
                 $this->item_sum_discount += $item_discount;
                 $orderItem->total = $orderItem->subtotal - $orderItem->offer_discount - $item_discount;
                 $orderItem->bonus = $item_discount;
-            }else{
+            } else {
                 $orderItem->total = $orderItem->subtotal - $orderItem->offer_discount;
             }
             $orderItem->item_return_days = $item->model->product_return_days;
@@ -550,7 +550,11 @@ class CheckoutComponent extends Component
     public function userCreate()
     {
         $password = Str::random(8);
-        $user = User::where('mobile', $this->billing_address['mobile'])->first();
+        if (Auth::check()) {
+            $user = User::find(Auth::user()->id);
+        } else {
+            $user = User::where('mobile', $this->billing_address['mobile'])->first();
+        }
 
         if (!$user) {
             $user = new User();
@@ -563,7 +567,9 @@ class CheckoutComponent extends Component
 
         $user->name = $this->billing_address['name'];
         $user->role = 'User';
-        $user->email = $this->billing_address['email'];
+        if ($this->billing_address['email'] != null && $this->billing_address['email'] != '') {
+            $user->email = $this->billing_address['email'];
+        }
         $user->save();
 
         return [
@@ -577,28 +583,33 @@ class CheckoutComponent extends Component
     // --- NEW VALIDATION AND POPUP TRIGGER ---
     public function verifyCheckout()
     {
-        // 1. Validate inputs first
-        $this->validate(
-            [
-                'billing_address.name' => 'required|string|max:255',
-                'billing_address.email' => 'required|email',
-                'billing_address.state' => 'required|string|max:255',
-                'billing_address.city' => 'required|string|max:255',
-                'billing_address.billing_address1' => 'required|string|max:255',
-                'billing_address.zipcode' => 'required',
-                'billing_address.mobile' => 'required|digits_between:10,15',
-            ],
-            [],
-            [
-                'billing_address.name' => 'name',
-                'billing_address.email' => 'email address',
-                'billing_address.state' => 'state',
-                'billing_address.city' => 'city',
-                'billing_address.billing_address1' => 'address',
-                'billing_address.zipcode' => 'zipcode',
-                'billing_address.mobile' => 'phone number',
-            ],
-        );
+        // 1. Validate inputs first - WRAPPED IN TRY/CATCH FOR SCROLLING
+        try {
+            $this->validate(
+                [
+                    'billing_address.name' => 'required|string|max:255',
+                    'billing_address.state' => 'required|string|max:255',
+                    'billing_address.city' => 'required|string|max:255',
+                    'billing_address.billing_address1' => 'required|string|max:255',
+                    'billing_address.zipcode' => 'required',
+                    'billing_address.mobile' => 'required|digits_between:10,15',
+                ],
+                [],
+                [
+                    'billing_address.name' => 'name',
+                    'billing_address.state' => 'state',
+                    'billing_address.city' => 'city',
+                    'billing_address.billing_address1' => 'address',
+                    'billing_address.zipcode' => 'zipcode',
+                    'billing_address.mobile' => 'phone number',
+                ],
+            );
+        } catch (ValidationException $e) {
+            // Dispatch event to frontend to scroll to the first error
+            $this->dispatch('validation-failed');
+            // Re-throw the exception so Livewire handles the error bag correctly
+            throw $e;
+        }
 
         if ($this->payment_method == 'cod') {
             if ($this->is_first_order) {
@@ -627,7 +638,6 @@ class CheckoutComponent extends Component
         // Redundant validation to be safe, though verifyCheckout handles it too
         $this->validate([
             'billing_address.name' => 'required|string|max:255',
-            'billing_address.email' => 'required|email',
             'billing_address.state' => 'required|string|max:255',
             'billing_address.city' => 'required|string|max:255',
             'billing_address.billing_address1' => 'required|string|max:255',
@@ -637,15 +647,8 @@ class CheckoutComponent extends Component
         ]);
 
         try {
-            $nonAuthUser = null;
-
-            // Create billing address
-            if (!Auth::check()) {
-                $nonAuthUser = $this->userCreate();
-                $billingAddress = $this->createBillingAddress($nonAuthUser['id']);
-            } else {
-                $billingAddress = $this->createBillingAddress();
-            }
+            $nonAuthUser = $this->userCreate();
+            $billingAddress = $this->createBillingAddress($nonAuthUser['id']);
 
             $encdoeBillingAddress = json_encode($billingAddress);
             //order create
@@ -722,9 +725,9 @@ class CheckoutComponent extends Component
                 $user_order->is_cod = 0;
 
                 $user_order->save();
-                
+
                 $this->createOrderItem($user_order);
-                if($this->is_first_order == true && $this->payment_method == 'online'){
+                if ($this->is_first_order == true && $this->payment_method == 'online') {
                     $user_order->total_bonus = $this->item_sum_discount;
                 }
                 $user_order->save();
