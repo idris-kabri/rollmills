@@ -298,7 +298,7 @@
 
                     {{-- 3. SHIPPING TO DIFFERENT ADDRESS TOGGLE --}}
                     <div class="ship_detail">
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <div class="chek-form">
                                 <div class="custome-checkbox">
                                     <input class="form-check-input" type="checkbox" name="checkbox"
@@ -308,7 +308,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         {{-- 4. SHIPPING DETAILS SECTION --}}
                         @if ($ship_to_different_address_enabled)
@@ -832,15 +832,15 @@
 
                             $couponDiscount = $couponDiscount ?? 0;
                             $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
-                            $potentialDiscount = ($cartTotalForCalc * 0.1) + $couponDiscount;
+                            $potentialDiscount = $cartTotalForCalc * 0.1 + $couponDiscount;
 
                             // Assuming finalTotal in COD mode already includes the COD shipping charge
                             $codShip = $cash_on_delivery_amount ?? 0;
                             $onlineShip = $online_payment_amount ?? 0;
 
-
                             // Potential Online Total
-                            $potentialOnlineTotal = $currentTotal - $codShip + $onlineShip - $potentialDiscount + ceil($couponDiscount);
+                            $potentialOnlineTotal =
+                                $currentTotal - $codShip + $onlineShip - $potentialDiscount + ceil($couponDiscount);
                         @endphp
 
                         <div class="d-flex justify-content-between mb-2">
@@ -920,6 +920,34 @@
     <script>
         let totalSeconds = 240;
         document.addEventListener('livewire:init', function() {
+
+            // --- SCROLL TO VALIDATION ERROR ---
+            window.addEventListener('validation-failed', function(event) {
+                // Wait briefly for Livewire to re-render the DOM with errors
+                setTimeout(() => {
+                    // Find the first element with the error class used in your blade file
+                    const firstError = document.querySelector('.text-danger.small.d-block');
+
+                    if (firstError) {
+                        // Attempt to find the parent .form-group for a better view
+                        const formGroup = firstError.closest('.form-group');
+
+                        if (formGroup) {
+                            formGroup.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        } else {
+                            // Fallback to scrolling to the error message itself
+                            firstError.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
+                    }
+                }, 100);
+            });
+
             // Trigger COD Confirmation Modal for First Order
             window.addEventListener('open-cod-modal', function(event) {
                 var el = document.getElementById('codAlertModal2');
