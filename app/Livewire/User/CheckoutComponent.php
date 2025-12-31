@@ -181,7 +181,11 @@ class CheckoutComponent extends Component
     public function checkPlaceOrderFunction()
     {
         if (Auth::check()) {
-            if (Order::where('logged_in_user_id', Auth::user()->id)->count() > 0) {
+            if (
+                Order::where('logged_in_user_id', Auth::user()->id)
+                    ->whereNotIn('status', [0, 4])
+                    ->count() > 0
+            ) {
                 $this->is_first_order = false;
             } else {
                 $this->is_first_order = true;
@@ -203,11 +207,11 @@ class CheckoutComponent extends Component
                 $order_count = 0;
                 if ($address_type == 'billing') {
                     $order_count = Order::where('billing_address_details', 'LIKE', "%$mobile_number%")
-                        ->where('status', '!=', 0)
+                        ->whereNotIn('status', [0, 4])
                         ->count();
                 } else {
                     $order_count = Order::where('ship_different_address_details', 'LIKE', "%$mobile_number%")
-                        ->where('status', '!=', 0)
+                        ->whereNotIn('status', [0, 4])
                         ->count();
                 }
 
