@@ -47,7 +47,7 @@ class ShopDetailComponent extends Component
     {
         $this->id = $id;
         $setting = Setting::where('label', 'surprise_gift_product_id')->first()->value;
-        if($id == (int)$setting){
+        if ($id == (int) $setting) {
             return redirect('/');
         }
         $this->selectedAttribute = [];
@@ -63,7 +63,7 @@ class ShopDetailComponent extends Component
         $relatedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Related')->pluck('related_product_id')->toArray();
         $linkedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Linked')->pluck('related_product_id')->toArray();
 
-        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where('parent_id', null)->take(8)->get();
+        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where('parent_id', null)->take(10)->get();
         $this->linkedProducts = Product::whereIn('id', $linkedProduct)->get();
 
         if (count($this->relatedProducts) <= 0) {
@@ -73,7 +73,7 @@ class ShopDetailComponent extends Component
                 $query->whereIn('category_id', $categoryIds);
             })
                 ->where('id', '!=', $id)
-                ->take(8)
+                ->take(10)
                 ->get();
         }
         $subProduct = Product::where('parent_id', $id)->pluck('attribute_id')->toArray();
