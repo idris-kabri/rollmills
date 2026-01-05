@@ -195,9 +195,254 @@
     box-shadow: 0 0 0 0.2rem rgba(224, 178, 0, 0.35);
 }
 
+/* 1. The Container - Ticket Shape & Animation */
+.rm-ticket-banner {
+    position: relative;
+    /* ANIMATED GRADIENT BACKGROUND */
+    background: linear-gradient(-45deg, #ffffff, #fffdf2, #fff4d4, #ffffff);
+    background-size: 400% 400%;
+    animation: shimmerGradient 10s ease infinite;
+
+    border: 2px solid #d69e2e;
+    /* Gold Border */
+    border-radius: 12px;
+    padding: 12px 30px;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    box-shadow: 0 4px 15px rgba(214, 158, 46, 0.1);
+    overflow: visible;
+}
+
+/* The Animation Keyframes */
+@keyframes shimmerGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 2. The "Cutouts" (Semi-circles on sides) */
+.rm-ticket-banner::before,
+.rm-ticket-banner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-color: #f4f4f4;
+    /* MATCH PAGE BG COLOR */
+    border: 2px solid #d69e2e;
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+    /* Inner shadow for depth */
+}
+
+.rm-ticket-banner::before {
+    left: -13px;
+}
+
+.rm-ticket-banner::after {
+    right: -13px;
+}
+
+/* 3. Content Layout */
+.rm-ticket-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+}
+
+/* 4. Left Icon (Gift Box) */
+.rm-ticket-icon i {
+    font-size: 32px;
+    color: #d69e2e;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+    animation: wobble 2s infinite ease-in-out;
+}
+
+/* 5. Text Styling */
+.rm-ticket-text {
+    font-size: 16px;
+    color: #253D4E;
+    font-weight: 600;
+}
+
+.rm-ticket-highlight {
+    font-size: 24px;
+    font-weight: 900;
+    color: #d69e2e;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 1);
+    padding: 0 5px;
+    letter-spacing: -0.5px;
+}
+
+/* 6. Button Styling */
+.rm-ticket-btn {
+    background: linear-gradient(180deg, #d69e2e 0%, #b7791f 100%);
+    color: #fff !important;
+    padding: 8px 25px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(183, 121, 31, 0.2);
+}
+
+.rm-ticket-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(183, 121, 31, 0.3);
+}
+
+.btn-grow {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy smooth transition */
+    display: inline-flex;
+    /* Ensures transform works correctly on anchor tags */
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-grow:hover {
+    transform: scale(1.1);
+    /* Grow by 10% */
+    z-index: 10;
+    /* Ensure it pops over other elements */
+}
+
+.btn-grow:active {
+    transform: scale(0.95);
+    /* Shrink slightly on click */
+}
+
+/* --- NEW ANIMATION CSS --- */
+
+/* 1. Define the Keyframes (The movement) */
+@keyframes btn-breathing {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        transform: scale(1.08);
+        /* Grow to 108% size */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        /* Add shadow depth */
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* 2. Define the Class (Apply to buttons) */
+.btn-loop-animate {
+    /* Runs the 'btn-breathing' animation, takes 2 seconds, runs forever, smooth ease-in-out */
+    animation: btn-breathing 2s infinite ease-in-out;
+
+    /* Ensures the transform works correctly on <a> tags */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Prevent pixelation during animation in some browsers */
+    backface-visibility: hidden;
+}
+
+/* Icon Animation */
+@keyframes wobble {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-8deg);
+    }
+
+    75% {
+        transform: rotate(8deg);
+    }
+}
+
+/* =========================================
+           MOBILE RESPONSIVE
+           ========================================= */
+@media (max-width: 768px) {
+    .rm-ticket-banner {
+        padding: 8px 15px;
+        border-width: 1px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .rm-ticket-banner::before,
+    .rm-ticket-banner::after {
+        width: 16px;
+        height: 16px;
+        border-width: 1px;
+    }
+
+    .rm-ticket-banner::before {
+        left: -9px;
+    }
+
+    .rm-ticket-banner::after {
+        right: -9px;
+    }
+
+    .rm-ticket-content {
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .rm-ticket-icon {
+        display: none;
+    }
+
+    .rm-ticket-text {
+        font-size: 11px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+    }
+
+    .rm-ticket-highlight {
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .rm-ticket-btn {
+        padding: 4px 12px;
+        font-size: 10px;
+        border-radius: 4px;
+        height: auto;
+    }
+}
+
 /* login css end here */
 
 @media (max-width: 1200px) {
+
     .container.shop-detail-page-main,
     .container.footer-strip,
     .container.footer-mid-inner,
@@ -265,10 +510,12 @@
     .comments-area .comment-list.comment-list-custom {
         align-items: flex-start !important;
     }
+
     .comment-list-custom .col-md-6 {
         display: block !important;
         height: auto !important;
     }
+
     .comment-list-custom .single-comment {
         height: auto !important;
         min-height: fit-content !important;
@@ -325,9 +572,7 @@
         font-size: 13px;
     }
 
-    .sticky-bar.stick
-        .mobile-category-options
-        .categories-dropdown-active-large {
+    .sticky-bar.stick .mobile-category-options .categories-dropdown-active-large {
         display: none;
     }
 
@@ -335,37 +580,26 @@
         min-width: 130px;
     }
 
-    .mobile-category-options.header-style-1
-        .select2-container--default
-        .select2-selection--single
-        .select2-selection__rendered {
+    .mobile-category-options.header-style-1 .select2-container--default .select2-selection--single .select2-selection__rendered {
         height: 45px;
         line-height: 45px;
         font-size: 13px;
         position: relative;
     }
 
-    .mobile-category-options.header-style-1
-        .select2-container--default
-        .select2-selection--single {
+    .mobile-category-options.header-style-1 .select2-container--default .select2-selection--single {
         height: 45px;
         line-height: 45px;
         padding-left: 15px;
         width: 130px;
     }
 
-    .mobile-category-options.header-style-1
-        .select2-container--default
-        .select2-selection--single
-        .select2-selection__arrow {
+    .mobile-category-options.header-style-1 .select2-container--default .select2-selection--single .select2-selection__arrow {
         right: 16px;
         top: 10px;
     }
 
-    .mobile-category-options.header-style-1
-        .select2-container--default
-        .select2-selection--single
-        .select2-selection__rendered:after {
+    .mobile-category-options.header-style-1 .select2-container--default .select2-selection--single .select2-selection__rendered:after {
         top: 13px;
     }
 
@@ -416,6 +650,7 @@
 
 /* Compact mobile layout for login left-box cards */
 @media (max-width: 768px) {
+
     /* Remove horizontal scroll */
     .left-box {
         overflow-x: hidden !important;

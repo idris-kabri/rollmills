@@ -1,8 +1,26 @@
 <main class="main home-page-main">
+    <div class="container">
+        <div class="rm-ticket-banner wow animate__animated animate__fadeInDown">
+            <div class="rm-ticket-content">
+                <div class="rm-ticket-icon">
+                    <i class="fi-rs-gift"></i>
+                </div>
+
+                <div class="rm-ticket-text">
+                    Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                </div>
+
+                <a href="/shop" class="rm-ticket-btn btn-loop-animate">
+                    Shop Now
+                </a>
+            </div>
+        </div>
+    </div>
     @livewire('user.quick-view', ['id' => $selectedProductId], key('quickview'))
     @php
         $array_random_parameter = ['hot', 'sale'];
     @endphp
+
     <section class="home-slider style-2 position-relative mb-md-3" wire:ignore>
         <div class="container">
             <div class="row">
@@ -29,7 +47,7 @@
                                         </h1>
                                         <p class="hidden-p-banner">{!! $slider->sub_heading !!}</p>
                                         <a href="{{ $slider->link ?? '#' }}"
-                                            class="btn btn-ls mt-20">{{ $slider->button_text }} <i
+                                            class="btn btn-ls mt-20 btn-loop-animate">{{ $slider->button_text }} <i
                                                 class="fi-rs-arrow-small-right"></i></a>
                                     </div>
                                 </div>
@@ -65,7 +83,7 @@
                                 <span class="text-brand">{!! $newSubHeadingSide !!}</span>
                             </h2>
                             <a href="{{ $top_side_banner->link ?? '#' }}"
-                                class="btn btn-xs">{{ $top_side_banner->button_text }} <i
+                                class="btn btn-xs btn-loop-animate">{{ $top_side_banner->button_text }} <i
                                     class="fi-rs-arrow-small-right"></i></a>
                         </div>
                     </div>
@@ -74,50 +92,12 @@
         </div>
     </section>
 
-    {{-- Checkout Model Start --}}
-    {{-- <div class="modal fade" id="CheckoutActionModal" tabindex="-1" aria-labelledby="CheckoutActionModal"
-        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content-custom w-100">
-                <div class="mb-4">
-                    <div class="d-flex justify-content-center">
-                        <img src="{{ asset('assets/frontend/imgs/icon&images/saving.png') }}" alt=""
-                            class="img-fluid mb-3 mt-4 modal-logo" />
-                    </div>
-                    <div class="modal-body p-0 d-flex justify-content-center text-center">
-                        <h1 class="fs-3 mb-2"> Unlock <span class="color-1 fs-2">10% Instant Savings</span></h1>
-                    </div>
-                    <p class="fs-6 mx-auto text-center w-md-75 w-75 quicksand">
-                        Complete your payment now and enjoy an
-                        <strong class="text-brand">instant 10% discount</strong>.
-                        No coupon needed — discount applied automatically.
-                    </p>
-                </div>
-                <div class="pb-4 d-flex flex-column justify-content-center">
-                    <button type="submit" class="btn checkout-modal-btn w-90-per pt-10 pb-10"
-                        wire:click.prevent="logoutUser">
-                        Pay Now & Save 10%
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- Checkout Model End --}}
-
-    <!--End hero slider-->
     <section class="popular-categories section-padding" wire:ignore>
         <div class="container wow animate__animated animate__fadeIn">
             <div class="section-title">
                 <div class="title">
                     <h3 class="m-0">Featured Categories</h3>
                 </div>
-                {{-- <div class="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow"
-                    id="carausel-10-columns-arrows"></div> --}}
-                {{-- <a class="btn btn-brand px-2 px-sm-4 py-2 quicksand d-flex align-items-center gap-1"
-                    href="/all-category">
-                    <span class="fi-rs-apps me-md-1 fs-14 text-white d-flex align-items-center"></span> View All
-                </a> --}}
             </div>
             <div class="home-categories-cards-section">
                 <div class="row justify-content-center">
@@ -140,6 +120,7 @@
             </div>
         </div>
     </section>
+
     <section class="banners feature-three-cards mb-25" wire:ignore>
         <div class="container">
             <div class="row">
@@ -167,7 +148,8 @@
                                     @endphp
                                     {!! $h_tag !!}
                                 </h4>
-                                <a href="{{ $banner->link ?? '#' }}" class="btn btn-xs">{{ $banner->button_text }}
+                                <a href="{{ $banner->link ?? '#' }}"
+                                    class="btn btn-xs btn-loop-animate">{{ $banner->button_text }}
                                     <i class="fi-rs-arrow-small-right"></i></a>
                             </div>
                         </div>
@@ -176,68 +158,6 @@
             </div>
         </div>
     </section>
-    <!--End banners-->
-
-    <!-- Popular Products Section  -->
-    {{-- <section class="product-tabs section-padding position-relative pt-md-4 pt-0">
-        <div class="container" wire:ignore.self>
-            <div class="section-title style-2">
-                <h3>Popular Products</h3>
-                <ul class="nav nav-tabs links d-none d-xl-flex" id="">
-                    <li class="nav-item">
-                        <button wire:click="setPopularProductCategory('all')"
-                            class="nav-link {{ $seleted_popular_product_category == 'all' ? 'active' : '' }}"
-                            id="" type="button">
-                            All
-                        </button>
-                    </li>
-                    @foreach ($parentCategory as $popular_category)
-                    <li class="nav-item">
-                        <button wire:click="setPopularProductCategory('{{ $popular_category->id }}')"
-                            class="nav-link {{ $seleted_popular_product_category == $popular_category->id ? 'active' : '' }}"
-                            type="button" wire:key="popular-category-{{ $popular_category->id }}">
-                            {{ $popular_category->name }}
-                        </button>
-                    </li>
-                    @endforeach
-                </ul>
-                <div class="d-flex justify-content-end d-xl-none">
-                    <div
-                        class="categories-dropdown-wrap categories-dropdown-active-large-2 categories-dropdown-active-large font-heading">
-                        <div class="categori-dropdown-inner" wire:ignore.self>
-                            <ul>
-                                @foreach ($parentCategory as $popular_category)
-                                <li>
-                                    <a href="javascript:void(0)"
-                                        wire:click="setPopularProductCategory('{{ $popular_category->id }}')">
-                                        <img src="{{ asset('storage/' . $popular_category->image) }}"
-                                            alt="">
-                                        {{ $popular_category->name }}
-                                    </a>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--End nav-tabs-->
-            <div class="row product-grid-4">
-                @if (count($popular_products) > 0)
-                @foreach ($popular_products as $popular_product)
-                <div class="col-lg-1-5 col-md-4 col-6 small-screen-padding">
-                    @livewire('user.component.product-card', ['product' => $popular_product, 'parameter' => 'hot'], key($popular_product->id . '-' . now()->timestamp))
-                </div>
-                @endforeach
-                @else
-                <h4 class="text-danger text-center">No Item Found!</h4>
-                @endif
-            </div>
-            <!--End tab-content-->
-        </div>
-    </section> --}}
-
-    <!-- category wise product section  -->
     @php
         $priority_ids = [29, 1];
 
@@ -252,7 +172,6 @@
                 <div class="section-title style-2">
                     <h3>{{ $popular_category->name }}</h3>
                 </div>
-                <!--End nav-tabs-->
                 <div class="row product-grid-4">
                     @php
                         $all_sub_category = \App\Models\ProductCategory::where('parent_id', $popular_category->id)
@@ -284,13 +203,11 @@
                         <h4 class="text-danger text-center">No Item Found!</h4>
                     @endif
                 </div>
-                <!--End tab-content-->
             </div>
         </section>
     @endforeach
 
 
-    <!--Daily Best Sells Tabs-->
     <section class="section-padding pb-5 pt-md-4 pt-0">
         <div class="container">
             <div class="section-title">
@@ -303,7 +220,7 @@
                         <div class="banner-text">
                             <h2 class="mb-100">{{ $best_deal_banner->heading }}</h2>
                             <a href="{{ $best_deal_banner->link ?? '#' }}"
-                                class="btn btn-xs">{{ $best_deal_banner->button_text }} <i
+                                class="btn btn-xs btn-loop-animate">{{ $best_deal_banner->button_text }} <i
                                     class="fi-rs-arrow-small-right"></i></a>
                         </div>
                     </div>
@@ -324,7 +241,6 @@
         </div>
     </section>
 
-    <!--Daily Best Sells Tabs-->
     <section class="section-padding pb-25 pt-md-4 pt-0">
         <div class="container">
             <div class="section-title">
@@ -343,17 +259,6 @@
                         @endforeach
                     </div>
                 </div>
-                {{-- <div class="col-xl-3 d-none d-xl-flex">
-                    <div class="banner-img style-2"
-                        style="background: url('{{ asset('storage/' . $user_look_for_banner->image) }}');">
-                <div class="banner-text">
-                    <h2 class="mb-100">{{ $user_look_for_banner->heading }}</h2>
-                    <a href="{{ $user_look_for_banner->link ?? '#' }}"
-                        class="btn btn-xs">{{ $user_look_for_banner->button_text }} <i
-                            class="fi-rs-arrow-small-right"></i></a>
-                </div>
-            </div>
-        </div> --}}
             </div>
         </div>
     </section>
@@ -649,8 +554,11 @@
         // Auto-show modal on page load
         window.addEventListener('load', function() {
             setTimeout(function() {
-                var modal = new bootstrap.Modal(document.getElementById('saleModal'));
-                modal.show();
+                var modalElement = document.getElementById('saleModal');
+                if (modalElement) {
+                    var modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
             }, 500);
         });
 
@@ -658,6 +566,13 @@
         let totalSeconds = 240; // 15 minutes = 900 seconds
 
         function updateCountdown() {
+            const m1 = document.getElementById('minutes1');
+            const m2 = document.getElementById('minutes2');
+            const s1 = document.getElementById('seconds1');
+            const s2 = document.getElementById('seconds2');
+
+            if (!m1 || !m2 || !s1 || !s2) return;
+
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
 
@@ -666,10 +581,10 @@
             const sec1 = Math.floor(seconds / 10);
             const sec2 = seconds % 10;
 
-            document.getElementById('minutes1').textContent = min1;
-            document.getElementById('minutes2').textContent = min2;
-            document.getElementById('seconds1').textContent = sec1;
-            document.getElementById('seconds2').textContent = sec2;
+            m1.textContent = min1;
+            m2.textContent = min2;
+            s1.textContent = sec1;
+            s2.textContent = sec2;
 
             if (totalSeconds > 0) {
                 totalSeconds--;
@@ -678,8 +593,6 @@
             }
         }
 
-        // Update countdown every second
         setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
     </script>
 @endpush
