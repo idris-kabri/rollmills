@@ -427,8 +427,11 @@
                                     @if ($mainProduct->product_return_days > 0)
                                         <p class="trust-badge-title">
                                             {{ $mainProduct->product_return_days }}-day<br>Returns</p>
+                                    @elseif($mainProduct->product_replacement_days > 0)
+                                        <p class="trust-badge-title">
+                                            {{ $mainProduct->product_replacement_days }}-day<br>Replacement</p>
                                     @else
-                                        <p class="trust-badge-title">Easy<br>Returns</p>
+                                        <p class="trust-badge-title">No Return Policy</p>
                                     @endif
                                 </div>
                             </div>
