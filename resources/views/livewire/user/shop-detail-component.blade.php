@@ -10,7 +10,165 @@
                 max-width: 100%;
             }
         }
+
+        /* --- TRUST BADGE STRIP --- */
+        .trust-badge-strip {
+            background-color: #eef2ff;
+            border-radius: 12px;
+            padding: 20px 10px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #e0e6fd;
+        }
+
+        .trust-badge-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .trust-badge-item:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background-color: #d4dbf0;
+        }
+
+        .trust-icon-box {
+            background-color: #ffffff;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .trust-icon-box i {
+            font-size: 20px;
+        }
+
+        .icon-price,
+        .icon-cod {
+            color: #00b59c;
+        }
+
+        .icon-return {
+            color: #fd7e14;
+        }
+
+        .trust-badge-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* --- SPECS TOGGLE STYLES (SIDEBAR VERSION) --- */
+        .specs-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .specs-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .specs-wrapper {
+            position: relative;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        /* Collapsed: Shows ~3 rows */
+        .specs-wrapper.collapsed {
+            max-height: 140px;
+        }
+
+        /* Expanded */
+        .specs-wrapper.expanded {
+            max-height: 2000px;
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            /* Shorter gradient for side column */
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+            pointer-events: none;
+            transition: opacity 0.3s;
+            opacity: 1;
+        }
+
+        .specs-wrapper.expanded .gradient-overlay {
+            opacity: 0;
+        }
+
+        /* Table adjustments for Sidebar */
+        .specs-table {
+            width: 100%;
+            font-size: 13px;
+            /* Slightly smaller for sidebar */
+        }
+
+        .specs-table td {
+            padding: 8px 5px;
+            border-bottom: 1px solid #f5f5f5;
+            vertical-align: top;
+        }
+
+        .specs-table td:first-child {
+            color: #777;
+            font-weight: 600;
+            width: 45%;
+        }
+
+        .specs-table td:last-child {
+            color: #333;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .specs-toggle-btn {
+            background: none;
+            border: none;
+            color: #00b59c;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 10px 0 0 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .specs-toggle-btn:hover {
+            text-decoration: underline;
+        }
     </style>
+
     <div class="page-header breadcrumb-wrap">
         <div class="">
             <div class="breadcrumb">
@@ -19,12 +177,31 @@
                 @endphp
                 <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                 @if ($count_category_assign > 1)
-                <span></span> <a href="/shop?category_id={{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->id }}&category_slug={{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->slug ?? 'no-slug' }}">{{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->name }}</a>
-                <span></span> <a href="/shop?category_id={{ $mainProduct->categoryAssigns[0]->category->id }}&category_slug={{ $mainProduct->categoryAssigns[0]->category->slug ?? 'no-slug' }}">{{ $mainProduct->categoryAssigns[0]->category->name }}</a>
+                    <span></span> <a
+                        href="/shop?category_id={{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->id }}&category_slug={{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->slug ?? 'no-slug' }}">{{ $mainProduct->categoryAssigns[$count_category_assign - 1]->category->name }}</a>
+                    <span></span> <a
+                        href="/shop?category_id={{ $mainProduct->categoryAssigns[0]->category->id }}&category_slug={{ $mainProduct->categoryAssigns[0]->category->slug ?? 'no-slug' }}">{{ $mainProduct->categoryAssigns[0]->category->name }}</a>
                 @else
-                <span></span> <a
-                    href="/shop?category_id={{ $mainProduct->categoryAssigns[0]->category->id }}&category_slug={{ $mainProduct->categoryAssigns[0]->category->slug ?? 'no-slug' }}">{{ $mainProduct->categoryAssigns[0]->category->name }}</a>
+                    <span></span> <a
+                        href="/shop?category_id={{ $mainProduct->categoryAssigns[0]->category->id }}&category_slug={{ $mainProduct->categoryAssigns[0]->category->slug ?? 'no-slug' }}">{{ $mainProduct->categoryAssigns[0]->category->name }}</a>
                 @endif
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="rm-ticket-banner wow animate__animated animate__fadeInDown">
+            <div class="rm-ticket-content">
+                <div class="rm-ticket-icon">
+                    <i class="fi-rs-gift"></i>
+                </div>
+
+                <div class="rm-ticket-text">
+                    Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                </div>
+
+                <a href="/shop" class="rm-ticket-btn btn-loop-animate">
+                    Shop Now
+                </a>
             </div>
         </div>
     </div>
@@ -36,7 +213,6 @@
                         <div class="detail-gallery d-xl-inline-block">
                             <div class="d-flex flex-column-reverse flex-xl-row">
                                 <div class="col-xl-2 product-slider-main" style='overflow-x: overlay;'>
-                                    <!-- THUMBNAILS -->
                                     <div class="product-slider-nav-thumbnails">
                                         <div class="d-flex overflow-hidden img-card">
                                             <a href="#" class="product_gallery_item d-flex"
@@ -74,6 +250,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-7 col-lg-6 col-sm-12 col-xs-12">
                         @php
                             $original_price = $mainProduct->price;
@@ -213,8 +390,9 @@
                                                 class="action-btn hover-up wishlist-detail-active"><i
                                                     class="fi-rs-heart"></i></a>
                                         @else
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"
-                                                wire:click.prevent="addToWhishlist()"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                href="#" wire:click.prevent="addToWhishlist()"><i
+                                                    class="fi-rs-heart"></i></a>
                                         @endif
                                     </div>
                                 @else
@@ -229,83 +407,64 @@
                                 @endif
                             </div>
 
-                            {{-- OLD SKU, warrenty etc section design --}}
-                            {{-- <div class="font-xs">
-                                <ul class="mr-50 float-start">
-                                    <li class="mb-5 fw-600">Warranty: <span
-                                            class="text-brand ms-2">{{ $mainProduct->product_waranty > 0 ? (int) $mainProduct->product_waranty / 365 . ' Year' : 'No Warranty' }}</span>
-                            </li>
-                            <li class="mb-5 fw-600">Return: <span
-                                    class="text-brand ms-2">{{ $mainProduct->product_return_days > 0 ? (int) $mainProduct->product_return_days . ' Days' : 'No Return Policy' }}</span>
-                            </li>
-                            </ul>
-                            <ul class="float-start">
-                                <li class="mb-5 fw-600">SKU: <a href="#"
-                                        class="text-brand ms-2">{{ $mainProduct->SKU }}</a></li>
-                                <li class="mb-5 fw-600">Replacement: <span
-                                        class="text-brand ms-2">{{ $mainProduct->product_replacement_days > 0 ? (int) $mainProduct->product_replacement_days . ' Days' : 'No Repalcement Policy' }}</span>
-                                </li>
-                            </ul>
-                        </div> --}}
-
-                            {{-- New design section --}}
-                            {{-- <div class="d-flex flex-wrap product-delivery-icons gap-3"> --}}
-                            <div class="row pt-md-2 pt-3">
-                                <div class="col-6">
-                                    <div class="product-delivery-icons">
-                                        <div>
-                                            <img src="{{ asset('assets/frontend/imgs/theme/home-delivery.png') }}"
-                                                alt="">
-                                            <p>Home Delivery</p>
-                                        </div>
-                                        <div>
-                                            <img src="{{ asset('assets/frontend/imgs/theme/top-brands.png') }}"
-                                                alt="">
-                                            <p>Top Brands</p>
-                                        </div>
-                                        <div>
-                                            <img src="{{ asset('assets/frontend/imgs/theme/secure-transaction.png') }}"
-                                                alt="">
-                                            <p>Secure Transaction</p>
-                                        </div>
+                            <div class="trust-badge-strip">
+                                <div class="trust-badge-item">
+                                    <div class="trust-icon-box">
+                                        <i class="fi-rs-label icon-price"></i>
                                     </div>
+                                    <p class="trust-badge-title">Lowest<br>Price</p>
                                 </div>
-                                <div class="col-6">
-                                    <div class="product-delivery-icons">
-                                        <div>
-                                            <img src="{{ asset('assets/frontend/imgs/theme/genuine-product.png') }}"
-                                                alt="">
-                                            <p>High Quality</p>
-                                        </div>
-                                        <div>
-                                            <img src="{{ asset('assets/frontend/imgs/theme/replacement.png') }}"
-                                                alt="">
-                                            @if ($mainProduct->product_return_days > 0)
-                                                <p>{{ $mainProduct->product_return_days }} Day Return</p>
-                                            @elseif($mainProduct->product_replacement_days > 0)
-                                                <p>{{ $mainProduct->product_replacement_days }} Day Replacement</p>
-                                            @else
-                                                <p>No Return And Replacement Policy</p>
-                                            @endif
-                                        </div>
-
+                                <div class="trust-badge-item">
+                                    <div class="trust-icon-box">
+                                        <i class="fi-rs-money icon-cod"></i>
                                     </div>
+                                    <p class="trust-badge-title">Cash on<br>Delivery</p>
+                                </div>
+                                <div class="trust-badge-item">
+                                    <div class="trust-icon-box">
+                                        <i class="fi-rs-refresh icon-return"></i>
+                                    </div>
+                                    @if ($mainProduct->product_return_days > 0)
+                                        <p class="trust-badge-title">
+                                            {{ $mainProduct->product_return_days }}-day<br>Returns</p>
+                                    @else
+                                        <p class="trust-badge-title">Easy<br>Returns</p>
+                                    @endif
                                 </div>
                             </div>
+
+                            @if (json_decode($mainProduct->specifications))
+                                <div class="specs-container">
+                                    <h4 class="specs-title">Specifications</h4>
+                                    <div class="specs-wrapper collapsed" id="specsWrapper">
+                                        <table class="specs-table">
+                                            <tbody>
+                                                @foreach (json_decode($mainProduct->specifications) as $specification)
+                                                    <tr>
+                                                        <td>{{ $specification->name }}</td>
+                                                        <td>{{ $specification->value }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <div class="gradient-overlay"></div>
+                                    </div>
+
+                                    <button type="button" class="specs-toggle-btn" onclick="toggleSpecs(this)">
+                                        Show More <i class="fi-rs-angle-down ms-1"></i>
+                                    </button>
+                                </div>
+                            @endif
                         </div>
-                        <!-- Detail Info -->
                     </div>
                 </div>
+
                 <div class="product-info">
                     <div class="tab-style3" wire:ignore>
                         <ul class="nav nav-tabs text-uppercase">
                             <li class="nav-item">
                                 <a class="nav-link active" id="Description-tab" data-bs-toggle="tab"
                                     href="#Description">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="Additional-info-tab" data-bs-toggle="tab"
-                                    href="#Additional-info">Additional info</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews
@@ -318,20 +477,8 @@
                                     <p>{!! $mainProduct->description !!}</p>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="Additional-info">
-                                <table class="font-md">
-                                    <tbody>
-                                        @foreach (json_decode($mainProduct->specifications) as $specification)
-                                            <tr>
-                                                <td>{{ $specification->name }}</td>
-                                                <td>{{ $specification->value }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+
                             <div class="tab-pane fade" id="Reviews">
-                                <!--Comments-->
                                 @if (count($mainProduct_reviews) > 0)
                                     <div class="comments-area">
                                         <div class="row">
@@ -437,7 +584,6 @@
                                         </div>
                                     </div>
                                 @endif
-                                <!--comment form-->
                                 <div class="comment-form">
                                     <h3 class="mb-20">Add a review</h3>
                                     <div class="star_rating mb-20" id="star_rating">
@@ -517,6 +663,23 @@
 </main>
 @push('scripts')
     <script>
+        // --- JS FUNCTION FOR TABLE TOGGLE ---
+        function toggleSpecs(btnElement) {
+            const wrapper = document.getElementById('specsWrapper');
+
+            if (wrapper.classList.contains('collapsed')) {
+                // Open it
+                wrapper.classList.remove('collapsed');
+                wrapper.classList.add('expanded');
+                btnElement.innerHTML = 'Show Less <i class="fi-rs-angle-up ms-1"></i>';
+            } else {
+                // Close it
+                wrapper.classList.remove('expanded');
+                wrapper.classList.add('collapsed');
+                btnElement.innerHTML = 'Show More <i class="fi-rs-angle-down ms-1"></i>';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const stars = document.querySelectorAll('#star_rating span');
 

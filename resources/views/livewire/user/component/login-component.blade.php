@@ -2,12 +2,12 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content rollmills-modal">
             <div class="row g-0">
-                
+
                 <div class="col-md-7 p-4 left-box text-white">
-                    
+
                     <img class="img-fluid" src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="">
                     <p class="tagline">
-                        Pay online & get FLAT 20% OFF.
+                        Pay online & get FLAT 10% OFF.
                     </p>
 
                     <div class="d-none d-lg-flex gap-3">
@@ -39,12 +39,10 @@
 
                 <div class="col-md-5 p-4 bg-white right-box position-relative">
 
-                    <button type="button" 
-                            class="position-absolute top-0 end-0 m-3 border-0 bg-transparent text-secondary fs-4" 
-                            style="z-index: 1050; cursor: pointer;"
-                            data-bs-dismiss="modal" 
-                            data-dismiss="modal" 
-                            aria-label="Close">
+                    <button type="button"
+                        class="position-absolute top-0 end-0 m-3 border-0 bg-transparent text-secondary fs-4"
+                        style="z-index: 1050; cursor: pointer;" data-bs-dismiss="modal" data-dismiss="modal"
+                        aria-label="Close">
                         <span aria-hidden="true" class="fw-bold">✖</span>
                     </button>
 

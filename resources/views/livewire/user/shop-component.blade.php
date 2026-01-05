@@ -1,4 +1,21 @@
     <main class="main">
+        <div class="container">
+            <div class="rm-ticket-banner wow animate__animated animate__fadeInDown">
+                <div class="rm-ticket-content">
+                    <div class="rm-ticket-icon">
+                        <i class="fi-rs-gift"></i>
+                    </div>
+
+                    <div class="rm-ticket-text">
+                        Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                    </div>
+
+                    <a href="/shop" class="rm-ticket-btn btn-loop-animate">
+                        Shop Now
+                    </a>
+                </div>
+            </div>
+        </div>
         @livewire('user.quick-view', ['id' => $selectedProductId], key('quickview'))
         <style>
             /* ... existing styles ... */

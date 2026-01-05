@@ -41,6 +41,23 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="rm-ticket-banner wow animate__animated animate__fadeInDown">
+            <div class="rm-ticket-content">
+                <div class="rm-ticket-icon">
+                    <i class="fi-rs-gift"></i>
+                </div>
+
+                <div class="rm-ticket-text">
+                    Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                </div>
+
+                <a href="/shop" class="rm-ticket-btn btn-loop-animate">
+                    Shop Now
+                </a>
+            </div>
+        </div>
+    </div>
     @php
         $shippingCharge = (float) (session('shipping_charge') ?? 0);
         $total = floatval(str_replace(',', '', Cart::total()));
@@ -538,8 +555,8 @@
 
                     {{-- <div class="divider-2 mb-30"></div> --}}
                     <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
-                        <a href="/shop" class="btn d-flex align-items-center custom-pad" style="max-width: fit-content"><i
-                                class="fi-rs-add mr-10"></i>Add More</a>
+                        <a href="/shop" class="btn d-flex align-items-center custom-pad"
+                            style="max-width: fit-content"><i class="fi-rs-add mr-10"></i>Add More</a>
                     </div>
                 </div>
                 <div class="col-xl-3">
@@ -670,9 +687,9 @@
                             </table>
                         </div>
                         {{-- @if ($checkout_button) --}}
-                            <a href="/checkout"
-                                class="btn mb-20 w-100 d-sm-flex d-none justify-content-center align-items-center">Proceed
-                                To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                        <a href="/checkout"
+                            class="btn mb-20 w-100 d-sm-flex d-none justify-content-center align-items-center">Proceed
+                            To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
                         {{-- @endif --}}
                     </div>
                     <div class="p-20 border-radius-15 border mb-20">
@@ -762,8 +779,8 @@
             </div>
         </div>
         {{-- @if ($checkout_button) --}}
-            <a href="/checkout" class="btn w-100 d-flex d-sm-none justify-content-center align-items-center">Proceed
-                To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+        <a href="/checkout" class="btn w-100 d-flex d-sm-none justify-content-center align-items-center">Proceed
+            To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
         {{-- @endif --}}
     </div>
 </main>
