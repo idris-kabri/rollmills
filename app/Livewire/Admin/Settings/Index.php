@@ -19,12 +19,12 @@ class Index extends Component
         if ($this->settingId) {
             $store_settings = Setting::find($this->settingId);
         } else {
-            $store_settings = new Setting;
+            $store_settings = new Setting();
         }
-        $store_settings->label = $this->label; 
+        $store_settings->label = $this->label;
         $store_settings->value = $this->value;
         $store_settings->save();
-        $this->reset(["label","value","disable","settingId"]);
+        $this->reset(['label', 'value', 'disable', 'settingId']);
     }
 
     public function loadSetting($id)
@@ -38,7 +38,7 @@ class Index extends Component
 
     public function cancelEdit()
     {
-      $this->reset(["label","value","settingId","disable"]);
+        $this->reset(['label', 'value', 'settingId', 'disable']);
     }
 
     public function delete($id)
@@ -49,7 +49,7 @@ class Index extends Component
 
     public function render()
     {
-        $settings = Setting::orderBy("id", "desc")->paginate(10);
-        return view('livewire.admin.settings.index', compact("settings"))->layout('layouts.admin.app');
+        $settings = Setting::orderBy('id', 'desc')->get();
+        return view('livewire.admin.settings.index', compact('settings'))->layout('layouts.admin.app');
     }
 }
