@@ -32,6 +32,47 @@
             font-size: 20px;
             margin-right: 5px;
         }
+
+        /* --- FREE SHIPPING WIDGET STYLES (Cart Version) --- */
+        .shipping-widget-cart {
+            background: #f4f6fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed #c4cdd5;
+        }
+
+        .shipping-progress-bg {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            width: 100%;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .shipping-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s ease;
+            position: relative;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+
+        .shipping-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .shipping-highlight {
+            color: #00b59c;
+            font-weight: 700;
+        }
     </style>
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -549,17 +590,46 @@
                     {{-- mobile responsive cart page new design end --}}
 
 
-
-
-
-
-                    {{-- <div class="divider-2 mb-30"></div> --}}
                     <div class="cart-action d-flex justify-content-between mt-3 mb-40 mb-xl-0">
                         <a href="/shop" class="btn d-flex align-items-center custom-pad"
                             style="max-width: fit-content"><i class="fi-rs-add mr-10"></i>Add More</a>
                     </div>
                 </div>
                 <div class="col-xl-3">
+
+                    {{-- START: Free Shipping Interactive Widget (Sidebar) --}}
+                    @php
+                        $cartSubtotalNumeric = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+                        $shippingThreshold =
+                            \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
+                        $shippingDiff = $shippingThreshold - $cartSubtotalNumeric;
+                        $shippingPercent = ($cartSubtotalNumeric / $shippingThreshold) * 100;
+                        if ($shippingPercent > 100) {
+                            $shippingPercent = 100;
+                        }
+                    @endphp
+
+                    <div class="shipping-widget-cart mb-4">
+                        <div class="shipping-text">
+                            @if ($cartSubtotalNumeric >= $shippingThreshold)
+                                <i class="fi-rs-check-circle" style="color: #28a745; font-size: 18px;"></i>
+                                <span style="font-size:13px; line-height:1.2">Congratulations! You get <span
+                                        class="shipping-highlight" style="color:#28a745">FREE Shipping</span>.</span>
+                            @else
+                                <i class="fi-rs-truck-side" style="color: #00b59c; font-size: 18px;"></i>
+                                <span style="font-size:13px; line-height:1.2">Add <span
+                                        class="shipping-highlight">₹{{ number_format($shippingDiff) }}</span> for
+                                    <span class="shipping-highlight">FREE Shipping</span></span>
+                            @endif
+                        </div>
+                        <div class="shipping-progress-bg">
+                            <div class="shipping-progress-bar"
+                                style="width: {{ $shippingPercent }}%; background-color: {{ $cartSubtotalNumeric >= $shippingThreshold ? '#28a745' : '#00b59c' }};">
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END: Free Shipping Interactive Widget --}}
+
                     <div class="border p-20 cart-totals mb-4">
                         <h4 class="mb-30 pb-2 underline">Details</h4>
                         <div class="table-responsive">
@@ -623,7 +693,7 @@
                                             </td>
                                         </tr>
                                     @endif
-                                    @if (floatval(session('shipping_charge')))
+                                    {{-- @if (floatval(session('shipping_charge')))
                                         <tr class="d-flex justify-content-between border-0">
                                             <td class="cart_total_label text-start">
                                                 <h6 class="text-muted">Shipping</h6>
@@ -640,7 +710,7 @@
                                             </td>
 
                                         </tr>
-                                    @endif
+                                    @endif --}}
                                     {{-- @if (session('latest_etd') != null)
                                         <tr class="d-flex justify-content-between border-0">
                                             <td class="cart_total_label text-start">
@@ -666,19 +736,19 @@
                                         <td class="cart_total_amount">
                                             @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                                    ₹{{ number_format($allCouponandOfferDiscount, 2) }}
                                                 </h4>
                                             @elseif($totalAfterDiscount != 0)
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                                    ₹{{ number_format($totalAfterDiscount, 2) }}
                                                 </h4>
                                             @elseif($totalOfferDiscountedPrice != 0)
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                                                    ₹{{ number_format($amountAfterDiscount, 2) }}
                                                 </h4>
                                             @else
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($total + (session('shipping_charge') ?? 0), 2) }}
+                                                    ₹{{ number_format($total, 2) }}
                                                 </h4>
                                             @endif
                                         </td>

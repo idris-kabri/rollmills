@@ -77,6 +77,59 @@
             line-height: 1.2;
         }
 
+        /* --- FREE SHIPPING WIDGET STYLES --- */
+        .shipping-widget-container {
+            background: #f4f6fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px dashed #c4cdd5;
+        }
+
+        .shipping-progress-bg {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            width: 100%;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .shipping-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s ease;
+            position: relative;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+
+        @keyframes progress-bar-stripes {
+            0% {
+                background-position: 1rem 0;
+            }
+
+            100% {
+                background-position: 0 0;
+            }
+        }
+
+        .shipping-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .shipping-highlight {
+            color: #00b59c;
+            /* Brand color */
+            font-weight: 700;
+        }
+
         /* --- SPECS TOGGLE STYLES (SIDEBAR VERSION) --- */
         .specs-container {
             margin-top: 20px;
@@ -347,6 +400,49 @@
                                     </div>
                                 @endif
                             </div>
+
+                            {{-- START: Free Shipping Interactive Widget --}}
+                            @php
+                                $effective_price = str_replace(',', '', Cart::subtotal());
+                                $shipping_threshold =
+                                    \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ??
+                                    0;
+                                $remaining_amount = $shipping_threshold - $effective_price;
+                                $shipping_percentage = 0;
+
+                                if ($effective_price >= $shipping_threshold) {
+                                    $shipping_percentage = 100;
+                                } else {
+                                    $shipping_percentage = ($effective_price / $shipping_threshold) * 100;
+                                }
+                            @endphp
+
+                            <div class="shipping-widget-container">
+                                <div class="shipping-text">
+                                    @if ($effective_price >= $shipping_threshold)
+                                        <i class="fi-rs-check-circle" style="color: #28a745; font-size: 18px;"></i>
+                                        <span>Congratulations! You get <span class="shipping-highlight"
+                                                style="color:#28a745">FREE Shipping</span>.</span>
+                                    @else
+                                        <i class="fi-rs-truck-side" style="color: #00b59c; font-size: 18px;"></i>
+                                        <span>Shop for <span
+                                                class="shipping-highlight">₹{{ number_format($remaining_amount) }}</span>
+                                            more to get <span class="shipping-highlight">FREE Shipping</span></span>
+                                    @endif
+                                </div>
+                                <div class="shipping-progress-bg">
+                                    <div class="shipping-progress-bar"
+                                        style="width: {{ $shipping_percentage }}%; background-color: {{ $effective_price >= $shipping_threshold ? '#28a745' : '#00b59c' }};">
+                                    </div>
+                                </div>
+                                @if ($effective_price < $shipping_threshold)
+                                    <div style="text-align: right; font-size: 11px; margin-top: 5px; color: #888;">
+                                        Order over ₹{{ $shipping_threshold }} for free delivery
+                                    </div>
+                                @endif
+                            </div>
+                            {{-- END: Free Shipping Interactive Widget --}}
+
                             <div class="short-desc mb-30">
                                 <p class="font-lg">{!! $mainProduct->short_description !!}</p>
                             </div>

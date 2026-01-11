@@ -97,13 +97,14 @@
     <p class="d-none" id="login_condition">{{ auth()->check() ? 'true' : 'false' }}</p>
     @php
         $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
+        $shop_over = \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
     @endphp
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
-            <span>Big Winter Savings! <strong>Up To 60%</strong> OFF Storewide. Shop <strong>Before the Deals</strong>
-                Melt.</span>
+            <span><strong>FREE SHIPPING</strong> on all orders over <strong>₹{{ $shop_over }}</strong></span>
         </div>
-        <a href="javascript:void(0);" id="a-div-login-hide" class="d-none" data-bs-toggle="modal" data-bs-target="#loginModal"></a>
+        <a href="javascript:void(0);" id="a-div-login-hide" class="d-none" data-bs-toggle="modal"
+            data-bs-target="#loginModal"></a>
         <div class="header-middle header-middle-ptb-1 d-none d-xl-block">
             <div class="container">
                 <div class="header-wrap justify-content-between">
