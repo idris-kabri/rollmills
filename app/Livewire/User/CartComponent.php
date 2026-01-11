@@ -42,10 +42,10 @@ class CartComponent extends Component
     public $to_be_applied_offer_id = [];
     public $offer_applied_cart_product_id = [];
     public $quantities = [];
-    
-    // REMOVED: public $display_coupons = []; 
+
+    // REMOVED: public $display_coupons = [];
     // We pass this in render() to avoid hydration 404s
-    
+
     public $surprise_gift_amount = 0;
     public $surprise_gift_product_id = null; // Stores ID (Value), not Model
     public $productCategoryIds = [];
@@ -122,7 +122,7 @@ class CartComponent extends Component
         }
         if (session()->has('shipping_pincode') && session('shipping_pincode') != null) {
             $this->pincode = session('shipping_pincode');
-            $this->pincodeCheckFunction();
+            // $this->pincodeCheckFunction();
         }
         $this->productCategoryIds = array_unique($this->productCategoryIds);
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
@@ -162,11 +162,11 @@ class CartComponent extends Component
         // Count total usage of this coupon
         $orderCount = Order::where('coupon_id', $checkCuponCode->id)->where('status', 1)->count();
 
-        if($checkCuponCode->start_date != null){
+        if ($checkCuponCode->start_date != null) {
             $start_date = Carbon::parse($checkCuponCode->start_date);
             $todays_date = Carbon::now();
-            if($start_date->gt($todays_date)){
-                $this->toastError('You can use these coupon after '.Carbon::parse($checkCuponCode->start_date)->format('d M Y'));
+            if ($start_date->gt($todays_date)) {
+                $this->toastError('You can use these coupon after ' . Carbon::parse($checkCuponCode->start_date)->format('d M Y'));
                 return false;
             }
         }
@@ -312,7 +312,7 @@ class CartComponent extends Component
                 $display_coupons[] = $coupon;
             }
         }
-        
+
         // New Code
         $non_global_coupons = Coupon::where('is_global', 0)
             ->whereNull('order_id')
@@ -492,7 +492,7 @@ class CartComponent extends Component
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
                 if ($this->pincode != null) {
-                    $this->pincodeCheckFunction();
+                    // $this->pincodeCheckFunction();
                 }
                 if (session('coupon_discount_id')) {
                     $this->applyCoupon();
@@ -569,7 +569,7 @@ class CartComponent extends Component
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
                 if ($this->pincode != null) {
-                    $this->pincodeCheckFunction();
+                    // $this->pincodeCheckFunction();
                 }
                 if (session('coupon_discount_id')) {
                     $this->applyCoupon();
@@ -648,7 +648,7 @@ class CartComponent extends Component
                 $this->dispatch('add-to-cart', $items);
                 // $this->offerCheckEligibility();
                 if ($this->pincode != null) {
-                    $this->pincodeCheckFunction();
+                    // $this->pincodeCheckFunction();
                 }
                 if (session('coupon_discount_id')) {
                     $this->applyCoupon();
@@ -726,47 +726,47 @@ class CartComponent extends Component
             $this->dispatch('close-cart-remove-item-modal');
         }
         // $this->offerCheckEligibility();
-        $this->pincodeCheckFunction();
+        // $this->pincodeCheckFunction();
         $this->checkSurpriseGift();
         // Removed explicit call to getDisplayCoupons
     }
 
-    public function pincodeCheckFunction($show_toast = 'no')
-    {
-        $checkoutconditionFail = false;
+    // public function pincodeCheckFunction($show_toast = 'no')
+    // {
+    //     $checkoutconditionFail = false;
 
-        if ($this->pincode == '' && $show_toast == 'yes') {
-            $this->toastError('Please Enter Pincode');
-        }
-        $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
-        if ($setting) {
-            $outOfDeliveryPincodes = explode(',', $setting->value);
+    //     if ($this->pincode == '' && $show_toast == 'yes') {
+    //         $this->toastError('Please Enter Pincode');
+    //     }
+    //     $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
+    //     if ($setting) {
+    //         $outOfDeliveryPincodes = explode(',', $setting->value);
 
-            if (in_array($this->pincode, $outOfDeliveryPincodes)) {
-                $this->free_shipping = true;
-                session()->put('free_shipping_pincode', $this->pincode);
-                session()->forget('show_deleviery_time');
-            } else {
-                $cart_items = Cart::instance('cart')->content();
-                session()->put('latest_etd', '5 to 7 days');
-                session()->put('shipping_bear_margin', 0);
+    //         if (in_array($this->pincode, $outOfDeliveryPincodes)) {
+    //             $this->free_shipping = true;
+    //             session()->put('free_shipping_pincode', $this->pincode);
+    //             session()->forget('show_deleviery_time');
+    //         } else {
+    //             $cart_items = Cart::instance('cart')->content();
+    //             session()->put('latest_etd', '5 to 7 days');
+    //             session()->put('shipping_bear_margin', 0);
 
-                session()->forget('free_shipping_pincode');
-                session()->put('show_deleviery_time', true);
-                if ($show_toast == 'yes') {
-                    $this->toastSuccess('Charges Calculated Successfully!');
-                }
-                // }
-            }
-            session()->put('shipping_pincode', $this->pincode);
-        }
-        if (!$checkoutconditionFail) {
-            $this->checkout_button = true;
-            // $this->checkoutCondition();
-        } else {
-            $this->checkout_button = false;
-        }
-    }
+    //             session()->forget('free_shipping_pincode');
+    //             session()->put('show_deleviery_time', true);
+    //             if ($show_toast == 'yes') {
+    //                 $this->toastSuccess('Charges Calculated Successfully!');
+    //             }
+    //             // }
+    //         }
+    //         session()->put('shipping_pincode', $this->pincode);
+    //     }
+    //     if (!$checkoutconditionFail) {
+    //         $this->checkout_button = true;
+    //         // $this->checkoutCondition();
+    //     } else {
+    //         $this->checkout_button = false;
+    //     }
+    // }
 
     public function checkoutCondition()
     {
@@ -831,11 +831,10 @@ class CartComponent extends Component
                 break;
             }
         }
-        
+
         // Fetch coupons here and pass variable to view
         $display_coupons = $this->fetchDisplayCoupons();
 
-        return view('livewire.user.cart-component', compact('giftAlreadyAdded', 'display_coupons'))
-            ->layout('layouts.user.app');
+        return view('livewire.user.cart-component', compact('giftAlreadyAdded', 'display_coupons'))->layout('layouts.user.app');
     }
 }

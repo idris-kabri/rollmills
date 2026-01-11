@@ -240,6 +240,10 @@ input[type="number"] {
     font-size: 25px;
 }
 
+.mobile-promotion span {
+    font-size: 16px !important;
+}
+
 /* ==================================================================== */
 /* Contact Us Css End */
 /* ==================================================================== */
@@ -407,12 +411,10 @@ input[type="number"] {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(255, 255, 255, 0.43),
-        transparent
-    );
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(255, 255, 255, 0.43),
+            transparent);
     animation: shimmer 2s infinite;
 }
 
@@ -477,11 +479,9 @@ input[type="number"] {
 }
 
 .result-display {
-    background: linear-gradient(
-        135deg,
-        rgba(212, 175, 55, 0.1),
-        rgba(212, 175, 55, 0.05)
-    );
+    background: linear-gradient(135deg,
+            rgba(212, 175, 55, 0.1),
+            rgba(212, 175, 55, 0.05));
     border: 2px dashed var(--color-1);
     border-radius: 15px;
     padding: 15px;
@@ -498,12 +498,10 @@ input[type="number"] {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(212, 175, 55, 0.1),
-        transparent
-    );
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(212, 175, 55, 0.1),
+            transparent);
     animation: shimmer 4s infinite;
 }
 
@@ -851,6 +849,7 @@ input[type="number"] {
 }
 
 @keyframes checkPop {
+
     0%,
     100% {
         transform: scale(1);
@@ -1010,10 +1009,12 @@ input[type="number"] {
 }
 
 @keyframes celebrationPulse {
+
     0%,
     100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.05);
     }
@@ -1044,12 +1045,10 @@ input[type="number"] {
     justify-content: end;
     z-index: 99;
 
-    background-image: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.3) 25%,
-        rgba(255, 255, 255, 0.6) 50%,
-        rgba(255, 255, 255, 0.3) 75%
-    );
+    background-image: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.3) 25%,
+            rgba(255, 255, 255, 0.6) 50%,
+            rgba(255, 255, 255, 0.3) 75%);
 
     background-size: 200% 100%;
     animation: waveMove 3s linear infinite;
@@ -1060,6 +1059,7 @@ input[type="number"] {
     0% {
         background-position: 200% 0;
     }
+
     100% {
         background-position: 0% 0;
     }
@@ -1069,6 +1069,7 @@ input[type="number"] {
     from {
         width: 0;
     }
+
     to {
         width: 100%;
     }
@@ -1093,6 +1094,7 @@ input[type="number"] {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1141,24 +1143,30 @@ input[type="number"] {
     background-size: 16px 16px;
     animation: l32-1 1.5s infinite, l32-2 1.5s infinite;
 }
+
 @keyframes l32-1 {
+
     0%,
     100% {
         width: 45px;
         height: 45px;
     }
+
     35%,
     65% {
         width: 65px;
         height: 65px;
     }
 }
+
 @keyframes l32-2 {
+
     0%,
     40% {
         background-position: 0 0, 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%,
             100% 0, 50% 0, 50% 50%;
     }
+
     60%,
     100% {
         background-position: 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%,
@@ -1304,6 +1312,7 @@ input[type="number"] {
     font-size: 16px;
     height: 54px;
 }
+
 .checkout-modal-btn {
     position: relative;
     overflow: hidden;
@@ -1313,12 +1322,10 @@ input[type="number"] {
     content: "";
     position: absolute;
     inset: -50%;
-    background: linear-gradient(
-        120deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.35) 50%,
-        transparent 60%
-    );
+    background: linear-gradient(120deg,
+            transparent 40%,
+            rgba(255, 255, 255, 0.35) 50%,
+            transparent 60%);
     animation: shimmer 1.8s infinite linear;
     pointer-events: none;
 }
@@ -1382,6 +1389,7 @@ input[type="number"] {
     letter-spacing: 2px;
     color: White;
 }
+
 .Checkout-modal .discount-text-price {
     font-size: 1.8rem;
     font-weight: 900;
@@ -1487,6 +1495,7 @@ input[type="number"] {
 }
 
 @keyframes pulse-checkout {
+
     0%,
     100% {
         transform: scale(1);
@@ -1637,6 +1646,7 @@ input[type="number"] {
         width: 100%;
         padding: 12px;
     }
+
     .cod-alert-modal .warning-icon img {
         width: 90px;
         height: 90px;
@@ -1740,10 +1750,12 @@ input[type="number"] {
         padding: 10px 10px;
         min-width: 60px;
     }
+
     .Checkout-modal .countdown-container {
         margin: 15px 0;
         gap: 8px;
     }
+
     .no-record-img img {
         width: 50%;
     }
@@ -1931,6 +1943,7 @@ input[type="number"] {
         bottom: 30px;
         overflow: hidden;
     }
+
     .gift-progress-container {
         padding: 20px 25px;
     }
@@ -2095,7 +2108,7 @@ input[type="number"] {
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
-    .header-action-2 .header-action-icon-2 > a img {
+    .header-action-2 .header-action-icon-2>a img {
         width: 50px;
         max-width: 100%;
     }
@@ -2123,9 +2136,7 @@ input[type="number"] {
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style
-        .mobile-header-wrapper-inner
-        .mobile-header-top {
+    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
@@ -2182,6 +2193,7 @@ input[type="number"] {
         display: flex;
         align-items: center;
     }
+
     .whatsapp-logo-contact {
         position: fixed;
         z-index: 1000;
@@ -2193,7 +2205,7 @@ input[type="number"] {
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
-    .header-action-2 .header-action-icon-2 > a img {
+    .header-action-2 .header-action-icon-2>a img {
         width: 40px;
         max-width: 100%;
     }
@@ -2221,12 +2233,11 @@ input[type="number"] {
         margin: 0pc 10px;
     }
 
-    .mobile-header-wrapper-style
-        .mobile-header-wrapper-inner
-        .mobile-header-top {
+    .mobile-header-wrapper-style .mobile-header-wrapper-inner .mobile-header-top {
         padding: 10px 25px 10px 20px;
         border-bottom: 1px solid #ececec;
     }
+
     .whatsapp-logo-contact {
         position: fixed;
         z-index: 1000;
@@ -2237,11 +2248,9 @@ input[type="number"] {
     }
 }
 
-@media (min-width: 1200px) {
-}
+@media (min-width: 1200px) {}
 
-@media (min-width: 1400px) {
-}
+@media (min-width: 1400px) {}
 
 @media (max-width: 500px) {
     .custom-dropdown-home {
@@ -2263,9 +2272,11 @@ input[type="number"] {
     padding: 20px;
     margin: 25px auto;
     width: 100%;
-    max-width: 350px; /* Controls width of the white box */
+    max-width: 350px;
+    /* Controls width of the white box */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    text-align: left; /* Aligns text to the left like the image */
+    text-align: left;
+    /* Aligns text to the left like the image */
 }
 
 .summary-row {
@@ -2279,7 +2290,8 @@ input[type="number"] {
 }
 
 .summary-row.discount {
-    color: #e63946; /* Red color for discount */
+    color: #e63946;
+    /* Red color for discount */
 }
 
 .summary-row.total {
@@ -2294,19 +2306,26 @@ input[type="number"] {
 /* Ensure the modal background allows the white card to pop */
 .summary-white-card {
     background-color: #ffffff;
-    border-radius: 12px; /* Rounded corners */
+    border-radius: 12px;
+    /* Rounded corners */
     padding: 20px;
-    margin: 20px auto; /* Spacing from timer and button */
+    margin: 20px auto;
+    /* Spacing from timer and button */
     width: 100%;
-    max-width: 90%; /* Keep it from touching edges */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Drop shadow for depth */
-    text-align: left; /* Align text to left */
-    color: #333333; /* Dark text for white bg */
+    max-width: 90%;
+    /* Keep it from touching edges */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    /* Drop shadow for depth */
+    text-align: left;
+    /* Align text to left */
+    color: #333333;
+    /* Dark text for white bg */
 }
 
 .summary-row {
     display: flex;
-    justify-content: space-between; /* Spreads label and price apart */
+    justify-content: space-between;
+    /* Spreads label and price apart */
     align-items: center;
     margin-bottom: 8px;
     font-size: 15px;
@@ -2315,7 +2334,8 @@ input[type="number"] {
 
 /* Specific style for the Green Discount */
 .summary-row.discount-row {
-    color: #28a745; /* Success Green */
+    color: #28a745;
+    /* Success Green */
     font-weight: 700;
 }
 
@@ -2331,11 +2351,10 @@ input[type="number"] {
 
 /* Adjust Modal Background to make white pop */
 .Checkout-modal .modal-content {
-    background: linear-gradient(
-        135deg,
-        #ff6b6b 0%,
-        #ff8e53 100%
-    ); /* Example gradient */
+    background: linear-gradient(135deg,
+            #ff6b6b 0%,
+            #ff8e53 100%);
+    /* Example gradient */
     border: none;
     border-radius: 20px;
 }
@@ -2348,6 +2367,7 @@ input[type="number"] {
 /* Iphone Mobile Responsive Hover None Css Start */
 /* ==================================================================== */
 @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
+
     .product-cart-wrap:hover,
     .product-cart-wrap:hover *,
     .product-cart-wrap .product-content-wrap h2 a:hover,
@@ -2372,6 +2392,7 @@ input[type="number"] {
         visibility: hidden !important;
     }
 }
+
 /* ==================================================================== */
 /* Iphone Mobile Responsive Hover None Css End */
 /* ==================================================================== */

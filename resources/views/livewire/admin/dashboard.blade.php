@@ -152,8 +152,7 @@
 
             <div class="row">
                 <div class="col-12 mb-3 mb-lg-2">
-                    <div id="list_widgets" class="row row-cards" data-bb-toggle="widgets-list"
-                        data-url="">
+                    <div id="list_widgets" class="row row-cards" data-bb-toggle="widgets-list" data-url="">
 
                         <div class="widget-item col-12 d-flex col-lg-12 mb-3 mb-lg-2" id="widget_analytics_page"
                             data-url="">
@@ -165,14 +164,15 @@
                                 </div>
                                 <div class="d-flex flex-column justify-content-between h-auto widget-content">
                                     <div class="table-responsive">
-                                        <table class="table table-vcenter card-table table-hover table-striped" id="dashboard-current-order-table">
+                                        <table class="table table-vcenter card-table table-hover table-striped"
+                                            id="dashboard-current-order-table">
                                             <thead>
                                                 <tr>
                                                     <th>
                                                         # Order Id
                                                     </th>
                                                     <th>
-                                                        User Name/Email
+                                                        User Name/Mobile
                                                     </th>
                                                     <th class="text-center">
                                                         Paid Amount
@@ -187,38 +187,40 @@
                                             </thead>
 
                                             <tbody style="font-size: 14px">
-                                                @foreach($current_date_orders as $order)
-                                                <tr>
-                                                    <td>
-                                                        {{$order->id}}
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('admin.customer.customer-detail',$order->logged_in_user_id) }}" target="_blank">
-                                                            {{$order->getUser->name}}</br>
-                                                            {{$order->getUser->email}}
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        {{$order->paid_amount}}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        @if($order->status == 0)
-                                                        <span class="text text-warning">Pending</span>
-                                                        @elseif($order->status == 1)
-                                                        <span class="text text-success">Processed..</span>
-                                                        @elseif($order->status == 2)
-                                                        <span class="text text-success">Shipped</span>
-                                                        @elseif($order->status == 3)
-                                                        <span class="text text-success">Complete</span>
-                                                        @endif
-                                                    </td>
+                                                @foreach ($current_date_orders as $order)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $order->id }}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('admin.customer.customer-detail', $order->logged_in_user_id) }}"
+                                                                target="_blank">
+                                                                {{ $order->getUser->name }}</br>
+                                                                {{ $order->getUser->mobile }}
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ $order->paid_amount }}
+                                                        </td>
+                                                        <td class="text-end">
+                                                            @if ($order->status == 0)
+                                                                <span class="text text-warning">Pending</span>
+                                                            @elseif($order->status == 1)
+                                                                <span class="text text-success">Processed..</span>
+                                                            @elseif($order->status == 2)
+                                                                <span class="text text-success">Shipped</span>
+                                                            @elseif($order->status == 3)
+                                                                <span class="text text-success">Complete</span>
+                                                            @endif
+                                                        </td>
 
-                                                    <td class="text-end">
-                                                        <a href="{{ route('admin.orders.view', $order->id) }}" target="_blank">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                        <td class="text-end">
+                                                            <a href="{{ route('admin.orders.view', $order->id) }}"
+                                                                target="_blank">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
 
                                             </tbody>
@@ -240,7 +242,8 @@
                                 </div>
                                 <div class="d-flex flex-column justify-content-between h-auto widget-content">
                                     <div class="table-responsive">
-                                        <table class="table table-vcenter card-table table-hover table-striped" id="dashboard-current-user-table">
+                                        <table class="table table-vcenter card-table table-hover table-striped"
+                                            id="dashboard-current-user-table">
                                             <thead>
                                                 <tr>
                                                     <th>
@@ -263,28 +266,29 @@
 
                                             <tbody style="font-size: 14px">
                                                 @php
-                                                $i = 1;
+                                                    $i = 1;
                                                 @endphp
-                                                @foreach($current_register_user as $user)
-                                                <tr>
-                                                    <td>
-                                                        {{$i++}}
-                                                    </td>
-                                                    <td>
-                                                        {{$user->name}}
-                                                    </td>
-                                                    <td>
-                                                        {{$user->email}}
-                                                    </td>
-                                                    <td>
-                                                        {{$user->mobile}}
-                                                    </td>
-                                                    <td class="text-end text-nowrap">
-                                                        <a href="{{ route('admin.customer.customer-detail',$user->id) }}" target="_blank">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                @foreach ($current_register_user as $user)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $i++ }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $user->name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $user->email }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $user->mobile }}
+                                                        </td>
+                                                        <td class="text-end text-nowrap">
+                                                            <a href="{{ route('admin.customer.customer-detail', $user->id) }}"
+                                                                target="_blank">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
 
@@ -305,7 +309,8 @@
                                 </div>
                                 <div class="d-flex flex-column justify-content-between h-auto widget-content">
                                     <div class="table-responsive">
-                                        <table class="table table-vcenter card-table table-hover table-striped" id="dashboard-current-guest-user-table">
+                                        <table class="table table-vcenter card-table table-hover table-striped"
+                                            id="dashboard-current-guest-user-table">
                                             <thead>
                                                 <tr>
                                                     <th>
@@ -328,28 +333,29 @@
 
                                             <tbody style="font-size: 14px">
                                                 @php
-                                                $i = 1;
+                                                    $i = 1;
                                                 @endphp
-                                                @foreach($current_guest_user_register as $guest_user)
-                                                <tr>
-                                                    <td>
-                                                        {{$i++}}
-                                                    </td>
-                                                    <td>
-                                                        {{$guest_user->name}}
-                                                    </td>
-                                                    <td>
-                                                        {{$guest_user->mobile}}
-                                                    </td>
-                                                    <td>
-                                                        {{$guest_user->email}}
-                                                    </td>
-                                                    <td class="text-end text-nowrap">
-                                                        <a href="{{ route('admin.customer.customer-detail',$guest_user->id) }}" target="_blank">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                @foreach ($current_guest_user_register as $guest_user)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $i++ }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $guest_user->name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $guest_user->mobile }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $guest_user->email }}
+                                                        </td>
+                                                        <td class="text-end text-nowrap">
+                                                            <a href="{{ route('admin.customer.customer-detail', $guest_user->id) }}"
+                                                                target="_blank">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
 
@@ -381,29 +387,28 @@
     </footer>
 </div>
 @section('scripts')
-<script>
-    $(document).ready(function() {
-        $('#dashboard-current-order-table').DataTable({
-            "pageLength": 10,
-            "lengthMenu": [5, 10, 25, 50, 100],
-            "ordering": true,
-            "searching": true,
-            "margin": 5
-        });
-        $('#dashboard-current-user-table').DataTable({
-            "pageLength": 10,
-            "lengthMenu": [5, 10, 25, 50, 100],
-            "ordering": true,
-            "searching": true
-        });
-        $('#dashboard-current-guest-user-table').DataTable({
-            "pageLength": 10,
-            "lengthMenu": [5, 10, 25, 50, 100],
-            "ordering": true,
-            "searching": true
-        });
+    <script>
+        $(document).ready(function() {
+            $('#dashboard-current-order-table').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 25, 50, 100],
+                "ordering": true,
+                "searching": true,
+                "margin": 5
+            });
+            $('#dashboard-current-user-table').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 25, 50, 100],
+                "ordering": true,
+                "searching": true
+            });
+            $('#dashboard-current-guest-user-table').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 25, 50, 100],
+                "ordering": true,
+                "searching": true
+            });
 
-    });
-</script>
-
+        });
+    </script>
 @endsection

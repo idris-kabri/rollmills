@@ -64,7 +64,8 @@
 
                                 <!-- Button aligned to right -->
                                 <div class="col-md-3 text-end">
-                                    <a class="btn action-item btn-primary" href="{{ route('admin.order-return.create') }}">
+                                    <a class="btn action-item btn-primary"
+                                        href="{{ route('admin.order-return.create') }}">
                                         <i class="fa fa-plus"></i> Create
                                     </a>
                                 </div>
@@ -88,7 +89,7 @@
                                             ID
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
-                                            NAME/EMAIL
+                                            NAME/MOBILE
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
                                             PRODUCT NAME
@@ -116,7 +117,7 @@
                                                 <a href="{{ route('admin.customer.customer-detail', $orderReturn->fetchCustomer->id) }}"
                                                     target="_blank">
                                                     {{ $orderReturn->fetchCustomer->name }}<br>
-                                                    {{ $orderReturn->fetchCustomer->email }}
+                                                    {{ $orderReturn->fetchCustomer->mobile }}
                                                 </a>
                                             </td>
                                             <td>

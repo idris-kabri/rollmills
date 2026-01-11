@@ -31,8 +31,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="mb-0 d-inline-block fs-6 lh-1"
-                                        href="{{url("/admin")}}">Dashboard</a>
+                                    <a class="mb-0 d-inline-block fs-6 lh-1" href="{{ url('/admin') }}">Dashboard</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <h1 class="mb-0 d-inline-block fs-6 lh-1">Reviews</h1>
@@ -71,7 +70,7 @@
                                 id="botble-ecommerce-tables-products-categories-table">
                                 <thead>
                                     @php
-                                    $i = 1;
+                                        $i = 1;
                                     @endphp
                                     <tr>
                                         <th title="ID" width="20"
@@ -82,7 +81,7 @@
                                             PRODUCT
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
-                                            NAME/EMAIL
+                                            NAME/MOBILE
                                         </th>
 
                                         <th title="Name" class="text-start column-key-2">
@@ -106,67 +105,69 @@
                                 </thead>
                                 <tbody>
                                     @forelse($reviews as $review)
-                                    <tr>
-                                        <td>{{$i++}}</td>
-                                        <td>
-                                            <a href="{{ url('/shop-product-detail/' . $review->product_id) }}" target="_blank">
-                                                {{ $review->getProducts->name }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="{{ $review->user_id ? url('/admin/customer/customer-detail/' . $review->user_id) : '#' }}" @if($review->user_id) target="_blank" @endif>
-                                                {{ $review->name }}<br>
-                                                {{ $review->email }}
-                                            </a>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            @php
-                                            $rating = round($review->ratings);
-                                            @endphp
+                                        <tr>
+                                            <td>{{ $i++ }}</td>
+                                            <td>
+                                                <a href="{{ url('/shop-product-detail/' . $review->product_id) }}"
+                                                    target="_blank">
+                                                    {{ $review->getProducts->name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ $review->user_id ? url('/admin/customer/customer-detail/' . $review->user_id) : '#' }}"
+                                                    @if ($review->user_id) target="_blank" @endif>
+                                                    {{ $review->name }}<br>
+                                                    {{ $review->mobile }}
+                                                </a>
+                                            </td>
+                                            <td style="width: 150px;">
+                                                @php
+                                                    $rating = round($review->ratings);
+                                                @endphp
 
-                                            <div class="rating_wrap">
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    @if ($i <=$rating)
-                                                    <i class="fas fa-star" style="color:#F6BC3E;"></i>
-                                                    @else
-                                                    <i class="far fa-star" style="color:#ccc;"></i>
-                                                    @endif
+                                                <div class="rating_wrap">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        @if ($i <= $rating)
+                                                            <i class="fas fa-star" style="color:#F6BC3E;"></i>
+                                                        @else
+                                                            <i class="far fa-star" style="color:#ccc;"></i>
+                                                        @endif
                                                     @endfor
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {{$review->remarks}}
-                                        </td>
-                                        <td>
-                                            @if($review->image)
-                                            <a href="{{Storage::url($review->image)}}" target="_blank">
-                                                <img src="{{Storage::url($review->image)}}" alt="" style="height: 100px; width: 100px;">
-                                            </a>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($review->status == 1)
-                                            <span class="badge bg-success text-success-fg">Publish</span>
-                                            @else
-                                            <span class="badge bg-warning text-warning-fg">Not Publish</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="#" data-bs-toggle="modal"
-                                                wire:click="reviewIdSet({{$review->id}})"
-                                                data-bs-target="#reviewChangeStatusModel"
-                                                aria-haspopup="dialog"
-                                                aria-expanded="false">
-                                                <i class="fa fa-pencil fa-md"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{ $review->remarks }}
+                                            </td>
+                                            <td>
+                                                @if ($review->image)
+                                                    <a href="{{ Storage::url($review->image) }}" target="_blank">
+                                                        <img src="{{ Storage::url($review->image) }}" alt=""
+                                                            style="height: 100px; width: 100px;">
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($review->status == 1)
+                                                    <span class="badge bg-success text-success-fg">Publish</span>
+                                                @else
+                                                    <span class="badge bg-warning text-warning-fg">Not Publish</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="#" data-bs-toggle="modal"
+                                                    wire:click="reviewIdSet({{ $review->id }})"
+                                                    data-bs-target="#reviewChangeStatusModel" aria-haspopup="dialog"
+                                                    aria-expanded="false">
+                                                    <i class="fa fa-pencil fa-md"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     @empty
-                                    <tr>
-                                        <td colspan="7">
-                                            <p class="text-center">No Data!</p>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                <p class="text-center">No Data!</p>
+                                            </td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -189,11 +190,11 @@
             </div>
         </div>
     </footer>
-</div> 
+</div>
 @section('scripts')
-<script>
-    window.addEventListener('review-change-status-model-close',event => { 
-        $('#reviewChangeStatusModel').modal('hide');
-    });
-</script> 
+    <script>
+        window.addEventListener('review-change-status-model-close', event => {
+            $('#reviewChangeStatusModel').modal('hide');
+        });
+    </script>
 @endsection

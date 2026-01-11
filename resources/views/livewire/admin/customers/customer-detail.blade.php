@@ -117,22 +117,22 @@
 
                                             <tbody>
                                                 @php
-                                                $i = 1;
+                                                    $i = 1;
                                                 @endphp
-                                                @foreach($get_address as $address)
-                                                <tr>
-                                                    <td>{{$i++}}</td>
-                                                    <td class="text-start">
-                                                        @if($address->address_line_1 != null)
-                                                        {{$address->address_line_1}}
-                                                        @else
-                                                        {{$address->address_line_2}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$address->state}}</td>
-                                                    <td>{{$address->city}}</td>
-                                                    <td>{{$address->zipcode}}</td>
-                                                </tr>
+                                                @foreach ($get_address as $address)
+                                                    <tr>
+                                                        <td>{{ $i++ }}</td>
+                                                        <td class="text-start">
+                                                            @if ($address->address_line_1 != null)
+                                                                {{ $address->address_line_1 }}
+                                                            @else
+                                                                {{ $address->address_line_2 }}
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $address->state }}</td>
+                                                        <td>{{ $address->city }}</td>
+                                                        <td>{{ $address->zipcode }}</td>
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -155,24 +155,25 @@
 
                                         <tbody>
                                             @php
-                                            $i = 1;
+                                                $i = 1;
                                             @endphp
                                             @forelse($get_whislist as $wishlist)
-                                            <tr>
-                                                <td>{{$i++}}</td>
-                                                <td>
-                                                    <a href="{{ url('/shop-product-detail/' . $wishlist->id) }}" target="_blank">
-                                                        {{$wishlist->name}}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    {{\Carbon\Carbon::parse($wishlist->model->created_at)->format('jS F Y')}}
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td>{{ $i++ }}</td>
+                                                    <td>
+                                                        <a href="{{ url('/shop-product-detail/' . $wishlist->id) }}"
+                                                            target="_blank">
+                                                            {{ $wishlist->name }}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        {{ \Carbon\Carbon::parse($wishlist->model->created_at)->format('jS F Y') }}
+                                                    </td>
+                                                </tr>
                                             @empty
-                                            <tr class="text-center text-muted">
-                                                <td colspan="7">No data to display</td>
-                                            </tr>
+                                                <tr class="text-center text-muted">
+                                                    <td colspan="7">No data to display</td>
+                                                </tr>
                                             @endforelse
                                         </tbody>
                                     </table>
@@ -196,43 +197,46 @@
 
                                         <tbody>
                                             @php
-                                            $i = 1;
+                                                $i = 1;
                                             @endphp
                                             @forelse($get_cart as $cart)
-                                            <tr>
-                                                <td>{{$i++}}</td>
-                                                <td>
-                                                    <a href="{{ url('/shop-product-detail/' . $cart->id) }}" target="_blank">
-                                                        {{$cart->name}}
-                                                    </a>
-                                                </td>
-                                                @php
-                                                $priceInfo = getPrice($cart->id);
-                                                @endphp
-                                                <td>
-                                                    ₹{{number_format($priceInfo['price'],2)}}
-                                                </td>
-                                                <td>
-                                                    {{$cart->qty}}
-                                                </td>
-                                                <td>
-                                                    @if(!empty($cart->options['discount_price']))
+                                                <tr>
+                                                    <td>{{ $i++ }}</td>
+                                                    <td>
+                                                        <a href="{{ url('/shop-product-detail/' . $cart->id) }}"
+                                                            target="_blank">
+                                                            {{ $cart->name }}
+                                                        </a>
+                                                    </td>
                                                     @php
-                                                    $totalOfferDiscountedPrice += $cart->price * $cart->qty - $cart->options['discount_price'];
+                                                        $priceInfo = getPrice($cart->id);
                                                     @endphp
-                                                    <del>₹{{ number_format($cart->price * $cart->qty, 2) }}</del>
-                                                    <span class="text-success">
-                                                        ₹{{ number_format($cart->options['discount_price'], 2) }}
-                                                    </span>
-                                                    @else
-                                                    ₹{{ number_format($cart->price * $cart->qty, 2) }}
-                                                    @endif
-                                                </td>
-                                            </tr>
+                                                    <td>
+                                                        ₹{{ number_format($priceInfo['price'], 2) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $cart->qty }}
+                                                    </td>
+                                                    <td>
+                                                        @if (!empty($cart->options['discount_price']))
+                                                            @php
+                                                                $totalOfferDiscountedPrice +=
+                                                                    $cart->price * $cart->qty -
+                                                                    $cart->options['discount_price'];
+                                                            @endphp
+                                                            <del>₹{{ number_format($cart->price * $cart->qty, 2) }}</del>
+                                                            <span class="text-success">
+                                                                ₹{{ number_format($cart->options['discount_price'], 2) }}
+                                                            </span>
+                                                        @else
+                                                            ₹{{ number_format($cart->price * $cart->qty, 2) }}
+                                                        @endif
+                                                    </td>
+                                                </tr>
                                             @empty
-                                            <tr class="text-center text-muted">
-                                                <td colspan="7">No data to display</td>
-                                            </tr>
+                                                <tr class="text-center text-muted">
+                                                    <td colspan="7">No data to display</td>
+                                                </tr>
                                             @endforelse
                                         </tbody>
                                     </table>
@@ -243,7 +247,8 @@
                                         <h4 class="card-title">Payments</h4>
                                     </div>
 
-                                    <table id="transaction-table" class="table table-vcenter card-table table-hover table-striped">
+                                    <table id="transaction-table"
+                                        class="table table-vcenter card-table table-hover table-striped">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -257,55 +262,55 @@
 
                                         <tbody>
                                             @php
-                                            $transaction_i = 1;
+                                                $transaction_i = 1;
                                             @endphp
                                             @foreach ($transactions as $transaction)
-                                            <tr>
-                                                <td>{{ $transaction_i++ }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d-m-Y') }}
-                                                </td>
-                                                <td>₹{{ number_format($transaction->amount) }}</td>
-                                                <td class="text-start">
-                                                    <a href="#" target="_blank">
-                                                        {{ $transaction->payment_id }}
-                                                        <svg class="icon svg-icon-ti-ti-external-link"
-                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" viewBox="0 0 24 24" fill="none"
-                                                            stroke="currentColor" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                fill="none" />
-                                                            <path
-                                                                d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-                                                            <path d="M11 13l9 -9" />
-                                                            <path d="M15 4h5v5" />
-                                                        </svg>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-success text-success-fg">
-                                                        {{ $transaction->status == 0 ? 'Pending' : ($transaction->status == 1 ? 'Confirm' : 'Cancel') }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-icon btn-sm" type="button" href="#"
-                                                        target="_blank" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="View in new tab">
-                                                        <svg class="icon icon-sm icon-left svg-icon-ti-ti-external-link"
-                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" viewBox="0 0 24 24" fill="none"
-                                                            stroke="currentColor" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                fill="none" />
-                                                            <path
-                                                                d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-                                                            <path d="M11 13l9 -9" />
-                                                            <path d="M15 4h5v5" />
-                                                        </svg>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td>{{ $transaction_i++ }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d-m-Y') }}
+                                                    </td>
+                                                    <td>₹{{ number_format($transaction->amount) }}</td>
+                                                    <td class="text-start">
+                                                        <a href="#" target="_blank">
+                                                            {{ $transaction->payment_id }}
+                                                            <svg class="icon svg-icon-ti-ti-external-link"
+                                                                xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                    fill="none" />
+                                                                <path
+                                                                    d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+                                                                <path d="M11 13l9 -9" />
+                                                                <path d="M15 4h5v5" />
+                                                            </svg>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-success text-success-fg">
+                                                            {{ $transaction->status == 0 ? 'Pending' : ($transaction->status == 1 ? 'Confirm' : 'Cancel') }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-icon btn-sm" type="button" href="#"
+                                                            target="_blank" data-bs-toggle="tooltip"
+                                                            data-bs-placement="top" title="View in new tab">
+                                                            <svg class="icon icon-sm icon-left svg-icon-ti-ti-external-link"
+                                                                xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                    fill="none" />
+                                                                <path
+                                                                    d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+                                                                <path d="M11 13l9 -9" />
+                                                                <path d="M15 4h5v5" />
+                                                            </svg>
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -323,7 +328,8 @@
                                                     <div class="btn-list">
                                                         <div class="table-search-input">
                                                             <label><input type="search" class="form-control input-sm"
-                                                                    placeholder="Search..." wire:model.live.debounce.500ms="review_search" /></label>
+                                                                    placeholder="Search..."
+                                                                    wire:model.live.debounce.500ms="review_search" /></label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -337,7 +343,7 @@
                                                                 <tr>
                                                                     <th title="ID" width="20">ID</th>
                                                                     <th title="Product">PRODUCT</th>
-                                                                    <th title="User">NAME/EMAIL</th>
+                                                                    <th title="User">NAME/MOBILE</th>
                                                                     <th title="Star" width="150">START</th>
                                                                     <th title="Comment">COMMENT</th>
                                                                     <th title="Images" width="150">IMAGE</th>
@@ -349,62 +355,73 @@
                                                             </thead>
                                                             <tbody>
                                                                 @php
-                                                                $review_i = 1;
+                                                                    $review_i = 1;
                                                                 @endphp
                                                                 @forelse($reviews as $review)
-                                                                <tr>
-                                                                    <td>{{$review_i++}}</td>
-                                                                    <td>
-                                                                        <a href="{{ url('/shop-product-detail/' . $review->product_id) }}" target="_blank">
-                                                                            {{ $review->getProducts->name }}
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $review->name }}<br>
-                                                                        {{ $review->email }}
-                                                                    </td>
-                                                                    <td style="min-width: 100px; white-space: nowrap;">
-                                                                        @php
-                                                                        $rating = round($review->ratings);
-                                                                        @endphp
+                                                                    <tr>
+                                                                        <td>{{ $review_i++ }}</td>
+                                                                        <td>
+                                                                            <a href="{{ url('/shop-product-detail/' . $review->product_id) }}"
+                                                                                target="_blank">
+                                                                                {{ $review->getProducts->name }}
+                                                                            </a>
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $review->name }}<br>
+                                                                            {{ $review->mobile }}
+                                                                        </td>
+                                                                        <td
+                                                                            style="min-width: 100px; white-space: nowrap;">
+                                                                            @php
+                                                                                $rating = round($review->ratings);
+                                                                            @endphp
 
-                                                                        <div class="rating_wrap">
-                                                                            @for ($i = 1; $i <= 5; $i++)
-                                                                                @if ($i <=$rating)
-                                                                                <i class="fas fa-star" style="color:#F6BC3E;"></i>
-                                                                                @else
-                                                                                <i class="far fa-star" style="color:#ccc;"></i>
-                                                                                @endif
+                                                                            <div class="rating_wrap">
+                                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                                    @if ($i <= $rating)
+                                                                                        <i class="fas fa-star"
+                                                                                            style="color:#F6BC3E;"></i>
+                                                                                    @else
+                                                                                        <i class="far fa-star"
+                                                                                            style="color:#ccc;"></i>
+                                                                                    @endif
                                                                                 @endfor
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{$review->remarks}}
-                                                                    </td>
-                                                                    <td style="min-width: 100px; white-space: nowrap;">
-                                                                        @if($review->image)
-                                                                        <a href="{{Storage::url($review->image)}}" target="_blank">
-                                                                            <img src="{{Storage::url($review->image)}}" alt="" style="height: 100px; width: 100px;">
-                                                                        </a>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if($review->status == 1)
-                                                                        <span class="badge bg-success text-success-fg">Publish</span>
-                                                                        @else
-                                                                        <span class="badge bg-warning text-warning-fg">Not Publish</span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        {{ \Carbon\Carbon::parse($review->created_at)->format('jS F Y') }}
-                                                                    </td>
-                                                                </tr>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $review->remarks }}
+                                                                        </td>
+                                                                        <td
+                                                                            style="min-width: 100px; white-space: nowrap;">
+                                                                            @if ($review->image)
+                                                                                <a href="{{ Storage::url($review->image) }}"
+                                                                                    target="_blank">
+                                                                                    <img src="{{ Storage::url($review->image) }}"
+                                                                                        alt=""
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                </a>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if ($review->status == 1)
+                                                                                <span
+                                                                                    class="badge bg-success text-success-fg">Publish</span>
+                                                                            @else
+                                                                                <span
+                                                                                    class="badge bg-warning text-warning-fg">Not
+                                                                                    Publish</span>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            {{ \Carbon\Carbon::parse($review->created_at)->format('jS F Y') }}
+                                                                        </td>
+                                                                    </tr>
                                                                 @empty
-                                                                <tr>
-                                                                    <td colspan="7">
-                                                                        <p class="text-center">No Data!</p>
-                                                                    </td>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <td colspan="7">
+                                                                            <p class="text-center">No Data!</p>
+                                                                        </td>
+                                                                    </tr>
                                                                 @endforelse
                                                             </tbody>
                                                         </table>
@@ -427,7 +444,8 @@
                                                     <div class="btn-list">
                                                         <div class="table-search-input">
                                                             <label><input type="search" class="form-control input-sm"
-                                                                    placeholder="Search..." wire:model.live.debounce.500ms="oredr_search" /></label>
+                                                                    placeholder="Search..."
+                                                                    wire:model.live.debounce.500ms="oredr_search" /></label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -456,37 +474,44 @@
                                                             </thead>
                                                             <tbody>
                                                                 @php
-                                                                $i = 1;
+                                                                    $i = 1;
                                                                 @endphp
                                                                 @forelse($orders as $order)
-                                                                <tr>
-                                                                    <td>{{$i++}}</td>
+                                                                    <tr>
+                                                                        <td>{{ $i++ }}</td>
 
-                                                                    <td>{{$order->subtotal}}</td>
-                                                                    <td>{{$order->coupon_discount}}</td>
-                                                                    <td>{{$order->offer_discount}}</td>
-                                                                    <td>{{$order->gift_card_discount}}</td>
-                                                                    <td>{{$order->paid_amount}}</td>
-                                                                    <td>
-                                                                        @if($order->status == 0)
-                                                                        <p class="text text-warning">Pending</p>
-                                                                        @elseif($order->status == 1)
-                                                                        <p class="text text-success">Processed..</p>
-                                                                        @elseif($order->status == 2)
-                                                                        <p class="text text-success">Shipped</p>
-                                                                        @elseif($order->status == 3)
-                                                                        <p class="text text-success">Complete</p>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ \Carbon\Carbon::parse($order->created_at)->format('jS F Y') }}</td>
-                                                                    <td><a href="{{ route('admin.orders.view', $order->id) }}" target="_blank"><i class="fa fa-eye"></i></a></td>
-                                                                </tr>
+                                                                        <td>{{ $order->subtotal }}</td>
+                                                                        <td>{{ $order->coupon_discount }}</td>
+                                                                        <td>{{ $order->offer_discount }}</td>
+                                                                        <td>{{ $order->gift_card_discount }}</td>
+                                                                        <td>{{ $order->paid_amount }}</td>
+                                                                        <td>
+                                                                            @if ($order->status == 0)
+                                                                                <p class="text text-warning">Pending
+                                                                                </p>
+                                                                            @elseif($order->status == 1)
+                                                                                <p class="text text-success">
+                                                                                    Processed..</p>
+                                                                            @elseif($order->status == 2)
+                                                                                <p class="text text-success">Shipped
+                                                                                </p>
+                                                                            @elseif($order->status == 3)
+                                                                                <p class="text text-success">Complete
+                                                                                </p>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('jS F Y') }}
+                                                                        </td>
+                                                                        <td><a href="{{ route('admin.orders.view', $order->id) }}"
+                                                                                target="_blank"><i
+                                                                                    class="fa fa-eye"></i></a></td>
+                                                                    </tr>
                                                                 @empty
-                                                                <tr>
-                                                                    <td colspan="9">
-                                                                        <p class="text-center">No Data!</p>
-                                                                    </td>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <td colspan="9">
+                                                                            <p class="text-center">No Data!</p>
+                                                                        </td>
+                                                                    </tr>
                                                                 @endforelse
                                                             </tbody>
                                                         </table>
@@ -498,7 +523,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{--<div class="col-md-3 gap-3 d-flex flex-column-reverse flex-md-column mb-md-0 mb-5">
+                            {{-- <div class="col-md-3 gap-3 d-flex flex-column-reverse flex-md-column mb-md-0 mb-5">
                                 <div class="card">
                                     <div class="card-header">
                                         <h4 class="card-title">Publish</h4>
@@ -672,7 +697,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>--}}
+                            </div> --}}
                         </div>
                     </form>
                 </div>
@@ -693,12 +718,12 @@
     </div>
 </div>
 @section('scripts')
-<script>
-    $(document).ready(function() {
-        $('#transaction-table').DataTable({
-            "order": [], // disables initial sorting
-            "pageLength": 10 // optional: number of rows per page
+    <script>
+        $(document).ready(function() {
+            $('#transaction-table').DataTable({
+                "order": [], // disables initial sorting
+                "pageLength": 10 // optional: number of rows per page
+            });
         });
-    });
-</script>
+    </script>
 @endsection

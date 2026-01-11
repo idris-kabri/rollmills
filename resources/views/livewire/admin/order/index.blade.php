@@ -7,8 +7,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="mb-0 d-inline-block fs-6 lh-1"
-                                        href="{{url("/admin")}}">Dashboard</a>
+                                    <a class="mb-0 d-inline-block fs-6 lh-1" href="{{ url('/admin') }}">Dashboard</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     <h1 class="mb-0 d-inline-block fs-6 lh-1">Orders</h1>
@@ -34,8 +33,8 @@
                                     <!-- Search -->
                                     <div class="col-md-3">
                                         <label class="form-label">Search</label>
-                                        <input type="search" class="form-control" placeholder="Search..." style="min-width: 100px"
-                                            wire:model.live.debounce.500ms="search" />
+                                        <input type="search" class="form-control" placeholder="Search..."
+                                            style="min-width: 100px" wire:model.live.debounce.500ms="search" />
                                     </div>
 
                                     <!-- From Date -->
@@ -81,7 +80,7 @@
                                             ID
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
-                                            NAME/EMAIL
+                                            NAME/MOBILE
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
                                             SUB TOTAL
@@ -112,47 +111,48 @@
                                 </thead>
                                 <tbody>
                                     @forelse($orders as $order)
-                                    <tr>
-                                        <td>{{$i++}}</td> 
-                                        @if($order->getUser)
-                                        <td>
-                                            {{$order->getUser->name}}<br>
-                                            {{$order->getUser->email}}
-                                        </td> 
-                                        @endif
-                                        <td>{{$order->subtotal}}</td>
-                                        <td>{{$order->coupon_discount ?? 0}}</td>
-                                        <td>{{$order->offer_discount ?? 0}}</td>
-                                        <td>{{$order->gift_card_discount ?? 0}}</td>
-                                        <td>{{$order->paid_amount}}</td>
-                                        <td>
-                                            @if($order->is_cod == 1)
-                                            <p class="text text-info">COD</p>
-                                            @else
-                                            <p class="text text-success">Online</p>
+                                        <tr>
+                                            <td>{{ $i++ }}</td>
+                                            @if ($order->getUser)
+                                                <td>
+                                                    {{ $order->getUser->name }}<br>
+                                                    {{ $order->getUser->mobile }}
+                                                </td>
                                             @endif
-                                        </td>
-                                        <td>
-                                            @if($order->status == 0)
-                                            <p class="text text-warning">Pending</p>
-                                            @elseif($order->status == 1)
-                                            <p class="text text-warning">Processed..</p>
-                                            @elseif($order->status == 2)
-                                            <p class="text text-info">Shipped</p>
-                                            @elseif($order->status == 3)
-                                            <p class="text text-success">Complete</p>
-                                            @elseif($order->status == 4)
-                                            <p class="text text-danger">Cancelled</p>
-                                            @endif
-                                        </td>
-                                        <td><a href="{{ route('admin.orders.view', $order->id) }}"><i class="fa fa-eye"></i></a></td>
-                                    </tr>
+                                            <td>{{ $order->subtotal }}</td>
+                                            <td>{{ $order->coupon_discount ?? 0 }}</td>
+                                            <td>{{ $order->offer_discount ?? 0 }}</td>
+                                            <td>{{ $order->gift_card_discount ?? 0 }}</td>
+                                            <td>{{ $order->paid_amount }}</td>
+                                            <td>
+                                                @if ($order->is_cod == 1)
+                                                    <p class="text text-info">COD</p>
+                                                @else
+                                                    <p class="text text-success">Online</p>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($order->status == 0)
+                                                    <p class="text text-warning">Pending</p>
+                                                @elseif($order->status == 1)
+                                                    <p class="text text-warning">Processed..</p>
+                                                @elseif($order->status == 2)
+                                                    <p class="text text-info">Shipped</p>
+                                                @elseif($order->status == 3)
+                                                    <p class="text text-success">Complete</p>
+                                                @elseif($order->status == 4)
+                                                    <p class="text text-danger">Cancelled</p>
+                                                @endif
+                                            </td>
+                                            <td><a href="{{ route('admin.orders.view', $order->id) }}"><i
+                                                        class="fa fa-eye"></i></a></td>
+                                        </tr>
                                     @empty
-                                    <tr>
-                                        <td colspan="7">
-                                            <p class="text-center">No Data!</p>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                <p class="text-center">No Data!</p>
+                                            </td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>

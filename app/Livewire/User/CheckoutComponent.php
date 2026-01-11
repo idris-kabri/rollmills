@@ -143,39 +143,53 @@ class CheckoutComponent extends Component
             $this->checkPlaceOrderFunction();
             $this->calculateTotals();
             $this->dispatch('initiate-checkout', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
+        } else {
+            return redirect()->route('cart');
         }
     }
 
     public function defaultShippingCharge()
     {
-        $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
-        $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
+        $cartSubtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+        $cod_charges = (int) Setting::where('label', 'cod_charges')->first()->value ?? 0;
+        $free_delivery_order_amount = (int) Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
+        $shipping_charges = (int) Setting::where('label', 'shipping_charges')->first()->value ?? 0;
 
-        $weight = 0;
-        foreach (Cart::instance('cart')->content() as $item) {
-            $weight += $item->model->weight * $item->qty;
-        }
-
-        $weight = $weight / 1000;
-        $lookupWeight = (string) (ceil($weight * 2) / 2);
-
-        $online_charges = config('rates.online_rates');
-        $cod_charges = config('rates.cod_rates');
-
-        $online_charge = $online_charges[$lookupWeight] ?? $minimum_online_charge;
-        $cod_charge = $cod_charges[$lookupWeight] ?? $minimum_cod_charge;
-
-        if ($online_charge > (int) $minimum_online_charge) {
-            $this->online_payment_amount = $online_charge;
+        if ($cartSubtotal > $free_delivery_order_amount) {
+            $this->online_payment_amount = 0;
         } else {
-            $this->online_payment_amount = $minimum_online_charge;
+            $this->online_payment_amount = $shipping_charges;
         }
 
-        if ($cod_charge > (int) $minimum_cod_charge) {
-            $this->cash_on_delivery_amount = $cod_charge;
-        } else {
-            $this->cash_on_delivery_amount = $minimum_cod_charge;
-        }
+        $this->cash_on_delivery_amount = $cod_charges + $this->online_payment_amount;
+        // $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
+        // $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
+
+        // $weight = 0;
+        // foreach (Cart::instance('cart')->content() as $item) {
+        //     $weight += $item->model->weight * $item->qty;
+        // }
+
+        // $weight = $weight / 1000;
+        // $lookupWeight = (string) (ceil($weight * 2) / 2);
+
+        // $online_charges = config('rates.online_rates');
+        // $cod_charges = config('rates.cod_rates');
+
+        // $online_charge = $online_charges[$lookupWeight] ?? $minimum_online_charge;
+        // $cod_charge = $cod_charges[$lookupWeight] ?? $minimum_cod_charge;
+
+        // if ($online_charge > (int) $minimum_online_charge) {
+        //     $this->online_payment_amount = $online_charge;
+        // } else {
+        //     $this->online_payment_amount = $minimum_online_charge;
+        // }
+
+        // if ($cod_charge > (int) $minimum_cod_charge) {
+        //     $this->cash_on_delivery_amount = $cod_charge;
+        // } else {
+        //     $this->cash_on_delivery_amount = $minimum_cod_charge;
+        // }
     }
 
     public function checkPlaceOrderFunction()
@@ -329,7 +343,7 @@ class CheckoutComponent extends Component
             $this->add_new_address = false;
         }
         $this->checkBillingEmail();
-        $this->pincodeCheckFunction('yes');
+        // $this->pincodeCheckFunction('yes');
     }
 
     public function storeAddressInToShipping($address_id)
@@ -349,7 +363,7 @@ class CheckoutComponent extends Component
             ];
             $this->add_new_shipp_address = false;
         }
-        $this->pincodeCheckFunction('yes');
+        // $this->pincodeCheckFunction('yes');
     }
 
     public function checkBillingEmail()
@@ -785,68 +799,68 @@ class CheckoutComponent extends Component
         }
     }
 
-    public function pincodeCheckFunction($show_toast = 'no')
-    {
-        $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
-        $cart_items = Cart::instance('cart')->content();
-        if ($setting) {
-            $outOfDeliveryPincodes = explode(',', $setting->value);
-            $pincode = '';
-            if ($this->ship_to_different_address_enabled) {
-                $pincode = $this->ship_to_different_address['zipcode'];
-            } else {
-                $pincode = $this->billing_address['zipcode'];
-            }
+    // public function pincodeCheckFunction($show_toast = 'no')
+    // {
+    //     $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
+    //     $cart_items = Cart::instance('cart')->content();
+    //     if ($setting) {
+    //         $outOfDeliveryPincodes = explode(',', $setting->value);
+    //         $pincode = '';
+    //         if ($this->ship_to_different_address_enabled) {
+    //             $pincode = $this->ship_to_different_address['zipcode'];
+    //         } else {
+    //             $pincode = $this->billing_address['zipcode'];
+    //         }
 
-            $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
-            $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
+    //         $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
+    //         $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
 
-            if (in_array($pincode, $outOfDeliveryPincodes)) {
-                $this->free_shipping = true;
-                $this->online_payment_amount = 0;
-                $this->cash_on_delivery_amount = 0;
-                session()->put('free_shipping_pincode', $pincode);
-                session()->forget('show_deleviery_time');
-                session()->put('shipping_pincode', $pincode);
-                session()->forget('shipping_charge');
-                session()->forget('flat_rate_charge');
-            } else {
-                $online_payment_amount_response = getEstimation($cart_items, $pincode, 'prepaid');
-                if (is_numeric($online_payment_amount_response)) {
-                    if ($online_payment_amount_response < $minimum_online_charge) {
-                        $this->online_payment_amount = $minimum_online_charge;
-                    } else {
-                        $this->online_payment_amount = $online_payment_amount_response;
-                    }
-                }
+    //         if (in_array($pincode, $outOfDeliveryPincodes)) {
+    //             $this->free_shipping = true;
+    //             $this->online_payment_amount = 0;
+    //             $this->cash_on_delivery_amount = 0;
+    //             session()->put('free_shipping_pincode', $pincode);
+    //             session()->forget('show_deleviery_time');
+    //             session()->put('shipping_pincode', $pincode);
+    //             session()->forget('shipping_charge');
+    //             session()->forget('flat_rate_charge');
+    //         } else {
+    //             $online_payment_amount_response = getEstimation($cart_items, $pincode, 'prepaid');
+    //             if (is_numeric($online_payment_amount_response)) {
+    //                 if ($online_payment_amount_response < $minimum_online_charge) {
+    //                     $this->online_payment_amount = $minimum_online_charge;
+    //                 } else {
+    //                     $this->online_payment_amount = $online_payment_amount_response;
+    //                 }
+    //             }
 
-                $cash_on_delivery_amount_response = getEstimation($cart_items, $pincode, 'cod');
-                if (is_numeric($online_payment_amount_response)) {
-                    if ($cash_on_delivery_amount_response < $minimum_cod_charge) {
-                        $this->cash_on_delivery_amount = $minimum_cod_charge;
-                    } else {
-                        $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
-                    }
-                }
+    //             $cash_on_delivery_amount_response = getEstimation($cart_items, $pincode, 'cod');
+    //             if (is_numeric($online_payment_amount_response)) {
+    //                 if ($cash_on_delivery_amount_response < $minimum_cod_charge) {
+    //                     $this->cash_on_delivery_amount = $minimum_cod_charge;
+    //                 } else {
+    //                     $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
+    //                 }
+    //             }
 
-                session()->forget('free_shipping_pincode');
-                session()->forget('show_deleviery_time');
-                session()->forget('shipping_pincode');
+    //             session()->forget('free_shipping_pincode');
+    //             session()->forget('show_deleviery_time');
+    //             session()->forget('shipping_pincode');
 
-                // --- SET SHIPPING BASED ON ACTIVE METHOD ---
-                // if($this->payment_method == 'cod') {
-                //     session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
-                // } else {
-                //     session()->put('shipping_charge', ceil($this->online_payment_amount));
-                // }
-            }
-        } else {
-            session()->forget('free_shipping_pincode');
-            session()->forget('show_deleviery_time');
-            session()->forget('shipping_pincode');
-        }
-        $this->calculateTotals();
-    }
+    //             // --- SET SHIPPING BASED ON ACTIVE METHOD ---
+    //             // if($this->payment_method == 'cod') {
+    //             //     session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
+    //             // } else {
+    //             //     session()->put('shipping_charge', ceil($this->online_payment_amount));
+    //             // }
+    //         }
+    //     } else {
+    //         session()->forget('free_shipping_pincode');
+    //         session()->forget('show_deleviery_time');
+    //         session()->forget('shipping_pincode');
+    //     }
+    //     $this->calculateTotals();
+    // }
 
     // --- OTHER HELPERS ---
     public function billingAddressMobile()

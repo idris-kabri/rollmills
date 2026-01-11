@@ -129,6 +129,47 @@
         .form-check.form-radio-checkout {
             display: flex;
         }
+
+        /* --- FREE SHIPPING WIDGET STYLES (Checkout Version) --- */
+        .shipping-widget-checkout {
+            background: #f4f6fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed #c4cdd5;
+        }
+
+        .shipping-progress-bg {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            width: 100%;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .shipping-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s ease;
+            position: relative;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+
+        .shipping-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .shipping-highlight {
+            color: #00b59c;
+            font-weight: 700;
+        }
     </style>
 
     <div class="page-header breadcrumb-wrap">
@@ -271,8 +312,8 @@
                                 <div class="form-group col-lg-6">
                                     <input type="text" @if (session('shipping_charge'))  @endif
                                         name="billing_address.zipcode" placeholder="Postcode / ZIP *"
-                                        wire:model="billing_address.zipcode"
-                                        wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
+                                        wire:model="billing_address.zipcode">
+                                    {{-- wire:keyup.debounce.800ms="pincodeCheckFunction('yes')"> --}}
                                     @error('billing_address.zipcode')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -417,8 +458,8 @@
                                         <div class="form-group col-lg-6">
                                             <input required="" type="text" name="zipcode"
                                                 placeholder="Zipcode *" wire:model="ship_to_different_address.zipcode"
-                                                @if (session('shipping_charge')) disabled @endif
-                                                wire:keyup.debounce.800ms="pincodeCheckFunction('yes')">
+                                                @if (session('shipping_charge')) disabled @endif>
+                                            {{-- wire:keyup.debounce.800ms="pincodeCheckFunction('yes')"> --}}
                                         </div>
                                     </div>
                                 @endif
@@ -484,6 +525,40 @@
                         display: inline-block;
                     }
                 </style>
+
+                {{-- START: Free Shipping Interactive Widget (Checkout Sidebar) --}}
+                @php
+                    $cartSubtotalNumeric = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+                    $shippingThreshold =
+                        \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
+                    $shippingDiff = $shippingThreshold - $cartSubtotalNumeric;
+                    $shippingPercent = ($cartSubtotalNumeric / $shippingThreshold) * 100;
+                    if ($shippingPercent > 100) {
+                        $shippingPercent = 100;
+                    }
+                @endphp
+
+                <div class="shipping-widget-checkout mb-4">
+                    <div class="shipping-text">
+                        @if ($cartSubtotalNumeric >= $shippingThreshold)
+                            <i class="fi-rs-check-circle" style="color: #28a745; font-size: 18px;"></i>
+                            <span style="font-size:13px; line-height:1.2">Congratulations! You get <span
+                                    class="shipping-highlight" style="color:#28a745">FREE Shipping</span>.</span>
+                        @else
+                            <i class="fi-rs-truck-side" style="color: #00b59c; font-size: 18px;"></i>
+                            <span style="font-size:13px; line-height:1.2">Add <span
+                                    class="shipping-highlight">₹{{ number_format($shippingDiff) }}</span> for <span
+                                    class="shipping-highlight">FREE Shipping</span></span>
+                        @endif
+                    </div>
+                    <div class="shipping-progress-bg">
+                        <div class="shipping-progress-bar"
+                            style="width: {{ $shippingPercent }}%; background-color: {{ $cartSubtotalNumeric >= $shippingThreshold ? '#28a745' : '#00b59c' }};">
+                        </div>
+                    </div>
+                </div>
+                {{-- END: Free Shipping Interactive Widget --}}
+
 
                 <div class="border p-20 cart-totals mb-3">
                     <div class="d-flex align-items-end justify-content-between mb-30">
@@ -718,7 +793,7 @@
                                     </td>
                                 </tr>
 
-                                @if ($payment_method == 'cod' && floatval($online_payment_amount) != 0)
+                                @if ($payment_method == 'cod')
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">COD charges</h6>
