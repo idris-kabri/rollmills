@@ -208,7 +208,7 @@
     @endforeach
 
 
-    <section class="section-padding pb-5 pt-md-4 pt-0">
+    {{-- <section class="section-padding pb-5 pt-md-4 pt-0">
         <div class="container">
             <div class="section-title">
                 <h3 class="">Daily Best Sells</h3>
@@ -239,7 +239,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="section-padding pb-25 pt-md-4 pt-0">
         <div class="container">
