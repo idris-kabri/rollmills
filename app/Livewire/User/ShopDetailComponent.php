@@ -60,7 +60,7 @@ class ShopDetailComponent extends Component
 
         $this->mainProduct_reviews_percentage = ($this->mainProduct_reviews_avg / 5) * 100;
 
-        $relatedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Related')->pluck('related_product_id')->toArray();
+        $relatedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Related')->orderBy('id', 'desc')->pluck('related_product_id')->toArray();
         $linkedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Linked')->pluck('related_product_id')->toArray();
 
         $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where('parent_id', null)->take(10)->orderBy('id', 'asc')->get();
