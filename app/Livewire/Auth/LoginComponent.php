@@ -49,9 +49,7 @@ class LoginComponent extends Component
                     'components' => [
                         [
                             'type' => 'body',
-                            'parameters' => [
-                                ['type' => 'text', 'text' => (string) $otp]
-                            ],
+                            'parameters' => [['type' => 'text', 'text' => (string) $otp]],
                         ],
                     ],
                 ],
@@ -65,7 +63,7 @@ class LoginComponent extends Component
             } else {
                 \Log::warning('OTP failed', [
                     'status' => $response->status(),
-                    'body' => $response->body()
+                    'body' => $response->body(),
                 ]);
                 return false;
             }
@@ -97,6 +95,7 @@ class LoginComponent extends Component
                 $user->mobile = $this->mobile;
                 $user->otp = $otp;
                 $user->save();
+                wawiContact($user);
                 $this->messageSend($otp);
                 $this->otp_section_show = true;
             }
@@ -119,7 +118,7 @@ class LoginComponent extends Component
                     Auth::login($user);
                     $this->toastSuccess('Logged In Successfully!');
                     if (Auth::user()->role == 'admin') {
-                        return redirect("/admin");
+                        return redirect('/admin');
                     }
                 } else {
                     $this->addError('password', 'Invalid password.');
@@ -137,7 +136,7 @@ class LoginComponent extends Component
                     Cart::instance('cart')->restore(Auth::user()->mobile);
                     Cart::instance('cart')->store(Auth::user()->mobile);
 
-                    return redirect("/");
+                    return redirect('/');
                 } else {
                     $this->addError('otp', 'You Enter Wrong Otp!');
                 }

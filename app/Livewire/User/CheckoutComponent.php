@@ -582,17 +582,13 @@ class CheckoutComponent extends Component
             $user->password_view = $password;
             $user->is_guest_user = 1;
         }
-
-        if ($user->name == null || $user->name == '') {
-            wawiContact($user);
-        }
-
         $user->name = $this->billing_address['name'];
         $user->role = 'User';
         if ($this->billing_address['email'] != null && $this->billing_address['email'] != '') {
             $user->email = $this->billing_address['email'];
         }
         $user->save();
+        wawiContact($user);
 
         return [
             'id' => $user->id,
