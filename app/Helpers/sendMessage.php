@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 function messageSend($mobile, $otp, $template_name)
 {
