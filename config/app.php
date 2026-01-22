@@ -90,6 +90,8 @@ return [
     'razorpay_secret_key' => env('RAZORPAY_SECRET_KEY'),
     'razorpay_key_id' => env('RAZORPAY_KEY_ID'),
     'access_token' => env('IG_ACCESS_TOKEN'),
+    'wawi_token' => env('WAWI_TOKEN'),
+    'wawi_url' => env('WAWI_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -124,7 +126,7 @@ return [
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
-    ], 
+    ],
 
     'whatsapp_api_token' => env('WHATSAPP_API_TOKEN'),
     'whatsapp_phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
