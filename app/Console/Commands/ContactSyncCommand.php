@@ -26,7 +26,7 @@ class ContactSyncCommand extends Command
      */
     public function handle()
     {
-        $users = User::where('role', '!=', 'admin')->where('wawi_contact_id', null)->get();
+        $users = User::where('role', '!=', 'admin')->where('wawi_contact_id', null)->orderBy('id', 'desc')->get();
         foreach ($users as $user) {
             wawiContact($user);
         }
