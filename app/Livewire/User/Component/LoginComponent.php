@@ -40,7 +40,7 @@ class LoginComponent extends Component
                     $this->password_section_show = true;
                     $this->dispatch('password-show');
                 } else {
-                    messageSend($this->mobile,$otp,'login_otp');
+                    messageSend($this->mobile, $otp, 'login_otp');
                     $check_user->otp = $otp;
                     $check_user->save();
                     $this->otp_section_show = true;
@@ -52,7 +52,8 @@ class LoginComponent extends Component
                 $user->mobile = $this->mobile;
                 $user->otp = $otp;
                 $user->save();
-                messageSend($this->mobile,$otp,'login_otp');
+                wawiContact($user);
+                messageSend($this->mobile, $otp, 'login_otp');
                 $this->otp_section_show = true;
                 $this->dispatch('');
             }
@@ -108,6 +109,7 @@ class LoginComponent extends Component
         $otp = rand(1000, 9999);
         $check_user->otp = $otp;
         $check_user->save();
+        messageSend($this->mobile, $otp, 'login_otp');
 
         $this->toastSuccess('OTP Resend Successfully!');
         $this->dispatch('resend-otp');
