@@ -67,7 +67,7 @@ function wawiContact($user)
     // Format Name
     $nameParts = explode(' ', $user->name ?? '', 2);
     $firstName = $nameParts[0];
-    $lastName = $nameParts[1] ?? '';
+    $lastName = $nameParts[1] ?? $nameParts[0];
 
     if (empty($firstName)) {
         $firstName = fake()->firstName();
