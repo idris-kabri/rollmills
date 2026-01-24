@@ -259,7 +259,7 @@
 
                                 <div class="form-group col-lg-6">
                                     <input required type="email" name="billing_address.email"
-                                        placeholder="Email address *" wire:model="billing_address.email">
+                                        placeholder="Email address" wire:model="billing_address.email">
                                     @error('billing_address.email')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
