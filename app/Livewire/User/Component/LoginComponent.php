@@ -21,6 +21,7 @@ class LoginComponent extends Component
     public $password_section_show = false;
     public $otp = ['', '', '', ''];
     public $enteredOtp = null;
+    public $is_new_user = false;
 
     public function updatedOtp($value, $index)
     {
@@ -52,6 +53,7 @@ class LoginComponent extends Component
                 $user->mobile = $this->mobile;
                 $user->otp = $otp;
                 $user->save();
+                $this->is_new_user = true;
                 wawiContact($user);
                 messageSend($this->mobile, $otp, 'login_otp');
                 $this->otp_section_show = true;
@@ -93,6 +95,9 @@ class LoginComponent extends Component
                     $get_all_cart = Cart::instance('cart')->content();
                     Cart::instance('cart')->restore(Auth::user()->mobile);
                     Cart::instance('cart')->store(Auth::user()->mobile);
+                    if ($this->is_new_user) {
+                        sendNormalTemplateWawi('welcome_message2', 'en_US', $this->mobile);
+                    }
 
                     return $this->dispatch('refresh-login');
                 } else {
