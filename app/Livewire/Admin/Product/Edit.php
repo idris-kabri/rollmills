@@ -15,7 +15,7 @@ use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
-use Livewire\WithFileUploads; 
+use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -71,6 +71,7 @@ class Edit extends Component
     public $all_products = [];
     public $linked_products = [];
     public $sale_default_price = 0;
+    public $gst = 0;
 
     public function mount($id)
     {
@@ -91,7 +92,7 @@ class Edit extends Component
             foreach ($categories as $cat) {
                 $categories_array[$cat->id] = [
                     'id' => $cat->id,
-                    'name' => $cat->name
+                    'name' => $cat->name,
                 ];
             }
         } else {
@@ -101,14 +102,14 @@ class Edit extends Component
                 $categories_array[$cat->id] = [
                     'id' => $cat->id,
                     'name' => $cat->name,
-                    'items' => []
+                    'items' => [],
                 ];
                 if (isset($child_category) && count($child_category) > 0) {
                     foreach ($child_category as $child) {
                         $categories_array[$cat->id]['items'][] = [
                             'id' => $child->id,
                             'name' => $child->name,
-                            'parent_id' => $child->parent_id
+                            'parent_id' => $child->parent_id,
                         ];
                     }
                 }
@@ -137,7 +138,7 @@ class Edit extends Component
                         'name' => $attribute->name,
                         'items' => [$assign->title],
                         'is_default' => null,
-                        'remove' => false
+                        'remove' => false,
                     ];
                 }
 
@@ -159,13 +160,11 @@ class Edit extends Component
         $this->selectedVariationOption = [];
         $variations = Product::where('parent_id', $id)->get();
         foreach ($variations as $variation) {
-
             $attrAssign = ProductAttributeAssign::where('product_id', $variation->id)->get();
             $compositeKeyParts = [];
             $nameParts = [];
 
             foreach ($attrAssign as $item) {
-
                 $items = $this->selectedOptions[$item->product_set_id]['items'];
                 $key = array_search($item->title, $items);
 
@@ -198,8 +197,8 @@ class Edit extends Component
                         'height' => $variation->height ?? 0,
                         'description' => $variation->description ?? '',
                         'existing_featured_image' => $variation->featured_image ?? null,
-                        'remove' => false
-                    ]
+                        'remove' => false,
+                    ],
                 ];
             }
         }
@@ -215,7 +214,7 @@ class Edit extends Component
         $this->discount = $product->sale_price;
         $this->discount_start_date = $product->sale_from_date;
         $this->discount_end_date = $product->sale_to_date;
-        $this->stock_status = $product->out_of_stock; 
+        $this->stock_status = $product->out_of_stock;
         $this->is_bulk_inquiry_supported = $product->bulk_supported;
         $this->weight = $product->weight;
         $this->length = $product->length;
@@ -223,6 +222,7 @@ class Edit extends Component
         $this->height = $product->height;
         $this->shipping_margin = $product->extra_shipping_margin;
         $this->shipping_margin_br = $product->shipping_margin_br;
+        $this->gst = $product->gst;
         $this->pincode_excluded = $product->pincode_excluded;
         $this->product_warranty = $product->product_waranty;
         $this->return_days = $product->product_return_days;
@@ -230,7 +230,7 @@ class Edit extends Component
         $this->seo_title = $product->seo_title;
         $this->seo_meta = $product->seo_meta;
         $this->seo_description = $product->seo_description;
-        $this->status = $product->status;
+        $this->status = $product->status == 1 ? 'published' : 'draft';
         $this->is_featured = $product->is_featured;
         $this->is_active = $product->active_inactive_status;
         $this->specifications = json_decode($product->specifications, true);
@@ -252,8 +252,8 @@ class Edit extends Component
                 $this->selectedOptions[$attribute->id] = [
                     'id' => $attribute->id,
                     'name' => $attribute->name,
-                    'items' => $attribute->getAttibuteItems->pluck('name')->toArray(), // Fetch item names 
-                    'remove' => true
+                    'items' => $attribute->getAttibuteItems->pluck('name')->toArray(), // Fetch item names
+                    'remove' => true,
                 ];
             }
 
@@ -264,7 +264,6 @@ class Edit extends Component
     public function removeOption($attributeId, $index)
     {
         if (isset($this->selectedOptions[$attributeId]['items'][$index])) {
-
             unset($this->selectedOptions[$attributeId]['items'][$index]);
 
             $this->selectedOptions[$attributeId]['items'] = array_values($this->selectedOptions[$attributeId]['items']);
@@ -278,7 +277,7 @@ class Edit extends Component
     public function addRow($attributeId)
     {
         if (isset($this->selectedOptions[$attributeId])) {
-            $this->selectedOptions[$attributeId]['items'][] = "";
+            $this->selectedOptions[$attributeId]['items'][] = '';
         }
     }
 
@@ -301,8 +300,8 @@ class Edit extends Component
             $this->selectedVariationOption[$compositeKey] = [
                 'details' => [
                     'id' => null,
-                    'gallery_images' => [],               // For new uploads
-                    'existing_gallery_images' => [],               // For new uploads
+                    'gallery_images' => [], // For new uploads
+                    'existing_gallery_images' => [], // For new uploads
                     'existing_featured_image' => null, // For existing images
                     'sku' => '',
                     'weight' => $this->weight,
@@ -312,9 +311,9 @@ class Edit extends Component
                     'regular_price' => 0,
                     'is_active' => 1,
                     'shipping_margin_br' => 0,
-                    'remove' => true
+                    'remove' => true,
                     // ... other default fields
-                ]
+                ],
             ];
         }
     }
@@ -342,19 +341,16 @@ class Edit extends Component
         } elseif ($type === 'variationsExisting') {
             if (isset($this->selectedVariationOption[$index]['details']['existing_gallery_images'])) {
                 unset($this->selectedVariationOption[$index]['details']['existing_gallery_images'][$key]);
-                $this->selectedVariationOption[$index]['details']['existing_gallery_images'] = array_values(
-                    $this->selectedVariationOption[$index]['details']['existing_gallery_images']
-                );
+                $this->selectedVariationOption[$index]['details']['existing_gallery_images'] = array_values($this->selectedVariationOption[$index]['details']['existing_gallery_images']);
             }
         } elseif ($type === 'variationsNew') {
             unset($this->selectedVariationOption[$index]['details']['gallery_images'][$key]);
-            $this->selectedVariationOption[$index]['details']['gallery_images'] = array_values(
-                $this->selectedVariationOption[$index]['details']['gallery_images']
-            );
+            $this->selectedVariationOption[$index]['details']['gallery_images'] = array_values($this->selectedVariationOption[$index]['details']['gallery_images']);
         }
     }
 
-    public function updatedName($value){ 
+    public function updatedName($value)
+    {
         $this->slug = Str::slug($value, '-');
     }
 
@@ -418,7 +414,7 @@ class Edit extends Component
 
         if ($validator->fails()) {
             $this->dispatch('validation-errors', [
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ]);
         } else {
             try {
@@ -446,6 +442,7 @@ class Edit extends Component
                 $product->shipping_margin_br = $this->shipping_margin_br;
                 $product->pincode_excluded = $this->pincode_excluded;
                 $product->product_waranty = $this->product_warranty;
+                $product->gst = $this->gst;
                 $product->product_return_days = $this->return_days;
                 $product->product_replacement_days = $this->replacement_days;
                 $product->seo_title = $this->seo_title;
@@ -469,7 +466,6 @@ class Edit extends Component
                     $imagePath = $this->featured_image->store('product', 'public');
                     $product->featured_image = $imagePath;
                 }
-
 
                 // Handle gallery images - UPDATED VERSION
                 $existingImages = $this->default_gallery_images ?? [];
@@ -499,18 +495,14 @@ class Edit extends Component
                 $allImages = array_merge($existingImages, $newImages);
                 $product->images = json_encode($allImages);
 
-
                 $product->save();
 
                 $product_id[] = $product->id;
 
-
                 // dd($this, $this->selectedVariationOption);
                 if ($this->selectedVariationOption != null && isset($this->selectedVariationOption) && count($this->selectedVariationOption) > 0) {
                     foreach ($this->selectedVariationOption as $key => $option) {
-                        $product_variation = (isset($option['details']['id']) && $option['details']['id'])
-                            ? Product::find($option['details']['id'])
-                            : new Product();
+                        $product_variation = isset($option['details']['id']) && $option['details']['id'] ? Product::find($option['details']['id']) : new Product();
 
                         // Set common properties
                         $product_variation->name = $this->name;
@@ -520,13 +512,11 @@ class Edit extends Component
                         $product_variation->youtube_video_link = $this->youtube_link;
                         $product_variation->SKU = $option['details']['sku'] ?? $this->sku;
                         $product_variation->price = $option['details']['regular_price'] ?? $this->price;
-                        $product_variation->sale_price = $option['details']['sale_price'] ?? $this->discount ?? 0;
-                        $product_variation->sale_default_price = $option['details']['sale_default_price'] ?? $this->sale_default_price ?? 0;
+                        $product_variation->sale_price = $option['details']['sale_price'] ?? ($this->discount ?? 0);
+                        $product_variation->sale_default_price = $option['details']['sale_default_price'] ?? ($this->sale_default_price ?? 0);
                         $product_variation->sale_from_date = $option['details']['from_date'] ?? $this->discount_start_date;
                         $product_variation->sale_to_date = $option['details']['sale_date'] ?? $this->discount_end_date;
-                        $product_variation->out_of_stock = isset($option['details']['stock_status'])
-                            ? ($option['details']['stock_status'] == false ? 0 : 1)
-                            : $this->stock_status;
+                        $product_variation->out_of_stock = isset($option['details']['stock_status']) ? ($option['details']['stock_status'] == false ? 0 : 1) : $this->stock_status;
                         if ($option['details']['is_active'] == false) {
                             $product_variation->active_inactive_status = 0;
                         } else {
@@ -549,6 +539,7 @@ class Edit extends Component
                         $product_variation->status = $this->status == 'published' ? 1 : 0;
                         $product_variation->is_featured = $this->is_featured;
                         $product_variation->specifications = json_encode($this->specifications ?? []);
+                        $product_variation->gst = $this->gst;
 
                         $product_variation->parent_id = $product->id;
 
@@ -591,7 +582,7 @@ class Edit extends Component
                             $isDefaultIndex = $this->selectedOptions[$attributeId]['is_default'] ?? null;
                             $isDefault = $isDefaultIndex == $itemIndex;
 
-                            $attributes_assign = new ProductAttributeAssign;
+                            $attributes_assign = new ProductAttributeAssign();
                             $attributes_assign->product_id = $product_variation->id;
                             $attributes_assign->product_set_id = $value_array[0];
                             $attributes_assign->title = $this->selectedOptions[$value_array[0]]['items'][$value_array[1]];
@@ -602,46 +593,37 @@ class Edit extends Component
                             $attributes_name[] = $this->selectedOptions[$value_array[0]]['items'][$value_array[1]];
                         }
 
-                        $product_variation->name = $this->name . " " . $name;
+                        $product_variation->name = $this->name . ' ' . $name;
                         $product_variation->attribute_id = implode(',', $attributes);
                         $product_variation->attributes_name = implode(',', $attributes_name);
-                        $product_variation->slug = Str::slug($product_variation->name. '-');
+                        $product_variation->slug = Str::slug($product_variation->name . '-');
                         $product_variation->save();
                     }
                 }
 
                 if (!empty($this->selectedCategories)) {
                     foreach ($product_id as $item) {
-                        $existingCategories = ProductCategoryAssign::where('product_id', $item)
-                            ->pluck('category_id')
-                            ->toArray();
+                        $existingCategories = ProductCategoryAssign::where('product_id', $item)->pluck('category_id')->toArray();
                         $categoriesToDelete = array_diff($existingCategories, $this->selectedCategories);
                         if (!empty($categoriesToDelete)) {
-                            ProductCategoryAssign::where('product_id', $item)
-                                ->whereIn('category_id', $categoriesToDelete)
-                                ->delete();
+                            ProductCategoryAssign::where('product_id', $item)->whereIn('category_id', $categoriesToDelete)->delete();
                         }
                         foreach ($this->selectedCategories as $category) {
-                            $exists = ProductCategoryAssign::where('product_id', $item)
-                                ->where('category_id', $category)
-                                ->exists();
+                            $exists = ProductCategoryAssign::where('product_id', $item)->where('category_id', $category)->exists();
 
                             if (!$exists) {
                                 ProductCategoryAssign::create([
                                     'product_id' => $item,
-                                    'category_id' => $category
+                                    'category_id' => $category,
                                 ]);
                             }
                         }
                     }
                 }
 
-
                 if (isset($this->brand_id)) {
                     // Get current brand associations for all products being updated
-                    $currentBrands = ProductBrand::whereIn('product_id', $product_id)
-                        ->pluck('brand_id')
-                        ->toArray();
+                    $currentBrands = ProductBrand::whereIn('product_id', $product_id)->pluck('brand_id')->toArray();
 
                     // Only make changes if brands were actually modified
                     if (array_diff($this->brand_id, $currentBrands) || array_diff($currentBrands, $this->brand_id)) {
@@ -650,7 +632,7 @@ class Edit extends Component
                         if (!empty($this->brand_id)) {
                             foreach (array_unique($this->brand_id) as $brand) {
                                 foreach ($product_id as $item) {
-                                    $product_brand = new ProductBrand;
+                                    $product_brand = new ProductBrand();
                                     $product_brand->product_id = $item;
                                     $product_brand->brand_id = $brand;
                                     $product_brand->save();
@@ -661,9 +643,7 @@ class Edit extends Component
                 }
 
                 // Related Products
-                ProductRelation::whereIn('product_id', $product_id)
-                    ->where('type', 'Related')
-                    ->delete();
+                ProductRelation::whereIn('product_id', $product_id)->where('type', 'Related')->delete();
                 if (count($this->related_products) > 0) {
                     foreach ($this->related_products as $related_product) {
                         foreach ($product_id as $item) {
@@ -676,16 +656,13 @@ class Edit extends Component
                     }
                 }
 
-
                 // Linked Products
-                ProductRelation::whereIn('product_id', $product_id)
-                    ->where('type', 'Linked')
-                    ->delete();
+                ProductRelation::whereIn('product_id', $product_id)->where('type', 'Linked')->delete();
                 // Add new relations if any exist
                 if (count($this->linked_products) > 0) {
                     foreach ($this->linked_products as $linked_product) {
                         foreach ($product_id as $item) {
-                            $product_relation_linked = new ProductRelation;
+                            $product_relation_linked = new ProductRelation();
                             $product_relation_linked->product_id = $item;
                             $product_relation_linked->related_product_id = $linked_product;
                             $product_relation_linked->type = 'Linked';
@@ -720,7 +697,7 @@ class Edit extends Component
     {
         $this->specifications[] = [
             'name' => '',
-            'value' => ''
+            'value' => '',
         ];
     }
 
