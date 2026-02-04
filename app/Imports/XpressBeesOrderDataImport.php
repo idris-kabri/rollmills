@@ -40,7 +40,7 @@ class XpressBeesOrderDataImport implements ToCollection, WithHeadingRow
                 }
             }
 
-            $order->total_delievery_charges = $row['charges'] ?? 0;
+            $order->total_delievery_charges += $row['charges'] ?? 0;
 
             if (($row['order_status'] ?? '') == 'delivered') {
                 $order->status = 3;

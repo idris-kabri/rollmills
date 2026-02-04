@@ -30,7 +30,7 @@ class IthinkOrderDataImport implements ToCollection, WithHeadingRow
                 }
             }
 
-            $order->total_delievery_charges = $row['unbilled_charges'] ?? 0;
+            $order->total_delievery_charges += $row['unbilled_charges'] ?? 0;
 
             if (($row['order_status'] ?? '') == 'Delivered') {
                 $order->status = 3;
