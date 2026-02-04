@@ -17,7 +17,7 @@
                                         href="{{ route('admin.orders.index') }}">Orders</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
-                                    <h1 class="mb-0 d-inline-block fs-6 lh-1">Order #EF-{{ $order->id }}</h1>
+                                    <h1 class="mb-0 d-inline-block fs-6 lh-1">Order #RM-{{ $order->id }}</h1>
                                 </li>
                             </ol>
                         </nav>
@@ -253,25 +253,6 @@
                                                     </tr>
                                                 @endif
 
-                                                {{-- <tr>
-                                                    <td>
-                                                        <p class="mb-1">Shipping fee</p>
-                                                        <span class="small d-block">Free delivery</span>
-                                                        <span class="small d-block">10,108 grams</span>
-                                                    </td>
-                                                    <td>
-                                                        $0.00
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Tax
-                                                    </td>
-                                                    <td>
-                                                        $180.50
-                                                    </td>
-                                                </tr> --}}
-
                                                 <tr>
                                                     <td>
                                                         Total amount
@@ -293,22 +274,6 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-
-                                                {{-- <tr>
-                                                    <td>
-                                                        Payment method
-                                                    </td>
-                                                    <td>
-                                                        <a href="https://shopwise.botble.com/admin/payments/transactions/19" target="_blank">
-                                                            Cash on delivery (COD)
-
-                                                            <svg class="icon  svg-icon-ti-ti-external-link" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"></path>
-                                                                <path d="M11 13l9 -9"></path>
-                                                                <path d="M15 4h5v5"></path>
-                                                            </svg> </a>
-                                                    </td>
-                                                </tr> --}}
 
                                                 <tr>
                                                     <td>
@@ -360,28 +325,6 @@
                                             </tbody>
                                         </table>
 
-                                        <!-- invoice print  -->
-                                        {{-- <div class="btn-list justify-content-end my-3">
-                                            <a class="btn" type="button" href="https://shopwise.botble.com/admin/ecommerce/orders/generate-invoice/19?type=print" target="_blank">
-                                                <svg class="icon icon-left svg-icon-ti-ti-printer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"></path>
-                                                    <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"></path>
-                                                    <path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z"></path>
-                                                </svg>
-                                                Print invoice
-
-                                            </a>
-                                            <a class="btn" type="button" href="https://shopwise.botble.com/admin/ecommerce/orders/generate-invoice/19" target="_blank">
-                                                <svg class="icon icon-left svg-icon-ti-ti-download" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                    <path d="M7 11l5 5l5 -5"></path>
-                                                    <path d="M12 4l0 12"></path>
-                                                </svg>
-                                                Download invoice
-
-                                            </a>
-                                        </div> --}}
-
                                         @if ($order->additional_information)
                                             <div class="mb-3 position-relative">
                                                 <label class="form-label" for="description">
@@ -414,6 +357,7 @@
                                 </div>
                             </div>
                         </div>
+
                         @if ($order_transaction != null)
                             <div class="card">
 
@@ -505,7 +449,6 @@
 
                     <div class="col-md-3">
 
-
                         <div class="card mb-4">
                             <div class="card-header">
                                 <h4 class="card-title">
@@ -545,6 +488,134 @@
                                         @endif
                                     </div>
                                 @endif
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="card-title m-0">Logistics & AWB</h4>
+                                    <small class="text-muted">Manage shipping details</small>
+                                </div>
+                                <button wire:click="addLogisticsRow" type="button" class="btn btn-sm btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"
+                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M12 5l0 14"></path>
+                                        <path d="M5 12l14 0"></path>
+                                    </svg>
+                                    Add New
+                                </button>
+                            </div>
+
+                            <div class="card-body p-3" style="max-height: 500px; overflow-y: auto;">
+
+                                @if (empty($logistics))
+                                    <div class="text-center py-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-truck-delivery text-muted mb-2"
+                                            width="48" height="48" viewBox="0 0 24 24" stroke-width="1.5"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
+                                            <path d="M3 9l4 0"></path>
+                                        </svg>
+                                        <p class="text-muted small">No logistics info added yet.</p>
+                                    </div>
+                                @endif
+
+                                @foreach ($logistics as $index => $row)
+                                    <div class="card mb-3 border position-relative group-hover-btn">
+                                        <button wire:click="removeLogisticsRow({{ $index }})" type="button"
+                                            class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"
+                                            style="z-index: 10; font-size: 0.75rem;" title="Remove"></button>
+
+                                        <div class="card-body p-2">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <label class="form-label small text-muted text-uppercase fw-bold"
+                                                        style="font-size: 0.7rem;">Aggregator</label>
+                                                    <input type="text"
+                                                        wire:model="logistics.{{ $index }}.aggregator"
+                                                        placeholder="Ex: Shiprocket"
+                                                        class="form-control form-control-sm">
+                                                    @error('logistics.{{ $index }}.aggregator')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <label class="form-label small text-muted text-uppercase fw-bold"
+                                                        style="font-size: 0.7rem;">Provider</label>
+                                                    <input type="text"
+                                                        wire:model="logistics.{{ $index }}.provider"
+                                                        placeholder="Ex: BlueDart"
+                                                        class="form-control form-control-sm">
+                                                    @error('logistics.{{ $index }}.provider')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label class="form-label small text-muted text-uppercase fw-bold"
+                                                        style="font-size: 0.7rem;">AWB / Tracking ID</label>
+                                                    <div class="input-group input-group-sm input-group-flat">
+                                                        <span class="input-group-text">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="icon icon-tabler icon-tabler-barcode"
+                                                                width="24" height="24" viewBox="0 0 24 24"
+                                                                stroke-width="2" stroke="currentColor" fill="none"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                                                                </path>
+                                                                <path d="M4 7v-1a2 2 0 0 1 2 -2h2"></path>
+                                                                <path d="M4 17v1a2 2 0 0 0 2 2h2"></path>
+                                                                <path d="M16 4h2a2 2 0 0 1 2 2v1"></path>
+                                                                <path d="M16 20h2a2 2 0 0 0 2 -2v-1"></path>
+                                                                <path d="M5 11h1v2h-1z"></path>
+                                                                <path d="M10 11l0 2"></path>
+                                                                <path d="M14 11h1v2h-1z"></path>
+                                                                <path d="M19 11l0 2"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <input type="text"
+                                                            wire:model="logistics.{{ $index }}.awb_number"
+                                                            placeholder="Enter AWB Number"
+                                                            class="form-control font-monospace">
+                                                        @error('logistics.{{ $index }}.awb_number')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label class="form-label small text-muted text-uppercase fw-bold"
+                                                        style="font-size: 0.7rem;">Shipping Charges</label>
+                                                    <div class="input-group input-group-sm input-group-flat">
+                                                        <span class="input-group-text">₹</span>
+                                                        <input type="number" step="0.01"
+                                                            wire:model="logistics.{{ $index }}.charges"
+                                                            placeholder="0.00" class="form-control">
+                                                        @error('logistics.{{ $index }}.charges')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="card-footer bg-light p-3">
+                                <button wire:click="saveLogistics" class="btn btn-dark w-100">
+                                    Save Logistics Details
+                                </button>
                             </div>
                         </div>
 
