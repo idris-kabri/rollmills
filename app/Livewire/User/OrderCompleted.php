@@ -85,9 +85,9 @@ class OrderCompleted extends Component
         ];
 
         $this->dispatch('purchase', $final_order_array);
+        $parameters = [$user_order->getBillAddress->name, $user_order->id];
+        sendParameterTemplateWawi('order_success_new2', 'en_us', $user_order->getBillAddress->mobile, $parameters);
         if (session()->has('success')) {
-            $parameters = [$user_order->getBillAddress->name, $user_order->id];
-            sendParameterTemplateWawi('order_success_new2', 'en_us', $user_order->getBillAddress->mobile, $parameters);
             $this->toastSuccess('Your order placed successfully!');
         }
 
