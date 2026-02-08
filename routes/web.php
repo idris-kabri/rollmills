@@ -58,5 +58,7 @@ Route::match(['get', 'post'], '/get-payment', [PaymentSuccessController::class, 
 Route::get('/ithink-import', [ImportController::class, 'ithink'])->name('ithink');
 Route::get('/xprees-bees-import', [ImportController::class, 'xpreesBees'])->name('xpreesBees');
 Route::get('/payment-settlement', [ImportController::class, 'paymentSettlement'])->name('paymentSettlement');
+Route::get('/meesho-order-import', [ImportController::class, 'meeshoOrderImport'])->name('meesho');
+Route::get('/meesho-deduction-import', [ImportController::class, 'meeshoDeductionImport'])->name('meesho');
 
 @include 'admin.php';

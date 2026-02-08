@@ -20,15 +20,15 @@
 
                             <p>Your order is being processed. We will update you shortly with further details.</p>
 
-                            <div class="wa-btn-container">
+                            {{-- <div class="wa-btn-container">
                                 <a href="https://wa.me/918764766553?text=Hi%20Roll%20Mills,%20I%20placed%20order%20%23{{ $id }}%20and%20would%20like%20to%20receive%20updates%20here."
                                     class="btn-whatsapp-premium" target="_blank">
                                     <i class="fab fa-whatsapp"></i>
                                     <span>Get Order updates on WhatsApp</span>
                                 </a>
-                            </div>
+                            </div> --}}
 
-                            <style>
+                            {{-- <style>
                                 /* Spacing around the button */
                                 .wa-btn-container {
                                     margin: 30px 0 20px 0;
@@ -82,7 +82,7 @@
                                     text-decoration: none;
                                     color: #fff;
                                 }
-                            </style>
+                            </style> --}}
                             <a href="{{ url('/shop') }}" class="btn btn-fill-out mt-10">
                                 Continue Shopping
                             </a>

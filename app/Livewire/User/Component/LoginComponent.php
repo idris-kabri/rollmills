@@ -96,7 +96,7 @@ class LoginComponent extends Component
                     Cart::instance('cart')->restore(Auth::user()->mobile);
                     Cart::instance('cart')->store(Auth::user()->mobile);
                     if ($this->is_new_user) {
-                        sendNormalTemplateWawi('welcome_message2', 'en_US', $this->mobile);
+                        sendNormalTemplateWawi('welcome_message2', 'en_us', $this->mobile);
                     }
 
                     return $this->dispatch('refresh-login');

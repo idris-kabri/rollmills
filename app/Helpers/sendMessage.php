@@ -135,9 +135,36 @@ function wawiContact($user)
 
 function sendNormalTemplateWawi($template_name, $language_code, $phone_number)
 {
-    Log::error('template_name: ' . $template_name . ' language_code: ' . $language_code . ' phone_number: ' . $phone_number);
     $url = config('app.wawi_url') . '/messages/template';
     $token = config('app.wawi_token');
+
+    $response = Http::withToken($token)->post($url, [
+        'template_name' => $template_name,
+        'template_language' => $language_code,
+        'phone_number' => '+91' . $phone_number,
+    ]);
+
+    // Handle the response
+    if ($response->successful()) {
+        return $response->json();
+    } else {
+        return $response->status();
+    }
+}
+
+function sendParameterTemplateWawi($template_name, $language_code, $phone_number, $parameters)
+{
+    $url = config('app.wawi_url') . '/messages/template';
+    $token = config('app.wawi_token');
+    $data = [
+        'template_name' => $template_name,
+        'template_language' => $language_code,
+        'phone_number' => '+91' . $phone_number,
+    ];
+
+    foreach ($parameters as $key => $value) {
+        $data['field_' . $key + 1] = $value;
+    }
 
     $response = Http::withToken($token)->post($url, [
         'template_name' => $template_name,
