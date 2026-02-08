@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->integer('quantity');
             $table->double('price_per_piece');
             $table->double('total');
-            $table->string('packet_qr');
+            $table->string('packet_qr')->nullable();
             $table->string('remittance_at')->nullable();
             $table->string('transaction_id')->nullable();
             $table->double('remittance_amount')->nullable();

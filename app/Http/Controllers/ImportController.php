@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Imports\IthinkOrderDataImport;
 use App\Imports\XpressBeesOrderDataImport;
+use App\Imports\MeeshoDeductionImport;
+use App\Imports\MeeshoOrderImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Http;
 use App\Models\Transaction;
@@ -60,6 +62,18 @@ class ImportController extends Controller
                 $payment->save();
             }
         }
+        return response()->json(['success' => true]);
+    }
+
+    public function meeshoOrderImport()
+    {
+        Excel::import(new MeeshoOrderImport(), public_path('meesho_orders.csv'));
+        return response()->json(['success' => true]);
+    }
+
+    public function meeshoDeductionImport()
+    {
+        Excel::import(new MeeshoDeductionImport(), public_path('meesho_deduction.csv'));
         return response()->json(['success' => true]);
     }
 }
