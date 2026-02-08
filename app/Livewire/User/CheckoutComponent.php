@@ -552,12 +552,15 @@ class CheckoutComponent extends Component
             if ($this->is_first_order == true && $this->payment_method == 'online' && (!isset($item->options['is_gift_product']) || $item->options['is_gift_product'] == false)) {
                 $item_discount = ($orderItem->subtotal * 10) / 100;
                 $this->item_sum_discount += $item_discount;
-                $orderItem->total = $orderItem->subtotal - $orderItem->offer_discount - $item_discount;
+                $total = $orderItem->subtotal - $orderItem->offer_discount - $item_discount;
                 $orderItem->bonus = $item_discount;
             } else {
-                $orderItem->total = $orderItem->subtotal - $orderItem->offer_discount;
+                $total = $orderItem->subtotal - $orderItem->offer_discount;
             }
+            $orderItem->total = $total;
             $orderItem->item_return_days = $item->model->product_return_days;
+            $orderItem->gst = $item->model->gst ?? 0;
+            $orderItem->gst_amount = $total - ($total * 100) / (100 + $item->model->gst ?? 0);
             $orderItem->item_replacement_days = $item->model->product_replacement_days;
             $orderItem->delivery_at = now();
             $orderItem->is_gift_item = $item->options['is_gift_product'] ?? false ? 1 : 0;

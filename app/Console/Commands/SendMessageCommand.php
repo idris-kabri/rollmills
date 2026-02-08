@@ -5,8 +5,9 @@ namespace App\Console\Commands;
 use App\Models\AbendedCartMessage;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Exception;
 
 class SendMessageCommand extends Command
 {
@@ -22,65 +23,76 @@ class SendMessageCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Send sequential abandoned cart messages (4h, 3d, 7d, 15d, 24d, 30d)';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
+        Log::info('Abandoned Cart Drip Command Started.');
+
+        $schedule = [
+            1 => 4, // 4 Hours
+            2 => 24 * 3, // 3 Days (72 hours)
+            3 => 24 * 7, // 7 Days
+            4 => 24 * 15, // 15 Days
+            5 => 24 * 24, // 24 Days
+            6 => 24 * 30, // 30 Days
+        ];
+
+        $startWindow = now()->subDays(35);
+        $endWindow = now()->subHours(4);
+
         try {
-            $shoppingCarts = DB::table('shoppingcart')
+            DB::table('shoppingcart')
                 ->where('instance', 'cart')
-                ->where('created_at', '<=', now()->subHours(4))
-                ->get();
-            foreach ($shoppingCarts as $cart) {
+                ->whereBetween('created_at', [$startWindow, $endWindow])
+                ->orderBy('created_at', 'desc') // Process newest first
+                ->chunk(50, function ($shoppingCarts) use ($schedule) {
+                    foreach ($shoppingCarts as $cart) {
+                        try {
+                            $cartDate = Carbon::parse($cart->created_at);
+                            $phone = preg_replace('/[^0-9]/', '', $cart->identifier);
 
-                $check_condtion = AbendedCartMessage::where('mobile_number', $cart->identifier)->orderBy('id', 'desc')->first();
-                if ($check_condtion && now()->diffInDays($check_condtion->created_at) <= 3) {
-                    continue;
-                }
-                try {
-                    $token = config('app.whatsapp_api_token');
-                    $phoneNumberId = config('app.whatsapp_phone_number_id');
-                    $apiVersion = config('app.whatsapp_api_version');
+                            // Validation: Skip invalid numbers
+                            if (strlen($phone) < 10) {
+                                continue;
+                            }
+                            $messagesSentCount = AbendedCartMessage::where('mobile_number', $cart->identifier)->where('created_at', '>=', $cartDate)->count();
 
-                    $phone = preg_replace('/[^0-9]/', '', $cart->identifier);
-                    $formattedPhone = strlen($phone) == 10 ? '91' . $phone : $phone;
+                            $nextStep = $messagesSentCount + 1;
 
-                    $url = "https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages";
+                            if ($nextStep > 6) {
+                                continue;
+                            }
 
-                    $payload = [
-                        'messaging_product' => 'whatsapp',
-                        'to' => $formattedPhone,
-                        'type' => 'template',
-                        'template' => [
-                            'name' => 'abandoned_cart_1',
-                            'language' => ['code' => 'en_US'],
-                        ],
-                    ];
+                            $hoursSinceCartCreated = now()->diffInHours($cartDate);
+                            $requiredHours = $schedule[$nextStep];
 
-                    $response = Http::withToken($token)->post($url, $payload);
+                            if ($hoursSinceCartCreated < $requiredHours) {
+                                continue;
+                            }
 
-                    if ($response->successful()) {
-                        $store = new AbendedCartMessage();
-                        $store->mobile_number = $cart->identifier;
-                        $store->send_at = now();
-                        $store->save();
-                        Log::info('Abandoned cart message sent', [
-                            'mobile' => $cart->identifier,
-                        ]);
-                    } else {
-                        Log::warning('Failed sending WhatsApp message', [
-                            'body' => $response->body(),
-                        ]);
+                            $formattedPhone = strlen($phone) == 10 ? '91' . $phone : $phone;
+                            $templateName = 'abandoned_cart_1';
+                            sendNormalTemplateWawi($templateName, 'en_US', $formattedPhone);
+
+                            $store = new AbendedCartMessage();
+                            $store->mobile_number = $cart->identifier;
+                            $store->send_at = now();
+                            $store->save();
+
+                            Log::info("Step {$nextStep} sent to {$formattedPhone} (Cart Age: {$hoursSinceCartCreated} hours)");
+                        } catch (Exception $e) {
+                            Log::error("Error processing cart {$cart->identifier}: " . $e->getMessage());
+                        }
                     }
-                } catch (\Exception $e) {
-                    Log::error('WhatsApp exception: ' . $e->getMessage());
-                }
-            }
+                });
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            Log::error('Critical Error in Abandoned Cart Command: ' . $e->getMessage());
         }
+
+        Log::info('Abandoned Cart Drip Command Finished.');
     }
 }
