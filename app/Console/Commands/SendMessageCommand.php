@@ -40,6 +40,13 @@ class SendMessageCommand extends Command
                 ->chunk(50, function ($shoppingCarts) use ($schedule) {
                     foreach ($shoppingCarts as $cart) {
                         try {
+                            $user = User::where('mobile', $cart->identifier)->first();
+                            $order = Order::where('is_logged_in_user', $user->id)
+                                ->whereNotIn('status', [0, 4])
+                                ->first();
+                            if ($order) {
+                                continue;
+                            }
                             $cartDate = Carbon::parse($cart->created_at);
                             $phone = preg_replace('/[^0-9]/', '', $cart->identifier);
 

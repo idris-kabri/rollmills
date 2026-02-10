@@ -475,8 +475,10 @@
                                         <div class="d-flex justify-content-center mt-3">
                                             <button class="btn btn-primary me-2">Change</button>
                                         </div>
-                                        <button type="button" wire:click="sendConfirmationMessage"
-                                            class="btn btn-primary mt-2">Send Confirmation message</button>
+                                        @if ($order->status == 1 && $order->is_cod == 1)
+                                            <button type="button" wire:click="sendConfirmationMessage"
+                                                class="btn btn-primary mt-2">Send Confirmation message</button>
+                                        @endif
                                     </form>
                                 @else
                                     <div class="mt-3">
