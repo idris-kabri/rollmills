@@ -124,6 +124,37 @@ class View extends Component
         $this->redirectWithDelay($url);
     }
 
+    public function sendConfirmationMessage()
+    {
+        $items = '';
+
+        // 1. Build Item String with Standard Newline
+        foreach ($this->order->getOrderItems as $key => $item) {
+            if ($key > 0) {
+                // Use "\n" (Double quotes, single backslash)
+                // This creates a real new line byte.
+                $items .= "\n";
+            }
+            $items .= $item->getProduct->name . ' x ' . $item->quantity;
+        }
+
+        $address = $this->order->getBillAddress->address_line_1 . ' ' . $this->order->getBillAddress->address_line_2 . ', ' . $this->order->getBillAddress->city . ', ' . $this->order->getBillAddress->state . ', ' . $this->order->getBillAddress->zipcode;
+
+        // 3. Ensure Total is a string
+        $totalAmount = (string) $this->order->total;
+
+        // 4. Debug: Check length (Must be < 1024)
+        if (strlen($items) > 1024 || strlen($address) > 1024) {
+            \Log::error('WhatsApp Error: Variable too long', ['items_len' => strlen($items), 'addr_len' => strlen($address)]);
+        }
+
+        $paramters = [$this->order->getBillAddress->name, $items, $totalAmount, $this->order->getBillAddress->name, $this->order->getBillAddress->mobile, $address];
+
+        sendParameterTemplateWawi('confirmation_message', 'en_us', $this->order->getBillAddress->mobile, $paramters);
+
+        $this->toastSuccess('Confirmation Message Sent Successfully!');
+    }
+
     public function render()
     {
         return view('livewire.admin.order.view')->layout('layouts.admin.app');

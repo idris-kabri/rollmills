@@ -473,8 +473,10 @@
                                         </div>
 
                                         <div class="d-flex justify-content-center mt-3">
-                                            <button class="btn btn-primary">Change</button>
+                                            <button class="btn btn-primary me-2">Change</button>
                                         </div>
+                                        <button type="button" wire:click="sendConfirmationMessage"
+                                            class="btn btn-primary mt-2">Send Confirmation message</button>
                                     </form>
                                 @else
                                     <div class="mt-3">

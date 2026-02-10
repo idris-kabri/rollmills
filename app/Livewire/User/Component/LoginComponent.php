@@ -88,13 +88,13 @@ class LoginComponent extends Component
                 if ($user) {
                     Auth::login($user);
 
-                    $get_all_whislist = Cart::instance('wishlist')->content();
-                    Cart::instance('wishlist')->restore(Auth::user()->mobile);
-                    Cart::instance('wishlist')->store(Auth::user()->mobile);
+                    // $get_all_whislist = Cart::instance('wishlist')->content();
+                    // Cart::instance('wishlist')->restore(Auth::user()->mobile);
+                    // Cart::instance('wishlist')->store(Auth::user()->mobile);
 
-                    $get_all_cart = Cart::instance('cart')->content();
-                    Cart::instance('cart')->restore(Auth::user()->mobile);
-                    Cart::instance('cart')->store(Auth::user()->mobile);
+                    // $get_all_cart = Cart::instance('cart')->content();
+                    // Cart::instance('cart')->restore(Auth::user()->mobile);
+                    // Cart::instance('cart')->store(Auth::user()->mobile);
                     if ($this->is_new_user) {
                         sendNormalTemplateWawi('welcome_message2', 'en_us', $this->mobile);
                     }
