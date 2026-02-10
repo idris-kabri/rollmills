@@ -1,122 +1,148 @@
 <main class="main pages">
     <style>
-        .order-card-mobile {
-            border: 1px solid #eee;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        /* --- GENERAL & UTILS --- */
+        .text-brand-custom {
+            color: rgb(220, 169, 22) !important;
+        }
+
+        .bg-brand-custom {
+            background-color: rgb(220, 169, 22) !important;
+            color: #fff;
+        }
+
+        /* --- STEP 3: SINGLE ORDER SUMMARY CARD --- */
+        .single-order-card {
             background: #fff;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             overflow: hidden;
-            transition: transform 0.2s;
-        }
-
-        .order-card-header {
-            background: #f8f9fa;
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-        }
-
-        .order-card-body {
-            padding: 15px;
-        }
-
-        .order-card-footer {
-            padding: 12px 15px;
-            background: #fff;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .product-thumb-sm {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 6px;
             border: 1px solid #eee;
         }
 
-        /* Buttons */
-        .btn-claim {
-            background-color: #ffbc0d;
-            /* Brand Gold */
-            color: #fff;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: 0.3s;
-            display: inline-flex;
+        .order-header-strip {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-bottom: 1px dashed #e0e0e0;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .btn-claim:hover {
-            background-color: #e0a500;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        .btn-view-coupon {
-            background-color: #25b579;
-            /* Success Green */
-            color: #fff;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .btn-view-coupon:hover {
-            background-color: #1e9663;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        .badge-qty {
-            background: #f1f1f1;
-            color: #333;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        /* Desktop Table Tweaks */
-        .table-custom-responsive thead th {
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            color: #253D4E;
-        }
-
-        .product-list-scroll {
-            max-height: 150px;
+        /* Product List Area */
+        .order-items-container {
+            padding: 25px;
+            max-height: 400px;
             overflow-y: auto;
-            padding-right: 5px;
         }
 
-        /* Custom Scrollbar for product list */
-        .product-list-scroll::-webkit-scrollbar {
-            width: 4px;
+        .order-item-row {
+            display: flex;
+            align-items: center;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .product-list-scroll::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .order-item-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
-        .product-list-scroll::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
+        .item-thumb {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #eee;
         }
 
-        /* --- NEW STYLES FOR EMPTY STATE PROMO (UPDATED COLOR) --- */
+        /* Payment Summary Area (Right Side) */
+        .payment-summary-box {
+            background: #fffbf0;
+            /* Light Gold Tint */
+            padding: 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 1px dashed #e0e0e0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .summary-row.savings {
+            color: #25b579;
+            font-weight: 600;
+        }
+
+        .divider-line {
+            height: 1px;
+            background: #ddd;
+            margin: 15px 0;
+        }
+
+        .final-amount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .final-price-text {
+            font-size: 28px;
+            font-weight: 800;
+            color: rgb(220, 169, 22);
+        }
+
+        .btn-pay-now-lg {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background-color: rgb(220, 169, 22);
+            color: #fff;
+            border: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(220, 169, 22, 0.3);
+        }
+
+        .btn-pay-now-lg:hover {
+            transform: translateY(-2px);
+            background-color: rgb(195, 149, 19);
+            box-shadow: 0 8px 20px rgba(220, 169, 22, 0.4);
+            color: #fff;
+        }
+
+        /* Mobile Responsiveness for Step 3 */
+        @media (max-width: 991px) {
+            .payment-summary-box {
+                border-left: none;
+                border-top: 1px dashed #e0e0e0;
+                padding: 20px;
+            }
+
+            .order-header-strip {
+                padding: 15px;
+            }
+
+            .order-items-container {
+                padding: 15px;
+                max-height: 300px;
+            }
+        }
+
+        /* --- EMPTY STATE STYLES --- */
         .empty-promo-card {
             background: #ffffff;
             border-radius: 20px;
@@ -128,10 +154,8 @@
         }
 
         .dashed-offer-box {
-            /* Updated to Brand Color rgb(220, 169, 22) */
             border: 2px dashed rgb(220, 169, 22);
             background-color: rgba(220, 169, 22, 0.05);
-            /* Very light gold background */
             border-radius: 12px;
             padding: 20px;
             margin: 25px auto;
@@ -141,7 +165,6 @@
         .discount-big-text {
             font-size: 3rem;
             font-weight: 800;
-            /* Updated to Brand Color */
             color: rgb(220, 169, 22);
             line-height: 1;
         }
@@ -152,7 +175,6 @@
             border-radius: 50px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            /* Updated to Brand Color */
             background-color: rgb(220, 169, 22);
             box-shadow: 0 4px 15px rgba(220, 169, 22, 0.3);
             color: white;
@@ -162,14 +184,9 @@
 
         .shop-now-btn-lg:hover {
             transform: translateY(-3px);
-            /* Slightly darker gold for hover */
             background-color: rgb(195, 149, 19);
             box-shadow: 0 8px 20px rgba(220, 169, 22, 0.4);
             color: white;
-        }
-
-        .text-brand-custom {
-            color: rgb(220, 169, 22) !important;
         }
     </style>
 
@@ -212,252 +229,137 @@
             </div>
         @endif
 
-        {{-- STEP 3: ORDER SELECTION (Responsive Table/Cards) --}}
+        {{-- STEP 3: SINGLE ORDER PAYMENT SUMMARY OR LATE MESSAGE --}}
         @if ($step === 3)
             <div class="container-lg mb-30 mt-50">
                 <div class="row">
                     <div class="col-xl-10 col-lg-12 m-auto">
 
-                        @if ($user_orders->count() > 0)
-                            <div class="content mb-40 text-center">
-                                <h1 class="title style-3 mb-10">Select an Order</h1>
-                                <p class="text-muted quicksand">Choose a previous order to unlock your exclusive
-                                    rewards!
+                        @php
+                            $order = $user_orders;
+                        @endphp
+
+                        {{-- CHECK IF ORDER STATUS IS VALID FOR PAYMENT --}}
+                        @if (!$order || $order->status > 1)
+                            {{-- LATE / EXPIRED VIEW --}}
+                            <div class="empty-promo-card text-center">
+                                <div class="mb-20">
+                                    <i class="fas fa-history text-brand-custom"
+                                        style="font-size: 80px; opacity: 0.8;"></i>
+                                </div>
+                                <h2 class="fw-800 mb-10">Payment Window Closed</h2>
+                                <p class="quicksand text-muted fs-18">
+                                    We are sorry, but you are late. You can't pay for this order now
+                                    <br>as the status has changed or the time limit has expired.
                                 </p>
+
+                                <div class="dashed-offer-box">
+                                    <p class="mb-0 quicksand fw-600">Don't worry! You can still explore our latest
+                                        collection.</p>
+                                </div>
+
+                                <a href="{{ url('/shop') }}" class="shop-now-btn-lg btn mt-20">
+                                    Return to Shop
+                                </a>
+                            </div>
+                        @else
+                            {{-- NORMAL PAYMENT VIEW --}}
+                            @php
+                                // Calculate Totals
+                                $discount = 0;
+                                foreach ($order->getOrderItems as $item) {
+                                    $discount += ($item->total * 10) / 100;
+                                }
+                                $final_amount = ceil($order->total - $discount - $order->cod_charges);
+                            @endphp
+
+                            <div class="content mb-40 text-center">
+                                <h1 class="title style-3 mb-10">Complete Your Order</h1>
+                                <p class="text-muted quicksand">Review your order details and proceed to payment.</p>
                             </div>
 
-                            {{-- DESKTOP VIEW: TABLE --}}
-                            <div
-                                class="table-responsive table-custom-responsive d-none d-md-block shadow-sm rounded-3 bg-white border">
-                                <table class="table table-hover mb-0">
-                                    <thead class="bg-light">
-                                        <tr class="main-heading">
-                                            <th scope="col" class="pl-30 py-4 rounded-start">Order Details</th>
-                                            <th scope="col" class="py-4">Product List</th>
-                                            <th scope="col" class="py-4">Order Amount</th>
-                                            <th scope="col" class="py-4">Final Payable</th>
-                                            <th scope="col" class="py-4 text-end pr-30 rounded-end">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($user_orders as $user_order)
-                                            <tr class="align-middle">
-                                                <td class="pl-30 py-4">
-                                                    <div class="d-flex flex-column">
-                                                        <span
-                                                            class="fw-700 text-brand fs-16">#{{ $user_order->id }}</span>
-                                                        <span
-                                                            class="text-muted fs-13">{{ $user_order->created_at->format('d M Y') }}</span>
-                                                        <span
-                                                            class="text-muted fs-12">{{ $user_order->created_at->format('h:i A') }}</span>
-                                                    </div>
-                                                </td>
-                                                <td class="product-des product-name py-4">
-                                                    <div class="product-list-scroll">
-                                                        @php
-                                                            $discount = 0;
-                                                        @endphp
-                                                        @foreach ($user_order->getOrderItems as $item)
-                                                            @php
-                                                                $product = $item->getProduct;
-                                                                $discount += ($item->total * 10) / 100;
-                                                            @endphp
-                                                            <div class="d-flex align-items-center mb-3">
-                                                                {{-- Thumbnail --}}
-                                                                <img src="{{ $product->featured_image ? asset('storage/' . $product->featured_image) : asset('assets/frontend/imgs/shop/product-1-1.jpg') }}"
-                                                                    class="product-thumb-sm me-3" alt="img">
-
-                                                                <div>
-                                                                    <h6 class="mb-0 fs-14 fw-600 text-heading">
-                                                                        @php
-                                                                            $shop_detail_url = $product->slug
-                                                                                ? route('shop-detail', [
-                                                                                    'slug' => $product->slug,
-                                                                                    'id' => $product->id,
-                                                                                ])
-                                                                                : route('shop-detail', [
-                                                                                    'slug' => 'no-slug',
-                                                                                    'id' => $product->id,
-                                                                                ]);
-                                                                        @endphp
-                                                                        <a href="{{ $item->is_gift_item == 1 ? 'javascripti:void(0);' : $shop_detail_url }}"
-                                                                            class="text-heading hover-up">{{ Str::limit($product->name, 35) }}</a>
-                                                                    </h6>
-                                                                    <div class="d-flex align-items-center gap-2 mt-1">
-                                                                        <span class="badge-qty">Qty:
-                                                                            {{ $item->quantity }}</span>
-
-                                                                        {{-- Rating (Optional) --}}
-                                                                        @php
-                                                                            $reviews = \App\Models\ProductReview::where(
-                                                                                'status',
-                                                                                1,
-                                                                            )
-                                                                                ->where('product_id', $item->item_id)
-                                                                                ->get();
-                                                                            $avg =
-                                                                                $reviews->count() > 0
-                                                                                    ? round($reviews->avg('ratings'), 1)
-                                                                                    : 0;
-                                                                        @endphp
-                                                                        @if ($avg > 0)
-                                                                            <div class="d-flex align-items-center">
-                                                                                <i
-                                                                                    class="fi-rs-star text-warning fs-10 me-1"></i>
-                                                                                <span
-                                                                                    class="fs-11 text-muted">{{ $avg }}</span>
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </td>
-                                                <td class="price py-4">
-                                                    <h4 class="text-brand fs-18 fw-700">
-                                                        ₹{{ number_format($user_order->total, 2) }}</h4>
-                                                </td>
-                                                <td class="price py-4">
-                                                    <h4 class="text-brand fs-18 fw-700">
-                                                        ₹{{ ceil($user_order->total - $discount - $user_order->cod_charges) }}
-                                                    </h4>
-                                                    {{-- Mentioning the deductions explicitly --}}
-                                                    <span class="d-block text-muted fs-11 mt-1">10% Off Applied</span>
-                                                    <span class="d-block text-success fs-11 fw-700">+ COD Fee
-                                                        Waived</span>
-                                                </td>
-                                                <td class="text-end pr-30 py-4">
-                                                    <button type="button"
-                                                        wire:click="payNow({{ $user_order->id }}, {{ ceil($user_order->total - $discount - $user_order->cod_charges) }})"
-                                                        class="btn btn-view-coupon shadow-sm"
-                                                        wire:loading.attr="disabled">
-
-                                                        <span wire:loading.remove wire:target="payNow">
-                                                            <i class="fi-rs-money mr-5"></i> Pay Now
-                                                        </span>
-
-                                                        <span wire:loading wire:target="payNow">
-                                                            <span class="spinner-border spinner-border-sm"
-                                                                role="status" aria-hidden="true"></span>
-                                                            Processing...
-                                                        </span>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {{-- MOBILE VIEW: CARDS --}}
-                            <div class="d-block d-md-none">
-                                @foreach ($user_orders as $user_order)
-                                    @php
-                                        // Calculate Discount for Mobile View (Same logic as Desktop)
-                                        $discount = 0;
-                                        foreach ($user_order->getOrderItems as $item) {
-                                            $discount += ($item->total * 10) / 100;
-                                        }
-                                        $final_amount = ceil($user_order->total - $discount - $user_order->cod_charges);
-                                    @endphp
-
-                                    <div class="order-card-mobile">
-                                        <div class="order-card-header">
+                            <div class="single-order-card">
+                                <div class="row g-0">
+                                    {{-- Left Side: Order Details & Items --}}
+                                    <div class="col-lg-8">
+                                        <div class="order-header-strip">
                                             <div>
-                                                <span class="fw-700 text-dark">#{{ $user_order->id }}</span>
-                                                <div class="fs-12 text-muted">
-                                                    {{ $user_order->created_at->format('d M, Y h:i A') }}
-                                                </div>
-                                            </div>
-                                            <div>
+                                                <h5 class="mb-1 fw-700">Order #{{ $order->id }}</h5>
                                                 <span
-                                                    class="badge bg-warning-light text-warning rounded-pill px-2">COD</span>
+                                                    class="text-muted fs-13">{{ $order->created_at->format('d M, Y h:i A') }}</span>
                                             </div>
+                                            <span
+                                                class="badge bg-warning-light text-warning rounded-pill px-3 py-2">Payment
+                                                Pending</span>
                                         </div>
 
-                                        <div class="order-card-body">
-                                            @foreach ($user_order->getOrderItems as $item)
+                                        <div class="order-items-container">
+                                            @foreach ($order->getOrderItems as $item)
                                                 @php $product = $item->getProduct; @endphp
-                                                <div class="d-flex align-items-start mb-3 last:mb-0">
+                                                <div class="order-item-row">
                                                     <img src="{{ $product->featured_image ? asset('storage/' . $product->featured_image) : asset('assets/frontend/imgs/shop/product-1-1.jpg') }}"
-                                                        class="product-thumb-sm me-3" alt="img">
-                                                    <div>
-                                                        <p class="mb-0 fs-14 fw-600 text-dark lh-sm">
-                                                            {{ Str::limit($product->name, 40) }}
-                                                        </p>
-                                                        <span class="fs-12 text-muted">Qty:
-                                                            {{ $item->quantity }}</span>
+                                                        class="item-thumb me-3" alt="img">
+
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-1 fs-15 fw-600 text-heading">
+                                                            {{ Str::limit($product->name, 50) }}
+                                                        </h6>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <span class="badge-qty">Qty: {{ $item->quantity }}</span>
+                                                            <span
+                                                                class="text-brand fs-14 fw-700">₹{{ number_format($item->total) }}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         </div>
+                                    </div>
 
-                                        <div class="order-card-footer">
-                                            <div class="d-flex flex-column">
-                                                <span class="fs-12 text-muted text-decoration-line-through">
-                                                    ₹{{ number_format($user_order->total) }}
-                                                </span>
-                                                <span class="text-brand fs-18 fw-800">
-                                                    ₹{{ $final_amount }}
-                                                </span>
-                                                {{-- Mentioning the deductions explicitly in mobile --}}
-                                                <span class="fs-10 text-success fw-bold">10% OFF + COD Waived</span>
+                                    {{-- Right Side: Payment Summary --}}
+                                    <div class="col-lg-4">
+                                        <div class="payment-summary-box">
+                                            <h5 class="mb-20 fw-700">Payment Summary</h5>
+
+                                            <div class="summary-row">
+                                                <span>Current Order Amount</span>
+                                                <span class="">₹{{ number_format($order->total) }}</span>
+                                            </div>
+
+                                            <div class="summary-row savings">
+                                                <span><i class="fi-rs-check-circle me-1"></i> 10% Discount</span>
+                                                <span>- ₹{{ number_format($discount, 2) }}</span>
+                                            </div>
+
+                                            @if ($order->cod_charges > 0)
+                                                <div class="summary-row savings">
+                                                    <span><i class="fi-rs-check-circle me-1"></i> COD Fee Waived</span>
+                                                    <span>- ₹{{ number_format($order->cod_charges) }}</span>
+                                                </div>
+                                            @endif
+
+                                            <div class="divider-line"></div>
+
+                                            <div class="final-amount-row">
+                                                <span class="fw-700 fs-16 text-dark">Total Payable</span>
+                                                <span class="final-price-text">₹{{ $final_amount }}</span>
                                             </div>
 
                                             <button type="button"
-                                                wire:click="payNow({{ $user_order->id }}, {{ $final_amount }})"
-                                                class="btn btn-view-coupon" wire:loading.attr="disabled">
+                                                wire:click="payNow({{ $order->id }}, {{ $final_amount }})"
+                                                class="btn-pay-now-lg shadow-sm" wire:loading.attr="disabled">
 
                                                 <span wire:loading.remove wire:target="payNow">
-                                                    Pay Now <i class="fi-rs-money ml-5"></i>
+                                                    Pay Now <i class="fi-rs-arrow-right ml-10"></i>
                                                 </span>
 
                                                 <span wire:loading wire:target="payNow">
                                                     <span class="spinner-border spinner-border-sm" role="status"
                                                         aria-hidden="true"></span>
+                                                    Processing...
                                                 </span>
                                             </button>
+
                                         </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            {{-- NEW: EMPTY STATE 10% DISCOUNT PROMO (GOLD THEME) --}}
-                            <div class="row">
-                                <div class="col-lg-8 col-md-10 m-auto">
-                                    <div class="empty-promo-card text-center">
-
-                                        {{-- Icon/Image --}}
-                                        <div class="mb-4">
-                                            <img src="{{ asset('assets/frontend/imgs/theme/icons/icon-cart.svg') }}"
-                                                alt="Shopping Bag"
-                                                style="width: 80px; filter: hue-rotate(30deg) sepia(100%) saturate(1000%) hue-rotate(350deg) opacity(0.8);">
-                                        </div>
-
-                                        <h2 class="mb-2 fw-800 text-dark">Welcome to Roll Mills!</h2>
-                                        <p class="text-muted quicksand fs-16 mb-0">
-                                            It looks like you haven't placed an order yet. <br
-                                                class="d-none d-md-block">
-                                            Start your journey with us today and grab a special welcome reward.
-                                        </p>
-
-                                        {{-- The Offer Box --}}
-                                        <div class="dashed-offer-box">
-                                            <span class="text-uppercase text-muted fs-12 fw-700 ls-1">Exclusive First
-                                                Order
-                                                Offer</span>
-                                            <div class="discount-big-text my-2">10% OFF</div>
-                                        </div>
-
-                                        {{-- CTA Button --}}
-                                        <a href="/shop" class="shop-now-btn-lg quicksand fw-700">
-                                            Shop Now & Save 10% <i class="fi-rs-arrow-right ms-2"></i>
-                                        </a>
-
-                                        <p class="mt-4 fs-12 text-muted fst-italic">
-                                            *Terms and conditions apply. Valid on your first purchase only.
-                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -468,7 +370,7 @@
         @endif
     @endif
 
-    {{-- MODAL --}}
+    {{-- MODAL (Login/OTP) --}}
     <div wire:ignore.self class="modal fade" id="giftCouponModal" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">

@@ -27,12 +27,6 @@ class CODConversionCommand extends Command
             ->chunk(50, function ($orders) {
                 foreach ($orders as $order) {
                     try {
-                        // 3. NULL SAFETY: Check if address exists
-                        if (!$order->getBillAddress) {
-                            Log::warning("Skipping Order #{$order->id}: No Billing Address found.");
-                            continue;
-                        }
-
                         $discount = 0;
                         foreach ($order->getOrderItems as $item) {
                             // Ensure numeric calculation
@@ -41,11 +35,9 @@ class CODConversionCommand extends Command
 
                         $finalAmount = ceil($order->total - $discount - $order->cod_charges);
 
-                        $parameter = [$order->getBillAddress->name, number_format($order->total, 2), $finalAmount];
-
                         $phone = $order->getBillAddress->mobile;
 
-                        sendParameterTemplateWawi('cod_conversion', 'en_us', $phone, $parameter);
+                        sendCODConversionTemplate($phone, $order->getBillAddress->name, number_format($order->total, 2), $finalAmount, $order->id);
 
                         $order->is_conversion_message_sent = 1;
                         $order->save();

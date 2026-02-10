@@ -55,7 +55,7 @@ Route::get('/register', RegisterComponent::class)->name('register');
 Route::get('/order-completed', OrderCompleted::class)->name('order-completed');
 Route::get('/all-category', AllCategory::class)->name('all-category');
 Route::match(['get', 'post'], '/get-payment', [PaymentSuccessController::class, 'paymentSuccess'])->name('payment.success');
-Route::get('/pay-now', CodConversionComponent::class)->name('pay-now');
+Route::get('/pay-now/{id}', CodConversionComponent::class)->name('pay-now');
 
 Route::get('/ithink-import', [ImportController::class, 'ithink'])->name('ithink');
 Route::get('/xprees-bees-import', [ImportController::class, 'xpreesBees'])->name('xpreesBees');

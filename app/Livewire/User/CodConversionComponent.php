@@ -24,6 +24,7 @@ class CodConversionComponent extends Component
     public $user_id;
     public $couponCode;
     public $coupon;
+    public $id = '';
 
     // Payment Variables
     #[Url]
@@ -42,8 +43,9 @@ class CodConversionComponent extends Component
         'otp.*' => 'required|numeric|digits:1',
     ];
 
-    public function mount()
+    public function mount($id)
     {
+        $this->id = $id;
         // 1. Manually grab URL parameters to ensure they are available immediately
         $this->transaction_id = request()->query('transaction_id');
         $this->payment_id = request()->query('payment_id');
@@ -56,7 +58,7 @@ class CodConversionComponent extends Component
         }
 
         // 3. Handle Payment Success Return
-        if ($this->transaction_id && $this->order_id) {
+        if ($this->transaction_id) {
             // Fix: Find the transaction by the ID passed back from Razorpay
             $transaction = Transaction::find($this->transaction_id);
 
@@ -69,7 +71,7 @@ class CodConversionComponent extends Component
                 $amount = $transaction->amount;
 
                 // Update Order
-                $order = Order::find($this->order_id);
+                $order = Order::find($this->id);
 
                 if ($order) {
                     $order->paid_amount = $amount;
@@ -199,7 +201,7 @@ class CodConversionComponent extends Component
             'customer_name' => $user->name ?? 'Customer',
             'customer_email' => $user->email ?? 'customer@example.com',
             'id' => $id, // Order ID from database
-            'success_url' => route('pay-now'), // This ensures user comes back to this page
+            'success_url' => route('pay-now', ['id' => $this->id]), // This ensures user comes back to this page
         ]);
     }
 
@@ -208,7 +210,7 @@ class CodConversionComponent extends Component
         $user_orders = [];
 
         if ($this->step == 3 && $this->user_id) {
-            $user_orders = Order::where('logged_in_user_id', $this->user_id)->where('is_cod', 1)->where('status', 1)->orderBy('id', 'desc')->get();
+            $user_orders = Order::where('id', $this->id)->where('is_cod', 1)->where('status', 1)->orderBy('id', 'desc')->first();
         }
 
         // Passing $id to view for the Success Screen (Step 4)

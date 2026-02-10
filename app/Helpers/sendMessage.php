@@ -51,6 +51,53 @@ function messageSend($mobile, $otp, $template_name)
     }
 }
 
+function sendCODConversionTemplate($mobile, $name, $order_amount, $discount_amount, $order_id)
+{
+    try {
+        $token = config('app.whatsapp_api_token');
+        $phoneNumberId = config('app.whatsapp_phone_number_id');
+        $apiVersion = config('app.whatsapp_api_version');
+
+        $url = "https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages";
+
+        $payload = [
+            'messaging_product' => 'whatsapp',
+            'to' => '91' . $mobile,
+            'type' => 'template',
+            'template' => [
+                'name' => 'cod_conversion',
+                'language' => ['code' => 'en_us'],
+                'components' => [
+                    [
+                        'type' => 'body',
+                        'parameters' => [['type' => 'text', 'text' => (string) $name], ['type' => 'text', 'text' => (string) $order_amount], ['type' => 'text', 'text' => (string) $discount_amount]],
+                    ],
+                    [
+                        'type' => 'button',
+                        'sub_type' => 'url',
+                        'index' => '0',
+                        'parameters' => [['type' => 'text', 'text' => (string) $order_id]],
+                    ],
+                ],
+            ],
+        ];
+
+        $response = Http::withToken($token)->post($url, $payload);
+        if ($response->successful()) {
+            return true;
+        } else {
+            Log::warning('failed', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+            return false;
+        }
+    } catch (\Exception $e) {
+        Log::error('WhatsApp exception: ' . $e->getMessage());
+        return false;
+    }
+}
+
 function wawiContact($user)
 {
     // --- 1. PREPARATION (Format Data) ---
