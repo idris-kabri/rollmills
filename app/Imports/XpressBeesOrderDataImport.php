@@ -32,34 +32,34 @@ class XpressBeesOrderDataImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            if (isset($row['remittance_paid']) && $row['remittance_paid'] !== 'No') {
-                try {
-                    $order->remittance_at = Carbon::parse($row['remittance_date']);
-                } catch (\Exception $e) {
-                    // Handle or log bad date format
-                }
-            }
+            // if (isset($row['remittance_paid']) && $row['remittance_paid'] !== 'No') {
+            //     try {
+            //         $order->remittance_at = Carbon::parse($row['remittance_date']);
+            //     } catch (\Exception $e) {
+            //         // Handle or log bad date format
+            //     }
+            // }
 
-            $order->total_delievery_charges += $row['charges'] ?? 0;
+            // $order->total_delievery_charges += $row['charges'] ?? 0;
 
-            if (($row['order_status'] ?? '') == 'delivered') {
+            if (($row['tracking_status'] ?? '') == 'delivered') {
                 $order->status = 3;
             }
 
             $order->save();
 
             // 2. Logic for AWB Charges
-            $unbilled = $row['charges'] ?? 0;
+            // $unbilled = $row['charges'] ?? 0;
 
-            // 3. Create First AWB
-            OrderAWB::create([
-                'order_id' => $order->id,
-                'aggregator' => 'XpressBees',
-                'provider' => $row['courier'],
-                'awb_number' => $row['awb_number'],
-                'charges_taken' => $unbilled,
-                'remarks' => 'Forward Shipping Charges',
-            ]);
+            // // 3. Create First AWB
+            // OrderAWB::create([
+            //     'order_id' => $order->id,
+            //     'aggregator' => 'XpressBees',
+            //     'provider' => $row['courier'],
+            //     'awb_number' => $row['awb_number'],
+            //     'charges_taken' => $unbilled,
+            //     'remarks' => 'Forward Shipping Charges',
+            // ]);
         }
     }
 }
