@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/plugins/slider-range.css') }}" />
     <!-- Custom New CSS -->
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
-    @if (Request::is('coupon-claim'))
+    @if (Request::is('coupon-claim') || Request::is('pay-now'))
         <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
     @endif
     <link rel="stylesheet" href="{{ asset('assets/custom_css/improve.css') }}" />

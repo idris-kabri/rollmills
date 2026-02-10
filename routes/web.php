@@ -19,6 +19,7 @@ use App\Livewire\User\WishlistComponent;
 use App\Livewire\User\ReturnPolicy;
 use App\Livewire\User\ShippingPolicy;
 use App\Livewire\User\CouponClaim;
+use App\Livewire\User\CodConversionComponent;
 use App\Livewire\User\OrderComponent;
 use App\Livewire\User\DeliveryInformationComponent;
 use App\Livewire\User\OrderDetail;
@@ -54,6 +55,7 @@ Route::get('/register', RegisterComponent::class)->name('register');
 Route::get('/order-completed', OrderCompleted::class)->name('order-completed');
 Route::get('/all-category', AllCategory::class)->name('all-category');
 Route::match(['get', 'post'], '/get-payment', [PaymentSuccessController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/pay-now', CodConversionComponent::class)->name('pay-now');
 
 Route::get('/ithink-import', [ImportController::class, 'ithink'])->name('ithink');
 Route::get('/xprees-bees-import', [ImportController::class, 'xpreesBees'])->name('xpreesBees');

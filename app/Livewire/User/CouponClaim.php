@@ -32,7 +32,7 @@ class CouponClaim extends Component
 
     public function askClaim($order_id)
     {
-        $this->confirmMessage = 'Are you sure you want to avail coupon for Order #'.$order_id.'?';
+        $this->confirmMessage = 'Are you sure you want to avail coupon for Order #' . $order_id . '?';
         $this->confirmAction = "applyCoupon('$order_id')";
 
         $this->dispatch('open-coupon-claim-modal');
@@ -85,23 +85,21 @@ class CouponClaim extends Component
 
         $enteredOtp = implode('', $this->otp);
 
-        $user = User::where('mobile', $this->mobile)
-            ->where('otp', $enteredOtp)
-            ->first();
+        $user = User::where('mobile', $this->mobile)->where('otp', $enteredOtp)->first();
 
         if ($user) {
             $this->user_id = $user->id;
             $this->step = 3;
-            $this->dispatch('close-modal');
             Auth::login($user);
+            $this->dispatch('close-modal');
 
-            $get_all_whislist = Cart::instance('wishlist')->content();
-            Cart::instance('wishlist')->restore(Auth::user()->mobile);
-            Cart::instance('wishlist')->store(Auth::user()->mobile);
+            // $get_all_whislist = Cart::instance('wishlist')->content();
+            // Cart::instance('wishlist')->restore(Auth::user()->mobile);
+            // Cart::instance('wishlist')->store(Auth::user()->mobile);
 
-            $get_all_cart = Cart::instance('cart')->content();
-            Cart::instance('cart')->restore(Auth::user()->mobile);
-            Cart::instance('cart')->store(Auth::user()->mobile);
+            // $get_all_cart = Cart::instance('cart')->content();
+            // Cart::instance('cart')->restore(Auth::user()->mobile);
+            // Cart::instance('cart')->store(Auth::user()->mobile);
         } else {
             $this->addError('otp', 'Invalid OTP. Please try again.');
             $this->reset('otp');
@@ -124,18 +122,17 @@ class CouponClaim extends Component
             foreach ($order->getOrderItems as $key => $item) {
                 $return_days = $item->item_return_days;
                 $replacement_days = $item->item_replacement_days;
-                if($return_days == 0 && $replacement_days == 0){
+                if ($return_days == 0 && $replacement_days == 0) {
                     continue;
-                }else{
+                } else {
                     $days = max($return_days, $replacement_days);
-                    if($days > $max_return_replacement_days){
+                    if ($days > $max_return_replacement_days) {
                         $max_return_replacement_days = $days;
                     }
                 }
             }
 
             $max_return_replacement_days += $shipping_days;
-
 
             if ($order && $order->logged_in_user_id == $this->user_id) {
                 $order->is_coupon_avail = 1;
@@ -146,7 +143,6 @@ class CouponClaim extends Component
             }
             $user = User::find($this->user_id);
             $settings = Setting::all();
-
 
             // Get first name only
             $nameParts = preg_split('/\s+/', trim($user->name));
@@ -159,9 +155,8 @@ class CouponClaim extends Component
 
             $start_date = Carbon::parse($order->shipped_at)->addDays($max_return_replacement_days)->format('Y-m-d');
 
-
-            $coupon = new Coupon;
-            $coupon->title = "Coupon for Order #" . $order->id;
+            $coupon = new Coupon();
+            $coupon->title = 'Coupon for Order #' . $order->id;
             $coupon->coupon_code = $couponCode;
             $coupon->minimum_order_value = $settings->where('label', 'coupon_min_order_value')->first()->value ?? 0;
             $coupon->discount_type = $settings->where('label', 'coupon_discount_type')->first()->value ?? 0;
@@ -169,18 +164,18 @@ class CouponClaim extends Component
             $coupon->maximum_discount_amount = $settings->where('label', 'coupon_max_discount')->first()->value ?? 0;
             $coupon->usage_limit = 1;
             $coupon->total_usage = 1;
-            $coupon->category = "";
+            $coupon->category = '';
             $coupon->start_date = $start_date;
-            $coupon->expiry_date = Carbon::now()->addDays((int)$settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
+            $coupon->expiry_date = Carbon::now()->addDays((int) $settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
             $coupon->order_id = $order->id;
             $coupon->save();
 
             $this->coupon = $coupon;
 
             $this->couponCode = $couponCode;
-            $this->toastSuccess("Coupon Availed Successfully!");
+            $this->toastSuccess('Coupon Availed Successfully!');
         } else {
-            $this->coupon = Coupon::where('order_id',$order->id)->first();
+            $this->coupon = Coupon::where('order_id', $order->id)->first();
             $this->couponCode = $this->coupon->coupon_code;
         }
         $this->dispatch('close-coupon-claim-modal');
@@ -189,7 +184,7 @@ class CouponClaim extends Component
 
     public function render()
     {
-        $user_orders = "";
+        $user_orders = '';
         if ($this->step == 3 && $this->user_id) {
             $user_orders = Order::where('logged_in_user_id', $this->user_id)
                 // ->where("is_coupon_avail", 0)
