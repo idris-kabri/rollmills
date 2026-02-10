@@ -163,7 +163,7 @@ function sendParameterTemplateWawi($template_name, $language_code, $phone_number
     ];
 
     foreach ($parameters as $key => $value) {
-        $data['field_' . $key + 1] = $value;
+        $data['field_' . $key + 1] = "$value";
     }
 
     $response = Http::withToken($token)->post($url, $data);
