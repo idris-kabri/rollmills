@@ -30,26 +30,22 @@
                         <div class="w-100 justify-content-between d-flex flex-wrap align-items-center gap-1">
                             <div class="container-fluid">
                                 <div class="row g-2 align-items-end">
-                                    <!-- Search -->
                                     <div class="col-md-3">
                                         <label class="form-label">Search</label>
                                         <input type="search" class="form-control" placeholder="Search..."
                                             style="min-width: 100px" wire:model.live.debounce.500ms="search" />
                                     </div>
 
-                                    <!-- From Date -->
                                     <div class="col-md-2">
                                         <label class="form-label text-primary">FormDate:</label>
                                         <input type="date" class="form-control" wire:model.live="formDate" />
                                     </div>
 
-                                    <!-- To Date -->
                                     <div class="col-md-2">
                                         <label class="form-label text-primary">ToDate:</label>
                                         <input type="date" class="form-control" wire:model.live="toDate" />
                                     </div>
 
-                                    <!-- Status -->
                                     <div class="col-md-2">
                                         <label class="form-label text-primary">Status:</label>
                                         <select class="form-select" wire:model.live="status">
@@ -58,6 +54,9 @@
                                             <option value="1">Processed</option>
                                             <option value="2">Shipped</option>
                                             <option value="3">Complete</option>
+                                            <option value="4">Cancelled</option>
+                                            <option value="5">Return</option>
+                                            <option value="6">Lost</option>
                                         </select>
                                     </div>
                                 </div>
@@ -89,10 +88,7 @@
                                             COUPON DISCOUNT
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
-                                            OFFER DISCOUNT
-                                        </th>
-                                        <th title="Name" class="text-start column-key-2">
-                                            GIFT CARD DISCOUNT
+                                            ORDER TOTAL
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
                                             PAID AMOUNT
@@ -111,7 +107,30 @@
                                 </thead>
                                 <tbody>
                                     @forelse($orders as $order)
-                                        <tr>
+                                        {{-- 
+                                            LOGIC TO GENERATE TOOLTIP CONTENT
+                                            Make sure your Order model has 'items' or 'orderItems' relationship loaded.
+                                        --}}
+                                        @php
+                                            $tooltipContent =
+                                                "<div class='text-start fw-bold mb-1'>Order Items:</div><ul class='ps-3 mb-0 text-start'>";
+                                            // CHECK: Replace '$order->items' with your actual relationship (e.g., $order->orderItems)
+                                            if ($order->getOrderItems && $order->getOrderItems->count() > 0) {
+                                                foreach ($order->getOrderItems as $item) {
+                                                    // Assumes item has product_name and qty
+                                                    $name = $item->getProduct->name ?? 'Unknown Item';
+                                                    $qty = $item->qty ?? 1;
+                                                    $tooltipContent .= "<li>{$name} (x{$qty})</li>";
+                                                }
+                                            } else {
+                                                $tooltipContent .= '<li>No items found</li>';
+                                            }
+                                            $tooltipContent .= '</ul>';
+                                        @endphp
+
+                                        {{-- ADDED TOOLTIP ATTRIBUTES HERE --}}
+                                        <tr data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                                            title="{{ $tooltipContent }}" style="cursor: pointer;">
                                             <td>{{ $i++ }}</td>
                                             @if ($order->getUser)
                                                 <td>
@@ -121,35 +140,40 @@
                                             @endif
                                             <td>{{ $order->subtotal }}</td>
                                             <td>{{ $order->coupon_discount ?? 0 }}</td>
-                                            <td>{{ $order->offer_discount ?? 0 }}</td>
-                                            <td>{{ $order->gift_card_discount ?? 0 }}</td>
+                                            <td>{{ $order->total ?? 0 }}</td>
                                             <td>{{ $order->paid_amount }}</td>
                                             <td>
                                                 @if ($order->is_cod == 1)
-                                                    <p class="text text-info">COD</p>
+                                                    <p class="text text-info mb-0">COD</p>
                                                 @else
-                                                    <p class="text text-success">Online</p>
+                                                    <p class="text text-success mb-0">Online</p>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($order->status == 0)
-                                                    <p class="text text-warning">Pending</p>
+                                                    <p class="text text-warning mb-0">Pending</p>
                                                 @elseif($order->status == 1)
-                                                    <p class="text text-warning">Processed..</p>
+                                                    <p class="text text-warning mb-0">Processed..</p>
                                                 @elseif($order->status == 2)
-                                                    <p class="text text-info">Shipped</p>
+                                                    <p class="text text-info mb-0">Shipped</p>
                                                 @elseif($order->status == 3)
-                                                    <p class="text text-success">Complete</p>
-                                                @elseif($order->status == 4)
-                                                    <p class="text text-danger">Cancelled</p>
+                                                    <p class="text text-success mb-0">Complete</p>
+                                                @elseif($order->status == 4 || $order->status == 5 || $order->status == 6)
+                                                    <p class="text text-danger mb-0">
+                                                        {{ ($order->status == 4 ? 'Cancelled' : $order->status == 5) ? 'Return' : 'Lost' }}
+                                                    </p>
                                                 @endif
                                             </td>
-                                            <td><a href="{{ route('admin.orders.view', $order->id) }}"><i
-                                                        class="fa fa-eye"></i></a></td>
+                                            {{-- Use stopPropagation to prevent row click when clicking action button --}}
+                                            <td onclick="event.stopPropagation()">
+                                                <a href="{{ route('admin.orders.view', $order->id) }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7">
+                                            <td colspan="9">
                                                 <p class="text-center">No Data!</p>
                                             </td>
                                         </tr>
@@ -175,4 +199,41 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize tooltips on initial page load
+            initTooltips();
+
+            // Re-initialize tooltips after Livewire updates the DOM (search, paginate, filter)
+            document.addEventListener('livewire:updated', function() {
+                initTooltips();
+            });
+        });
+
+        function initTooltips() {
+            // Disposes existing tooltips to prevent duplication ghosts
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+
+            // Check if bootstrap is defined (Standard in most Laravel/Admin templates)
+            if (typeof bootstrap !== 'undefined') {
+                var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                    // Get existing instance
+                    var existingTooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                    if (existingTooltip) {
+                        existingTooltip.dispose();
+                    }
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
+        }
+    </script>
+
+    <style>
+        /* Optional: Improves tooltip readability for lists */
+        .tooltip-inner {
+            max-width: 350px !important;
+            /* Wider tooltip for product lists */
+            text-align: left !important;
+        }
+    </style>
 </div>
