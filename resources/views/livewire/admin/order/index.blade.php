@@ -160,7 +160,7 @@
                                                     <p class="text text-success mb-0">Complete</p>
                                                 @elseif($order->status == 4 || $order->status == 5 || $order->status == 6)
                                                     <p class="text text-danger mb-0">
-                                                        {{ ($order->status == 4 ? 'Cancelled' : $order->status == 5) ? 'Return' : 'Lost' }}
+                                                        {{ $order->status == 4 ? 'Cancelled' : ($order->status == 5 ? 'Return' : 'Lost') }}
                                                     </p>
                                                 @endif
                                             </td>

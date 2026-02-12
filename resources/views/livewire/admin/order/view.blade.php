@@ -491,7 +491,7 @@
                                             <p class="badge bg-success text-white">Complete</p>
                                         @elseif($order->status == 4 || $order->status == 5 || $order->status == 6)
                                             <p class="badge bg-danger text-white">
-                                                {{ ($order->status == 4 ? 'Cancelled' : $order->status == 5) ? 'Return' : 'Lost' }}
+                                                {{ $order->status == 4 ? 'Cancelled' : ($order->status == 5 ? 'Return' : 'Lost') }}
                                             </p>
                                         @endif
                                     </div>
