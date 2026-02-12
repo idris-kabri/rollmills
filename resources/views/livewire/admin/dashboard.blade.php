@@ -5,6 +5,12 @@
         .dataTables_info {
             padding: 0.5rem !important;
         }
+
+        /* Optional: Wider tooltip for product lists */
+        .tooltip-inner {
+            max-width: 350px !important;
+            text-align: left !important;
+        }
     </style>
     <div class="page-header d-print-none">
         <div class="container-xl">
@@ -22,25 +28,6 @@
                         </nav>
                     </div>
                 </div>
-                {{-- <div class="col-auto ms-auto d-print-none">
-                    <div class="btn-list">
-                        <button class="btn btn-outline-primary manage-widget" type="button" data-bs-toggle="modal"
-                            data-bs-target="#widgets-management-modal">
-                            <svg class="icon icon-left svg-icon-ti-ti-layout-dashboard"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
-                                <path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
-                                <path
-                                    d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
-                                <path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
-                            </svg>
-                            Manage Widgets
-                        </button>
-                    </div>
-                </div> --}}
             </div>
         </div>
     </div>
@@ -177,6 +164,9 @@
                                                     <th class="text-center">
                                                         Paid Amount
                                                     </th>
+                                                    <th class="text-center">
+                                                        Total Amount
+                                                    </th>
                                                     <th class="text-end">
                                                         Status
                                                     </th>
@@ -188,7 +178,29 @@
 
                                             <tbody style="font-size: 14px">
                                                 @foreach ($current_date_orders as $order)
-                                                    <tr>
+                                                    @php
+                                                        // --- TOOLTIP LOGIC ---
+                                                        $tooltipContent =
+                                                            "<div class='text-start fw-bold mb-1'>Order Items:</div><ul class='ps-3 mb-0 text-start'>";
+                                                        // Note: Ensure '$order->items' matches your model relationship name
+                                                        if (
+                                                            $order->getOrderItems &&
+                                                            $order->getOrderItems->count() > 0
+                                                        ) {
+                                                            foreach ($order->getOrderItems as $item) {
+                                                                $name = $item->getProduct->name ?? 'Item';
+                                                                $qty = $item->qty ?? 1;
+                                                                $tooltipContent .= "<li>{$name} (x{$qty})</li>";
+                                                            }
+                                                        } else {
+                                                            $tooltipContent .= '<li>No items found</li>';
+                                                        }
+                                                        $tooltipContent .= '</ul>';
+                                                    @endphp
+
+                                                    <tr data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-html="true" title="{{ $tooltipContent }}"
+                                                        style="cursor: pointer;">
                                                         <td>
                                                             {{ $order->id }}
                                                         </td>
@@ -202,6 +214,9 @@
                                                         <td class="text-center">
                                                             {{ $order->paid_amount }}
                                                         </td>
+                                                        <td class="text-center">
+                                                            {{ $order->total }}
+                                                        </td>
                                                         <td class="text-end">
                                                             @if ($order->status == 0)
                                                                 <span class="text text-warning">Pending</span>
@@ -214,7 +229,7 @@
                                                             @endif
                                                         </td>
 
-                                                        <td class="text-end">
+                                                        <td class="text-end" onclick="event.stopPropagation()">
                                                             <a href="{{ route('admin.orders.view', $order->id) }}"
                                                                 target="_blank">
                                                                 <i class="fa fa-eye"></i>
@@ -389,13 +404,34 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#dashboard-current-order-table').DataTable({
+
+            // Helper function to initialize tooltips
+            function initTooltips() {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                    // Dispose existing to prevent duplication
+                    if (typeof bootstrap !== 'undefined') {
+                        var existing = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                        if (existing) existing.dispose();
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    }
+                });
+            }
+
+            // 1. Initialize Current Order Table
+            var orderTable = $('#dashboard-current-order-table').DataTable({
                 "pageLength": 10,
                 "lengthMenu": [5, 10, 25, 50, 100],
                 "ordering": true,
                 "searching": true,
-                "margin": 5
+                "margin": 5,
+                // IMPORTANT: Re-init tooltips every time the table redraws (pagination/sort)
+                "drawCallback": function(settings) {
+                    initTooltips();
+                }
             });
+
+            // 2. Initialize User Tables (Standard)
             $('#dashboard-current-user-table').DataTable({
                 "pageLength": 10,
                 "lengthMenu": [5, 10, 25, 50, 100],
@@ -409,6 +445,8 @@
                 "searching": true
             });
 
+            // Initial call for tooltips on page load
+            initTooltips();
         });
     </script>
 @endsection

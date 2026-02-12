@@ -457,7 +457,7 @@
                             </div>
 
                             <div class="card-body p-3">
-                                @if ($order->status !== 3 && $order->status !== 4)
+                                @if ($order->status !== 3 && $order->status !== 4 && $order->status !== 5 && $order->status !== 6)
                                     <form wire:submit.prevent="orderStatusChange" class="mb-2">
 
                                         <div class="">
@@ -469,6 +469,8 @@
                                                 <option value="2">Shipped</option>
                                                 <option value="3">Complete</option>
                                                 <option value="4">Cancelled</option>
+                                                <option value="5">Return</option>
+                                                <option value="6">Lost</option>
                                             </select>
                                         </div>
 
@@ -487,8 +489,10 @@
                                             <p class="badge bg-info text-white">Shipped</p>
                                         @elseif($order->status == 3)
                                             <p class="badge bg-success text-white">Complete</p>
-                                        @elseif($order->status == 4)
-                                            <p class="badge bg-danger text-white">Cancelled</p>
+                                        @elseif($order->status == 4 || $order->status == 5 || $order->status == 6)
+                                            <p class="badge bg-danger text-white">
+                                                {{ ($order->status == 4 ? 'Cancelled' : $order->status == 5) ? 'Return' : 'Lost' }}
+                                            </p>
                                         @endif
                                     </div>
                                 @endif
