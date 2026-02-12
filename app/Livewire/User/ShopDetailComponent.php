@@ -63,8 +63,8 @@ class ShopDetailComponent extends Component
         $relatedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Related')->orderBy('id', 'desc')->pluck('related_product_id')->toArray();
         $linkedProduct = ProductRelation::where('product_id', $this->mainProduct->id)->where('type', 'Linked')->pluck('related_product_id')->toArray();
 
-        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where('parent_id', null)->take(10)->orderBy('sale_default_price', 'desc')->get();
-        $this->linkedProducts = Product::whereIn('id', $linkedProduct)->get();
+        $this->relatedProducts = Product::whereIn('id', $relatedProduct)->where('parent_id', null)->where('status', 1)->take(10)->orderBy('sale_default_price', 'desc')->get();
+        $this->linkedProducts = Product::whereIn('id', $linkedProduct)->where('status', 1)->get();
 
         if (count($this->relatedProducts) <= 0) {
             $categoryIds = $this->mainProduct->categoryAssigns->pluck('category_id')->unique();
@@ -72,6 +72,7 @@ class ShopDetailComponent extends Component
             $this->relatedProducts = Product::whereHas('categoryAssigns', function ($query) use ($categoryIds) {
                 $query->whereIn('category_id', $categoryIds);
             })
+                ->where('status', 1)
                 ->where('id', '!=', $id)
                 ->orderBy('sale_default_price', 'desc')
                 ->take(10)
