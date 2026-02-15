@@ -34,9 +34,6 @@ class MeeshoOrderImport implements ToCollection, WithHeadingRow
                     $meesho_order->price_per_piece = $row['price'];
                     $meesho_order->total = $row['price'] * $row['quantity'];
                     $meesho_order->packet_qr = $row['packet_id'];
-                    $meesho_order->remittance_at = $row['payment_date'];
-                    $meesho_order->transaction_id = $row['transaction_id'];
-                    $meesho_order->remittance_amount = $row['amount'];
                     $meesho_order->save();
                 }
             } catch (\Exception $e) {
