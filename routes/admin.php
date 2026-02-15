@@ -65,125 +65,170 @@ use App\Livewire\Admin\Review\Index as reviewIndex;
 use App\Livewire\Admin\UserQuotation\Index as UserQuotationIndex;
 use App\Livewire\Admin\UserQuotation\View as UserQuotationView;
 
+use App\Livewire\Admin\Report;
+
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::match(['get', 'post'], '/', Dashboard::class)->name('dashboard');
-    Route::match(['get', 'post'], '/logout', [LogoutController::class, "logout"])->name('dashboard.logout');
+Route::middleware('auth')
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::match(['get', 'post'], '/', Dashboard::class)->name('dashboard');
+        Route::match(['get', 'post'], '/logout', [LogoutController::class, 'logout'])->name('dashboard.logout');
 
-    //product route
-    Route::prefix('/product')->name('product.')->group(function () {
-        Route::get('/', ProductIndex::class)->name('index');
-        Route::get('/create', ProductCreate::class)->name('create');
-        Route::get('/edit/{id}', ProductEdit::class)->name('edit');
-    });
+        //product route
+        Route::prefix('/product')
+            ->name('product.')
+            ->group(function () {
+                Route::get('/', ProductIndex::class)->name('index');
+                Route::get('/create', ProductCreate::class)->name('create');
+                Route::get('/edit/{id}', ProductEdit::class)->name('edit');
+            });
 
-    //Product Attributes route
-    Route::prefix('/product-attributes')->name('product-attributes.')->group(function () {
-        Route::get('/', ProductAttributesIndex::class)->name('index');
-        Route::get('/create', ProductAttributesCreate::class)->name('create');
-        Route::get('/edit/{id}', ProductAttributesEdit::class)->name('edit');
-    });
-    // Products Categories
-    Route::prefix('/products-categories')->name('products-categories.')->group(function () {
-        Route::get('/', ProductsCategoriesIndex::class)->name("index");
-        Route::get('/create', ProductsCategoriesCreate::class)->name("create");
-        Route::get('/edit/{id}', ProductsCategoriesEdit::class)->name("edit");
-    });
+        Route::get('/report', Report::class)->name('report');
 
-    //brand route
-    Route::prefix('/brand')->name('brand.')->group(function () {
-        Route::match(['get', 'post'], '/', Index::class)->name('index');
-        Route::get('/create', Create::class)->name('create');
-        Route::post('/store', [Create::class, 'create'])->name('store');
-        Route::get('/edit/{id}', Edit::class)->name('edit');
-    });
+        //Product Attributes route
+        Route::prefix('/product-attributes')
+            ->name('product-attributes.')
+            ->group(function () {
+                Route::get('/', ProductAttributesIndex::class)->name('index');
+                Route::get('/create', ProductAttributesCreate::class)->name('create');
+                Route::get('/edit/{id}', ProductAttributesEdit::class)->name('edit');
+            });
+        // Products Categories
+        Route::prefix('/products-categories')
+            ->name('products-categories.')
+            ->group(function () {
+                Route::get('/', ProductsCategoriesIndex::class)->name('index');
+                Route::get('/create', ProductsCategoriesCreate::class)->name('create');
+                Route::get('/edit/{id}', ProductsCategoriesEdit::class)->name('edit');
+            });
 
-    //settings
-    Route::prefix('/settings')->name('settings.')->group(function () {
-        Route::get('/', SettingIndex::class)->name('index');
-    });
+        //brand route
+        Route::prefix('/brand')
+            ->name('brand.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', Index::class)->name('index');
+                Route::get('/create', Create::class)->name('create');
+                Route::post('/store', [Create::class, 'create'])->name('store');
+                Route::get('/edit/{id}', Edit::class)->name('edit');
+            });
 
-    // post routes
-    Route::prefix('/post')->name('post.')->group(function () {
-        Route::match(['get', 'post'], '/', Post::class)->name('index');
-    });
+        //settings
+        Route::prefix('/settings')
+            ->name('settings.')
+            ->group(function () {
+                Route::get('/', SettingIndex::class)->name('index');
+            });
 
-    // banner routes
-    Route::prefix('/banner')->name('banner.')->group(function () {
-        Route::match(['get', 'post'], '/', BannerIndex::class)->name('index');
-        Route::get('/create', BannerCreate::class)->name('create');
-        Route::get('/edit/{id}', BannerEdit::class)->name('edit');
-    });
+        // post routes
+        Route::prefix('/post')
+            ->name('post.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', Post::class)->name('index');
+            });
 
-    // customer routes
-    Route::prefix('/customer')->name('customer.')->group(function () {
-        Route::match(['get', 'post'], '/', CustomerIndex::class)->name('index');
-        Route::match(['get', 'post'], '/customer-detail/{id}', CustomerDetail::class)->name('customer-detail');
-    });
+        // banner routes
+        Route::prefix('/banner')
+            ->name('banner.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', BannerIndex::class)->name('index');
+                Route::get('/create', BannerCreate::class)->name('create');
+                Route::get('/edit/{id}', BannerEdit::class)->name('edit');
+            });
 
-    Route::prefix('/contact-us')->name('contact.us.')->group(function () {
-        Route::match(['get', 'post'], '/', ContactUs::class)->name('index');
-        Route::match(['get', 'post'], '/customer-detail/{id}', ContactUsDetail::class)->name('customer-detail');
-    });
+        // customer routes
+        Route::prefix('/customer')
+            ->name('customer.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', CustomerIndex::class)->name('index');
+                Route::match(['get', 'post'], '/customer-detail/{id}', CustomerDetail::class)->name('customer-detail');
+            });
 
-    // gift card routes
-    Route::prefix('/gift-cards')->name('gift-card.')->group(function () {
-        Route::match(['get', 'post'], '/', GiftCardGroupIndex::class)->name('index');
-    });
+        Route::prefix('/contact-us')
+            ->name('contact.us.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', ContactUs::class)->name('index');
+                Route::match(['get', 'post'], '/customer-detail/{id}', ContactUsDetail::class)->name('customer-detail');
+            });
 
-    // gift card items routes
-    Route::prefix('/gift-card-items')->name('gift-card-items.')->group(function () {
-        Route::match(['get', 'post'], '/{id}', GiftCardItemIndex::class)->name('index');
-        Route::get('view/{id}', GiftCardItemView::class)->name('view');
-    });
+        // gift card routes
+        Route::prefix('/gift-cards')
+            ->name('gift-card.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', GiftCardGroupIndex::class)->name('index');
+            });
 
-    // payments transaction route
-    Route::prefix('/transaction')->name('transaction.')->group(function () {
-        Route::match(['get', 'post'], '/', Transaction::class)->name('index');
-        Route::match(['get', 'post'], '/edit/{id}', TransactionEdit::class)->name('edit');
-    });
+        // gift card items routes
+        Route::prefix('/gift-card-items')
+            ->name('gift-card-items.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/{id}', GiftCardItemIndex::class)->name('index');
+                Route::get('view/{id}', GiftCardItemView::class)->name('view');
+            });
 
-    Route::prefix('/profile')->name('profile.')->group(function () {
-        Route::match(['get', 'post'], '/{id}', Profile::class)->name('index');
-    });
+        // payments transaction route
+        Route::prefix('/transaction')
+            ->name('transaction.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', Transaction::class)->name('index');
+                Route::match(['get', 'post'], '/edit/{id}', TransactionEdit::class)->name('edit');
+            });
 
-    //Coupon route
-    Route::prefix('/coupon')->name('coupon.')->group(function () {
-        Route::get('/', CouponIndex::class)->name('index');
-        Route::get('/create', CouponCreate::class)->name('create');
-        Route::get('/edit/{id}', CouponEdit::class)->name('edit');
-    });
+        Route::prefix('/profile')
+            ->name('profile.')
+            ->group(function () {
+                Route::match(['get', 'post'], '/{id}', Profile::class)->name('index');
+            });
 
-    //Offer route
-    Route::prefix('/offer')->name('offer.')->group(function () {
-        Route::get('/', OfferIndex::class)->name('index');
-        Route::get('/create', OfferCreate::class)->name('create');
-        Route::get('/edit/{id}', OfferEdit::class)->name('edit');
-        Route::match(['get', 'post'], '/detail/{id}', OfferDetail::class)->name('detail');
-    });
+        //Coupon route
+        Route::prefix('/coupon')
+            ->name('coupon.')
+            ->group(function () {
+                Route::get('/', CouponIndex::class)->name('index');
+                Route::get('/create', CouponCreate::class)->name('create');
+                Route::get('/edit/{id}', CouponEdit::class)->name('edit');
+            });
 
-    //orders route 
-    Route::prefix('/orders')->name('orders.')->group(function () {
-        Route::get('/', OrderIndex::class)->name('index');
-        Route::get('/view/{id}', OrderView::class)->name('view');
-    });
+        //Offer route
+        Route::prefix('/offer')
+            ->name('offer.')
+            ->group(function () {
+                Route::get('/', OfferIndex::class)->name('index');
+                Route::get('/create', OfferCreate::class)->name('create');
+                Route::get('/edit/{id}', OfferEdit::class)->name('edit');
+                Route::match(['get', 'post'], '/detail/{id}', OfferDetail::class)->name('detail');
+            });
 
-    //orders return 
-    Route::prefix('/order-return')->name('order-return.')->group(function () {
-        Route::get('/', OrderItemReturnIndex::class)->name('index');
-        Route::get('/create', OrderItemReturnCreate::class)->name('create');
-        Route::get('/view/{id}', OrderItemReturnView::class)->name('view');
-    });
+        //orders route
+        Route::prefix('/orders')
+            ->name('orders.')
+            ->group(function () {
+                Route::get('/', OrderIndex::class)->name('index');
+                Route::get('/view/{id}', OrderView::class)->name('view');
+            });
 
-    //review route 
-    Route::prefix('/reviews')->name('reviews.')->group(function () {
-        Route::get('/', reviewIndex::class)->name('index');
-    });
+        //orders return
+        Route::prefix('/order-return')
+            ->name('order-return.')
+            ->group(function () {
+                Route::get('/', OrderItemReturnIndex::class)->name('index');
+                Route::get('/create', OrderItemReturnCreate::class)->name('create');
+                Route::get('/view/{id}', OrderItemReturnView::class)->name('view');
+            });
 
-    //review route 
-    Route::prefix('user-quotation')->name('user-quotation.')->group(function () {
-        Route::get('/', UserQuotationIndex::class)->name('index');
-        Route::get('/view/{id}', UserQuotationView::class)->name('view');
+        //review route
+        Route::prefix('/reviews')
+            ->name('reviews.')
+            ->group(function () {
+                Route::get('/', reviewIndex::class)->name('index');
+            });
+
+        //review route
+        Route::prefix('user-quotation')
+            ->name('user-quotation.')
+            ->group(function () {
+                Route::get('/', UserQuotationIndex::class)->name('index');
+                Route::get('/view/{id}', UserQuotationView::class)->name('view');
+            });
     });
-});

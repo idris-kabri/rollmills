@@ -506,6 +506,22 @@
                             </a>
 
                             <!-- trnsactions  -->
+                            <a class="dropdown-item nav-priority-0 {{ Request::is('admin/report*') ? 'active' : '' }}"
+                                href="{{ route('admin.report') }}" id="cms-plugins-payments-all" title="Reports">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block" title="Reports">
+                                    <img src="{{ asset('assets/backend/images/report-file-svgrepo-com.svg') }}"
+                                        alt="">
+                                </span>
+
+                                <span class="nav-link-title text-truncate">
+                                    Reports
+                                    <span
+                                        class="badge badge-sm bg-primary text-primary-fg badge-pill menu-item-count pending-payments"
+                                        data-url="#" style="display: none"></span>
+                                </span>
+                            </a>
+
+                            <!-- trnsactions  -->
                             <a class="dropdown-item nav-priority-0 {{ Request::is('admin/post*') ? 'active' : '' }}"
                                 href="{{ route('admin.post.index') }}" id="cms-plugins-payments-all" title="Posts">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block" title="Posts">
