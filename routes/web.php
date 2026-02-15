@@ -60,7 +60,8 @@ Route::get('/pay-now/{id}', CodConversionComponent::class)->name('pay-now');
 Route::get('/ithink-import', [ImportController::class, 'ithink'])->name('ithink');
 Route::get('/xprees-bees-import', [ImportController::class, 'xpreesBees'])->name('xpreesBees');
 Route::get('/payment-settlement', [ImportController::class, 'paymentSettlement'])->name('paymentSettlement');
-Route::get('/meesho-order-import', [ImportController::class, 'meeshoOrderImport'])->name('meesho');
-Route::get('/meesho-deduction-import', [ImportController::class, 'meeshoDeductionImport'])->name('meesho');
+Route::get('/meesho-order-import', [ImportController::class, 'meeshoOrderImport']);
+Route::get('/meesho-deduction-import', [ImportController::class, 'meeshoDeductionImport']);
+Route::get('/meesho-payment-import', [ImportController::class, 'meeshoPaymentImport']);
 
 @include 'admin.php';

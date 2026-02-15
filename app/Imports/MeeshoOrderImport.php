@@ -34,7 +34,7 @@ class MeeshoOrderImport implements ToCollection, WithHeadingRow
                     $meesho_order->order_date = $row['order_date'];
                     $meesho_order->customer_state = $row['state'];
                     $meesho_order->product_name = $row['product_name'];
-                    $meesho_order->gst = 18;
+                    $meesho_order->gst = $row['gst'];
                     $meesho_order->sku = $row['sku'];
                     $meesho_order->quantity = $row['quantity'];
                     $meesho_order->price_per_piece = $row['price'];
