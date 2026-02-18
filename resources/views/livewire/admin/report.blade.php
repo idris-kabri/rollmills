@@ -41,6 +41,27 @@
                 </div>
             </div>
 
+            <div class="row my-3">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="mb-0">Prepaid Order's Sum</h1>
+                            <p class="lead">Total amount of prepaid orders</p>
+                            <h3 class="text-success">Rs. {{ number_format($prepaid_order_sum, 2) }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="mb-0">COD Order's Sum</h1>
+                            <p class="lead">Total amount of COD orders</p>
+                            <h3 class="text-success">Rs. {{ number_format($cod_order_sum, 2) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card mb-4">
                 <div class="card-header">
                     <h3 class="card-title">Detailed Breakdown (Website)</h3>
