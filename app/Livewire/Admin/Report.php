@@ -21,6 +21,16 @@ class Report extends Component
             $baseQuery->whereBetween('created_at', [$this->from_date, $this->to_date]);
         }
 
+        $prepaid_order_sum = (clone $baseQuery)
+            ->where('is_cod', 0)
+            ->whereIn('status', [1, 2, 3])
+            ->sum('total');
+
+        $cod_order_sum = (clone $baseQuery)
+            ->where('is_cod', 1)
+            ->whereIn('status', [1, 2, 3])
+            ->sum('total');
+
         // 2. Helper function
         $getStats = function ($queryClone, $statusLabel) {
             return [
@@ -112,6 +122,8 @@ class Report extends Component
             'meesho_orders_array' => $meesho_orders_array,
             'meesho_deduction_array' => $meesho_deduction_array,
             'meesho_items' => $meesho_items,
+            'prepaid_order_sum' => $prepaid_order_sum,
+            'cod_order_sum' => $cod_order_sum,
         ])->layout('layouts.admin.app');
     }
 }

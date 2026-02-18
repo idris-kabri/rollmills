@@ -548,10 +548,12 @@
                                                 <div class="col-6">
                                                     <label class="form-label small text-muted text-uppercase fw-bold"
                                                         style="font-size: 0.7rem;">Aggregator</label>
-                                                    <input type="text"
-                                                        wire:model="logistics.{{ $index }}.aggregator"
-                                                        placeholder="Ex: Shiprocket"
+                                                    <select wire:model="logistics.{{ $index }}.aggregator"
                                                         class="form-control form-control-sm">
+                                                        <option value="" disabled>Select Aggregator</option>
+                                                        <option value="Ithink">Ithink</option>
+                                                        <option value="XpressBees">XpressBees</option>
+                                                    </select>
                                                     @error('logistics.{{ $index }}.aggregator')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
