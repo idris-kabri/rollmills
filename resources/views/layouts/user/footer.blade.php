@@ -332,7 +332,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         let modalShown = localStorage.getItem("triggeredModal");
-        
+
         if (!modalShown) {
             // $("#preloader-active").delay(0).fadeOut("slow");
             // $("body").delay(0).css({ overflow: "visible" });
@@ -456,6 +456,9 @@
             event: 'purchase',
             ecommerce: {
                 items: data
+            },
+            user_data: {
+                email: data.email ?? null
             }
         });
         console.log(dataLayer)
