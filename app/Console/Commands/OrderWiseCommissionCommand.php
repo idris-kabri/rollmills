@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use App\Models\Transaction;
 use App\Models\Order;
 
@@ -21,35 +22,49 @@ class OrderWiseCommissionCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Fetch Razorpay payments and update order-wise commissions.';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $payments = Transaction::all();
-        foreach ($payments as $payment) {
-            $payment_id = null;
-            if (str_contains($payment->payment_id, 'order_')) {
-                $payment_id = getPaymentId($payment->payment_id);
-            } else {
-                $payment_id = $payment->payment_id;
-            }
-            if ($payment_id) {
+        $order_ids = Order::where('is_cod', 0)->where('status', '!=', 0)->where('commission', 0)->pluck('id')->toArray();
+
+        if (empty($order_ids)) {
+            $this->info('No orders found requiring commission updates.');
+            return;
+        }
+
+        $this->info('Starting commission updates...');
+
+        Transaction::whereIn('refrence_id', $order_ids)->chunk(100, function ($payments) {
+            foreach ($payments as $payment) {
+                $payment_id = str_contains($payment->payment_id, 'order_') ? getPaymentId($payment->payment_id) : $payment->payment_id;
+
+                if (!$payment_id) {
+                    continue;
+                }
+
                 $response = Http::withBasicAuth(config('app.razorpay_key_id'), config('app.razorpay_secret_key'))->get("https://api.razorpay.com/v1/payments/{$payment_id}");
 
                 if ($response->failed()) {
+                    Log::error("Razorpay API failed for Payment ID: {$payment_id}", [
+                        'status' => $response->status(),
+                        'response' => $response->body(),
+                    ]);
                     continue;
                 }
 
                 $payment_response = $response->json();
 
-                if ($payment_response['status'] == 'captured') {
+                $payment->payment_id = $payment_id;
+
+                if (isset($payment_response['status']) && $payment_response['status'] === 'captured') {
                     $commission_final = $payment_response['fee'] > 0 ? $payment_response['fee'] / 100 : 0;
+
                     $payment->status = 1;
                     $payment->commission = $commission_final;
-                    $payment->save();
 
                     $order = Order::find((int) $payment->refrence_id);
                     if ($order) {
@@ -58,9 +73,10 @@ class OrderWiseCommissionCommand extends Command
                     }
                 }
 
-                $payment->payment_id = $payment_id;
                 $payment->save();
             }
-        }
+        });
+
+        $this->info('Commission updates completed successfully.');
     }
 }
