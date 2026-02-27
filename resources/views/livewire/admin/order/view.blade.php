@@ -553,6 +553,7 @@
                                                         <option value="" disabled>Select Aggregator</option>
                                                         <option value="Ithink">Ithink</option>
                                                         <option value="XpressBees">XpressBees</option>
+                                                        <option value="Custom">Custom</option>
                                                     </select>
                                                     @error('logistics.{{ $index }}.aggregator')
                                                         <span class="text-danger">{{ $message }}</span>
