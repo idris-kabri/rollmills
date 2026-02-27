@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Order;
 use App\Models\MeeshoOrder;
 use App\Models\MeeshoDeduction;
+use Carbon\Carbon;
 
 class Report extends Component
 {
@@ -18,7 +19,7 @@ class Report extends Component
         $baseQuery = Order::query();
 
         if ($this->from_date && $this->to_date) {
-            $baseQuery->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            $baseQuery->whereBetween('created_at', [Carbon::parse($this->from_date)->startOfDay(), Carbon::parse($this->to_date)->endOfDay()]);
         }
 
         $prepaid_order_sum = (clone $baseQuery)

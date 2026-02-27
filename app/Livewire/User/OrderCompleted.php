@@ -84,6 +84,10 @@ class OrderCompleted extends Component
             'items' => $this->items_checkout_event_array,
         ];
 
+        if ($user_order->getBillAddress->email != null) {
+            $final_order_array['email'] = $user_order->getBillAddress->email;
+        }
+
         $this->dispatch('purchase', $final_order_array);
         $parameters = [$user_order->getBillAddress->name, $user_order->id];
         sendParameterTemplateWawi('order_success_new2', 'en_us', $user_order->getBillAddress->mobile, $parameters);
