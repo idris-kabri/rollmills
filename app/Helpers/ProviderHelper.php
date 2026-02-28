@@ -108,10 +108,9 @@ function synIthinkTracking($awb_number, $order)
 
 function IthinkRemittanceSync($date)
 {
-    Log::error('Ithink Remittance Sync Started on ' . now() . ' : ' . $date);
     $response = Http::post('https://my.ithinklogistics.com/api_v3/remittance/get_details.json', [
         'data' => [
-            'awb_number_list' => $date,
+            'remittance_date' => $date,
             'access_token' => config('app.ithink_access_token'),
             'secret_key' => config('app.secret_key'),
         ],
@@ -121,12 +120,14 @@ function IthinkRemittanceSync($date)
         $data = $response->json();
         if ($data['status'] == 'success' && $data['status_code'] == 200) {
             $awbs = $data['data'];
-            foreach ($awbs as $awb) {
-                $order_awb = OrderAWB::where('awb_number', $awb['airway_bill_no'])->first();
-                if ($order_awb) {
-                    $order = Order::where('id', $order_awb->getOrder->id)->first();
-                    $order->remittance_at = $date;
-                    $order->save();
+            if (count($awbs) > 0) {
+                foreach ($awbs as $awb) {
+                    $order_awb = OrderAWB::where('awb_number', $awb['airway_bill_no'])->first();
+                    if ($order_awb) {
+                        $order = Order::where('id', $order_awb->getOrder->id)->first();
+                        $order->remittance_at = $date;
+                        $order->save();
+                    }
                 }
             }
         }
