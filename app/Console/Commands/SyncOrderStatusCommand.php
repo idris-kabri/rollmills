@@ -27,7 +27,7 @@ class SyncOrderStatusCommand extends Command
      */
     public function handle()
     {
-        $orders = Order::whereNotIn('status', [0])
+        $orders = Order::whereIn('status', [2, 5, 7, 8, 9])
             ->pluck('id')
             ->toArray();
         $order_awbs = OrderAWB::whereIn('order_id', $orders)->get();
@@ -38,8 +38,8 @@ class SyncOrderStatusCommand extends Command
             }
 
             if ($order_awb->aggregator == 'Ithink') {
-                // synIthinkOrderDetail($order_awb->awb_number, $order_awb->getOrder);
-                // synIthinkTracking($order_awb->awb_number, $order_awb->getOrder);
+                synIthinkOrderDetail($order_awb->awb_number, $order_awb->getOrder);
+                synIthinkTracking($order_awb->awb_number, $order_awb->getOrder);
             } elseif ($order_awb->aggregator == 'XpressBees') {
                 if ($token != false) {
                     xpressBeesTracking($token, $order_awb->awb_number);
