@@ -93,6 +93,9 @@ return [
     'wawi_token' => env('WAWI_TOKEN'),
     'wawi_url' => env('WAWI_URL'),
 
+    'xpressbees_email' => env('XPRESSBEES_EMAIL'),
+    'xpressbees_password' => env('XPRESSBEES_PASSWORD'),
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key

@@ -8,7 +8,7 @@ class OrderAWB extends Model
 {
     protected $table = 'order_awb';
 
-    protected $fillable = ['order_id', 'aggregator', 'provider', 'awb_number', 'charges_taken', 'remarks'];
+    protected $fillable = ['order_id', 'aggregator', 'provider', 'awb_number', 'charges_taken', 'remarks', 'cod_charges'];
 
     public function getOrder()
     {

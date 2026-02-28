@@ -104,3 +104,65 @@ function synIthinkTracking($awb_number, $order)
 
     return true;
 }
+
+function xpressBeesLogin()
+{
+    $email = config('app.xpressbees_email');
+    $password = config('app.xpressbees_password');
+    $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+    ])->post('https://shipment.xpressbees.com/api/users/login', [
+        'email' => $email,
+        'password' => $password,
+    ]);
+
+    if ($response->successful()) {
+        $data = $response->json();
+        if ($data['status'] == true) {
+            return $data['data'];
+        }
+    }
+
+    return false;
+}
+
+function xpressBeesTracking($token, $awb_number)
+{
+    $order_awb = OrderAWB::where('awb_number', $awb_number)->first();
+    $order = Order::where('id', $order_awb->getOrder->id)->first();
+    $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' . $token,
+    ])->get('https://shipment.xpressbees.com/api/shipments2/track/' . $awb_number);
+
+    if ($response->successful()) {
+        $data = $response->json();
+        if ($data['status'] == true) {
+            $status = $data['data']['status'];
+            $internalStatus = match ($status) {
+                'in transit' => 2,
+                'delivered' => 3,
+                'rto' => 5,
+                'out for delivery' => 7,
+                default => 2,
+            };
+            $order->status = $internalStatus;
+            $histories = $data['data']['history'];
+            if (!empty($histories)) {
+                $trackingDataToSave = [];
+                foreach ($histories as $history) {
+                    $trackingDataToSave[] = [
+                        'status' => $history['status_code'],
+                        'date_time' => Carbon::parse($history['event_time'])->format('Y-m-d H:i:s'),
+                        'location' => $history['location'] ?? '',
+                        'remark' => $history['message'] ?? '',
+                    ];
+                }
+                if (!empty($trackingDataToSave)) {
+                    $order->tracking_updates = json_encode($trackingDataToSave);
+                }
+            }
+            $order->save();
+        }
+    }
+}
