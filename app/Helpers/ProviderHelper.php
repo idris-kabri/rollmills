@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderAWB;
+use Illuminate\Support\Facades\Log;
 
 function synIthinkOrderDetail($awb_number, $order)
 {
@@ -103,6 +104,33 @@ function synIthinkTracking($awb_number, $order)
     }
 
     return true;
+}
+
+function IthinkRemittanceSync($date)
+{
+    Log::error('Ithink Remittance Sync Started on ' . now() . ' : ' . $date);
+    $response = Http::post('https://my.ithinklogistics.com/api_v3/remittance/get_details.json', [
+        'data' => [
+            'awb_number_list' => $date,
+            'access_token' => config('app.ithink_access_token'),
+            'secret_key' => config('app.secret_key'),
+        ],
+    ]);
+
+    if ($response->successful()) {
+        $data = $response->json();
+        if ($data['status'] == 'success' && $data['status_code'] == 200) {
+            $awbs = $data['data'];
+            foreach ($awbs as $awb) {
+                $order_awb = OrderAWB::where('awb_number', $awb['airway_bill_no'])->first();
+                if ($order_awb) {
+                    $order = Order::where('id', $order_awb->getOrder->id)->first();
+                    $order->remittance_at = $date;
+                    $order->save();
+                }
+            }
+        }
+    }
 }
 
 function xpressBeesLogin()
