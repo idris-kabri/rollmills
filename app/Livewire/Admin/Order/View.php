@@ -111,9 +111,6 @@ class View extends Component
                 $this->order->paid_amount = $this->order->total;
                 $this->order->remaining_amount = 0;
             }
-
-            // Whatsapp logic (commented out as per your original file)
-            // ...
         }
 
         $this->order->save();

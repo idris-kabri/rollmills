@@ -21,7 +21,6 @@
                                 </li>
                             </ol>
                         </nav>
-
                     </div>
                 </div>
                 <div class="col-auto ms-auto d-print-none">
@@ -34,12 +33,7 @@
 
     <div class="page-body page-content">
         <div class="container-xl">
-
-
             <div id="main-order-content">
-
-
-
                 <div class="row row-cards">
                     <div class="col-md-9">
                         <div class="card mb-3">
@@ -97,11 +91,95 @@
                                                 <path d="M6 5l14 1l-1 7h-13"></path>
                                                 <path d="M15 19l2 2l4 -4"></path>
                                             </svg>
-                                            Completed
+                                            Complete
+                                        </span>
+                                    @break
+
+                                    @case(4)
+                                        <span class="badge bg-danger text-white d-flex align-items-center gap-1">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M18 6l-12 12"></path>
+                                                <path d="M6 6l12 12"></path>
+                                            </svg>
+                                            Cancelled
+                                        </span>
+                                    @break
+
+                                    @case(5)
+                                        <span class="badge bg-danger text-white d-flex align-items-center gap-1">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M9 14l-4 -4l4 -4"></path>
+                                                <path d="M5 10h11a4 4 0 1 1 0 8h-1"></path>
+                                            </svg>
+                                            Return
+                                        </span>
+                                    @break
+
+                                    @case(6)
+                                        <span class="badge bg-secondary text-white d-flex align-items-center gap-1">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="9"></circle>
+                                                <path d="M9 12l6 0"></path>
+                                            </svg>
+                                            Lost
+                                        </span>
+                                    @break
+
+                                    @case(7)
+                                        <span class="badge bg-purple text-white d-flex align-items-center gap-1">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
+                                            </svg>
+                                            OFD
+                                        </span>
+                                    @break
+
+                                    @case(8)
+                                        <span class="badge bg-orange text-white d-flex align-items-center gap-1">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                                                <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                                            </svg>
+                                            Return Initiated
+                                        </span>
+                                    @break
+
+                                    @case(9)
+                                        <span class="badge bg-dark text-white d-flex align-items-center gap-1">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                                                <path d="M10 10l4 4m0 -4l-4 4"></path>
+                                            </svg>
+                                            Undelivered
+                                        </span>
+                                    @break
+
+                                    @case(10)
+                                        <span class="badge bg-danger text-white d-flex align-items-center gap-1">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                                                <path d="M10 10l4 4m0 -4l-4 4"></path>
+                                            </svg>
+                                            Rejected
                                         </span>
                                     @break
                                 @endswitch
-
                             </div>
 
                             <table class="table table-vcenter card-table order-products-table">
@@ -285,7 +363,7 @@
                                                             @if ($order->status == 0)
                                                                 Pending
                                                             @else
-                                                                confirmed
+                                                                Confirmed
                                                             @endif
                                                         </span>
                                                     </td>
@@ -329,8 +407,6 @@
                                             <div class="mb-3 position-relative">
                                                 <label class="form-label" for="description">
                                                     Note (from customer at the checkout page)
-
-
                                                 </label>
 
                                                 <textarea class="form-control textarea-auto-height" name="description" id="description" placeholder="Add note...">{{ $order->additional_information }}</textarea>
@@ -372,27 +448,15 @@
                                             <thead>
                                                 <tr>
                                                     <th title="ID" width="20"
-                                                        class="text-center no-column-visibility column-key-0">
-                                                        #
+                                                        class="text-center no-column-visibility column-key-0">#</th>
+                                                    <th title="Charge ID" class="column-key-1">Payment ID</th>
+                                                    <th title="Payer Name" class="text-start column-key-2">Payer Name
                                                     </th>
-                                                    <th title="Charge ID" class="column-key-1">
-                                                        Payment ID
-                                                    </th>
-                                                    <th title="Payer Name" class="text-start column-key-2">
-                                                        Payer Name
-                                                    </th>
-                                                    <th title="Amount" class="text-start column-key-3">
-                                                        Amount
-                                                    </th>
+                                                    <th title="Amount" class="text-start column-key-3">Amount</th>
                                                     <th title="Description" class="text-start column-key-3">
-                                                        Description
-                                                    </th>
-                                                    <th title="Status" class="text-start column-key-5">
-                                                        Status
-                                                    </th>
-                                                    <th title="Created At" class="column-key-6">
-                                                        Created At
-                                                    </th>
+                                                        Description</th>
+                                                    <th title="Status" class="text-start column-key-5">Status</th>
+                                                    <th title="Created At" class="column-key-6">Created At</th>
                                                     <th title="Operations">Operations</th>
                                                 </tr>
                                             </thead>
@@ -400,9 +464,8 @@
                                                 <tr>
                                                     <td
                                                         class="text-center no-column-visibility column-key-0 sorting_1">
-                                                        1
-                                                    </td>
-                                                    <td class="   column-key-1"><a
+                                                        1</td>
+                                                    <td class=" column-key-1"><a
                                                             href="{{ route('admin.transaction.edit', $order_transaction->id) }}"
                                                             target="_blank">{{ $order_transaction->payment_id }}</a>
                                                     </td>
@@ -414,17 +477,13 @@
                                                     </td>
                                                     <td class="column-key-5">
                                                         @if ($order_transaction->status === 0)
-                                                            <span class="badge bg-warning text-warning-fg">
-                                                                Pending
-                                                            </span>
+                                                            <span
+                                                                class="badge bg-warning text-warning-fg">Pending</span>
                                                         @elseif($order_transaction->status === 1)
-                                                            <span class="badge bg-success text-success-fg">
-                                                                Confirm
-                                                            </span>
+                                                            <span
+                                                                class="badge bg-success text-success-fg">Confirm</span>
                                                         @else
-                                                            <span class="badge bg-danger text-danger-fg">
-                                                                Cancel
-                                                            </span>
+                                                            <span class="badge bg-danger text-danger-fg">Cancel</span>
                                                         @endif
                                                     </td>
                                                     <td class="column-key-6">
@@ -457,7 +516,8 @@
                             </div>
 
                             <div class="card-body p-3">
-                                @if ($order->status !== 3 && $order->status !== 4 && $order->status !== 5 && $order->status !== 6)
+                                {{-- Updated condition to hide the edit form on final status states --}}
+                                @if (!in_array($order->status, [3, 4, 5, 6, 9, 10]))
                                     <form wire:submit.prevent="orderStatusChange" class="mb-2">
 
                                         <div class="">
@@ -465,12 +525,17 @@
                                                 Status:</label>
                                             <select wire:model="status" id="statusSelect" class="form-select">
                                                 <option value="">Select Status</option>
+                                                <option value="0">Pending</option>
                                                 <option value="1">Processed</option>
                                                 <option value="2">Shipped</option>
                                                 <option value="3">Complete</option>
                                                 <option value="4">Cancelled</option>
                                                 <option value="5">Return</option>
                                                 <option value="6">Lost</option>
+                                                <option value="7">OFD</option>
+                                                <option value="8">Return Initiated</option>
+                                                <option value="9">Undelivered</option>
+                                                <option value="10">Rejected</option>
                                             </select>
                                         </div>
 
@@ -484,16 +549,28 @@
                                     </form>
                                 @else
                                     <div class="mt-3">
-                                        <label for="statusSelect" class="form-label fw-bold">Status</label>
-                                        @if ($order->status == 2)
-                                            <p class="badge bg-info text-white">Shipped</p>
-                                        @elseif($order->status == 3)
-                                            <p class="badge bg-success text-white">Complete</p>
-                                        @elseif($order->status == 4 || $order->status == 5 || $order->status == 6)
-                                            <p class="badge bg-danger text-white">
-                                                {{ $order->status == 4 ? 'Cancelled' : ($order->status == 5 ? 'Return' : 'Lost') }}
-                                            </p>
-                                        @endif
+                                        <label for="statusSelect" class="form-label fw-bold">Current Status</label>
+                                        @php
+                                            // Dynamic mapping to prevent long if/else chains
+                                            $statusMap = [
+                                                0 => ['name' => 'Pending', 'class' => 'bg-warning text-dark'],
+                                                1 => ['name' => 'Processed', 'class' => 'bg-primary text-white'],
+                                                2 => ['name' => 'Shipped', 'class' => 'bg-info text-white'],
+                                                3 => ['name' => 'Complete', 'class' => 'bg-success text-white'],
+                                                4 => ['name' => 'Cancelled', 'class' => 'bg-danger text-white'],
+                                                5 => ['name' => 'Return', 'class' => 'bg-danger text-white'],
+                                                6 => ['name' => 'Lost', 'class' => 'bg-secondary text-white'],
+                                                7 => ['name' => 'OFD', 'class' => 'bg-purple text-white'],
+                                                8 => ['name' => 'Return Initiated', 'class' => 'bg-orange text-white'],
+                                                9 => ['name' => 'Undelivered', 'class' => 'bg-dark text-white'],
+                                                10 => ['name' => 'Rejected', 'class' => 'bg-danger text-white'],
+                                            ];
+                                            $currentBadge = $statusMap[$order->status] ?? [
+                                                'name' => 'Unknown',
+                                                'class' => 'bg-secondary text-white',
+                                            ];
+                                        @endphp
+                                        <p class="badge {{ $currentBadge['class'] }}">{{ $currentBadge['name'] }}</p>
                                     </div>
                                 @endif
                             </div>
@@ -641,7 +718,7 @@
                                 <div class="p-3">
 
                                     <p class="mb-1">
-                                        <svg class="icon  svg-icon-ti-ti-inbox" xmlns="http://www.w3.org/2000/svg"
+                                        <svg class="icon svg-icon-ti-ti-inbox" xmlns="http://www.w3.org/2000/svg"
                                             width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round">
@@ -678,7 +755,7 @@
                                         <dd>{{ $shippAddress->name }}</dd>
                                         <dd>
                                             <a href="tel:+91{{ $shippAddress->mobile }}">
-                                                <svg class="icon  svg-icon-ti-ti-phone"
+                                                <svg class="icon svg-icon-ti-ti-phone"
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

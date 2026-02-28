@@ -218,15 +218,53 @@
                                                             {{ $order->total }}
                                                         </td>
                                                         <td class="text-end">
-                                                            @if ($order->status == 0)
-                                                                <span class="text text-warning">Pending</span>
-                                                            @elseif($order->status == 1)
-                                                                <span class="text text-success">Processed..</span>
-                                                            @elseif($order->status == 2)
-                                                                <span class="text text-success">Shipped</span>
-                                                            @elseif($order->status == 3)
-                                                                <span class="text text-success">Complete</span>
-                                                            @endif
+                                                            @php
+                                                                // Dynamic mapping for all 11 statuses
+                                                                $statusMap = [
+                                                                    0 => [
+                                                                        'name' => 'Pending',
+                                                                        'class' => 'text-warning',
+                                                                    ],
+                                                                    1 => [
+                                                                        'name' => 'Processed',
+                                                                        'class' => 'text-primary',
+                                                                    ],
+                                                                    2 => ['name' => 'Shipped', 'class' => 'text-info'],
+                                                                    3 => [
+                                                                        'name' => 'Complete',
+                                                                        'class' => 'text-success',
+                                                                    ],
+                                                                    4 => [
+                                                                        'name' => 'Cancelled',
+                                                                        'class' => 'text-danger',
+                                                                    ],
+                                                                    5 => ['name' => 'Return', 'class' => 'text-danger'],
+                                                                    6 => [
+                                                                        'name' => 'Lost',
+                                                                        'class' => 'text-secondary',
+                                                                    ],
+                                                                    7 => ['name' => 'OFD', 'class' => 'text-purple'],
+                                                                    8 => [
+                                                                        'name' => 'Return Initiated',
+                                                                        'class' => 'text-warning',
+                                                                    ],
+                                                                    9 => [
+                                                                        'name' => 'Undelivered',
+                                                                        'class' => 'text-dark',
+                                                                    ],
+                                                                    10 => [
+                                                                        'name' => 'Rejected',
+                                                                        'class' => 'text-danger',
+                                                                    ],
+                                                                ];
+                                                                $currentStatus = $statusMap[$order->status] ?? [
+                                                                    'name' => 'Unknown',
+                                                                    'class' => 'text-muted',
+                                                                ];
+                                                            @endphp
+                                                            <span class="text {{ $currentStatus['class'] }} fw-bold">
+                                                                {{ $currentStatus['name'] }}
+                                                            </span>
                                                         </td>
 
                                                         <td class="text-end" onclick="event.stopPropagation()">
@@ -273,6 +311,9 @@
                                                     <th>
                                                         Mobile
                                                     </th>
+                                                    <th>
+                                                        Registered At
+                                                    </th>
                                                     <th class="text-end">
                                                         Action
                                                     </th>
@@ -296,6 +337,9 @@
                                                         </td>
                                                         <td>
                                                             {{ $user->mobile }}
+                                                        </td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($user->created_at)->format('d-M-Y h:i A') }}
                                                         </td>
                                                         <td class="text-end text-nowrap">
                                                             <a href="{{ route('admin.customer.customer-detail', $user->id) }}"
@@ -340,6 +384,9 @@
                                                     <th>
                                                         Email
                                                     </th>
+                                                    <th>
+                                                        Registered At
+                                                    </th>
                                                     <th class="text-end">
                                                         Action
                                                     </th>
@@ -363,6 +410,9 @@
                                                         </td>
                                                         <td>
                                                             {{ $guest_user->email }}
+                                                        </td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($guest_user->created_at)->format('d-M-Y h:i A') }}
                                                         </td>
                                                         <td class="text-end text-nowrap">
                                                             <a href="{{ route('admin.customer.customer-detail', $guest_user->id) }}"
