@@ -27,7 +27,7 @@ class SyncOrderStatusCommand extends Command
      */
     public function handle()
     {
-        $orders = Order::whereNotIn('status', [0])
+        $orders = Order::whereNotIn('status', [0, 10])
             ->pluck('id')
             ->toArray();
         $order_awbs = OrderAWB::whereIn('order_id', $orders)->get();

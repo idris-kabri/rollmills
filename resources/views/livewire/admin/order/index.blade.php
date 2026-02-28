@@ -57,6 +57,10 @@
                                             <option value="4">Cancelled</option>
                                             <option value="5">Return</option>
                                             <option value="6">Lost</option>
+                                            <option value="7">OFD</option>
+                                            <option value="8">Return Initiated</option>
+                                            <option value="9">Undelivered</option>
+                                            <option value="10">Rejected</option>
                                         </select>
                                     </div>
                                 </div>
@@ -150,19 +154,29 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($order->status == 0)
-                                                    <p class="text text-warning mb-0">Pending</p>
-                                                @elseif($order->status == 1)
-                                                    <p class="text text-warning mb-0">Processed..</p>
-                                                @elseif($order->status == 2)
-                                                    <p class="text text-info mb-0">Shipped</p>
-                                                @elseif($order->status == 3)
-                                                    <p class="text text-success mb-0">Complete</p>
-                                                @elseif($order->status == 4 || $order->status == 5 || $order->status == 6)
-                                                    <p class="text text-danger mb-0">
-                                                        {{ $order->status == 4 ? 'Cancelled' : ($order->status == 5 ? 'Return' : 'Lost') }}
-                                                    </p>
-                                                @endif
+                                                @php
+                                                    // Mapping array for clean and dynamic status output
+                                                    $statusMap = [
+                                                        0 => ['name' => 'Pending', 'class' => 'text-warning'],
+                                                        1 => ['name' => 'Processed', 'class' => 'text-primary'],
+                                                        2 => ['name' => 'Shipped', 'class' => 'text-info'],
+                                                        3 => ['name' => 'Complete', 'class' => 'text-success'],
+                                                        4 => ['name' => 'Cancelled', 'class' => 'text-danger'],
+                                                        5 => ['name' => 'Return', 'class' => 'text-danger'],
+                                                        6 => ['name' => 'Lost', 'class' => 'text-secondary'],
+                                                        7 => ['name' => 'OFD', 'class' => 'text-purple'], // Custom class if you have it, else fallback to text-primary
+                                                        8 => ['name' => 'Return Initiated', 'class' => 'text-warning'],
+                                                        9 => ['name' => 'Undelivered', 'class' => 'text-dark'],
+                                                        10 => ['name' => 'Rejected', 'class' => 'text-danger'],
+                                                    ];
+                                                    $currentStatus = $statusMap[$order->status] ?? [
+                                                        'name' => 'Unknown',
+                                                        'class' => 'text-muted',
+                                                    ];
+                                                @endphp
+                                                <p class="text {{ $currentStatus['class'] }} mb-0 fw-bold">
+                                                    {{ $currentStatus['name'] }}
+                                                </p>
                                             </td>
                                             {{-- Use stopPropagation to prevent row click when clicking action button --}}
                                             <td onclick="event.stopPropagation()">
@@ -234,6 +248,15 @@
             max-width: 350px !important;
             /* Wider tooltip for product lists */
             text-align: left !important;
+        }
+
+        /* Fallback color classes if they don't exist in your theme */
+        .text-purple {
+            color: #6f42c1 !important;
+        }
+
+        .text-orange {
+            color: #fd7e14 !important;
         }
     </style>
 </div>
