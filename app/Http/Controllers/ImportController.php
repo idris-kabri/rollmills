@@ -8,6 +8,7 @@ use App\Imports\XpressBeesOrderDataImport;
 use App\Imports\MeeshoDeductionImport;
 use App\Imports\MeeshoPaymentImport;
 use App\Imports\MeeshoOrderImport;
+use App\Imports\XpressBeesRTOImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Http;
 use App\Models\Transaction;
@@ -81,6 +82,12 @@ class ImportController extends Controller
     public function meeshoPaymentImport()
     {
         Excel::import(new MeeshoPaymentImport(), public_path('meesho_order_payments.csv'));
+        return response()->json(['success' => true]);
+    }
+
+    public function xpressBeesRTOImport()
+    {
+        Excel::import(new XpressBeesRTOImport(), public_path('xpress_bees_rto.csv'));
         return response()->json(['success' => true]);
     }
 }
