@@ -63,5 +63,6 @@ Route::get('/payment-settlement', [ImportController::class, 'paymentSettlement']
 Route::get('/meesho-order-import', [ImportController::class, 'meeshoOrderImport']);
 Route::get('/meesho-deduction-import', [ImportController::class, 'meeshoDeductionImport']);
 Route::get('/meesho-payment-import', [ImportController::class, 'meeshoPaymentImport']);
+Route::get('/xpress-bees-rto-import', [ImportController::class, 'xpressBeesRTOImport']);
 
 @include 'admin.php';
