@@ -283,6 +283,147 @@
                             </div>
                         </div>
 
+                        <div class="widget-item col-12 d-flex col-lg-12 mb-3 mb-lg-2" id="widget_not_awb"
+                            data-url="">
+                            <div class="card card-sm flex-fill hover-shadow-md shadow-sm rounded-4">
+                                <div class="card-header">
+                                    <h2 class="mb-0">
+                                        Order AWB Missing
+                                    </h2>
+                                </div>
+                                <div class="d-flex flex-column justify-content-between h-auto widget-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table table-hover table-striped"
+                                            id="dashboard-order-awb-missing">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        # Order Id
+                                                    </th>
+                                                    <th>
+                                                        User Name/Mobile
+                                                    </th>
+                                                    <th class="text-center">
+                                                        Paid Amount
+                                                    </th>
+                                                    <th class="text-center">
+                                                        Total Amount
+                                                    </th>
+                                                    <th class="text-end">
+                                                        Status
+                                                    </th>
+                                                    <th class="text-end">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody style="font-size: 14px">
+                                                @foreach ($not_awbs as $order)
+                                                    @php
+                                                        // --- TOOLTIP LOGIC ---
+                                                        $tooltipContent =
+                                                            "<div class='text-start fw-bold mb-1'>Order Items:</div><ul class='ps-3 mb-0 text-start'>";
+                                                        // Note: Ensure '$order->items' matches your model relationship name
+                                                        if (
+                                                            $order->getOrderItems &&
+                                                            $order->getOrderItems->count() > 0
+                                                        ) {
+                                                            foreach ($order->getOrderItems as $item) {
+                                                                $name = $item->getProduct->name ?? 'Item';
+                                                                $qty = $item->qty ?? 1;
+                                                                $tooltipContent .= "<li>{$name} (x{$qty})</li>";
+                                                            }
+                                                        } else {
+                                                            $tooltipContent .= '<li>No items found</li>';
+                                                        }
+                                                        $tooltipContent .= '</ul>';
+                                                    @endphp
+
+                                                    <tr data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-html="true" title="{{ $tooltipContent }}"
+                                                        style="cursor: pointer;">
+                                                        <td>
+                                                            {{ $order->id }}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('admin.customer.customer-detail', $order->logged_in_user_id) }}"
+                                                                target="_blank">
+                                                                {{ $order->getUser->name }}</br>
+                                                                {{ $order->getUser->mobile }}
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ $order->paid_amount }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ $order->total }}
+                                                        </td>
+                                                        <td class="text-end">
+                                                            @php
+                                                                // Dynamic mapping for all 11 statuses
+                                                                $statusMap = [
+                                                                    0 => [
+                                                                        'name' => 'Pending',
+                                                                        'class' => 'text-warning',
+                                                                    ],
+                                                                    1 => [
+                                                                        'name' => 'Processed',
+                                                                        'class' => 'text-primary',
+                                                                    ],
+                                                                    2 => ['name' => 'Shipped', 'class' => 'text-info'],
+                                                                    3 => [
+                                                                        'name' => 'Complete',
+                                                                        'class' => 'text-success',
+                                                                    ],
+                                                                    4 => [
+                                                                        'name' => 'Cancelled',
+                                                                        'class' => 'text-danger',
+                                                                    ],
+                                                                    5 => ['name' => 'Return', 'class' => 'text-danger'],
+                                                                    6 => [
+                                                                        'name' => 'Lost',
+                                                                        'class' => 'text-secondary',
+                                                                    ],
+                                                                    7 => ['name' => 'OFD', 'class' => 'text-purple'],
+                                                                    8 => [
+                                                                        'name' => 'Return Initiated',
+                                                                        'class' => 'text-warning',
+                                                                    ],
+                                                                    9 => [
+                                                                        'name' => 'Undelivered',
+                                                                        'class' => 'text-dark',
+                                                                    ],
+                                                                    10 => [
+                                                                        'name' => 'Rejected',
+                                                                        'class' => 'text-danger',
+                                                                    ],
+                                                                ];
+                                                                $currentStatus = $statusMap[$order->status] ?? [
+                                                                    'name' => 'Unknown',
+                                                                    'class' => 'text-muted',
+                                                                ];
+                                                            @endphp
+                                                            <span class="text {{ $currentStatus['class'] }} fw-bold">
+                                                                {{ $currentStatus['name'] }}
+                                                            </span>
+                                                        </td>
+
+                                                        <td class="text-end" onclick="event.stopPropagation()">
+                                                            <a href="{{ route('admin.orders.view', $order->id) }}"
+                                                                target="_blank">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="widget-item col-12 d-flex col-lg-12 mb-3 mb-lg-2" id="widget_posts_recent">
                             <div class="card card-sm flex-fill hover-shadow-md shadow-sm rounded-4">
@@ -470,6 +611,18 @@
 
             // 1. Initialize Current Order Table
             var orderTable = $('#dashboard-current-order-table').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 25, 50, 100],
+                "ordering": true,
+                "searching": true,
+                "margin": 5,
+                // IMPORTANT: Re-init tooltips every time the table redraws (pagination/sort)
+                "drawCallback": function(settings) {
+                    initTooltips();
+                }
+            });
+
+            var orderAWBTable = $('#dashboard-order-awb-missing').DataTable({
                 "pageLength": 10,
                 "lengthMenu": [5, 10, 25, 50, 100],
                 "ordering": true,
