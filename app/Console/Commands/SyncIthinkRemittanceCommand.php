@@ -27,19 +27,8 @@ class SyncIthinkRemittanceCommand extends Command
      */
     public function handle()
     {
-        $order = Order::first();
-        if (!$order) {
-            $this->error('No orders found.');
-            return;
-        }
-
-        $startDate = Carbon::parse($order->created_at);
         $today = Carbon::now();
-        $days = $startDate->diffInDays($today);
-
-        for ($i = 0; $i <= $days; $i++) {
-            $date = $startDate->copy()->addDays($i)->format('Y-m-d');
-            IthinkRemittanceSync($date);
-        }
+        $date = $today->subDays(1)->format('Y-m-d');
+        IthinkRemittanceSync($date);
     }
 }

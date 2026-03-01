@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderAWB;
+use App\Models\OrderCommandLogs;
 use Illuminate\Support\Facades\Log;
 
 function synIthinkOrderDetail($awb_number, $order)
@@ -25,17 +26,47 @@ function synIthinkOrderDetail($awb_number, $order)
         if (isset($result['status']) && $result['status'] === 'success' && isset($result['data'][$awb_number])) {
             $apiData = $result['data'][$awb_number];
 
-            $order_data = Order::find($order->id);
+            $order_data = Order::where('id', $order->id)->first();
             $order_awb = OrderAWB::where('order_id', $order->id)->where('awb_number', $awb_number)->first();
 
             // Only update if the models were actually found
             if ($order_data && $order_awb) {
+                OrderCommandLogs::create([
+                    'order_id' => $order->id,
+                    'command_for' => 'Sync Ithink Order Detail',
+                    'request_body' => json_encode([
+                        'awb_number_list' => $awb_number,
+                        'order_no' => '',
+                        'start_date' => Carbon::parse($order->created_at)->format('Y-m-d'),
+                        'end_date' => Carbon::parse($order->created_at)->addDays(60)->format('Y-m-d'),
+                        'access_token' => config('app.ithink_access_token'),
+                        'secret_key' => config('app.secret_key'),
+                    ]),
+                    'api_response' => json_encode($apiData),
+                    'response' => 'Success',
+                ]);
                 $order_awb->charges_taken = (float) ($apiData['unbilled_total_charges'] ?? 0);
                 $order_awb->save();
 
                 $order_data->total_delievery_charges = (float) ($apiData['unbilled_total_charges'] ?? 0);
                 $order_data->save();
             }
+        } else {
+            $apiData = $result;
+            OrderCommandLogs::create([
+                'order_id' => $order->id,
+                'command_for' => 'Sync Ithink Order Detail',
+                'request_body' => json_encode([
+                    'awb_number_list' => $awb_number,
+                    'order_no' => '',
+                    'start_date' => Carbon::parse($order->created_at)->format('Y-m-d'),
+                    'end_date' => Carbon::parse($order->created_at)->addDays(60)->format('Y-m-d'),
+                    'access_token' => config('app.ithink_access_token'),
+                    'secret_key' => config('app.secret_key'),
+                ]),
+                'api_response' => json_encode($apiData),
+                'response' => 'Error',
+            ]);
         }
     }
 
@@ -76,6 +107,18 @@ function synIthinkTracking($awb_number, $order)
             if ($order_data) {
                 $order_data->status = $internalStatus;
 
+                OrderCommandLogs::create([
+                    'order_id' => $order->id,
+                    'command_for' => 'Sync Ithink Tracking',
+                    'request_body' => json_encode([
+                        'awb_number_list' => $awb_number,
+                        'access_token' => config('app.ithink_access_token'),
+                        'secret_key' => config('app.secret_key'),
+                    ]),
+                    'api_response' => json_encode($apiData),
+                    'response' => 'Success',
+                ]);
+
                 // Rename array to avoid overwriting the $apiData
                 $trackingDataToSave = [];
 
@@ -100,6 +143,18 @@ function synIthinkTracking($awb_number, $order)
 
                 $order_data->save();
             }
+        } else {
+            OrderCommandLogs::create([
+                'order_id' => $order->id,
+                'command_for' => 'Sync Ithink Tracking',
+                'request_body' => json_encode([
+                    'awb_number_list' => $awb_number,
+                    'access_token' => config('app.ithink_access_token'),
+                    'secret_key' => config('app.secret_key'),
+                ]),
+                'api_response' => json_encode($result),
+                'response' => 'Error',
+            ]);
         }
     }
 
@@ -125,6 +180,15 @@ function IthinkRemittanceSync($date)
                     $order_awb = OrderAWB::where('awb_number', $awb['airway_bill_no'])->first();
                     if ($order_awb) {
                         $order = Order::where('id', $order_awb->getOrder->id)->first();
+                        OrderCommandLogs::create([
+                            'order_id' => $order->id,
+                            'command_for' => 'Ithink Remittance',
+                            'request_body' => json_encode([
+                                'date' => $date,
+                            ]),
+                            'api_response' => json_encode(['message' => 'Ithink Remittance Synced Successfully']),
+                            'response' => 'Success',
+                        ]);
                         $order->remittance_at = $date;
                         $order->save();
                     }
@@ -187,11 +251,32 @@ function xpressBeesTracking($token, $awb_number)
                         'remark' => $history['message'] ?? '',
                     ];
                 }
+                OrderCommandLogs::create([
+                    'order_id' => $order->id,
+                    'command_for' => 'XpressBees Tracking',
+                    'request_body' => json_encode([
+                        'awb_number_list' => $awb_number,
+                        'token' => $token,
+                    ]),
+                    'api_response' => json_encode($data),
+                    'response' => 'Success',
+                ]);
                 if (!empty($trackingDataToSave)) {
                     $order->tracking_updates = json_encode($trackingDataToSave);
                 }
             }
             $order->save();
+        } else {
+            OrderCommandLogs::create([
+                'order_id' => $order->id,
+                'command_for' => 'XpressBees Tracking',
+                'request_body' => json_encode([
+                    'awb_number_list' => $awb_number,
+                    'token' => $token,
+                ]),
+                'api_response' => json_encode($data),
+                'response' => 'Error',
+            ]);
         }
     }
 }
