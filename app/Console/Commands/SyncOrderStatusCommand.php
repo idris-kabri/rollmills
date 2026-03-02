@@ -37,7 +37,7 @@ class SyncOrderStatusCommand extends Command
                 continue;
             }
 
-            if ($order_awb->aggregator == 'Ithink') {
+            if ($order_awb->aggregator == 'Ithink' && $order_awb->getOrder->status != 5) {
                 synIthinkOrderDetail($order_awb->awb_number, $order_awb->getOrder);
                 synIthinkTracking($order_awb->awb_number, $order_awb->getOrder);
             } elseif ($order_awb->aggregator == 'XpressBees') {
