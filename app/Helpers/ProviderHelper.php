@@ -79,7 +79,7 @@ function synIthinkTracking($awb_number, $order)
             if (isset($result['status']) && $result['status'] === 'success' && isset($result['data'][$awb_number])) {
                 $apiData = $result['data'][$awb_number];
 
-                $order->status = match ($apiData['current_status'] ?? '') {
+                $new_status = match ($apiData['current_status'] ?? '') {
                     'In Transit', 'Manifested', 'Picked Up', 'Reached At Destination' => 2,
                     'Delivered' => 3,
                     'Cancelled', 'REV Cancelled', 'REV Closed' => 4,
@@ -90,6 +90,9 @@ function synIthinkTracking($awb_number, $order)
                     'Not Picked', 'Undelivered', 'Out of Delivery Area', 'Delayed', 'Misrouted' => 9,
                     default => 2,
                 };
+                $old_status = $order->status;
+
+                $order->status = $new_status;
 
                 // Process Scan Details
                 if (isset($apiData['scan_details']) && is_array($apiData['scan_details'])) {
@@ -110,6 +113,12 @@ function synIthinkTracking($awb_number, $order)
                 }
 
                 $order->save();
+                if ($new_status == 7 && $old_status != $new_status) {
+                    sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
+                } elseif ($new_status == 3 && $old_status != $new_status) {
+                    sendParameterTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile, [$order->id]);
+                }
+
                 saveCommandLog($order->id, 'Sync Ithink Tracking', $requestData, $apiData, 'Success');
             } else {
                 saveCommandLog($order->id, 'Sync Ithink Tracking', $requestData, $result, 'Error');
@@ -205,14 +214,17 @@ function xpressBeesTracking($token, $awb_number)
             $data = $response->json();
             if ($data['status'] ?? false) {
                 $shipment = $data['data'];
-
-                $order->status = match (strtolower($shipment['status'] ?? '')) {
+                $new_status = match (strtolower($shipment['status'] ?? '')) {
                     'in transit' => 2,
                     'delivered' => 3,
                     'rto' => 5,
                     'out for delivery' => 7,
                     default => 2,
                 };
+
+                $old_status = $order->status;
+
+                $order->status = $new_status;
 
                 if (!empty($shipment['history'])) {
                     $history = collect($shipment['history'])
@@ -230,6 +242,11 @@ function xpressBeesTracking($token, $awb_number)
                 }
 
                 $order->save();
+                if ($new_status == 7 && $old_status != $new_status) {
+                    sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
+                } elseif ($new_status == 3 && $old_status != $new_status) {
+                    sendParameterTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile, [$order->id]);
+                }
                 saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Success');
             } else {
                 saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Error');
