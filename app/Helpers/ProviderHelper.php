@@ -112,12 +112,13 @@ function synIthinkTracking($awb_number, $order)
                     $order->tracking_updates = json_encode($trackingUpdates);
                 }
 
-                $order->save();
                 if ($new_status == 7 && $old_status != $new_status) {
                     sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
                 } elseif ($new_status == 3 && $old_status != $new_status) {
+                    $order->complete_at = now();
                     sendNormalTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile);
                 }
+                $order->save();
 
                 saveCommandLog($order->id, 'Sync Ithink Tracking', $requestData, $apiData, 'Success');
             } else {
@@ -241,12 +242,13 @@ function xpressBeesTracking($token, $awb_number)
                     $order->tracking_updates = json_encode($history);
                 }
 
-                $order->save();
                 if ($new_status == 7 && $old_status != $new_status) {
                     sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
                 } elseif ($new_status == 3 && $old_status != $new_status) {
+                    $order->complete_at = now();
                     sendNormalTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile);
                 }
+                $order->save();
                 saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Success');
             } else {
                 saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Error');
