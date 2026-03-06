@@ -44,9 +44,9 @@ class SendMessageCommand extends Command
                         try {
                             $user = User::where('mobile', $cart->identifier)->first();
                             $order = Order::where('is_logged_in_user', $user->id)
-                                ->whereNotIn('status', [0, 4])
+                                ->whereIn('status', [0, 10])
                                 ->first();
-                            if ($order) {
+                            if (!$order) {
                                 continue;
                             }
                             $cartDate = Carbon::parse($cart->created_at);
