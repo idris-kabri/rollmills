@@ -24,6 +24,7 @@ class MeeshoPaymentImport implements ToCollection, WithHeadingRow
 
                 $meesho_order->remittance_at = $row['payment_date'];
                 $meesho_order->transaction_id = $row['transaction_id'];
+                $meesho_order->gst = $row['gst'];
 
                 // Simply add the amount. If it's negative, it will naturally subtract.
                 $meesho_order->remittance_amount += $amount;
