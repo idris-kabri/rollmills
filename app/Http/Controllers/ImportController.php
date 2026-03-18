@@ -97,4 +97,10 @@ class ImportController extends Controller
         Excel::import(new XpressBeesRemittanceImport(), public_path('remittance.csv'));
         return response()->json(['success' => true]);
     }
+
+    public function test($id)
+    {
+        $order = Order::find($id);
+        sendNormalTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile);
+    }
 }

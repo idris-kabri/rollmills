@@ -2,6 +2,9 @@
 
 use App\Models\Product;
 use App\Models\Setting;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Coupon;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
@@ -74,4 +77,60 @@ function getPaymentId($orderId)
     }
 
     return $paymentId;
+}
+
+function claimCoupon($id)
+{
+    $order = Order::find($id);
+    if ($order->is_coupon_avail == 0) {
+        $shipping_days = Setting::where('label', 'shipping_days')->first()->value ?? 7;
+
+        $max_return_replacement_days = 0;
+        foreach ($order->getOrderItems as $key => $item) {
+            $return_days = $item->item_return_days;
+            $replacement_days = $item->item_replacement_days;
+            if ($return_days == 0 && $replacement_days == 0) {
+                continue;
+            } else {
+                $days = max($return_days, $replacement_days);
+                if ($days > $max_return_replacement_days) {
+                    $max_return_replacement_days = $days;
+                }
+            }
+        }
+
+        $max_return_replacement_days += $shipping_days;
+
+        $order->is_coupon_avail = 1;
+        $order->save();
+
+        $user = User::find($order->logged_in_user_id);
+        $settings = Setting::all();
+
+        // Get first name only
+        $nameParts = preg_split('/\s+/', trim($user->name));
+        $firstName = $nameParts[0]; // only first name
+
+        $randomNumber = rand(10, 200);
+
+        // Build coupon code with first name only
+        $couponCode = $firstName . $randomNumber;
+
+        $start_date = Carbon::parse($order->shipped_at)->addDays($max_return_replacement_days)->format('Y-m-d');
+
+        $coupon = new Coupon();
+        $coupon->title = 'Coupon for Order #' . $order->id;
+        $coupon->coupon_code = $couponCode;
+        $coupon->minimum_order_value = $settings->where('label', 'coupon_min_order_value')->first()->value ?? 0;
+        $coupon->discount_type = $settings->where('label', 'coupon_discount_type')->first()->value ?? 0;
+        $coupon->discount_value = $settings->where('label', 'discount_value')->first()->value ?? 0;
+        $coupon->maximum_discount_amount = $settings->where('label', 'coupon_max_discount')->first()->value ?? 0;
+        $coupon->usage_limit = 1;
+        $coupon->total_usage = 1;
+        $coupon->category = '';
+        $coupon->start_date = $start_date;
+        $coupon->expiry_date = Carbon::now()->addDays((int) $settings->where('label', 'coupon_expiry')->first()->value)->format('Y-m-d');
+        $coupon->order_id = $order->id;
+        $coupon->save();
+    }
 }

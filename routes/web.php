@@ -23,6 +23,7 @@ use App\Livewire\User\CodConversionComponent;
 use App\Livewire\User\OrderComponent;
 use App\Livewire\User\DeliveryInformationComponent;
 use App\Livewire\User\OrderDetail;
+use App\Livewire\User\TrackingComponent;
 use App\Livewire\User\Profile;
 use App\Livewire\User\AddressComponent;
 use App\Http\Controllers\PaymentSuccessController;
@@ -56,6 +57,7 @@ Route::get('/order-completed', OrderCompleted::class)->name('order-completed');
 Route::get('/all-category', AllCategory::class)->name('all-category');
 Route::match(['get', 'post'], '/get-payment', [PaymentSuccessController::class, 'paymentSuccess'])->name('payment.success');
 Route::get('/pay-now/{id}', CodConversionComponent::class)->name('pay-now');
+Route::get('/tracking-info/{id}', TrackingComponent::class)->name('tracking-info');
 
 Route::get('/ithink-import', [ImportController::class, 'ithink'])->name('ithink');
 Route::get('/xprees-bees-import', [ImportController::class, 'xpreesBees'])->name('xpreesBees');
@@ -65,5 +67,7 @@ Route::get('/meesho-deduction-import', [ImportController::class, 'meeshoDeductio
 Route::get('/meesho-payment-import', [ImportController::class, 'meeshoPaymentImport']);
 Route::get('/xpress-bees-rto-import', [ImportController::class, 'xpressBeesRTOImport']);
 Route::get('/xpress-bees-remittance-import', [ImportController::class, 'xpressBeesRemittanceImport']);
+
+Route::get('/claim-coupon-order/{id}', [ImportController::class, 'test']);
 
 @include 'admin.php';

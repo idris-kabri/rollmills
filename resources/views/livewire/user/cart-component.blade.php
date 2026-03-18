@@ -4,9 +4,7 @@
             background: linear-gradient(90deg, #fffbf0 0%, #ffffff 100%);
             border: 1px solid #f7e3a6;
             border-left: 5px solid #ffbc0d;
-            /* Gold left border */
         }
-
 
         .gift-badge {
             background-color: #ffbc0d;
@@ -22,7 +20,6 @@
 
         .price-free {
             color: #25b579;
-            /* Success Green */
             font-weight: 800;
             font-size: 18px;
         }
@@ -33,12 +30,11 @@
             margin-right: 5px;
         }
 
-        /* --- FREE SHIPPING WIDGET STYLES (Cart Version) --- */
+        /* --- DISCOUNT PROGRESS WIDGET STYLES --- */
         .shipping-widget-cart {
-            background: #f4f6fa;
             padding: 15px;
             border-radius: 10px;
-            border: 1px dashed #c4cdd5;
+            border: 1px dashed;
         }
 
         .shipping-progress-bg {
@@ -60,6 +56,16 @@
             animation: progress-bar-stripes 1s linear infinite;
         }
 
+        @keyframes progress-bar-stripes {
+            0% {
+                background-position: 1rem 0;
+            }
+
+            100% {
+                background-position: 0 0;
+            }
+        }
+
         .shipping-text {
             font-size: 14px;
             font-weight: 500;
@@ -70,7 +76,6 @@
         }
 
         .shipping-highlight {
-            color: #00b59c;
             font-weight: 700;
         }
     </style>
@@ -90,7 +95,7 @@
                 </div>
 
                 <div class="rm-ticket-text">
-                    Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                    Pay online and get <span class="rm-ticket-highlight">20% OFF</span> as a prepaid discount
                 </div>
 
                 <a href="/shop" class="rm-ticket-btn btn-loop-animate">
@@ -166,7 +171,6 @@
                                     <h6 class="d-block d-sm-none text-start text-brand">Shop
                                         ₹{{ $surprise_gift_amount }} & Grab Your Gift Now!!
                                     </h6>
-                                    {{-- <div class="progress-title">Offer!! Offer!! Offer!!</div> --}}
                                     <p class="quicksand fw-500 quicksand d-none d-sm-block">Shop
                                         ₹{{ $surprise_gift_amount }} and get
                                         exclusive
@@ -269,14 +273,11 @@
                                         }
                                     @endphp
 
-                                    {{-- Add 'gift-row' class if it is a gift --}}
                                     <tr class="pt-3 {{ $isGift ? 'gift-row' : '' }}">
-                                        {{-- IMAGE COLUMN --}}
                                         <td class="image product-thumbnail pt-40 position-relative ps-3">
                                             <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                                 alt="{{ $item->model->seo_meta }}">
 
-                                            {{-- Mobile Remove Button (Hide if Gift) --}}
                                             @if (!$isGift)
                                                 <div class="display-visible-480 d-none custom-remove-item">
                                                     <a href="#"
@@ -287,7 +288,6 @@
                                             @endif
                                         </td>
 
-                                        {{-- NAME COLUMN --}}
                                         <td class="product-des product-name px-sm-3">
                                             @if ($isGift)
                                                 <span class="gift-badge badge py-1 quicksand"><i
@@ -309,7 +309,6 @@
                                                 @endif
                                             </h6>
 
-                                            {{-- Rating (Only show for real products, maybe hide for gift if desired, keeping it for now) --}}
                                             @php
                                                 $reviews = \App\Models\ProductReview::where('status', 1)
                                                     ->where('product_id', $item->model->id)
@@ -337,7 +336,6 @@
                                             @endif
                                         </td>
 
-                                        {{-- PRICE COLUMN --}}
                                         <td class="price small-screen-table-td me-3" data-title="Price">
                                             @if ($isGift)
                                                 <h4 class="text-body small-screen-table-td-content">
@@ -368,16 +366,13 @@
                                             @endif
                                         </td>
 
-                                        {{-- QUANTITY COLUMN --}}
                                         <td class="text-center detail-info" data-title="Stock">
                                             @if ($isGift)
-                                                {{-- Lock Quantity for Gift --}}
                                                 <div class="detail-qty border radius bg-light disabled"
                                                     style="cursor: not-allowed; opacity: 0.7;">
                                                     <span class="qty-val">1</span>
                                                 </div>
                                             @else
-                                                {{-- Normal Quantity Controls --}}
                                                 <div class="detail-extralink mr-15 display-hide-480">
                                                     <div class="detail-qty border radius">
                                                         <a href="#"
@@ -403,7 +398,6 @@
                                             @endif
                                         </td>
 
-                                        {{-- SUBTOTAL COLUMN --}}
                                         <td class="price small-screen-table-td" data-title="Total Price">
                                             @if ($isGift)
                                                 <h4 class="price-free small-screen-table-td-content">₹0</h4>
@@ -413,11 +407,9 @@
                                             @endif
                                         </td>
 
-                                        {{-- REMOVE COLUMN --}}
                                         <td class="action text-center small-screen-table-td remove-btn pe-sm-2"
                                             data-title="Remove">
                                             @if ($isGift)
-                                                {{-- Hide Remove button for gift, or show lock icon --}}
                                                 <span class="text-muted" title="Automatic Gift"><i
                                                         class="fi-rs-lock"></i></span>
                                             @else
@@ -440,9 +432,6 @@
                         </table>
                     </div>
 
-
-
-
                     {{-- mobile responsive cart page new design start --}}
                     <div class="product-detail-small-screen d-block d-sm-none">
                         @php
@@ -450,7 +439,6 @@
                         @endphp
                         @foreach (Cart::instance('cart')->content() as $item)
                             @php
-                                // Check if this is the gift product
                                 $isGift = $item->options['is_gift_product'] ?? false;
 
                                 if ($item->model->slug) {
@@ -470,7 +458,6 @@
                                     <div class="img-section position-relative">
                                         <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                             alt="{{ $item->model->seo_meta }}" class="img-fluid">
-                                        {{-- Mobile Remove Button (Hide if Gift) --}}
                                         @if (!$isGift)
                                             <div class="d-block d-sm-none custom-remove-item">
                                                 <a href="#"
@@ -540,13 +527,11 @@
                                         </div>
 
                                         @if ($isGift)
-                                            {{-- Lock Quantity for Gift --}}
                                             <div class="detail-qty border radius bg-light disabled"
                                                 style="cursor: not-allowed; opacity: 0.7;">
                                                 <span class="qty-val">1</span>
                                             </div>
                                         @else
-                                            {{-- Normal Quantity Controls --}}
                                             @if ($item->model->out_of_stock != 1)
                                                 <div class="detail-extralink mr-15 display-hide-480">
                                                     <div class="detail-qty border radius">
@@ -597,38 +582,47 @@
                 </div>
                 <div class="col-xl-3">
 
-                    {{-- START: Free Shipping Interactive Widget (Sidebar) --}}
+                    {{-- START: Dynamic Discount Offer Progress Widget (Sidebar) --}}
                     @php
                         $cartSubtotalNumeric = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
-                        $shippingThreshold =
-                            \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
-                        $shippingDiff = $shippingThreshold - $cartSubtotalNumeric;
-                        $shippingPercent = ($cartSubtotalNumeric / $shippingThreshold) * 100;
-                        if ($shippingPercent > 100) {
-                            $shippingPercent = 100;
-                        }
+                        $remainingAmount = max(0, $minimum_order_value - $cartSubtotalNumeric);
+
+                        $progressPercentage =
+                            $cartSubtotalNumeric >= $minimum_order_value
+                                ? 100
+                                : ($cartSubtotalNumeric / $minimum_order_value) * 100;
                     @endphp
 
-                    <div class="shipping-widget-cart mb-4">
+                    <div class="shipping-widget-cart mb-4"
+                        style="background: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#f0fdf4' : '#fdfaf3' }}; border-color: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
                         <div class="shipping-text">
-                            @if ($cartSubtotalNumeric >= $shippingThreshold)
+                            @if ($cartSubtotalNumeric >= $minimum_order_value)
                                 <i class="fi-rs-check-circle" style="color: #28a745; font-size: 18px;"></i>
-                                <span style="font-size:13px; line-height:1.2">Congratulations! You get <span
-                                        class="shipping-highlight" style="color:#28a745">FREE Shipping</span>.</span>
+                                <span style="font-size:13px; line-height:1.2">Congratulations! You've unlocked <span
+                                        class="shipping-highlight" style="color:#28a745">{{ $discount_percentage }}%
+                                        OFF (Up to ₹{{ $maximum_extra_discount_amount }})</span>!</span>
                             @else
-                                <i class="fi-rs-truck-side" style="color: #00b59c; font-size: 18px;"></i>
-                                <span style="font-size:13px; line-height:1.2">Add <span
-                                        class="shipping-highlight">₹{{ number_format($shippingDiff) }}</span> for
-                                    <span class="shipping-highlight">FREE Shipping</span></span>
+                                <i class="fi-rs-shopping-bag" style="color: #e6b400; font-size: 18px;"></i>
+                                <span style="font-size:13px; line-height:1.2">Add <span class="shipping-highlight"
+                                        style="color:#d32f2f">₹{{ number_format($remainingAmount) }}</span> more for
+                                    <span class="shipping-highlight"
+                                        style="color:#d32f2f">{{ $discount_percentage }}% OFF (Up to
+                                        ₹{{ $maximum_extra_discount_amount }})</span>!</span>
                             @endif
                         </div>
                         <div class="shipping-progress-bg">
                             <div class="shipping-progress-bar"
-                                style="width: {{ $shippingPercent }}%; background-color: {{ $cartSubtotalNumeric >= $shippingThreshold ? '#28a745' : '#00b59c' }};">
+                                style="width: {{ $progressPercentage }}%; background-color: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
                             </div>
                         </div>
+                        @if ($cartSubtotalNumeric < $minimum_order_value)
+                            <div style="text-align: right; font-size: 11px; margin-top: 5px; color: #888;">
+                                Total: ₹{{ number_format($cartSubtotalNumeric) }} /
+                                ₹{{ number_format($minimum_order_value) }}
+                            </div>
+                        @endif
                     </div>
-                    {{-- END: Free Shipping Interactive Widget --}}
+                    {{-- END: Dynamic Discount Offer Progress Widget --}}
 
                     <div class="border p-20 cart-totals mb-4">
                         <h4 class="mb-30 pb-2 underline">Details</h4>
@@ -670,6 +664,25 @@
                                                 ₹{{ Cart::instance('cart')->subtotal() }}</h4>
                                         </td>
                                     </tr>
+
+                                    {{-- NEW EXTRA DISCOUNT ROW --}}
+                                    @if (session()->has('extra_discount') && session('extra_discount') > 0)
+                                        <tr class="d-flex justify-content-between border-0 align-items-center">
+                                            <td class="cart_total_label text-start">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-success me-2">Special Discount</span>
+                                                    <h6 class="text-success m-0">({{ $discount_percentage }}% OFF)
+                                                    </h6>
+                                                </div>
+                                            </td>
+                                            <td class="cart_total_amount">
+                                                <h5 class="text-end fs-16 text-success fw-bold">
+                                                    - ₹{{ number_format(session('extra_discount'), 2) }}
+                                                </h5>
+                                            </td>
+                                        </tr>
+                                    @endif
+
                                     @php
                                         $discount = $totalOfferDiscountedPrice + $mainDiscountAmount;
                                     @endphp
@@ -693,38 +706,13 @@
                                             </td>
                                         </tr>
                                     @endif
-                                    {{-- @if (floatval(session('shipping_charge')))
-                                        <tr class="d-flex justify-content-between border-0">
-                                            <td class="cart_total_label text-start">
-                                                <h6 class="text-muted">Shipping</h6>
-                                            </td>
-
-                                            <td class="cart_total_amount">
-                                                <h5 class="text-heading text-end fs-16">
-                                                    @if (floatval(session('shipping_charge')) == 0)
-                                                        Free Shipping
-                                                    @else
-                                                        {{ number_format(session('shipping_charge'), 2) }}
-                                                    @endif
-                                                </h5>
-                                            </td>
-
-                                        </tr>
-                                    @endif --}}
-                                    {{-- @if (session('latest_etd') != null)
-                                        <tr class="d-flex justify-content-between border-0">
-                                            <td class="cart_total_label text-start">
-                                                <h6 class="text-muted">Etd</h6>
-                                            </td>
-                                            <td class="cart_total_amount">
-                                                <h5 class="text-heading text-end fs-16">{{ session('latest_etd') }}
-                                                    </h4>
-                                            </td>
-                                        </tr>
-                                    @endif --}}
 
                                     @php
                                         $cartTotal = (float) str_replace(',', '', Cart::total());
+                                        $extraSessionDiscount = session('extra_discount')
+                                            ? session('extra_discount')
+                                            : 0;
+
                                         $amountAfterDiscount = $cartTotal - $totalOfferDiscountedPrice;
                                         $allCouponandOfferDiscount =
                                             $cartTotal - $totalOfferDiscountedPrice - $mainDiscountAmount;
@@ -736,19 +724,19 @@
                                         <td class="cart_total_amount">
                                             @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($allCouponandOfferDiscount, 2) }}
+                                                    ₹{{ number_format($allCouponandOfferDiscount - $extraSessionDiscount, 2) }}
                                                 </h4>
                                             @elseif($totalAfterDiscount != 0)
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($totalAfterDiscount, 2) }}
+                                                    ₹{{ number_format($totalAfterDiscount - $extraSessionDiscount, 2) }}
                                                 </h4>
                                             @elseif($totalOfferDiscountedPrice != 0)
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($amountAfterDiscount, 2) }}
+                                                    ₹{{ number_format($amountAfterDiscount - $extraSessionDiscount, 2) }}
                                                 </h4>
                                             @else
                                                 <h4 class="text-brand text-end fs-16">
-                                                    ₹{{ number_format($total, 2) }}
+                                                    ₹{{ number_format($cartTotal - $extraSessionDiscount, 2) }}
                                                 </h4>
                                             @endif
                                         </td>
@@ -756,11 +744,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        {{-- @if ($checkout_button) --}}
                         <a href="/checkout"
                             class="btn mb-20 w-100 d-sm-flex d-none justify-content-center align-items-center">Proceed
                             To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
-                        {{-- @endif --}}
                     </div>
                     <div class="p-20 border-radius-15 border mb-20">
                         <h4 class="mb-30 pb-2 underline">Apply Coupon</h4>
@@ -828,30 +814,32 @@
                     <h6 class="text-muted fs-14">Payable Amount :</h6>
                 </td>
                 <td class="cart_total_amount">
+                    @php
+                        $mobileExtraDiscount = session('extra_discount') ? session('extra_discount') : 0;
+                    @endphp
+
                     @if ($totalOfferDiscountedPrice != 0 && $mainDiscountAmount != 0)
                         <h4 class="text-brand text-end fs-14">
-                            ₹{{ number_format($allCouponandOfferDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                            ₹{{ number_format($allCouponandOfferDiscount - $mobileExtraDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @elseif($totalAfterDiscount != 0)
                         <h4 class="text-brand text-end fs-14">
-                            ₹{{ number_format($totalAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                            ₹{{ number_format($totalAfterDiscount - $mobileExtraDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @elseif($totalOfferDiscountedPrice != 0)
                         <h4 class="text-brand text-end fs-14">
-                            ₹{{ number_format($amountAfterDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
+                            ₹{{ number_format($amountAfterDiscount - $mobileExtraDiscount + ((float) session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @else
                         <h4 class="text-brand text-end fs-14">
-                            ₹{{ number_format($total + (session('shipping_charge') ?? 0), 2) }}
+                            ₹{{ number_format($total - $mobileExtraDiscount + (session('shipping_charge') ?? 0), 2) }}
                         </h4>
                     @endif
                 </td>
             </div>
         </div>
-        {{-- @if ($checkout_button) --}}
         <a href="/checkout" class="btn w-100 d-flex d-sm-none justify-content-center align-items-center">Proceed
             To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
-        {{-- @endif --}}
     </div>
 </main>
 
@@ -884,8 +872,8 @@
             let skipAnimation = bar.getAttribute("data-skip") === "true";
 
             if (skipAnimation) {
-                bar.style.transition = "none"; // remove animation
-                bar.style.width = "100%"; // full bar
+                bar.style.transition = "none";
+                bar.style.width = "100%";
                 markerClosed.style.display = "none";
                 markerOpen.style.display = "block";
                 return;
@@ -914,8 +902,6 @@
 
         });
 
-
-        // Your confetti code
         function showCongratsOffer() {
             confetti({
                 particleCount: 800,
@@ -926,7 +912,6 @@
             });
         }
 
-        // Optional: fire from Livewire event also
         window.addEventListener('coupon-applied', event => {
             showCongratsOffer();
         });
@@ -937,8 +922,8 @@
 
             Livewire.on('open-cart-remove-item-modal', () => {
                 wishlistModal = new bootstrap.Modal(document.getElementById('CartRemoveItemModal'), {
-                    backdrop: 'static', // ← important
-                    keyboard: false // ← important
+                    backdrop: 'static',
+                    keyboard: false
                 });
                 wishlistModal.show();
             });

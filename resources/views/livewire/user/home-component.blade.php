@@ -7,7 +7,7 @@
                 </div>
 
                 <div class="rm-ticket-text">
-                    Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                    Pay online and get <span class="rm-ticket-highlight">20% OFF</span> as a prepaid discount
                 </div>
 
                 <a href="/shop" class="rm-ticket-btn btn-loop-animate">

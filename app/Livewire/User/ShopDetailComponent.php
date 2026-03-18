@@ -41,11 +41,17 @@ class ShopDetailComponent extends Component
     public $review_image;
     public $check_user_can_review;
 
+    // --- NEW VARIABLES ADDED HERE ---
+    public $minimum_order_value = 1000; // Set your desired minimum order amount
+    public $discount_percentage = 15; // Set your desired discount percentage
+
     protected $listeners = ['closeQuickView' => 'handleCloseQuickView'];
 
     public function mount($slug = null, $id)
     {
         $this->id = $id;
+        $this->minimum_order_value = Setting::where('label', 'extra_discount_order_value')->first()->value;
+        $this->discount_percentage = Setting::where('label', 'extra_discount')->first()->value;
         $setting = Setting::where('label', 'surprise_gift_product_id')->first()->value;
         if ($id == (int) $setting) {
             return redirect('/');
@@ -92,7 +98,6 @@ class ShopDetailComponent extends Component
 
             $assignItems = $assign->productAttribute->getAttibuteItems;
 
-            // dd($assign,$attributeName,$assignItems);
             if (!isset($this->groupedAttributes[$setIds])) {
                 $this->groupedAttributes[$setIds] = [
                     'name' => $attributeName,

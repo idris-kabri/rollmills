@@ -116,7 +116,12 @@ function synIthinkTracking($awb_number, $order)
                     sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
                 } elseif ($new_status == 3 && $old_status != $new_status) {
                     $order->complete_at = now();
+                    if ($order->is_cod == 1) {
+                        $order->paid_amount = $order->total;
+                        $order->remaining_amount = 0;
+                    }
                     sendNormalTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile);
+                    claimCoupon($order->id);
                 }
                 $order->save();
 
@@ -246,6 +251,11 @@ function xpressBeesTracking($token, $awb_number)
                     sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
                 } elseif ($new_status == 3 && $old_status != $new_status) {
                     $order->complete_at = now();
+                    if ($order->is_cod == 1) {
+                        $order->paid_amount = $order->total;
+                        $order->remaining_amount = 0;
+                    }
+                    claimCoupon($order->id);
                     sendNormalTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile);
                 }
                 $order->save();

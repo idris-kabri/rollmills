@@ -132,7 +132,8 @@
         .dashed-offer-box {
             /* Updated to Brand Color rgb(220, 169, 22) */
             border: 2px dashed rgb(220, 169, 22);
-            background-color: rgba(220, 169, 22, 0.05); /* Very light gold background */
+            background-color: rgba(220, 169, 22, 0.05);
+            /* Very light gold background */
             border-radius: 12px;
             padding: 20px;
             margin: 25px auto;
@@ -164,11 +165,11 @@
         .shop-now-btn-lg:hover {
             transform: translateY(-3px);
             /* Slightly darker gold for hover */
-            background-color: rgb(195, 149, 19); 
+            background-color: rgb(195, 149, 19);
             box-shadow: 0 8px 20px rgba(220, 169, 22, 0.4);
             color: white;
         }
-        
+
         .text-brand-custom {
             color: rgb(220, 169, 22) !important;
         }
@@ -297,11 +298,12 @@
             <div class="container-lg mb-30 mt-50">
                 <div class="row">
                     <div class="col-xl-10 col-lg-12 m-auto">
-                        
+
                         @if ($user_orders->count() > 0)
                             <div class="content mb-40 text-center">
                                 <h1 class="title style-3 mb-10">Select an Order</h1>
-                                <p class="text-muted quicksand">Choose a previous order to unlock your exclusive rewards!
+                                <p class="text-muted quicksand">Choose a previous order to unlock your exclusive
+                                    rewards!
                                 </p>
                             </div>
 
@@ -352,7 +354,7 @@
                                                                                     'id' => $product->id,
                                                                                 ]);
                                                                         @endphp
-                                                                        <a href="{{ $item->is_gift_item == 1 ? "javascripti:void(0);" : $shop_detail_url }}"
+                                                                        <a href="{{ $item->is_gift_item == 1 ? 'javascripti:void(0);' : $shop_detail_url }}"
                                                                             class="text-heading hover-up">{{ Str::limit($product->name, 35) }}</a>
                                                                     </h6>
                                                                     <div class="d-flex align-items-center gap-2 mt-1">
@@ -489,13 +491,15 @@
 
                                         <h2 class="mb-2 fw-800 text-dark">Welcome to Roll Mills!</h2>
                                         <p class="text-muted quicksand fs-16 mb-0">
-                                            It looks like you haven't placed an order yet. <br class="d-none d-md-block">
+                                            It looks like you haven't placed an order yet. <br
+                                                class="d-none d-md-block">
                                             Start your journey with us today and grab a special welcome reward.
                                         </p>
 
                                         {{-- The Offer Box --}}
                                         <div class="dashed-offer-box">
-                                            <span class="text-uppercase text-muted fs-12 fw-700 ls-1">Exclusive First Order
+                                            <span class="text-uppercase text-muted fs-12 fw-700 ls-1">Exclusive First
+                                                Order
                                                 Offer</span>
                                             <div class="discount-big-text my-2">10% OFF</div>
                                         </div>
