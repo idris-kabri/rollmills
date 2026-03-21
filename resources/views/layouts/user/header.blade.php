@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{{ strip_tags($og_title ?? ($meta_title ?? 'RollMills - Household & Decoration')) }}</title>
+    <title>{{ strip_tags($og_title ?? ($meta_title ?? 'RollMills - Fragrances')) }}</title>
 
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
@@ -12,10 +12,9 @@
 
     {{-- 2. Dynamic Description & Keywords --}}
     <meta name="description"
-        content="{{ strip_tags($meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Household And Decoration products.') }}" />
+        content="{{ strip_tags($meta_description ?? 'Welcome to Roll Mills - Your trusted destination for high quality Fragnance products.') }}" />
 
-    <meta name="keywords"
-        content="{{ strip_tags($meta_keywords ?? 'household, decoration, rollmills, home decor, hanging Perfume, candles') }}" />
+    <meta name="keywords" content="{{ strip_tags($meta_keywords ?? 'hanging Perfume, candles') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     {{-- 3. Dynamic Open Graph (Social Media) Tags --}}
@@ -101,7 +100,7 @@
     @endphp
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
-            <span><strong>FREE SHIPPING</strong> on all orders over <strong>₹{{ $shop_over }}</strong></span>
+            <span><strong>Fill your space with luxury – Free Shipping on every order! ✨</strong></span>
         </div>
         <a href="javascript:void(0);" id="a-div-login-hide" class="d-none" data-bs-toggle="modal"
             data-bs-target="#loginModal"></a>
