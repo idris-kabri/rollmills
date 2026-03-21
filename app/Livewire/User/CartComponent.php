@@ -43,13 +43,16 @@ class CartComponent extends Component
     public $offer_applied_cart_product_id = [];
     public $quantities = [];
 
-    // REMOVED: public $display_coupons = [];
-    // We pass this in render() to avoid hydration 404s
+    // --- NEW VARIABLES ---
+    public $minimum_order_value = 1000;
+    public $discount_percentage = 15;
+    public $maximum_extra_discount_amount = 500; // NEW: Maximum allowed discount cap
+    public $extra_discount = 0;
 
     public $surprise_gift_amount = 0;
-    public $surprise_gift_product_id = null; // Stores ID (Value), not Model
+    public $surprise_gift_product_id = null;
     public $productCategoryIds = [];
-    public $flat_rate = 0; // Stores Value, not Model
+    public $flat_rate = 0;
 
     public $confirmMessage = '';
     public $confirmAction = '';
@@ -65,6 +68,9 @@ class CartComponent extends Component
     public function mount()
     {
         $items = [];
+        $this->minimum_order_value = Setting::where('label', 'extra_discount_order_value')->first()->value;
+        $this->discount_percentage = Setting::where('label', 'extra_discount')->first()->value;
+        $this->maximum_extra_discount_amount = Setting::where('label', 'maximum_extra_discount')->first()->value;
         foreach (Cart::instance('cart')->content() as $item) {
             $this->quantities[$item->rowId] = $item->qty;
             $quantity = $item->qty;
@@ -122,12 +128,10 @@ class CartComponent extends Component
         }
         if (session()->has('shipping_pincode') && session('shipping_pincode') != null) {
             $this->pincode = session('shipping_pincode');
-            // $this->pincodeCheckFunction();
         }
         $this->productCategoryIds = array_unique($this->productCategoryIds);
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
 
-        // FIX: Extract values immediately to avoid storing Models
         $giftAmountSetting = Setting::where('label', 'surprise_gift_minimum_amount')->first();
         $this->surprise_gift_amount = $giftAmountSetting ? (int) $giftAmountSetting->value : 0;
 
@@ -140,7 +144,6 @@ class CartComponent extends Component
             session()->put('flat_rate_charge', (int) $this->flat_rate);
         }
 
-        // We do not call getDisplayCoupons() here anymore; it's handled in render()
         $this->checkSurpriseGift();
     }
 
@@ -149,17 +152,11 @@ class CartComponent extends Component
         $currentDate = Carbon::now()->format('Y-m-d');
         $checkCuponCode = Coupon::where('coupon_code', $this->couponCode)->first();
 
-        // session()->forget('coupon_discount_amount');
-        // session()->forget('coupon_discount_id');
-        // session()->forget('coupon_code');
-
-        // Check if coupon exists
         if (!$checkCuponCode) {
             $this->toastError('This Coupon Code Not Exists!');
             return false;
         }
 
-        // Count total usage of this coupon
         $orderCount = Order::where('coupon_id', $checkCuponCode->id)->where('status', 1)->count();
 
         if ($checkCuponCode->start_date != null) {
@@ -176,7 +173,6 @@ class CartComponent extends Component
             return false;
         }
 
-        // Check logged in user's usage if user is logged in
         if (Auth::check()) {
             $orderUserCount = Order::where('logged_in_user_id', Auth::user()->id)
                 ->where('coupon_id', $checkCuponCode->id)
@@ -189,18 +185,13 @@ class CartComponent extends Component
             }
         }
 
-        // Parse coupon categories (comma separated values)
         $couponCategoryIds = explode(',', $checkCuponCode->category);
-
-        // Calculate total price of eligible products in cart
         $cartItems = Cart::instance('cart')->content();
         $eligibleProductsTotal = 0;
         $eligibleProductCount = 0;
 
         foreach ($cartItems as $item) {
-            // Check if product belongs to coupon categories
             if ($checkCuponCode->category != '' && $checkCuponCode->category != null) {
-                // Assume each product has categories relationship returning an array of category IDs
                 $productCategoryIds = ProductCategoryAssign::where('product_id', $item->model->id)->pluck('category_id')->toArray();
                 if (array_intersect($couponCategoryIds, $productCategoryIds)) {
                     $eligibleProductsTotal += $item->price * $item->qty;
@@ -212,29 +203,24 @@ class CartComponent extends Component
             }
         }
 
-        // If no eligible product found in cart for coupon categories
         if ($eligibleProductsTotal == 0) {
             $this->toastError('No products in cart belong to the coupon category.');
             return;
         }
 
-        // Check minimum order value on eligible products total
         if ($eligibleProductsTotal < (float) $checkCuponCode->minimum_order_value) {
             $this->toastError('Minimum order value must be ₹' . number_format($checkCuponCode->minimum_order_value) . ' for products in coupon category.');
             return;
         }
 
-        // Check coupon expiry date using Carbon
         if (!Carbon::parse($checkCuponCode->expiry_date)->gt(Carbon::now())) {
             $this->toastError('This Coupon Is Expired!');
             return;
         }
 
-        // Calculate discount amount
         if ($checkCuponCode->discount_type == 'Percentage') {
             $discountAmount = ($eligibleProductsTotal * $checkCuponCode->discount_value) / 100;
 
-            // Cap it at maximum_discount_amount if applicable
             if ($discountAmount > $checkCuponCode->maximum_discount_amount) {
                 $discountAmount = (float) $checkCuponCode->maximum_discount_amount;
             }
@@ -250,7 +236,6 @@ class CartComponent extends Component
             $this->dispatch('coupon-applied');
         }
 
-        // Save coupon info in session
         session()->put('coupon_discount_amount', $this->mainDiscountAmount);
         session()->put('coupon_discount_id', $checkCuponCode->id);
         session()->put('coupon_code', $this->couponCode);
@@ -258,24 +243,20 @@ class CartComponent extends Component
         return true;
     }
 
-    // Renamed to fetch and return array, NOT set property
     public function fetchDisplayCoupons()
     {
         $cartTotal = (float) str_replace(',', '', Cart::total());
         $display_coupons = [];
         $currentDate = Carbon::now()->format('Y-m-d');
 
-        // First Condition: Global Coupons
         $global_coupons = Coupon::where('is_global', 1)->where('expiry_date', '>', $currentDate)->get();
 
         foreach ($global_coupons as $coupon) {
-            // Check total usage limit
             $totalUsage = Order::where('coupon_id', $coupon->id)->count();
             if ($totalUsage >= $coupon->total_usage) {
                 continue;
             }
 
-            // Check user-specific usage if logged in
             if (Auth::check() && $coupon->usage_limit > 0) {
                 $userUsage = Order::where('coupon_id', $coupon->id)->where('logged_in_user_id', Auth::id())->count();
                 if ($userUsage >= $coupon->usage_limit) {
@@ -286,24 +267,15 @@ class CartComponent extends Component
             $display_coupons[] = $coupon;
         }
 
-        // Second Condition: User-Specific Coupons
         if (Auth::check()) {
-            $user_coupons = Coupon::where('is_global', 0)
-                ->whereNotNull('order_id')
-                ->where('expiry_date', '>', $currentDate)
-                ->join('orders', 'coupons.order_id', '=', 'orders.id')
-                ->where('orders.logged_in_user_id', Auth::id())
-                ->select('coupons.*') // Ensure we get coupon fields, not order fields
-                ->get();
+            $user_coupons = Coupon::where('is_global', 0)->whereNotNull('order_id')->where('expiry_date', '>', $currentDate)->join('orders', 'coupons.order_id', '=', 'orders.id')->where('orders.logged_in_user_id', Auth::id())->select('coupons.*')->get();
 
             foreach ($user_coupons as $coupon) {
-                // Check total usage limit
                 $totalUsage = Order::where('coupon_id', $coupon->id)->count();
                 if ($totalUsage >= $coupon->total_usage) {
                     continue;
                 }
 
-                // Check user-specific usage
                 $userUsage = Order::where('coupon_id', $coupon->id)->where('logged_in_user_id', Auth::id())->count();
                 if ($userUsage >= $coupon->usage_limit) {
                     continue;
@@ -313,19 +285,14 @@ class CartComponent extends Component
             }
         }
 
-        // New Code
         $non_global_coupons = Coupon::where('is_global', 0)
             ->whereNull('order_id')
             ->where('expiry_date', '>', $currentDate)
             ->where(function ($query) {
-                // 1. Allow coupons defined for ALL categories (null)
                 $query->whereNull('category');
-
-                // 2. Loop through every category in the cart and check if it matches the coupon
                 if (!empty($this->productCategoryIds)) {
                     $query->orWhere(function ($subQuery) {
                         foreach ($this->productCategoryIds as $id) {
-                            // Check if this specific ID exists in the comma-separated DB column
                             $subQuery->orWhereRaw('FIND_IN_SET(?, category)', [$id]);
                         }
                     });
@@ -334,18 +301,15 @@ class CartComponent extends Component
             ->get();
 
         foreach ($non_global_coupons as $coupon) {
-            // Check minimum order value
             if ($cartTotal < $coupon->minimum_order_value) {
                 continue;
             }
 
-            // Check total usage limit
             $totalUsage = Order::where('coupon_id', $coupon->id)->count();
             if ($totalUsage >= $coupon->total_usage) {
                 continue;
             }
 
-            // Check user-specific usage
             if (Auth::check() && $coupon->usage_limit > 0) {
                 $userUsage = Order::where('coupon_id', $coupon->id)->where('logged_in_user_id', Auth::id())->count();
                 if ($userUsage >= $coupon->usage_limit) {
@@ -361,50 +325,36 @@ class CartComponent extends Component
 
     public function checkSurpriseGift()
     {
-        // 1. Validate that the setting exists and has a value
         if (!$this->surprise_gift_product_id) {
             return;
         }
         $giftProductId = $this->surprise_gift_product_id;
         $threshold = (float) $this->surprise_gift_amount;
 
-        // 2. Calculate Current Cart Total (Excluding the gift itself)
         $currentCartTotal = 0;
         $existingGiftRowId = null;
 
         foreach (Cart::instance('cart')->content() as $item) {
-            // Check if this specific row is our automated gift
             if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
                 $existingGiftRowId = $item->rowId;
-                continue; // Do not add the gift value to the total calculation
+                continue;
             }
-
-            // Calculate total of normal items
             $currentCartTotal += $item->price * $item->qty;
         }
 
-        // 3. Compare Total vs Threshold
         if ($currentCartTotal >= $threshold) {
             if (!$existingGiftRowId) {
-                // Fetch the product details from DB
                 $product = \App\Models\Product::find($giftProductId);
 
                 if ($product) {
                     Cart::instance('cart')
-                        ->add(
-                            $product->id,
-                            $product->name,
-                            1, // Quantity
-                            0, // Price
-                            [
-                                'is_gift_product' => true,
-                                'featured_image' => $product->featured_image,
-                                'discount_price' => 0,
-                            ],
-                        )
+                        ->add($product->id, $product->name, 1, 0, [
+                            'is_gift_product' => true,
+                            'featured_image' => $product->featured_image,
+                            'discount_price' => 0,
+                        ])
                         ->associate('App\Models\Product');
 
-                    // Trigger events only when gift is newly added
                     $this->dispatch('coupon-applied');
                     $this->dispatch('surprise-gift');
                 }
@@ -490,17 +440,13 @@ class CartComponent extends Component
 
                 $items[] = $itemData;
                 $this->dispatch('add-to-cart', $items);
-                // $this->offerCheckEligibility();
-                if ($this->pincode != null) {
-                    // $this->pincodeCheckFunction();
-                }
+
                 if (session('coupon_discount_id')) {
                     $this->applyCoupon();
                 }
             }
         }
         $this->checkSurpriseGift();
-        // Removed explicit call to getDisplayCoupons, render handles it
     }
 
     public function updateQuantity($rowId)
@@ -567,17 +513,13 @@ class CartComponent extends Component
 
                 $items[] = $itemData;
                 $this->dispatch('add-to-cart', $items);
-                // $this->offerCheckEligibility();
-                if ($this->pincode != null) {
-                    // $this->pincodeCheckFunction();
-                }
+
                 if (session('coupon_discount_id')) {
                     $this->applyCoupon();
                 }
             }
         }
         $this->checkSurpriseGift();
-        // Removed explicit call to getDisplayCoupons
     }
 
     public function decrementQuantity($rowId)
@@ -646,17 +588,13 @@ class CartComponent extends Component
 
                 $items[] = $itemData;
                 $this->dispatch('add-to-cart', $items);
-                // $this->offerCheckEligibility();
-                if ($this->pincode != null) {
-                    // $this->pincodeCheckFunction();
-                }
+
                 if (session('coupon_discount_id')) {
                     $this->applyCoupon();
                 }
             }
         }
         $this->checkSurpriseGift();
-        // Removed explicit call to getDisplayCoupons
     }
 
     public function removeFromCart($rowId)
@@ -664,7 +602,7 @@ class CartComponent extends Component
         try {
             $item = Cart::instance('cart')->get($rowId);
         } catch (\Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException $e) {
-            return; // rowId not found — safely exit
+            return;
         }
         $qty = Cart::instance('cart')->get($rowId)->qty;
         $productId = Cart::instance('cart')->get($rowId)->model->id;
@@ -725,48 +663,9 @@ class CartComponent extends Component
             $this->toastError('Product Remove Successfully From Your Cart!');
             $this->dispatch('close-cart-remove-item-modal');
         }
-        // $this->offerCheckEligibility();
-        // $this->pincodeCheckFunction();
+
         $this->checkSurpriseGift();
-        // Removed explicit call to getDisplayCoupons
     }
-
-    // public function pincodeCheckFunction($show_toast = 'no')
-    // {
-    //     $checkoutconditionFail = false;
-
-    //     if ($this->pincode == '' && $show_toast == 'yes') {
-    //         $this->toastError('Please Enter Pincode');
-    //     }
-    //     $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
-    //     if ($setting) {
-    //         $outOfDeliveryPincodes = explode(',', $setting->value);
-
-    //         if (in_array($this->pincode, $outOfDeliveryPincodes)) {
-    //             $this->free_shipping = true;
-    //             session()->put('free_shipping_pincode', $this->pincode);
-    //             session()->forget('show_deleviery_time');
-    //         } else {
-    //             $cart_items = Cart::instance('cart')->content();
-    //             session()->put('latest_etd', '5 to 7 days');
-    //             session()->put('shipping_bear_margin', 0);
-
-    //             session()->forget('free_shipping_pincode');
-    //             session()->put('show_deleviery_time', true);
-    //             if ($show_toast == 'yes') {
-    //                 $this->toastSuccess('Charges Calculated Successfully!');
-    //             }
-    //             // }
-    //         }
-    //         session()->put('shipping_pincode', $this->pincode);
-    //     }
-    //     if (!$checkoutconditionFail) {
-    //         $this->checkout_button = true;
-    //         // $this->checkoutCondition();
-    //     } else {
-    //         $this->checkout_button = false;
-    //     }
-    // }
 
     public function checkoutCondition()
     {
@@ -824,15 +723,30 @@ class CartComponent extends Component
     public function render()
     {
         $giftAlreadyAdded = false;
+        $currentCartTotal = 0;
 
         foreach (Cart::instance('cart')->content() as $item) {
             if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
                 $giftAlreadyAdded = true;
-                break;
+                continue;
             }
+            $currentCartTotal += $item->price * $item->qty;
         }
 
-        // Fetch coupons here and pass variable to view
+        // --- UPDATED LOGIC FOR DYNAMIC DISCOUNT WITH CAP ---
+        if ($currentCartTotal >= $this->minimum_order_value) {
+            // Calculate percentage discount
+            $calculated_discount = ($currentCartTotal * $this->discount_percentage) / 100;
+
+            // Apply the min() function to ensure we don't exceed the maximum allowed discount
+            $this->extra_discount = min($calculated_discount, $this->maximum_extra_discount_amount);
+
+            session()->put('extra_discount', $this->extra_discount);
+        } else {
+            $this->extra_discount = 0;
+            session()->forget('extra_discount');
+        }
+
         $display_coupons = $this->fetchDisplayCoupons();
 
         return view('livewire.user.cart-component', compact('giftAlreadyAdded', 'display_coupons'))->layout('layouts.user.app');

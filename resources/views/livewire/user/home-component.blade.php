@@ -7,7 +7,7 @@
                 </div>
 
                 <div class="rm-ticket-text">
-                    Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                    Pay online and get <span class="rm-ticket-highlight">20% OFF</span> as a prepaid discount
                 </div>
 
                 <a href="/shop" class="rm-ticket-btn btn-loop-animate">
@@ -92,7 +92,7 @@
         </div>
     </section>
 
-    <section class="popular-categories section-padding" wire:ignore>
+    {{-- <section class="popular-categories section-padding" wire:ignore>
         <div class="container wow animate__animated animate__fadeIn">
             <div class="section-title">
                 <div class="title">
@@ -119,7 +119,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="banners feature-three-cards mb-25" wire:ignore>
         <div class="container">
@@ -136,23 +136,25 @@
                         }
                     @endphp
                     <div class="col-lg-4 {{ $class }}">
-                        <div class="banner-img">
-                            <img src="{{ asset('storage/' . $banner->image) }}" alt="" />
-                            <div class="banner-text">
-                                <h4>
-                                    @php
-                                        $h_tag = str_replace('<p>', '', $banner->sub_heading);
-                                        $h_tag = str_replace('</p>', '', $h_tag);
-                                        $h_tag = str_replace('<strong>', '', $h_tag);
-                                        $h_tag = str_replace('</strong>', '', $h_tag);
-                                    @endphp
-                                    {!! $h_tag !!}
-                                </h4>
-                                <a href="{{ $banner->link ?? '#' }}"
+                        <a href="{{ $banner->link ?? '#' }}">
+                            <div class="banner-img">
+                                <img src="{{ asset('storage/' . $banner->image) }}" alt="" />
+                                <div class="banner-text">
+                                    <h4>
+                                        @php
+                                            $h_tag = str_replace('<p>', '', $banner->sub_heading);
+                                            $h_tag = str_replace('</p>', '', $h_tag);
+                                            $h_tag = str_replace('<strong>', '', $h_tag);
+                                            $h_tag = str_replace('</strong>', '', $h_tag);
+                                        @endphp
+                                        {!! $h_tag !!}
+                                    </h4>
+                                    {{-- <a href="{{ $banner->link ?? '#' }}"
                                     class="btn btn-xs btn-loop-animate">{{ $banner->button_text }}
-                                    <i class="fi-rs-arrow-small-right"></i></a>
+                                    <i class="fi-rs-arrow-small-right"></i></a> --}}
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 @endforeach
             </div>

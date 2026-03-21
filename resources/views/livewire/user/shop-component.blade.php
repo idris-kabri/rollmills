@@ -7,7 +7,7 @@
                     </div>
 
                     <div class="rm-ticket-text">
-                        Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                        Pay online and get <span class="rm-ticket-highlight">20% OFF</span> as a prepaid discount
                     </div>
 
                     <a href="/shop" class="rm-ticket-btn btn-loop-animate">
@@ -232,7 +232,7 @@
         <div class="container mb-40 mt-40">
             <div class="row">
                 <div class="col-xl-3 primary-sidebar">
-                    <div class="sidebar-widget custom-category-widget mb-30 d-none d-xl-block">
+                    {{-- <div class="sidebar-widget custom-category-widget mb-30 d-none d-xl-block">
                         <h5 class="section-title style-1 mb-30"
                             style="color: var(--color-3); border-bottom: 2px solid var(--color-1); display: inline-block; padding-bottom: 5px;">
                             Category</h5>
@@ -293,8 +293,8 @@
                                                 <div
                                                     class="sub-cat-item {{ $selectedCategory == $sub_category->id ? 'active' : '' }}">
                                                     <input type="radio" id="sub-{{ $sub_category->id }}"
-                                                        value="{{ $sub_category->id }}" {{-- <--- FIX: Added the value attribute --}}
-                                                        name="category_group" class="custom-check"
+                                                        value="{{ $sub_category->id }}" name="category_group"
+                                                        class="custom-check"
                                                         wire:click="categoryWiseProduct({{ $sub_category->id }}, 'change')"
                                                         {{ $selectedCategory == $sub_category->id ? 'checked' : '' }}>
 
@@ -309,7 +309,7 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Filter By Price -->
                     {{-- <div class="sidebar-widget range mb-30 d-none d-xl-block">

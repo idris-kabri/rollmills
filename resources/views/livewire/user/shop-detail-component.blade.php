@@ -65,7 +65,8 @@
             color: #00b59c;
         }
 
-        .icon-return {
+        .icon-return,
+        .icon-express {
             color: #fd7e14;
         }
 
@@ -77,13 +78,15 @@
             line-height: 1.2;
         }
 
-        /* --- FREE SHIPPING WIDGET STYLES --- */
+        /* --- DISCOUNT PROGRESS WIDGET STYLES --- */
         .shipping-widget-container {
-            background: #f4f6fa;
+            background: #fdfaf3;
+            /* Slight yellow/gold tint for offer */
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 25px;
-            border: 1px dashed #c4cdd5;
+            margin-top: 15px;
+            border: 1px dashed #f5c518;
         }
 
         .shipping-progress-bg {
@@ -91,9 +94,11 @@
             border-radius: 10px;
             height: 8px;
             width: 100%;
-            margin-top: 8px;
+            margin-top: 10px;
             overflow: hidden;
         }
+
+        .icon-express {}
 
         .shipping-progress-bar {
             height: 100%;
@@ -125,8 +130,7 @@
         }
 
         .shipping-highlight {
-            color: #00b59c;
-            /* Brand color */
+            color: #d32f2f;
             font-weight: 700;
         }
 
@@ -249,7 +253,7 @@
                 </div>
 
                 <div class="rm-ticket-text">
-                    Pay online and get <span class="rm-ticket-highlight">10% OFF</span> on 1st order
+                    Pay online and get <span class="rm-ticket-highlight">20% OFF</span> as a prepaid discount
                 </div>
 
                 <a href="/shop" class="rm-ticket-btn btn-loop-animate">
@@ -396,52 +400,53 @@
                                 @else
                                     <div class="product-price primary-color float-left">
                                         <span
-                                            class="current-price text-brand">${{ number_format($mainProduct->price) }}</span>
+                                            class="current-price text-brand">₹{{ number_format($mainProduct->price) }}</span>
                                     </div>
                                 @endif
                             </div>
 
-                            {{-- START: Free Shipping Interactive Widget --}}
+                            {{-- START: Dynamic Cart Progress Widget --}}
                             @php
-                                $effective_price = str_replace(',', '', Cart::subtotal());
-                                $shipping_threshold =
-                                    \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ??
-                                    0;
-                                $remaining_amount = $shipping_threshold - $effective_price;
-                                $shipping_percentage = 0;
+                                // Get the current cart subtotal and convert it to a float safely
+                                $cart_subtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+                                $remaining_amount = max(0, $minimum_order_value - $cart_subtotal);
 
-                                if ($effective_price >= $shipping_threshold) {
-                                    $shipping_percentage = 100;
-                                } else {
-                                    $shipping_percentage = ($effective_price / $shipping_threshold) * 100;
-                                }
+                                // Calculate the percentage complete for the progress bar
+                                $progress_percentage =
+                                    $cart_subtotal >= $minimum_order_value
+                                        ? 100
+                                        : ($cart_subtotal / $minimum_order_value) * 100;
                             @endphp
 
                             <div class="shipping-widget-container">
                                 <div class="shipping-text">
-                                    @if ($effective_price >= $shipping_threshold)
-                                        <i class="fi-rs-check-circle" style="color: #28a745; font-size: 18px;"></i>
-                                        <span>Congratulations! You get <span class="shipping-highlight"
-                                                style="color:#28a745">FREE Shipping</span>.</span>
+                                    @if ($cart_subtotal >= $minimum_order_value)
+                                        <i class="fi-rs-check-circle" style="color: #28a745; font-size: 20px;"></i>
+                                        <span>Congratulations! You've unlocked <span class="shipping-highlight"
+                                                style="color:#28a745">{{ $discount_percentage }}% OFF</span> your
+                                            order!</span>
                                     @else
-                                        <i class="fi-rs-truck-side" style="color: #00b59c; font-size: 18px;"></i>
-                                        <span>Shop for <span
+                                        <i class="fi-rs-shopping-bag" style="color: #e6b400; font-size: 20px;"></i>
+                                        <span>Add <span
                                                 class="shipping-highlight">₹{{ number_format($remaining_amount) }}</span>
-                                            more to get <span class="shipping-highlight">FREE Shipping</span></span>
+                                            more to your cart to get <span
+                                                class="shipping-highlight">{{ $discount_percentage }}%
+                                                OFF</span>!</span>
                                     @endif
                                 </div>
                                 <div class="shipping-progress-bg">
                                     <div class="shipping-progress-bar"
-                                        style="width: {{ $shipping_percentage }}%; background-color: {{ $effective_price >= $shipping_threshold ? '#28a745' : '#00b59c' }};">
+                                        style="width: {{ $progress_percentage }}%; background-color: {{ $cart_subtotal >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
                                     </div>
                                 </div>
-                                @if ($effective_price < $shipping_threshold)
+                                @if ($cart_subtotal < $minimum_order_value)
                                     <div style="text-align: right; font-size: 11px; margin-top: 5px; color: #888;">
-                                        Order over ₹{{ $shipping_threshold }} for free delivery
+                                        Current Total: ₹{{ number_format($cart_subtotal) }} /
+                                        ₹{{ number_format($minimum_order_value) }}
                                     </div>
                                 @endif
                             </div>
-                            {{-- END: Free Shipping Interactive Widget --}}
+                            {{-- END: Dynamic Cart Progress Widget --}}
 
                             <div class="short-desc mb-30">
                                 <p class="font-lg">{!! $mainProduct->short_description !!}</p>
@@ -508,6 +513,12 @@
                                 </div>
                                 <div class="trust-badge-item">
                                     <div class="trust-icon-box">
+                                        <i class="fi-rs-rocket icon-express"></i>
+                                    </div>
+                                    <p class="trust-badge-title">Express<br>Delivery</p>
+                                </div>
+                                <div class="trust-badge-item">
+                                    <div class="trust-icon-box">
                                         <i class="fi-rs-money icon-cod"></i>
                                     </div>
                                     <p class="trust-badge-title">Cash on<br>Delivery</p>
@@ -523,7 +534,7 @@
                                         <p class="trust-badge-title">
                                             {{ $mainProduct->product_replacement_days }}-day<br>Replacement</p>
                                     @else
-                                        <p class="trust-badge-title">No Return Policy</p>
+                                        <p class="trust-badge-title">No Return <br> Policy</p>
                                     @endif
                                 </div>
                             </div>

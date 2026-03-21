@@ -55,6 +55,12 @@ class CheckoutComponent extends Component
     public $online_payment_amount;
     public $cash_on_delivery_user_additional_pay;
 
+    // --- NEW VARIABLES FOR DYNAMIC DISCOUNT ---
+    public $minimum_order_value = 1000;
+    public $discount_percentage = 15;
+    public $maximum_extra_discount_amount = 500;
+    public $extra_discount = 0;
+
     // Properties for generic modal
     public $confirmMessage = '';
     public $confirmAction = '';
@@ -62,6 +68,9 @@ class CheckoutComponent extends Component
     public function mount()
     {
         session()->forget('first_order');
+        $this->minimum_order_value = Setting::where('label', 'extra_discount_order_value')->first()->value;
+        $this->discount_percentage = Setting::where('label', 'extra_discount')->first()->value;
+        $this->maximum_extra_discount_amount = Setting::where('label', 'maximum_extra_discount')->first()->value;
         $this->billing_address['zipcode'] = session('shipping_pincode');
         $this->billing_address['email'] = '';
         $this->ship_to_different_address['zipcode'] = session('shipping_pincode');
@@ -153,7 +162,7 @@ class CheckoutComponent extends Component
         $cartSubtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
         $cod_charges = (int) Setting::where('label', 'cod_charges')->first()->value ?? 0;
         $free_delivery_order_amount = (int) Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
-        $shipping_charges = (int) Setting::where('label', 'shipping_charges')->first()->value ?? 0;
+        $shipping_charges = 0;
 
         if ($cartSubtotal > $free_delivery_order_amount) {
             $this->online_payment_amount = 0;
@@ -162,34 +171,6 @@ class CheckoutComponent extends Component
         }
 
         $this->cash_on_delivery_amount = $cod_charges + $this->online_payment_amount;
-        // $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
-        // $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
-
-        // $weight = 0;
-        // foreach (Cart::instance('cart')->content() as $item) {
-        //     $weight += $item->model->weight * $item->qty;
-        // }
-
-        // $weight = $weight / 1000;
-        // $lookupWeight = (string) (ceil($weight * 2) / 2);
-
-        // $online_charges = config('rates.online_rates');
-        // $cod_charges = config('rates.cod_rates');
-
-        // $online_charge = $online_charges[$lookupWeight] ?? $minimum_online_charge;
-        // $cod_charge = $cod_charges[$lookupWeight] ?? $minimum_cod_charge;
-
-        // if ($online_charge > (int) $minimum_online_charge) {
-        //     $this->online_payment_amount = $online_charge;
-        // } else {
-        //     $this->online_payment_amount = $minimum_online_charge;
-        // }
-
-        // if ($cod_charge > (int) $minimum_cod_charge) {
-        //     $this->cash_on_delivery_amount = $cod_charge;
-        // } else {
-        //     $this->cash_on_delivery_amount = $minimum_cod_charge;
-        // }
     }
 
     public function checkPlaceOrderFunction()
@@ -242,11 +223,28 @@ class CheckoutComponent extends Component
     {
         $cartTotal = (float) str_replace(',', '', Cart::instance('cart')->total());
         $totalOfferDiscount = 0;
+        $currentCartTotal = 0;
 
         foreach (Cart::instance('cart')->content() as $item) {
             if (!empty($item->options['discount_price'])) {
-                $totalOfferDiscount = $item->price * $item->qty - $item->options['discount_price'];
+                $totalOfferDiscount += $item->price * $item->qty - $item->options['discount_price'];
             }
+
+            // Skip gift products for discount threshold calculation
+            if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
+                continue;
+            }
+            $currentCartTotal += $item->price * $item->qty;
+        }
+
+        // --- DYNAMIC EXTRA DISCOUNT LOGIC ---
+        if ($currentCartTotal >= $this->minimum_order_value) {
+            $calculated_discount = ($currentCartTotal * $this->discount_percentage) / 100;
+            $this->extra_discount = min($calculated_discount, $this->maximum_extra_discount_amount);
+            session()->put('extra_discount', $this->extra_discount);
+        } else {
+            $this->extra_discount = 0;
+            session()->forget('extra_discount');
         }
 
         $this->offerDiscount = (float) ($totalOfferDiscount ?? 0);
@@ -255,19 +253,17 @@ class CheckoutComponent extends Component
 
         $shippingCharge = (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
 
-        // --- NEW LOGIC: 10% Discount for First Order on Online Payment ---
+        // First Order on Online Payment
         if ($this->is_first_order && $this->payment_method == 'online') {
-            // Calculate 10% of the Cart Total
-            $this->onlineDiscountAmount = round($cartTotal * 0.1, 2);
+            $this->onlineDiscountAmount = round($cartTotal * 0.2, 2);
         } else {
             $this->onlineDiscountAmount = 0;
         }
 
         if ($this->payment_method == 'online') {
-            $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->onlineDiscountAmount + $shippingCharge;
+            $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->onlineDiscountAmount - $this->extra_discount + $shippingCharge;
         } else {
-            // Final Calculation
-            $this->finalTotal = $cartTotal - $this->offerDiscount - $this->onlineDiscountAmount + $shippingCharge;
+            $this->finalTotal = $cartTotal - $this->offerDiscount - $this->onlineDiscountAmount - $this->extra_discount + $shippingCharge;
         }
 
         // Ensure total doesn't go negative
@@ -343,7 +339,6 @@ class CheckoutComponent extends Component
             $this->add_new_address = false;
         }
         $this->checkBillingEmail();
-        // $this->pincodeCheckFunction('yes');
     }
 
     public function storeAddressInToShipping($address_id)
@@ -363,7 +358,6 @@ class CheckoutComponent extends Component
             ];
             $this->add_new_shipp_address = false;
         }
-        // $this->pincodeCheckFunction('yes');
     }
 
     public function checkBillingEmail()
@@ -407,7 +401,6 @@ class CheckoutComponent extends Component
 
     public function applyGiftCard($gift_card_item_id = null)
     {
-        // Existing gift card logic...
         if ($this->gift_card_code && $gift_card_item_id == null) {
             if (isset($this->billing_address['email']) && $this->billing_address['email'] != '') {
                 $this->gift_card_item = GiftCardItem::where('gift_code', $this->gift_card_code)->first();
@@ -444,20 +437,19 @@ class CheckoutComponent extends Component
 
             $this->gift_card_amount = $gift_card_item->getGiftCardGroupId->price;
             $cartTotal = (float) str_replace(',', '', Cart::instance('cart')->total());
-            $final_total = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->gift_card_amount;
+            $final_total = $cartTotal - $this->offerDiscount - $this->extra_discount - $this->couponDiscount - $this->gift_card_amount;
             if ($final_total < 0) {
                 $this->finalTotal = 0;
-                $gift_card_amount = $this->gift_card_amount - ($cartTotal - $this->offerDiscount - $this->couponDiscount);
+                $gift_card_amount = $this->gift_card_amount - ($cartTotal - $this->offerDiscount - $this->extra_discount - $this->couponDiscount);
                 $this->gift_card_amount = $this->gift_card_amount - $gift_card_amount;
             } else {
-                $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->gift_card_amount + (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
+                $this->finalTotal = $cartTotal - $this->offerDiscount - $this->extra_discount - $this->couponDiscount - $this->gift_card_amount + (float) session('flat_rate_charge') ?? (float) session('shipping_charge');
             }
         }
     }
 
     public function createBillingAddress($userId = null)
     {
-        // Create address logic...
         $address = isset($this->billing_address['id']) ? Address::find($this->billing_address['id']) ?? new Address() : new Address();
         $address->name = $this->billing_address['name'];
         $address->email = $this->billing_address['email'] ?? null;
@@ -490,7 +482,6 @@ class CheckoutComponent extends Component
 
     public function createShippingAddress($userId = null)
     {
-        // Create shipping logic...
         $ship_different_address = isset($this->ship_to_different_address['id']) ? Address::find($this->ship_to_different_address['id']) ?? new Address() : new Address();
         $ship_different_address->name = $this->ship_to_different_address['name'];
         $ship_different_address->email = $this->ship_to_different_address['email'] ?? $this->billing_address['email'];
@@ -537,8 +528,6 @@ class CheckoutComponent extends Component
             $orderItem->sale_price_start_date = $item->model->sale_from_date;
             $orderItem->sale_price_end_date = $item->model->sale_to_date;
 
-            // Note: Original code had logic for 'first_order' bonus inside OrderItem.
-            // Since we are changing the main discount logic, I am keeping this standard.
             $orderItem->subtotal = $item->qty * $productPrice['price'];
 
             $offerPrice = 0;
@@ -550,7 +539,7 @@ class CheckoutComponent extends Component
             }
             $orderItem->offer_discount = $offerPrice;
             if ($this->is_first_order == true && $this->payment_method == 'online' && (!isset($item->options['is_gift_product']) || $item->options['is_gift_product'] == false)) {
-                $item_discount = ($orderItem->subtotal * 10) / 100;
+                $item_discount = ($orderItem->subtotal * 20) / 100;
                 $this->item_sum_discount += $item_discount;
                 $total = $orderItem->subtotal - $orderItem->offer_discount - $item_discount;
                 $orderItem->bonus = $item_discount;
@@ -601,10 +590,8 @@ class CheckoutComponent extends Component
         ];
     }
 
-    // --- NEW VALIDATION AND POPUP TRIGGER ---
     public function verifyCheckout()
     {
-        // 1. Validate inputs first - WRAPPED IN TRY/CATCH FOR SCROLLING
         try {
             $this->validate(
                 [
@@ -626,29 +613,23 @@ class CheckoutComponent extends Component
                 ],
             );
         } catch (ValidationException $e) {
-            // Dispatch event to frontend to scroll to the first error
             $this->dispatch('validation-failed');
-            // Re-throw the exception so Livewire handles the error bag correctly
             throw $e;
         }
 
         if ($this->payment_method == 'cod') {
             if ($this->is_first_order) {
-                // First order, COD logic
                 $this->dispatch('open-cod-modal');
             } else {
-                // Not first order, COD logic (Trigger placeOrderModal)
                 $this->confirmMessage = 'Are you sure you want to proceed with Cash on Delivery?';
-                $this->confirmAction = 'proceedWithCOD'; // Action method to call
+                $this->confirmAction = 'proceedWithCOD';
                 $this->dispatch('open-place-order-modal');
             }
         } else {
-            // Online payment, proceed immediately
             $this->placeOrder();
         }
     }
 
-    // --- CALLED FROM MODAL CONFIRMATION ---
     public function proceedWithCOD()
     {
         $this->placeOrder();
@@ -656,7 +637,6 @@ class CheckoutComponent extends Component
 
     public function placeOrder()
     {
-        // Redundant validation to be safe, though verifyCheckout handles it too
         $this->validate([
             'billing_address.name' => 'required|string|max:255',
             'billing_address.state' => 'required|string|max:255',
@@ -672,10 +652,8 @@ class CheckoutComponent extends Component
             $billingAddress = $this->createBillingAddress($nonAuthUser['id']);
 
             $encdoeBillingAddress = json_encode($billingAddress);
-            //order create
             $user_order = new Order();
 
-            //ship to different address create
             if (!empty($this->ship_to_different_address['name']) && !empty($this->ship_to_different_address['billing_address1']) && !empty($this->ship_to_different_address['city']) && !empty($this->ship_to_different_address['state']) && !empty($this->ship_to_different_address['zipcode'])) {
                 if (!Auth::check()) {
                     $shippingAddress = $this->createShippingAddress($nonAuthUser['id']);
@@ -713,6 +691,13 @@ class CheckoutComponent extends Component
                 $user_order->offer_discount = 0;
             }
 
+            // Record dynamic extra discount into the new special_discount column
+            if ($this->extra_discount > 0) {
+                $user_order->special_discount = $this->extra_discount;
+            } else {
+                $user_order->special_discount = 0;
+            }
+
             if ($this->payment_method == 'online') {
                 $user_order->total = ceil($this->finalTotal + $this->online_payment_amount);
                 $user_order->shipping_charges = (float) $this->online_payment_amount;
@@ -739,7 +724,6 @@ class CheckoutComponent extends Component
                 $user_order->gift_card_discount = $this->gift_card_amount;
             }
 
-            // --- PAYMENT METHOD CHECK ---
             if ($this->payment_method == 'online') {
                 $user_order->paid_amount = ceil($this->finalTotal + $this->online_payment_amount);
                 $user_order->remaining_amount = 0;
@@ -776,7 +760,6 @@ class CheckoutComponent extends Component
                     'success_url' => route('payment.success'),
                 ]);
             } else {
-                // COD FLOW
                 $user_order->paid_amount = 0;
                 $user_order->remaining_amount = ceil($this->finalTotal + $this->cash_on_delivery_amount);
                 $user_order->cod_charges = (int) $this->cash_on_delivery_amount - $this->online_payment_amount;
@@ -802,70 +785,6 @@ class CheckoutComponent extends Component
         }
     }
 
-    // public function pincodeCheckFunction($show_toast = 'no')
-    // {
-    //     $setting = Setting::where('label', 'Pincode Out Of Delhivery')->first();
-    //     $cart_items = Cart::instance('cart')->content();
-    //     if ($setting) {
-    //         $outOfDeliveryPincodes = explode(',', $setting->value);
-    //         $pincode = '';
-    //         if ($this->ship_to_different_address_enabled) {
-    //             $pincode = $this->ship_to_different_address['zipcode'];
-    //         } else {
-    //             $pincode = $this->billing_address['zipcode'];
-    //         }
-
-    //         $minimum_online_charge = Setting::where('label', 'minimum_online_charge')->first()->value ?? 0;
-    //         $minimum_cod_charge = Setting::where('label', 'minimum_cod_charge')->first()->value ?? 0;
-
-    //         if (in_array($pincode, $outOfDeliveryPincodes)) {
-    //             $this->free_shipping = true;
-    //             $this->online_payment_amount = 0;
-    //             $this->cash_on_delivery_amount = 0;
-    //             session()->put('free_shipping_pincode', $pincode);
-    //             session()->forget('show_deleviery_time');
-    //             session()->put('shipping_pincode', $pincode);
-    //             session()->forget('shipping_charge');
-    //             session()->forget('flat_rate_charge');
-    //         } else {
-    //             $online_payment_amount_response = getEstimation($cart_items, $pincode, 'prepaid');
-    //             if (is_numeric($online_payment_amount_response)) {
-    //                 if ($online_payment_amount_response < $minimum_online_charge) {
-    //                     $this->online_payment_amount = $minimum_online_charge;
-    //                 } else {
-    //                     $this->online_payment_amount = $online_payment_amount_response;
-    //                 }
-    //             }
-
-    //             $cash_on_delivery_amount_response = getEstimation($cart_items, $pincode, 'cod');
-    //             if (is_numeric($online_payment_amount_response)) {
-    //                 if ($cash_on_delivery_amount_response < $minimum_cod_charge) {
-    //                     $this->cash_on_delivery_amount = $minimum_cod_charge;
-    //                 } else {
-    //                     $this->cash_on_delivery_amount = $cash_on_delivery_amount_response;
-    //                 }
-    //             }
-
-    //             session()->forget('free_shipping_pincode');
-    //             session()->forget('show_deleviery_time');
-    //             session()->forget('shipping_pincode');
-
-    //             // --- SET SHIPPING BASED ON ACTIVE METHOD ---
-    //             // if($this->payment_method == 'cod') {
-    //             //     session()->put('shipping_charge', ceil($this->cash_on_delivery_amount));
-    //             // } else {
-    //             //     session()->put('shipping_charge', ceil($this->online_payment_amount));
-    //             // }
-    //         }
-    //     } else {
-    //         session()->forget('free_shipping_pincode');
-    //         session()->forget('show_deleviery_time');
-    //         session()->forget('shipping_pincode');
-    //     }
-    //     $this->calculateTotals();
-    // }
-
-    // --- OTHER HELPERS ---
     public function billingAddressMobile()
     {
         if (isset($this->billing_address['mobile']) && $this->billing_address['mobile'] != null) {
@@ -908,7 +827,6 @@ class CheckoutComponent extends Component
 
     public function placeFirstOrder()
     {
-        // Kept for backward compatibility if needed, but verifyCheckout replaces this
         $this->placeOrder();
     }
 
@@ -917,7 +835,6 @@ class CheckoutComponent extends Component
         $this->placeOrder();
     }
 
-    // --- SWITCH PAYMENT METHOD AND RECALCULATE ---
     public function paymentMethod($method)
     {
         $this->payment_method = $method;

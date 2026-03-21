@@ -49,14 +49,14 @@ class CouponClaim extends Component
         if ($user) {
             $user->otp = $otpCode;
             $user->save();
-            messageSend($this->mobile, $otpCode, 'login_otp');
+            messageSend($this->mobile, 'login_otp', ["$otpCode"], ["$otpCode"], 'en');
         } else {
             $user = new User();
             $user->role = 'user';
             $user->mobile = $this->mobile;
             $user->otp = $otpCode;
             $user->save();
-            messageSend($this->mobile, $otpCode, 'login_otp');
+            messageSend($this->mobile, 'login_otp', ["$otpCode"], ["$otpCode"], 'en');
         }
         $this->step = 2;
     }

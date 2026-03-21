@@ -170,6 +170,44 @@
             color: #00b59c;
             font-weight: 700;
         }
+
+        /* --- EXPRESS DELIVERY TAG STYLES --- */
+        .express-delivery-tag {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(255, 65, 108, 0.4);
+            animation: pulse-express 2s infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes pulse-express {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 65, 108, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(255, 65, 108, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 65, 108, 0);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .express-delivery-tag {
+                font-size: 10px;
+                padding: 2px 8px;
+            }
+        }
     </style>
 
     <div class="page-header breadcrumb-wrap">
@@ -313,7 +351,6 @@
                                     <input type="text" @if (session('shipping_charge'))  @endif
                                         name="billing_address.zipcode" placeholder="Postcode / ZIP *"
                                         wire:model="billing_address.zipcode">
-                                    {{-- wire:keyup.debounce.800ms="pincodeCheckFunction('yes')"> --}}
                                     @error('billing_address.zipcode')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
@@ -337,25 +374,12 @@
                         <textarea rows="5" placeholder="Additional information" wire:model="additional_information"></textarea>
                     </div>
 
-                    {{-- 3. SHIPPING TO DIFFERENT ADDRESS TOGGLE --}}
+                    {{-- 4. SHIPPING DETAILS SECTION --}}
                     <div class="ship_detail">
-                        {{-- <div class="form-group">
-                            <div class="chek-form">
-                                <div class="custome-checkbox">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="differentaddress" wire:click="ship_to_different_address_function">
-                                    <label class="form-check-label label_info" for="differentaddress">
-                                        <span>Ship to a different address?</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div> --}}
-
-                        {{-- 4. SHIPPING DETAILS SECTION --}}
                         @if ($ship_to_different_address_enabled)
                             <div id="collapseAddress" class="different_address collapse in show">
 
-                                {{-- 4a. SAVED SHIPPING ADDRESSES (USING UNIFIED DESIGN) --}}
+                                {{-- 4a. SAVED SHIPPING ADDRESSES --}}
                                 @if (count($fetch_user_address) > 0 && !$add_new_shipp_address)
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <h6 class="text-muted">Select Delivery Address:</h6>
@@ -366,7 +390,6 @@
 
                                     <div class="row">
                                         @foreach ($fetch_user_address as $address)
-                                            {{-- Determine if selected --}}
                                             @php
                                                 $isSelected =
                                                     isset($ship_to_different_address['id']) &&
@@ -376,7 +399,6 @@
                                             <div class="col-md-12 mb-3">
                                                 <div class="default-address-div"
                                                     wire:click="storeAddressInToShipping({{ $address->id }})">
-                                                    {{-- Reuse coupon-card-cart class for consistency --}}
                                                     <a class="coupon-card-cart {{ $isSelected ? 'selected' : '' }}">
                                                         <div class="coupon-header">
                                                             <div class="d-flex coupon-code-section">
@@ -459,7 +481,6 @@
                                             <input required="" type="text" name="zipcode"
                                                 placeholder="Zipcode *" wire:model="ship_to_different_address.zipcode"
                                                 @if (session('shipping_charge')) disabled @endif>
-                                            {{-- wire:keyup.debounce.800ms="pincodeCheckFunction('yes')"> --}}
                                         </div>
                                     </div>
                                 @endif
@@ -526,39 +547,51 @@
                     }
                 </style>
 
-                {{-- START: Free Shipping Interactive Widget (Checkout Sidebar) --}}
+                {{-- START: Dynamic Discount Offer Progress Widget (Sidebar) --}}
                 @php
-                    $cartSubtotalNumeric = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
-                    $shippingThreshold =
-                        \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
-                    $shippingDiff = $shippingThreshold - $cartSubtotalNumeric;
-                    $shippingPercent = ($cartSubtotalNumeric / $shippingThreshold) * 100;
-                    if ($shippingPercent > 100) {
-                        $shippingPercent = 100;
+                    $cartSubtotalNumeric = 0;
+                    foreach (Cart::instance('cart')->content() as $item) {
+                        if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
+                            continue;
+                        }
+                        $cartSubtotalNumeric += $item->price * $item->qty;
                     }
+                    $remainingAmount = max(0, $minimum_order_value - $cartSubtotalNumeric);
+                    $progressPercentage =
+                        $cartSubtotalNumeric >= $minimum_order_value
+                            ? 100
+                            : ($cartSubtotalNumeric / $minimum_order_value) * 100;
                 @endphp
 
-                <div class="shipping-widget-checkout mb-4">
+                <div class="shipping-widget-checkout mb-4"
+                    style="background: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#f0fdf4' : '#fdfaf3' }}; border-color: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
                     <div class="shipping-text">
-                        @if ($cartSubtotalNumeric >= $shippingThreshold)
+                        @if ($cartSubtotalNumeric >= $minimum_order_value)
                             <i class="fi-rs-check-circle" style="color: #28a745; font-size: 18px;"></i>
-                            <span style="font-size:13px; line-height:1.2">Congratulations! You get <span
-                                    class="shipping-highlight" style="color:#28a745">FREE Shipping</span>.</span>
+                            <span style="font-size:13px; line-height:1.2">Congratulations! You've unlocked <span
+                                    class="shipping-highlight" style="color:#28a745">{{ $discount_percentage }}% OFF
+                                    (Up to ₹{{ $maximum_extra_discount_amount }})</span>!</span>
                         @else
-                            <i class="fi-rs-truck-side" style="color: #00b59c; font-size: 18px;"></i>
-                            <span style="font-size:13px; line-height:1.2">Add <span
-                                    class="shipping-highlight">₹{{ number_format($shippingDiff) }}</span> for <span
-                                    class="shipping-highlight">FREE Shipping</span></span>
+                            <i class="fi-rs-shopping-bag" style="color: #e6b400; font-size: 18px;"></i>
+                            <span style="font-size:13px; line-height:1.2">Add <span class="shipping-highlight"
+                                    style="color:#d32f2f">₹{{ number_format($remainingAmount) }}</span> more for
+                                <span class="shipping-highlight" style="color:#d32f2f">{{ $discount_percentage }}%
+                                    OFF (Up to ₹{{ $maximum_extra_discount_amount }})</span>!</span>
                         @endif
                     </div>
                     <div class="shipping-progress-bg">
                         <div class="shipping-progress-bar"
-                            style="width: {{ $shippingPercent }}%; background-color: {{ $cartSubtotalNumeric >= $shippingThreshold ? '#28a745' : '#00b59c' }};">
+                            style="width: {{ $progressPercentage }}%; background-color: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
                         </div>
                     </div>
+                    @if ($cartSubtotalNumeric < $minimum_order_value)
+                        <div style="text-align: right; font-size: 11px; margin-top: 5px; color: #888;">
+                            Total: ₹{{ number_format($cartSubtotalNumeric) }} /
+                            ₹{{ number_format($minimum_order_value) }}
+                        </div>
+                    @endif
                 </div>
-                {{-- END: Free Shipping Interactive Widget --}}
-
+                {{-- END: Dynamic Discount Offer Progress Widget --}}
 
                 <div class="border p-20 cart-totals mb-3">
                     <div class="d-flex align-items-end justify-content-between mb-30">
@@ -732,6 +765,24 @@
                                             ₹{{ Cart::instance('cart')->subtotal() }}</h4>
                                     </td>
                                 </tr>
+
+                                {{-- NEW EXTRA DISCOUNT ROW --}}
+                                @if ($extra_discount > 0)
+                                    <tr class="d-flex justify-content-between border-0 align-items-center">
+                                        <td class="cart_total_label text-start">
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-success me-2">Special Discount</span>
+                                                <h6 class="text-success m-0">({{ $discount_percentage }}% OFF)</h6>
+                                            </div>
+                                        </td>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-end fs-16 text-success fw-bold">
+                                                - ₹{{ number_format($extra_discount, 2) }}
+                                            </h5>
+                                        </td>
+                                    </tr>
+                                @endif
+
                                 @php
                                     $discount = $mainDiscountAmount;
                                     $couponCode = session()->get('coupon_code');
@@ -757,12 +808,12 @@
                                     </tr>
                                 @endif
 
-                                {{-- NEW ROW FOR ONLINE 10% DISCOUNT --}}
+                                {{-- ROW FOR ONLINE 10% DISCOUNT --}}
                                 @if ($is_first_order && $payment_method == 'online')
                                     <tr class="d-flex justify-content-between border-0 align-items-center">
                                         <td class="cart_total_label text-start">
                                             <div class="d-flex align-items-center">
-                                                <span class="badge bg-info me-2">First Order Online</span>
+                                                <span class="badge bg-info me-2">Prepaid Discount</span>
                                             </div>
                                         </td>
 
@@ -807,11 +858,6 @@
                                     </tr>
                                 @endif
 
-                                @php
-                                    $cartTotal = (float) str_replace(',', '', Cart::total());
-                                    $mainDiscountAmount = (float) session('coupon_discount_amount');
-                                    $allCouponandOfferDiscount = $cartTotal - $mainDiscountAmount;
-                                @endphp
                                 <tr class="d-flex justify-content-between border-0">
                                     <td class="cart_total_label text-start">
                                         <h6 class="text-muted">Your Total</h6>
@@ -829,40 +875,48 @@
                                 @if ($is_first_order && $payment_method == 'online')
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start py-0">
-                                            <h6 class="text-success fs-14">You have saved 10% on every product!!</h6>
+                                            <h6 class="text-success fs-14">You have saved 20% on every product!!</h6>
                                         </td>
                                     </tr>
                                 @endif
                             </tbody>
                         </table>
+
                         <div class="px-2 pt-4" style="border-top: 2px dashed #ddd;">
                             <div class="heading mb-4">
                                 <h5 class="underline pb-2">Select Payment Method</h5>
                             </div>
                             <div class="">
-                                <div class="form-check form-radio-checkout">
-                                    <input class="form-check-input checkout-radio me-2" type="radio"
+                                <div class="form-check form-radio-checkout mb-3 align-items-start">
+                                    <input class="form-check-input checkout-radio me-2 mt-1" type="radio"
                                         name="flexRadioDefault" wire:click="paymentMethod('online')"
                                         id="flexRadioDefault2" {{ $payment_method == 'online' ? 'checked' : '' }}>
-                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault2">
-                                        Pay Online
+                                    <label class="form-check-label quicksand fw-700 fs-16 w-100"
+                                        for="flexRadioDefault2">
+                                        <div class="d-flex align-items-center flex-wrap">
+                                            Pay Online
+                                            <span class="express-delivery-tag ms-2">⚡ Free Express Delivery</span>
+                                        </div>
                                         @if ($is_first_order)
-                                            <span class="fs-12 ms-md-2 ms-1 text-muted">(Get Instant <strong
-                                                    class="color-1">10% Off</strong> on each product.)</span>
+                                            <span class="fs-12 text-muted d-block mt-1">(Get Instant <strong
+                                                    class="color-1">20% Off</strong> on each product.)</span>
                                         @endif
                                     </label>
                                 </div>
-                                <div class="form-check form-radio-checkout">
-                                    <input class="form-check-input checkout-radio me-2" type="radio"
+
+                                <div class="form-check form-radio-checkout align-items-start">
+                                    <input class="form-check-input checkout-radio me-2 mt-1" type="radio"
                                         name="flexRadioDefault" id="flexRadioDefault1"
                                         wire:click="paymentMethod('cod')"
                                         {{ $payment_method == 'cod' ? 'checked' : '' }}>
-                                    <label class="form-check-label quicksand fw-700 fs-16" for="flexRadioDefault1">
+                                    <label class="form-check-label quicksand fw-700 fs-16 w-100"
+                                        for="flexRadioDefault1">
                                         Cash On Delivery
                                     </label>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -907,13 +961,11 @@
 
                             $couponDiscount = $couponDiscount ?? 0;
                             $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
-                            $potentialDiscount = $cartTotalForCalc * 0.1 + $couponDiscount;
+                            $potentialDiscount = $cartTotalForCalc * 0.2 + $couponDiscount;
 
-                            // Assuming finalTotal in COD mode already includes the COD shipping charge
                             $codShip = $cash_on_delivery_amount ?? 0;
                             $onlineShip = $online_payment_amount ?? 0;
 
-                            // Potential Online Total
                             $potentialOnlineTotal =
                                 $currentTotal - $codShip + $onlineShip - $potentialDiscount + ceil($couponDiscount);
                         @endphp
@@ -925,7 +977,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between mb-2 text-danger">
-                            <span>You lose discount</span>
+                            <b>You lose Prepaid discount</b>
                             <span>- ₹{{ number_format($potentialDiscount, 2) }}</span>
                         </div>
 
@@ -944,7 +996,7 @@
                                 </line>
                                 <polyline points="12 19 5 12 12 5"></polyline>
                             </svg>
-                            Go Back & Save 10%
+                            Go Back & Save 20%
                         </button>
                         <button class="btn-brand btn quicksand" style="border-radius: 10px"
                             wire:loading.attr="disabled" wire:target="proceedWithCOD"
@@ -998,13 +1050,10 @@
 
             // --- SCROLL TO VALIDATION ERROR ---
             window.addEventListener('validation-failed', function(event) {
-                // Wait briefly for Livewire to re-render the DOM with errors
                 setTimeout(() => {
-                    // Find the first element with the error class used in your blade file
                     const firstError = document.querySelector('.text-danger.small.d-block');
 
                     if (firstError) {
-                        // Attempt to find the parent .form-group for a better view
                         const formGroup = firstError.closest('.form-group');
 
                         if (formGroup) {
@@ -1013,7 +1062,6 @@
                                 block: 'center'
                             });
                         } else {
-                            // Fallback to scrolling to the error message itself
                             firstError.scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'center'
@@ -1023,7 +1071,6 @@
                 }, 100);
             });
 
-            // Trigger COD Confirmation Modal for First Order
             window.addEventListener('open-cod-modal', function(event) {
                 var el = document.getElementById('codAlertModal2');
                 var myModal = new bootstrap.Modal(el, {
@@ -1033,7 +1080,6 @@
                 myModal.show();
             });
 
-            // Trigger Confirmation Modal for Generic/Non-First Order COD
             window.addEventListener('open-place-order-modal', function(event) {
                 var el = document.getElementById('placeOrderModal');
                 var myModal = new bootstrap.Modal(el, {

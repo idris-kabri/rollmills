@@ -98,9 +98,9 @@ class ShopComponent extends Component
 
     public function addPreviewProduct($id)
     {
-        $this->selectedProductId = $id; 
+        $this->selectedProductId = $id;
         $this->dispatch('openQuickView', [
-            'productId' => $id
+            'productId' => $id,
         ]);
     }
 
@@ -178,7 +178,7 @@ class ShopComponent extends Component
             $brands = Brand::where('status', 1)->get();
             $productAttributes = ProductAttribute::where('status', 1)->get();
         }
-        $productCategorys = ProductCategory::where('parent_id', null)->get();
+        $productCategorys = ProductCategory::where('parent_id', null)->where('is_featured', 1)->get();
 
         $products = Product::where('active_inactive_status', 1)
             ->where('parent_id', null)

@@ -4,44 +4,66 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
-function messageSend($mobile, $otp, $template_name)
+function messageSend($mobile, $template_name, array $body_params = [], array $button_params = [], $language = 'en_US')
 {
     try {
         $token = config('app.whatsapp_api_token');
         $phoneNumberId = config('app.whatsapp_phone_number_id');
-        $apiVersion = config('app.whatsapp_api_version');
+        $apiVersion = config('app.whatsapp_api_version', 'v17.0'); // Fallback to v17.0 if null
 
         $url = "https://graph.facebook.com/{$apiVersion}/{$phoneNumberId}/messages";
 
+        $components = [];
+
+        // 1. Build Body Components (Dynamically handles multiple body text variables)
+        if (!empty($body_params)) {
+            $bodyParameters = [];
+            foreach ($body_params as $param) {
+                $bodyParameters[] = ['type' => 'text', 'text' => (string) $param];
+            }
+            $components[] = [
+                'type' => 'body',
+                'parameters' => $bodyParameters,
+            ];
+        }
+
+        // 2. Build Button Components (Dynamically handles multiple buttons)
+        if (!empty($button_params)) {
+            foreach ($button_params as $index => $button) {
+                $components[] = [
+                    'type' => 'button',
+                    'sub_type' => 'url', // Defaults to URL button
+                    'index' => (string) $index,
+                    'parameters' => [['type' => 'text', 'text' => (string) $button]],
+                ];
+            }
+        }
+
         $payload = [
             'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
             'to' => '91' . $mobile,
             'type' => 'template',
             'template' => [
                 'name' => $template_name,
-                'language' => ['code' => 'en'],
-                'components' => [
-                    [
-                        'type' => 'body',
-                        'parameters' => [['type' => 'text', 'text' => (string) $otp]],
-                    ],
-                    [
-                        'type' => 'button',
-                        'sub_type' => 'url',
-                        'index' => '0',
-                        'parameters' => [['type' => 'text', 'text' => (string) $otp]],
-                    ],
-                ],
+                'language' => ['code' => $language],
             ],
         ];
 
+        // Only attach components to payload if there are variables to send
+        if (!empty($components)) {
+            $payload['template']['components'] = $components;
+        }
+
         $response = Http::withToken($token)->post($url, $payload);
+
         if ($response->successful()) {
             return true;
         } else {
-            Log::warning('failed', [
+            Log::warning('WhatsApp message failed', [
                 'status' => $response->status(),
                 'body' => $response->body(),
+                'payload' => json_encode($payload), // Logs the exact payload for easier debugging
             ]);
             return false;
         }
@@ -188,8 +210,9 @@ function sendNormalTemplateWawi($template_name, $language_code, $phone_number)
     $response = Http::withToken($token)->post($url, [
         'template_name' => $template_name,
         'template_language' => $language_code,
-        'phone_number' => '+91' . $phone_number,
+        'phone_number' => '+919358473253',
     ]);
+    dd($response->body());
 
     // Handle the response
     if ($response->successful()) {
@@ -203,6 +226,9 @@ function sendParameterTemplateWawi($template_name, $language_code, $phone_number
 {
     $url = config('app.wawi_url') . '/messages/template';
     $token = config('app.wawi_token');
+    if (str_starts_with($phone_number, '91') && strlen($phone_number) > 10) {
+        $phone_number = substr($phone_number, 2);
+    }
     $data = [
         'template_name' => $template_name,
         'template_language' => $language_code,
