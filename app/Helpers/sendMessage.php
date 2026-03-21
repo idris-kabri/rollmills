@@ -206,11 +206,14 @@ function sendNormalTemplateWawi($template_name, $language_code, $phone_number)
 {
     $url = config('app.wawi_url') . '/messages/template';
     $token = config('app.wawi_token');
+    if (str_starts_with($phone_number, '91') && strlen($phone_number) > 10) {
+        $phone_number = substr($phone_number, 2);
+    }
 
     $response = Http::withToken($token)->post($url, [
         'template_name' => $template_name,
         'template_language' => $language_code,
-        'phone_number' => '+919358473253',
+        'phone_number' => '+91' . $phone_number,
     ]);
     dd($response->body());
 
