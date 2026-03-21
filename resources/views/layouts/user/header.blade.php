@@ -128,7 +128,7 @@
                                 class="img-fluid" /></a>
                     </div>
                     <div class="header-nav d-none d-xl-flex">
-                        <div class="main-categori-wrap d-none d-lg-block">
+                        {{-- <div class="main-categori-wrap d-none d-lg-block">
                             <a class="categories-button-active" href="#">
                                 <span class="fi-rs-apps"></span> <span class="et">Browse</span> All Categories
                                 <i class="fi-rs-angle-down"></i>
@@ -143,7 +143,6 @@
                                         <ul>
                                             @foreach ($chunk as $category)
                                                 <li>
-                                                    {{-- Replace 'category.show' with your actual route name --}}
                                                     <a
                                                         href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
                                                         <img src="{{ asset('storage/' . $category->icon) }}"
@@ -175,97 +174,29 @@
                                             class="heading-sm-1">Show more...</span></div>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                             <nav>
                                 <ul>
-                                    {{-- <li class="hot-deals"><img
-                                            src="{{ asset('assets/frontend/imgs/theme/icons/icon-hot.svg') }}"
-                                    alt="hot deals" /><a href="shop-grid-right.html">Deals</a>
-                                    </li> --}}
                                     <li>
                                         <a class="{{ Request::is('/') ? 'active' : '' }}" href="/">Home</a>
+                                    </li>
+                                    <li>
+                                        <a class="" href="/shop?category_id=33">Get 2
+                                            perfume
+                                            at ₹429</a>
                                     </li>
 
                                     <li>
                                         <a href="/shop" class="{{ Request::is('shop') ? 'active' : '' }}">Shop </a>
                                     </li>
-                                    {{-- <li class="position-static">
-                                        <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="mega-menu">
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Fruit & Vegetables</a>
-                                                <ul>
-                                                    <li><a href="shop-product-right.html">Meat & Poultry</a></li>
-                                                    <li><a href="shop-product-right.html">Fresh Vegetables</a></li>
-                                                    <li><a href="shop-product-right.html">Herbs & Seasonings</a></li>
-                                                    <li><a href="shop-product-right.html">Cuts & Sprouts</a></li>
-                                                    <li><a href="shop-product-right.html">Exotic Fruits & Veggies</a>
-                                                    </li>
-                                                    <li><a href="shop-product-right.html">Packaged Produce</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Breakfast & Dairy</a>
-                                                <ul>
-                                                    <li><a href="shop-product-right.html">Milk & Flavoured Milk</a>
-                                                    </li>
-                                                    <li><a href="shop-product-right.html">Butter and Margarine</a></li>
-                                                    <li><a href="shop-product-right.html">Eggs Substitutes</a></li>
-                                                    <li><a href="shop-product-right.html">Marmalades</a></li>
-                                                    <li><a href="shop-product-right.html">Sour Cream</a></li>
-                                                    <li><a href="shop-product-right.html">Cheese</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Meat & Seafood</a>
-                                                <ul>
-                                                    <li><a href="shop-product-right.html">Breakfast Sausage</a></li>
-                                                    <li><a href="shop-product-right.html">Dinner Sausage</a></li>
-                                                    <li><a href="shop-product-right.html">Chicken</a></li>
-                                                    <li><a href="shop-product-right.html">Sliced Deli Meat</a></li>
-                                                    <li><a href="shop-product-right.html">Wild Caught Fillets</a></li>
-                                                    <li><a href="shop-product-right.html">Crab and Shellfish</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="sub-mega-menu sub-mega-menu-width-34">
-                                                <div class="menu-banner-wrap">
-                                                    <a href="shop-product-right.html"><img
-                                                            src="{{ asset('assets/frontend/imgs/banner/banner-menu.png') }}"
-                                    alt="Nest" /></a>
-                                    <div class="menu-banner-content">
-                                        <h4>Hot deals</h4>
-                                        <h3>
-                                            Don't miss<br />
-                                            Trending
-                                        </h3>
-                                        <div class="menu-banner-price">
-                                            <span class="new-price text-success">Save to 50%</span>
-                                        </div>
-                                        <div class="menu-banner-btn">
-                                            <a href="shop-product-right.html">Shop now</a>
-                                        </div>
-                                    </div>
-                                    <div class="menu-banner-discount">
-                                        <h3>
-                                            <span>25%</span>
-                                            off
-                                        </h3>
-                                    </div>
-                        </div>
-                        </li>
-                        </ul>
-                        </li>
-                        <li>
-                            <a href="/blog">Blog</a>
-                        </li> --}}
                                     <li>
                                         <a href="/about" class="{{ Request::is('about') ? 'active' : '' }}">About
                                             Us</a>
                                     </li>
                                     <li>
-                                        <a href="/contact"
-                                            class="{{ Request::is('contact') ? 'active' : '' }}">Contact Us</a>
+                                        <a href="/contact" class="{{ Request::is('contact') ? 'active' : '' }}">Contact
+                                            Us</a>
                                     </li>
                                 </ul>
                             </nav>
