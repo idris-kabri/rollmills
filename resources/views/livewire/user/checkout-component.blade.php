@@ -813,7 +813,7 @@
                                     <tr class="d-flex justify-content-between border-0 align-items-center">
                                         <td class="cart_total_label text-start">
                                             <div class="d-flex align-items-center">
-                                                <span class="badge bg-info me-2">First Order Online</span>
+                                                <span class="badge bg-info me-2">Prepaid Discount</span>
                                             </div>
                                         </td>
 
@@ -895,7 +895,7 @@
                                         for="flexRadioDefault2">
                                         <div class="d-flex align-items-center flex-wrap">
                                             Pay Online
-                                            <span class="express-delivery-tag ms-2">⚡ Express Delivery</span>
+                                            <span class="express-delivery-tag ms-2">⚡ Free Express Delivery</span>
                                         </div>
                                         @if ($is_first_order)
                                             <span class="fs-12 text-muted d-block mt-1">(Get Instant <strong
@@ -961,7 +961,7 @@
 
                             $couponDiscount = $couponDiscount ?? 0;
                             $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
-                            $potentialDiscount = $cartTotalForCalc * 0.1 + $couponDiscount;
+                            $potentialDiscount = $cartTotalForCalc * 0.2 + $couponDiscount;
 
                             $codShip = $cash_on_delivery_amount ?? 0;
                             $onlineShip = $online_payment_amount ?? 0;
@@ -977,7 +977,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between mb-2 text-danger">
-                            <span>You lose discount</span>
+                            <b>You lose Prepaid discount</b>
                             <span>- ₹{{ number_format($potentialDiscount, 2) }}</span>
                         </div>
 
@@ -996,7 +996,7 @@
                                 </line>
                                 <polyline points="12 19 5 12 12 5"></polyline>
                             </svg>
-                            Go Back & Save 10%
+                            Go Back & Save 20%
                         </button>
                         <button class="btn-brand btn quicksand" style="border-radius: 10px"
                             wire:loading.attr="disabled" wire:target="proceedWithCOD"

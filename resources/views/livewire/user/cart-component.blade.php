@@ -655,6 +655,7 @@
                                                 - ₹{{ number_format($customer_save_amount, 2) }}</h4>
                                         </td>
                                     </tr>
+
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">Subtotal</h6>
@@ -717,6 +718,16 @@
                                         $allCouponandOfferDiscount =
                                             $cartTotal - $totalOfferDiscountedPrice - $mainDiscountAmount;
                                     @endphp
+                                    <tr class="d-flex justify-content-between border-0">
+                                        <td class="cart_total_label text-start">
+                                            <h6 class="text-muted">Shipping</h6>
+                                        </td>
+                                        <td class="cart_total_amount">
+                                            <h5 class="text-heading text-end fs-16">
+                                                Free Shipping
+                                            </h5>
+                                        </td>
+                                    </tr>
                                     <tr class="d-flex justify-content-between border-0">
                                         <td class="cart_total_label text-start">
                                             <h6 class="text-muted">Your Total</h6>

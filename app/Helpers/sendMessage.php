@@ -226,6 +226,9 @@ function sendParameterTemplateWawi($template_name, $language_code, $phone_number
 {
     $url = config('app.wawi_url') . '/messages/template';
     $token = config('app.wawi_token');
+    if (str_starts_with($phone_number, '91') && strlen($phone_number) > 10) {
+        $phone_number = substr($phone_number, 2);
+    }
     $data = [
         'template_name' => $template_name,
         'template_language' => $language_code,

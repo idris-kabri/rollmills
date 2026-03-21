@@ -373,8 +373,10 @@ class View extends Component
             $this->order->shipped_at = now();
         } elseif ($this->status == 3) {
             $this->order->complete_at = now();
-            claimCoupon($this->order->id);
-            sendNormalTemplateWawi('order_success1', 'en_us', $this->order->getBillAddress->mobile);
+            $coupon_code = claimCoupon($this->order->id);
+            $billing_address = json_decode($this->order->billing_address_details, true);
+            $customerName = $billing_address['name'] ?? $this->order->getBillAddress->name;
+            sendParameterTemplateWawi('order_delivered_2', 'en_US', $this->order->getBillAddress->mobile, [$customerName, (string) $this->order->id, "$coupon_code"]);
             if ($this->order->is_cod == 1) {
                 $this->order->paid_amount = $this->order->total;
                 $this->order->remaining_amount = 0;

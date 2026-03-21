@@ -65,7 +65,8 @@
             color: #00b59c;
         }
 
-        .icon-return {
+        .icon-return,
+        .icon-express {
             color: #fd7e14;
         }
 
@@ -96,6 +97,8 @@
             margin-top: 10px;
             overflow: hidden;
         }
+
+        .icon-express {}
 
         .shipping-progress-bar {
             height: 100%;
@@ -510,6 +513,12 @@
                                 </div>
                                 <div class="trust-badge-item">
                                     <div class="trust-icon-box">
+                                        <i class="fi-rs-rocket icon-express"></i>
+                                    </div>
+                                    <p class="trust-badge-title">Express<br>Delivery</p>
+                                </div>
+                                <div class="trust-badge-item">
+                                    <div class="trust-icon-box">
                                         <i class="fi-rs-money icon-cod"></i>
                                     </div>
                                     <p class="trust-badge-title">Cash on<br>Delivery</p>
@@ -525,7 +534,7 @@
                                         <p class="trust-badge-title">
                                             {{ $mainProduct->product_replacement_days }}-day<br>Replacement</p>
                                     @else
-                                        <p class="trust-badge-title">No Return Policy</p>
+                                        <p class="trust-badge-title">No Return <br> Policy</p>
                                     @endif
                                 </div>
                             </div>

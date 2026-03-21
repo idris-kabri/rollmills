@@ -159,7 +159,7 @@ class FakeReviewScript extends Command
         //     ]);
         // }
 
-        $products = Product::where('id', 60)->get();
+        $products = Product::whereIn('id', [67, 66, 65, 64, 63, 62, 61])->get();
 
         foreach ($products as $product) {
             // Har product ke liye 15-20 reviews

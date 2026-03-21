@@ -36,7 +36,6 @@ class HomeComponent extends Component
         'closeQuickView' => 'handleCloseQuickView',
     ];
 
-
     public function mount()
     {
         $this->slider_banner = Banner::where('status', 1)->where('banner_type', 'slider_banner')->get();
@@ -45,11 +44,13 @@ class HomeComponent extends Component
         $this->best_deal_banner = Banner::where('status', 1)->where('banner_type', 'daily_best_deals')->first();
         $this->user_look_for_banner = Banner::where('status', 1)->where('banner_type', 'user_looks_for')->first();
         $this->parentCategory = ProductCategory::where('parent_id', null)
+            ->where('is_featured', 1)
             ->get()
             ->map(function ($item) {
                 $product_sum = 0;
 
-                $product_sum += $item->getProductCategoryAssign()
+                $product_sum += $item
+                    ->getProductCategoryAssign()
                     ->whereHas('product', function ($q) {
                         $q->whereNull('parent_id');
                     })
@@ -58,8 +59,8 @@ class HomeComponent extends Component
                 $subcategories = ProductCategory::where('parent_id', $item->id)->get();
 
                 foreach ($subcategories as $sub) {
-
-                    $product_sum += $sub->getProductCategoryAssign()
+                    $product_sum += $sub
+                        ->getProductCategoryAssign()
                         ->whereHas('product', function ($q) {
                             $q->whereNull('parent_id');
                         })
@@ -92,7 +93,7 @@ class HomeComponent extends Component
     {
         $this->selectedProductId = $id;
         $this->dispatch('openQuickView', [
-            'productId' => $id
+            'productId' => $id,
         ]);
     }
 
@@ -133,9 +134,9 @@ class HomeComponent extends Component
             }
         });
 
-        if($existing_qauntity == 0){
+        if ($existing_qauntity == 0) {
             $addToCart = finalAddToCart($defaultProduct, 1);
-        }else{
+        } else {
             $addToCart = finalAddToCart($defaultProduct, 1 + $existing_qauntity, 'update-quantity');
         }
 

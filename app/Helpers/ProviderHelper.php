@@ -1,11 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderAWB;
 use App\Models\OrderCommandLogs;
-use Illuminate\Support\Facades\Log;
+use App\Models\Setting;
+use App\Models\User;
+use App\Models\Coupon;
 
 /**
  * Sync Detailed Order Information from iThink Logistics
@@ -44,15 +47,17 @@ function synIthinkOrderDetail($awb_number, $order)
                 $order->update(['total_delievery_charges' => $unbilledCharges]);
 
                 saveCommandLog($order->id, 'Sync Ithink Order Detail', $requestData, $apiData, 'Success');
+                return true;
             } else {
                 saveCommandLog($order->id, 'Sync Ithink Order Detail', $requestData, $result, 'Error');
+                return false;
             }
         }
     } catch (\Exception $e) {
         Log::error('iThink Detail Sync Exception: ' . $e->getMessage());
     }
 
-    return true;
+    return false;
 }
 
 /**
@@ -90,8 +95,8 @@ function synIthinkTracking($awb_number, $order)
                     'Not Picked', 'Undelivered', 'Out of Delivery Area', 'Delayed', 'Misrouted' => 9,
                     default => 2,
                 };
-                $old_status = $order->status;
 
+                $old_status = $order->status;
                 $order->status = $new_status;
 
                 // Process Scan Details
@@ -115,26 +120,22 @@ function synIthinkTracking($awb_number, $order)
                 if ($new_status == 7 && $old_status != $new_status) {
                     sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
                 } elseif ($new_status == 3 && $old_status != $new_status) {
-                    $order->complete_at = now();
-                    if ($order->is_cod == 1) {
-                        $order->paid_amount = $order->total;
-                        $order->remaining_amount = 0;
-                    }
-                    sendNormalTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile);
-                    claimCoupon($order->id);
+                    markOrderAsDelivered($order);
                 }
-                $order->save();
 
+                $order->save();
                 saveCommandLog($order->id, 'Sync Ithink Tracking', $requestData, $apiData, 'Success');
+                return true;
             } else {
                 saveCommandLog($order->id, 'Sync Ithink Tracking', $requestData, $result, 'Error');
+                return false;
             }
         }
     } catch (\Exception $e) {
         Log::error('iThink Tracking Exception: ' . $e->getMessage());
     }
 
-    return true;
+    return false;
 }
 
 /**
@@ -153,14 +154,16 @@ function IthinkRemittanceSync($date)
 
         if ($response->successful()) {
             $data = $response->json();
-            if (($data['status'] ?? '') == 'success') {
-                foreach ($data['data'] ?? [] as $awbData) {
-                    $orderAwb = OrderAWB::with('getOrder')->where('awb_number', $awbData['airway_bill_no'])->first();
 
-                    if ($orderAwb && $orderAwb->getOrder) {
-                        $order = $orderAwb->getOrder;
+            if (($data['status'] ?? '') == 'success' && !empty($data['data'])) {
+                // Fixed N+1 Query: Fetch all order AWBs at once
+                $awbNumbers = array_column($data['data'], 'airway_bill_no');
+
+                $orderAwbs = OrderAWB::with('getOrder')->whereIn('awb_number', $awbNumbers)->get();
+
+                foreach ($orderAwbs as $orderAwb) {
+                    if ($order = $orderAwb->getOrder) {
                         $order->update(['remittance_at' => $date]);
-
                         saveCommandLog($order->id, 'Ithink Remittance', ['date' => $date], ['message' => 'Synced'], 'Success');
                     }
                 }
@@ -218,6 +221,7 @@ function xpressBeesTracking($token, $awb_number)
 
         if ($response->successful()) {
             $data = $response->json();
+
             if ($data['status'] ?? false) {
                 $shipment = $data['data'];
                 $new_status = match (strtolower($shipment['status'] ?? '')) {
@@ -229,7 +233,6 @@ function xpressBeesTracking($token, $awb_number)
                 };
 
                 $old_status = $order->status;
-
                 $order->status = $new_status;
 
                 if (!empty($shipment['history'])) {
@@ -250,14 +253,9 @@ function xpressBeesTracking($token, $awb_number)
                 if ($new_status == 7 && $old_status != $new_status) {
                     sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
                 } elseif ($new_status == 3 && $old_status != $new_status) {
-                    $order->complete_at = now();
-                    if ($order->is_cod == 1) {
-                        $order->paid_amount = $order->total;
-                        $order->remaining_amount = 0;
-                    }
-                    claimCoupon($order->id);
-                    sendNormalTemplateWawi('order_success1', 'en_us', $order->getBillAddress->mobile);
+                    markOrderAsDelivered($order);
                 }
+
                 $order->save();
                 saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Success');
             } else {
@@ -270,8 +268,26 @@ function xpressBeesTracking($token, $awb_number)
 }
 
 /**
- * Global Helper for Logging
+ * Shared Helper: Mark Order as Delivered
  */
+function markOrderAsDelivered($order)
+{
+    $order->complete_at = now();
+
+    if ($order->is_cod == 1) {
+        $order->paid_amount = $order->total;
+        $order->remaining_amount = 0;
+    }
+
+    $coupon_code = claimCoupon($order->id);
+
+    // Fix: Safely decode billing address to avoid undefined variables
+    $billing_address = json_decode($order->billing_address_details, true);
+    $customerName = $billing_address['name'] ?? $order->getBillAddress->name;
+
+    sendParameterTemplateWawi('order_delivered_2', 'en_US', $order->getBillAddress->mobile, [$customerName, (string) $order->id, "$coupon_code"]);
+}
+
 function saveCommandLog($orderId, $commandName, $request, $response, $status)
 {
     OrderCommandLogs::create([

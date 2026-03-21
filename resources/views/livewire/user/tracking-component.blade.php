@@ -946,7 +946,7 @@
             @php
                 $conversion_discount = 0;
                 foreach ($order->getOrderItems as $item) {
-                    $conversion_discount += ($item->total * 10) / 100;
+                    $conversion_discount += ($item->total * 20) / 100;
                 }
                 $new_payable = ceil($order->total - $conversion_discount - $order->cod_charges);
                 $total_savings = ceil($conversion_discount + $order->cod_charges);
@@ -1314,17 +1314,16 @@
                         </div>
                         <div class="details-row">
                             <span class="details-label">Shipping Charges</span>
-                            <span
-                                class="val-dark">₹{{ $order->is_cod == 1 ? number_format($order->shipping_charges - $order->cod_charges, 2) : number_format($order->shipping_charges, 2) }}</span>
+                            <span class="val-dark">FREE SHIPPING</span>
                         </div>
                         @if ($order->is_cod == 1)
-                            <div class="details-row">
+                            <div class="details-row mb-0">
                                 <span class="details-label">COD Charges</span>
                                 <span class="val-dark">₹{{ number_format($order->cod_charges, 2) }}</span>
                             </div>
                         @endif
 
-                        <div class="details-row total-row">
+                        <div class="details-row total-row mt-0">
                             <span class="details-label">Your Total</span>
                             <span class="val-yellow">₹{{ number_format($order->total, 2) }}</span>
                         </div>
