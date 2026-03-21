@@ -11,6 +11,89 @@
             }
         }
 
+        /* --- FREE SHIPPING BADGE (ANIMATED & ATTRACTIVE) --- */
+        .free-shipping-wrapper {
+            clear: both;
+            padding-top: 12px;
+            padding-bottom: 15px;
+        }
+
+        .free-shipping-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(45deg, #00b59c, #10e0a1);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            /* The pulse animation acts as a modern 'blink' */
+            animation: free-ship-pulse 1.5s infinite;
+        }
+
+        .free-shipping-badge i {
+            margin-right: 6px;
+            font-size: 16px;
+            /* Optional: adds a tiny bounce to the truck */
+            animation: truck-bounce 2s infinite ease-in-out;
+        }
+
+        /* Outer glowing pulse effect */
+        @keyframes free-ship-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 181, 156, 0.6);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 181, 156, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 181, 156, 0);
+            }
+        }
+
+        /* Inner sweeping light shimmer */
+        .free-shipping-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            z-index: -1;
+            animation: free-ship-shimmer 2.5s infinite;
+        }
+
+        @keyframes free-ship-shimmer {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 200%;
+            }
+        }
+
+        @keyframes truck-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-2px);
+            }
+        }
+
         /* --- TRUST BADGE STRIP --- */
         .trust-badge-strip {
             background-color: #eef2ff;
@@ -387,7 +470,7 @@
                             @endphp
                             <div class="clearfix product-price-cover">
                                 @if ($sale_price > 0)
-                                    <div class="product-price primary-color float-left">
+                                    <div class="product-price primary-color float-left mb-0">
                                         <span class="current-price text-brand">₹{{ number_format($sale_price) }}</span>
                                         <span>
                                             <span
@@ -398,12 +481,20 @@
                                         </span>
                                     </div>
                                 @else
-                                    <div class="product-price primary-color float-left">
+                                    <div class="product-price primary-color float-left mb-0">
                                         <span
                                             class="current-price text-brand">₹{{ number_format($mainProduct->price) }}</span>
                                     </div>
                                 @endif
                             </div>
+
+                            {{-- START: Free Shipping Badge --}}
+                            <div class="free-shipping-wrapper">
+                                <span class="free-shipping-badge">
+                                    <i class="fi-rs-truck"></i> Free Shipping
+                                </span>
+                            </div>
+                            {{-- END: Free Shipping Badge --}}
 
                             {{-- START: Dynamic Cart Progress Widget --}}
                             @php
@@ -467,7 +558,8 @@
                             <div class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start mb-30">
                                 @if ($mainProduct->out_of_stock == 0)
                                     <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
-                                        <a href="#" class="qty-down" wire:click.prevent="decrementQuantity()"><i
+                                        <a href="#" class="qty-down"
+                                            wire:click.prevent="decrementQuantity()"><i
                                                 class="fi-rs-angle-small-down"></i></a>
                                         <input type="text" name="quantity" class="qty-val fw-600 fs-18"
                                             value="1" min="1" wire:model.lazy="quantity">
