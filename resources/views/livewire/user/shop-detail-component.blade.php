@@ -169,37 +169,77 @@
             display: block;
         }
 
+        /* --- UPDATED MOBILE COMPACT VIEW --- */
         @media (max-width: 768px) {
             .premium-offer-banner {
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                padding: 20px;
+                padding: 12px 10px;
+                gap: 8px;
+                border-radius: 12px;
+                flex-wrap: nowrap;
+                /* Forces a single line */
+                align-items: center;
             }
 
             .premium-offer-left {
-                flex-direction: column;
-                gap: 12px;
+                flex-direction: row;
+                text-align: left;
+                gap: 8px;
+                flex: 1;
+                /* Takes up remaining space */
+                min-width: 0;
+                /* CRITICAL: Allows flex child to shrink properly without pushing elements out */
+            }
+
+            .premium-offer-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 15px;
+                flex-shrink: 0;
+            }
+
+            .premium-offer-text {
+                min-width: 0;
+                /* CRITICAL: Prevents text from expanding beyond the screen */
             }
 
             .premium-offer-text h4 {
-                font-size: 20px;
+                font-size: 13px;
+                margin-bottom: 2px;
+                white-space: normal;
+                /* Lets title wrap if necessary */
+                line-height: 1.2;
+            }
+
+            .premium-offer-text p {
+                font-size: 11px;
+                line-height: 1.2;
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                /* limits description to 2 lines max */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
 
             .premium-payment-pill {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-                padding: 12px;
+                padding: 6px 10px;
+                flex-shrink: 0;
+                /* Prevents pill from squishing */
+                flex-wrap: nowrap;
             }
 
             .premium-payment-pill .secure-text {
-                border-right: none;
-                border-bottom: 2px solid #f0f0f0;
-                padding-right: 0;
-                padding-bottom: 8px;
-                width: 100%;
-                justify-content: center;
+                display: none;
+                /* Hide 'Secure' text to save space on mobile */
+            }
+
+            .premium-payment-icons {
+                gap: 5px;
+            }
+
+            .premium-payment-icons img {
+                height: 12px !important;
+                /* Scale icons nicely */
             }
         }
 

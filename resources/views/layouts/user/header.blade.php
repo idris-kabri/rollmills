@@ -226,7 +226,7 @@
                 </div>
                 <div
                     class="d-flex justify-content-between d-md-none mobile-category-options header-style-1 mt-15 mb-10 px-1">
-                    <div class="main-categori-wrap mr-15">
+                    {{-- <div class="main-categori-wrap mr-15">
                         <a class="categories-button-active p-15" href="#">
                             <span class="fi-rs-apps m-0"></span>
                         </a>
@@ -240,7 +240,6 @@
                                     <ul>
                                         @foreach ($chunk as $category)
                                             <li>
-                                                {{-- Replace 'category.show' with your actual route name --}}
                                                 <a
                                                     href="{{ route('shop') }}?category_id={{ $category->id }}&category_slug={{ $category->slug ?? 'no-slug' }}">
                                                     <img src="{{ asset('storage/' . $category->icon) }}"
@@ -272,7 +271,7 @@
                                         class="heading-sm-1">Show more...</span></div>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="header-wrap justify-content-between w-100">
                         @livewire('user.component.search-component')
                     </div>
