@@ -1,85 +1,6 @@
 <main class="main home-page-main">
     <style>
         /* --- GIFT ROW STYLES (ORDER SUMMARY) --- */
-        .gift-row {
-            background: linear-gradient(90deg, #fffbf0 0%, #ffffff 100%);
-            border: 1px solid #f7e3a6;
-            border-left: 5px solid #ffbc0d;
-        }
-
-        .gift-badge {
-            background-color: #ffbc0d;
-            color: #fff;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 5px;
-        }
-
-        .price-free {
-            color: #25b579;
-            font-weight: 800;
-            font-size: 18px;
-        }
-
-        .gift-icon-container {
-            color: #ffbc0d;
-            font-size: 20px;
-            margin-right: 5px;
-        }
-
-        /* --- DISCOUNT PROGRESS WIDGET STYLES --- */
-        .shipping-widget-cart {
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px dashed;
-        }
-
-        .shipping-progress-bg {
-            background-color: #e9ecef;
-            border-radius: 10px;
-            height: 8px;
-            width: 100%;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .shipping-progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.6s ease;
-            position: relative;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-            background-size: 1rem 1rem;
-            animation: progress-bar-stripes 1s linear infinite;
-        }
-
-        @keyframes progress-bar-stripes {
-            0% {
-                background-position: 1rem 0;
-            }
-
-            100% {
-                background-position: 0 0;
-            }
-        }
-
-        .shipping-text {
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .shipping-highlight {
-            font-weight: 700;
-        }
-
         /* --- PREMIUM OFFER BANNER STYLES --- */
         .premium-offer-banner {
             background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
@@ -169,37 +90,77 @@
             display: block;
         }
 
+        /* --- UPDATED MOBILE COMPACT VIEW --- */
         @media (max-width: 768px) {
             .premium-offer-banner {
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                padding: 20px;
+                padding: 12px 10px;
+                gap: 8px;
+                border-radius: 12px;
+                flex-wrap: nowrap;
+                /* Forces a single line */
+                align-items: center;
             }
 
             .premium-offer-left {
-                flex-direction: column;
-                gap: 12px;
+                flex-direction: row;
+                text-align: left;
+                gap: 8px;
+                flex: 1;
+                /* Takes up remaining space */
+                min-width: 0;
+                /* CRITICAL: Allows flex child to shrink properly without pushing elements out */
+            }
+
+            .premium-offer-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 15px;
+                flex-shrink: 0;
+            }
+
+            .premium-offer-text {
+                min-width: 0;
+                /* CRITICAL: Prevents text from expanding beyond the screen */
             }
 
             .premium-offer-text h4 {
-                font-size: 20px;
+                font-size: 13px;
+                margin-bottom: 2px;
+                white-space: normal;
+                /* Lets title wrap if necessary */
+                line-height: 1.2;
+            }
+
+            .premium-offer-text p {
+                font-size: 11px;
+                line-height: 1.2;
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                /* limits description to 2 lines max */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
 
             .premium-payment-pill {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-                padding: 12px;
+                padding: 6px 10px;
+                flex-shrink: 0;
+                /* Prevents pill from squishing */
+                flex-wrap: nowrap;
             }
 
             .premium-payment-pill .secure-text {
-                border-right: none;
-                border-bottom: 2px solid #f0f0f0;
-                padding-right: 0;
-                padding-bottom: 8px;
-                width: 100%;
-                justify-content: center;
+                display: none;
+                /* Hide 'Secure' text to save space on mobile */
+            }
+
+            .premium-payment-icons {
+                gap: 5px;
+            }
+
+            .premium-payment-icons img {
+                height: 12px !important;
+                /* Scale icons nicely */
             }
         }
     </style>
