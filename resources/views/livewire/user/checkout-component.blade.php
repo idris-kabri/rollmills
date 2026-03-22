@@ -208,6 +208,153 @@
                 padding: 2px 8px;
             }
         }
+
+        /* --- NEW REDESIGNED COD MODAL STYLES --- */
+        .cod-modal-redesign .modal-content {
+            border-radius: 16px;
+            border: none;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .cod-modal-redesign .modal-header-custom {
+            background: #ffffff;
+            padding: 40px 20px 15px;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        /* Danger Warning Icon Styles */
+        .cod-modal-redesign .icon-warning-pulse {
+            width: 75px;
+            height: 75px;
+            background: #ffe5e8;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: #dc3545;
+            animation: pulse-danger 2s infinite;
+        }
+
+        @keyframes pulse-danger {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(220, 53, 69, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+            }
+        }
+
+        /* Highlight text for losing discount */
+        .cod-modal-redesign .loss-highlight-badge {
+            display: inline-block;
+            background: #dc3545;
+            color: #ffffff;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+            transform: scale(1.05);
+        }
+
+        .cod-modal-redesign .price-comparison {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .cod-modal-redesign .price-col {
+            flex: 1;
+            padding: 15px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cod-modal-redesign .price-col:first-child {
+            border-right: 1px solid #e9ecef;
+            background: #fafafa;
+        }
+
+        .cod-modal-redesign .price-col-success {
+            background: #f0fdf4;
+            border: 2px solid #28a745;
+            border-radius: 12px;
+            position: relative;
+            transform: scale(1.02);
+            z-index: 2;
+        }
+
+        .cod-modal-redesign .badge-save {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #28a745;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .cod-modal-redesign .btn-switch-online {
+            background: #28a745;
+            color: #fff;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .cod-modal-redesign .btn-switch-online:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.25);
+            color: #fff;
+        }
+
+        .cod-modal-redesign .btn-proceed-cod {
+            background: transparent;
+            color: #999;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 5px;
+            transition: all 0.3s;
+            text-decoration: underline;
+        }
+
+        .cod-modal-redesign .btn-proceed-cod:hover {
+            color: #dc3545;
+        }
     </style>
 
     <div class="page-header breadcrumb-wrap">
@@ -894,7 +1041,7 @@
                                     <label class="form-check-label quicksand fw-700 fs-16 w-100"
                                         for="flexRadioDefault2">
                                         <div class="d-flex align-items-center flex-wrap">
-                                            Pay Online
+                                            Pay via UPI/Credit Card
                                             <span class="express-delivery-tag ms-2">⚡ Free Express Delivery</span>
                                         </div>
                                         @if ($is_first_order)
@@ -939,69 +1086,78 @@
         </div>
     </div>
 
-    {{-- MODAL 1: COD ALERT (FIRST ORDER) --}}
-    <div class="modal fade cod-alert-modal" id="codAlertModal2" tabindex="-1" aria-hidden="true"
+    {{-- MODAL 1: COD ALERT (REDESIGNED V2 - HIGH FOCUS ON LOSS) --}}
+    <div class="modal fade cod-modal-redesign" id="codAlertModal2" tabindex="-1" aria-hidden="true"
         data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body text-center p-4">
-                    <div class="warning-icon mb-3">
-                        <img src="assets/frontend/imgs/icon&images/loose-money.png" alt="" class="img-fluid"
-                            style="max-height: 80px;">
+                @php
+                    $currentTotal = $finalTotal;
+
+                    $couponDiscount = $couponDiscount ?? 0;
+                    $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
+                    $potentialDiscount = $cartTotalForCalc * 0.2 + $couponDiscount;
+
+                    $codShip = $cash_on_delivery_amount ?? 0;
+                    $onlineShip = $online_payment_amount ?? 0;
+
+                    $potentialOnlineTotal =
+                        $currentTotal - $codShip + $onlineShip - $potentialDiscount + ceil($couponDiscount);
+
+                    $codTotal = ceil($finalTotal + $cash_on_delivery_amount);
+                    $onlineTotal = ceil($finalTotal + $online_payment_amount - $potentialDiscount);
+                @endphp
+
+                <div class="modal-header-custom">
+                    <div class="icon-warning-pulse">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                            </path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
                     </div>
 
-                    <h2 class="alert-heading mb-2">Are You Sure?</h2>
-                    <p class="alert-subheading quicksand">You're about to lose your <strong>10% OFF</strong> discount
-                        on each item!</p>
-                    <p class="alert-subheading quicksand mb-4">Pay online now and save big instantly!</p>
+                    <h3 class="fw-bolder mb-2 text-dark" style="font-size: 26px; letter-spacing: -0.5px;">Wait! Are
+                        you sure?</h3>
+                    <p class="mb-0 quicksand" style="font-size: 16px; color: #555;">
+                        By selecting Cash on Delivery, you are
+                        <br>
+                        <span class="loss-highlight-badge">Losing Your 20% Discount</span>
+                    </p>
+                </div>
 
-                    <div class="summary-white-card quicksand mb-4 shadow-sm border p-3 rounded text-start">
-                        @php
-                            $currentTotal = $finalTotal;
+                <div class="modal-body px-4 pb-4 pt-1 text-center">
 
-                            $couponDiscount = $couponDiscount ?? 0;
-                            $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
-                            $potentialDiscount = $cartTotalForCalc * 0.2 + $couponDiscount;
-
-                            $codShip = $cash_on_delivery_amount ?? 0;
-                            $onlineShip = $online_payment_amount ?? 0;
-
-                            $potentialOnlineTotal =
-                                $currentTotal - $codShip + $onlineShip - $potentialDiscount + ceil($couponDiscount);
-                        @endphp
-
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted fw-500">Total with Cash on Delivery</span>
-                            <span
-                                class="text-brand fw-bold">₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}</span>
+                    <div class="price-comparison">
+                        <div class="price-col">
+                            <span class="text-muted font-sm fw-600 mb-1">If you choose COD</span>
+                            <h4 class="text-dark mb-0">₹{{ number_format($codTotal, 2) }}</h4>
                         </div>
-
-                        <div class="d-flex justify-content-between mb-2 text-danger">
-                            <b>You lose Prepaid discount</b>
-                            <span>- ₹{{ number_format($potentialDiscount, 2) }}</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between border-top pt-2 mt-2">
-                            <span class="text-muted fw-500">Pay Online & Get it for</span>
-                            <span
-                                class="text-success fw-bold">₹{{ number_format(ceil($finalTotal + $online_payment_amount - $potentialDiscount), 2) }}</span>
+                        <div class="price-col price-col-success">
+                            <div class="badge-save">Save ₹{{ number_format($potentialDiscount, 2) }}</div>
+                            <span class="text-success font-sm fw-700 mb-1">If you Pay via UPI/Credit Card</span>
+                            <h3 class="text-success fw-900 mb-0">₹{{ number_format($onlineTotal, 2) }}</h3>
                         </div>
                     </div>
 
-                    <div class="button-group">
-                        <button class="btn-secondary quicksand" data-bs-dismiss="modal">
+                    <div class="button-group mt-2">
+                        <button class="btn-switch-online quicksand" data-bs-dismiss="modal">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2">
-                                <line x1="19" y1="12" x2="5" y2="12">
-                                </line>
-                                <polyline points="12 19 5 12 12 5"></polyline>
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2">
+                                </rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
                             </svg>
-                            Go Back & Save 20%
+                            Pay via UPI/Credit card & Save ₹{{ number_format($potentialDiscount, 2) }}
                         </button>
-                        <button class="btn-brand btn quicksand" style="border-radius: 10px"
-                            wire:loading.attr="disabled" wire:target="proceedWithCOD"
-                            wire:click.prevent="proceedWithCOD">
-                            <span wire:loading.remove wire:target="proceedWithCOD">Proceed with COD</span>
+
+                        <button class="btn-proceed-cod quicksand" wire:loading.attr="disabled"
+                            wire:target="proceedWithCOD" wire:click.prevent="proceedWithCOD">
+                            <span wire:loading.remove wire:target="proceedWithCOD">Skip savings & pay
+                                ₹{{ number_format($codTotal, 2) }} on delivery</span>
                             <span wire:loading wire:target="proceedWithCOD">Processing...</span>
                         </button>
                     </div>

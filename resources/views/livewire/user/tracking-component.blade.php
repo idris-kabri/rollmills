@@ -956,7 +956,7 @@
                 <div class="cod-promo-content">
                     <h3>🎉 Convert & Save!</h3>
                     <p>
-                        Pay via UPI/Card now to get an extra <strong>20% off</strong>, waive the
+                        Pay via UPI/Credit Card now to get an extra <strong>20% off</strong>, waive the
                         <strong>₹{{ number_format($order->cod_charges) }} COD fee</strong>, and unlock <span
                             class="express-badge">⚡ Express Delivery</span>
                     </p>
