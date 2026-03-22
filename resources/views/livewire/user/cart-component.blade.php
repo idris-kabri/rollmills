@@ -78,7 +78,131 @@
         .shipping-highlight {
             font-weight: 700;
         }
+
+        /* --- PREMIUM OFFER BANNER STYLES --- */
+        .premium-offer-banner {
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin: 10px 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(0, 176, 155, 0.25);
+            color: #ffffff;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .premium-offer-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .premium-offer-icon {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #ffffff;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .premium-offer-text h4 {
+            color: #ffffff;
+            margin: 0 0 4px 0;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .premium-offer-text p {
+            color: rgba(255, 255, 255, 0.95);
+            margin: 0;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+        }
+
+        .premium-payment-pill {
+            background: #ffffff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .premium-payment-pill .secure-text {
+            color: #25b579;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-right: 2px solid #f0f0f0;
+            padding-right: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .premium-payment-icons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .premium-payment-icons img {
+            height: 20px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .premium-offer-banner {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .premium-offer-left {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .premium-offer-text h4 {
+                font-size: 20px;
+            }
+
+            .premium-payment-pill {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                padding: 12px;
+            }
+
+            .premium-payment-pill .secure-text {
+                border-right: none;
+                border-bottom: 2px solid #f0f0f0;
+                padding-right: 0;
+                padding-bottom: 8px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
+
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
@@ -87,23 +211,38 @@
             </div>
         </div>
     </div>
+
     <div class="container">
-        <div class="rm-ticket-banner wow animate__animated animate__fadeInDown">
-            <div class="rm-ticket-content">
-                <div class="rm-ticket-icon">
-                    <i class="fi-rs-gift"></i>
+        <div class="premium-offer-banner wow animate__animated animate__fadeInDown mt-4">
+            <div class="premium-offer-left">
+                <div class="premium-offer-icon">
+                    <i class="fi-rs-badge"></i>
                 </div>
-
-                <div class="rm-ticket-text">
-                    Pay online and get <span class="rm-ticket-highlight">20% OFF</span> as a prepaid discount
+                <div class="premium-offer-text">
+                    <h4>Get 20% OFF Instantly!</h4>
+                    <p>Pay online via UPI or Card to unlock this exclusive offer.</p>
                 </div>
+            </div>
 
-                <a href="/shop" class="rm-ticket-btn btn-loop-animate">
-                    Shop Now
-                </a>
+            <div class="premium-payment-pill">
+                <div class="secure-text">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    100% Secure
+                </div>
+                <div class="premium-payment-icons">
+                    <img src="{{ asset('assets/frontend/imgs/theme/upi_logo.webp') }}" alt="UPI"
+                        style="height: 18px;">
+                    <img src="{{ asset('assets/frontend/imgs/theme/mastercard_logo.png') }}" alt="MasterCard">
+                    <img src="{{ asset('assets/frontend/imgs/theme/rupay.png') }}" alt="RuPay" style="height: 16px;">
+                </div>
             </div>
         </div>
     </div>
+
     @php
         $shippingCharge = (float) (session('shipping_charge') ?? 0);
         $total = floatval(str_replace(',', '', Cart::total()));
