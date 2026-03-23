@@ -471,6 +471,12 @@
                                                         </a>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td class="text-muted pb-0">Orderd Date</td>
+                                                    <td class="pb-0 fw-bold">
+                                                        {{ $order->created_at }}
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
 
@@ -545,7 +551,7 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-muted">
-                                                        {{ \Carbon\Carbon::parse($order_transaction->created_at)->format('d-m-Y') }}
+                                                        {{ $order_transaction->created_at }}
                                                     </td>
                                                 </tr>
                                             </tbody>
