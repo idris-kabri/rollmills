@@ -98,6 +98,36 @@
         $categories = \App\Models\ProductCategory::where('status', 1)->where('parent_id', null)->get();
         $shop_over = \App\Models\Setting::where('label', 'free_delivery_order_amount')->first()->value ?? 0;
     @endphp
+    <style>
+        /* Enforce strict button styling for View Cart */
+        .btn-view-cart {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            background-color: #3BB77E !important;
+            /* Nice green color for success */
+            color: #ffffff !important;
+            border-radius: 4px;
+            padding: 6px 5px !important;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease 0s;
+            text-decoration: none;
+            line-height: 1.5;
+        }
+
+        .btn-view-cart i {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .btn-view-cart:hover {
+            background-color: #29a56c !important;
+            /* Darker green on hover */
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+    </style>
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
             <span><strong>Fill your space with luxury – Free Shipping on every order! ✨</strong></span>

@@ -1,7 +1,6 @@
 <main class="main">
     <style>
         /* --- GIFT ROW STYLES (ORDER SUMMARY) --- */
-        /* --- GIFT ROW STYLES (ORDER SUMMARY) --- */
         .gift-row {
             background: linear-gradient(90deg, #fffbf0 0%, #ffffff 100%);
             border: 1px solid #f7e3a6;
@@ -177,7 +176,6 @@
                 gap: 8px;
                 border-radius: 12px;
                 flex-wrap: nowrap;
-                /* Forces a single line */
                 align-items: center;
             }
 
@@ -186,9 +184,7 @@
                 text-align: left;
                 gap: 8px;
                 flex: 1;
-                /* Takes up remaining space */
                 min-width: 0;
-                /* CRITICAL: Allows flex child to shrink properly without pushing elements out */
             }
 
             .premium-offer-icon {
@@ -200,14 +196,12 @@
 
             .premium-offer-text {
                 min-width: 0;
-                /* CRITICAL: Prevents text from expanding beyond the screen */
             }
 
             .premium-offer-text h4 {
                 font-size: 13px;
                 margin-bottom: 2px;
                 white-space: normal;
-                /* Lets title wrap if necessary */
                 line-height: 1.2;
             }
 
@@ -217,7 +211,6 @@
                 white-space: normal;
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
-                /* limits description to 2 lines max */
                 -webkit-box-orient: vertical;
                 overflow: hidden;
             }
@@ -225,13 +218,11 @@
             .premium-payment-pill {
                 padding: 6px 10px;
                 flex-shrink: 0;
-                /* Prevents pill from squishing */
                 flex-wrap: nowrap;
             }
 
             .premium-payment-pill .secure-text {
                 display: none;
-                /* Hide 'Secure' text to save space on mobile */
             }
 
             .premium-payment-icons {
@@ -240,7 +231,6 @@
 
             .premium-payment-icons img {
                 height: 12px !important;
-                /* Scale icons nicely */
             }
         }
 
@@ -269,7 +259,6 @@
             user-select: none;
         }
 
-        /* Gradient text effect to make it look premium but still just text */
         .free-shipping-badge .fs-text {
             font-size: 16px;
             font-weight: 900;
@@ -287,7 +276,6 @@
             animation: drive-truck 2.5s ease-in-out infinite;
         }
 
-        /* The active glowing dot grabs attention without using a box background */
         .glowing-dot {
             width: 8px;
             height: 8px;
@@ -395,57 +383,11 @@
         /* --- DISCOUNT PROGRESS WIDGET STYLES --- */
         .shipping-widget-container {
             background: #fdfaf3;
-            /* Slight yellow/gold tint for offer */
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 25px;
             margin-top: 15px;
             border: 1px dashed #f5c518;
-        }
-
-        .shipping-progress-bg {
-            background-color: #e9ecef;
-            border-radius: 10px;
-            height: 8px;
-            width: 100%;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .icon-express {}
-
-        .shipping-progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.6s ease;
-            position: relative;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-            background-size: 1rem 1rem;
-            animation: progress-bar-stripes 1s linear infinite;
-        }
-
-        @keyframes progress-bar-stripes {
-            0% {
-                background-position: 1rem 0;
-            }
-
-            100% {
-                background-position: 0 0;
-            }
-        }
-
-        .shipping-text {
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .shipping-highlight {
-            color: #d32f2f;
-            font-weight: 700;
         }
 
         /* --- SPECS TOGGLE STYLES (SIDEBAR VERSION) --- */
@@ -468,12 +410,10 @@
             transition: max-height 0.5s ease-in-out;
         }
 
-        /* Collapsed: Shows ~3 rows */
         .specs-wrapper.collapsed {
             max-height: 140px;
         }
 
-        /* Expanded */
         .specs-wrapper.expanded {
             max-height: 2000px;
         }
@@ -484,7 +424,6 @@
             left: 0;
             width: 100%;
             height: 50px;
-            /* Shorter gradient for side column */
             background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
             pointer-events: none;
             transition: opacity 0.3s;
@@ -495,11 +434,9 @@
             opacity: 0;
         }
 
-        /* Table adjustments for Sidebar */
         .specs-table {
             width: 100%;
             font-size: 13px;
-            /* Slightly smaller for sidebar */
         }
 
         .specs-table td {
@@ -537,6 +474,38 @@
 
         .specs-toggle-btn:hover {
             text-decoration: underline;
+        }
+
+        /* --- VIEW CART BUTTON (DETAIL PAGE SPECIFIC) --- */
+        .btn-view-cart-detail {
+            width: auto !important;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            background-color: #3BB77E !important;
+            color: #ffffff !important;
+            border-radius: 4px;
+            padding: 10px 30px !important;
+            /* Matches standard button size */
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s ease 0s;
+            text-decoration: none;
+            line-height: 1.5;
+            border: none;
+            height: 50px;
+            /* Aligns perfectly with qty box */
+        }
+
+        .btn-view-cart-detail i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .btn-view-cart-detail:hover {
+            background-color: #29a56c !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
         }
     </style>
 
@@ -746,7 +715,7 @@
                             {{-- START: Dynamic Cart Progress Widget --}}
                             @php
                                 // Get the current cart subtotal and convert it to a float safely
-                                $cart_subtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+                                $cart_subtotal = (float) str_replace(',', '', \Cart::instance('cart')->subtotal());
                                 $remaining_amount = max(0, $minimum_order_value - $cart_subtotal);
 
                                 // Calculate the percentage complete for the progress bar
@@ -804,29 +773,50 @@
                             @endforeach
                             <div class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start mb-30">
                                 @if ($mainProduct->out_of_stock == 0)
-                                    <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
-                                        <a href="#" class="qty-down"
-                                            wire:click.prevent="decrementQuantity()"><i
-                                                class="fi-rs-angle-small-down"></i></a>
-                                        <input type="text" name="quantity" class="qty-val fw-600 fs-18"
-                                            value="1" min="1" wire:model.lazy="quantity">
-                                        <a href="#" class="qty-up" wire:click.prevent="incrementQuantity()"><i
-                                                class="fi-rs-angle-small-up"></i></a>
-                                    </div>
+                                    @php
+                                        $wishlist = \Cart::instance('wishlist')->search(function (
+                                            $wishlistItem,
+                                            $rowId,
+                                        ) use ($mainProduct) {
+                                            return $wishlistItem->model->id === $mainProduct->id;
+                                        });
+
+                                        // Check if main product is currently in the cart
+                                        $itemInCart =
+                                            \Cart::instance('cart')->content()->where('id', $mainProduct->id)->count() >
+                                            0;
+                                    @endphp
+                                    @if (!$itemInCart)
+                                        <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
+                                            <a href="#" class="qty-down"
+                                                wire:click.prevent="decrementQuantity()"><i
+                                                    class="fi-rs-angle-small-down"></i></a>
+                                            <input type="text" name="quantity" class="qty-val fw-600 fs-18"
+                                                value="1" min="1" wire:model.lazy="quantity">
+                                            <a href="#" class="qty-up"
+                                                wire:click.prevent="incrementQuantity()"><i
+                                                    class="fi-rs-angle-small-up"></i></a>
+                                        </div>
+                                    @endif
                                     <div class="product-extra-link2">
-                                        @php
-                                            $wishlist = Cart::instance('wishlist')->search(function (
-                                                $wishlistItem,
-                                                $rowId,
-                                            ) use ($mainProduct) {
-                                                return $wishlistItem->model->id === $mainProduct->id;
-                                            });
-                                        @endphp
-                                        <button type="button" class="button button-add-to-cart"
-                                            wire:click="addToCart()"><i class="fi-rs-shopping-cart"></i>Add to
-                                            cart</button>
+
+                                        @if ($itemInCart)
+                                            <a href="{{ route('cart') }}" class="btn-view-cart-detail">
+                                                <i class="fi-rs-eye"></i> View Cart
+                                            </a>
+                                        @else
+                                            <button type="button" class="button button-add-to-cart"
+                                                wire:click="addToCart()" wire:loading.class="disabled">
+                                                <span wire:loading.remove wire:target="addToCart"><i
+                                                        class="fi-rs-shopping-cart"></i>Add to cart</span>
+                                                <span wire:loading wire:target="addToCart"><span
+                                                        class="spinner-border spinner-border-sm mr-5"></span>
+                                                    Adding...</span>
+                                            </button>
+                                        @endif
+
                                         @if ($wishlist->isNotEmpty())
-                                            <a href="javascript:void(0);" aria-label="Add To Wishlist"
+                                            <a href="/wishlist" aria-label="Add To Wishlist"
                                                 class="action-btn hover-up wishlist-detail-active"><i
                                                     class="fi-rs-heart"></i></a>
                                         @else
@@ -938,7 +928,6 @@
                                                             <div class="single-comment mb-3 border-bottom">
                                                                 <div class="d-flex align-items-center mb-2">
                                                                     <div class="me-2 d-flex">
-                                                                        {{-- Profile Image Logic --}}
                                                                         <img src="{{ asset('assets/frontend/imgs/blog/author-2.png') }}"
                                                                             alt="">
                                                                     </div>
@@ -950,17 +939,13 @@
                                                                     </div>
                                                                 </div>
 
-                                                                {{-- 2. Star Ratings Section --}}
                                                                 <div class="d-flex align-items-center mb-2">
                                                                     <div class="stars me-2">
-                                                                        {{-- Loop to display 5 stars --}}
                                                                         @for ($i = 1; $i <= 5; $i++)
                                                                             @if ($i <= $rating)
-                                                                                {{-- Filled Star (Orange) --}}
                                                                                 <i
                                                                                     class="fas fa-star text-warning"></i>
                                                                             @else
-                                                                                {{-- Empty Star (Grey) --}}
                                                                                 <i class="far fa-star text-muted"></i>
                                                                             @endif
                                                                         @endfor
