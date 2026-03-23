@@ -169,77 +169,37 @@
             display: block;
         }
 
-        /* --- UPDATED MOBILE COMPACT VIEW --- */
         @media (max-width: 768px) {
             .premium-offer-banner {
-                padding: 12px 10px;
-                gap: 8px;
-                border-radius: 12px;
-                flex-wrap: nowrap;
-                /* Forces a single line */
-                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding: 20px;
             }
 
             .premium-offer-left {
-                flex-direction: row;
-                text-align: left;
-                gap: 8px;
-                flex: 1;
-                /* Takes up remaining space */
-                min-width: 0;
-                /* CRITICAL: Allows flex child to shrink properly without pushing elements out */
-            }
-
-            .premium-offer-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 15px;
-                flex-shrink: 0;
-            }
-
-            .premium-offer-text {
-                min-width: 0;
-                /* CRITICAL: Prevents text from expanding beyond the screen */
+                flex-direction: column;
+                gap: 12px;
             }
 
             .premium-offer-text h4 {
-                font-size: 13px;
-                margin-bottom: 2px;
-                white-space: normal;
-                /* Lets title wrap if necessary */
-                line-height: 1.2;
-            }
-
-            .premium-offer-text p {
-                font-size: 11px;
-                line-height: 1.2;
-                white-space: normal;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                /* limits description to 2 lines max */
-                -webkit-box-orient: vertical;
-                overflow: hidden;
+                font-size: 20px;
             }
 
             .premium-payment-pill {
-                padding: 6px 10px;
-                flex-shrink: 0;
-                /* Prevents pill from squishing */
-                flex-wrap: nowrap;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                padding: 12px;
             }
 
             .premium-payment-pill .secure-text {
-                display: none;
-                /* Hide 'Secure' text to save space on mobile */
-            }
-
-            .premium-payment-icons {
-                gap: 5px;
-            }
-
-            .premium-payment-icons img {
-                height: 12px !important;
-                /* Scale icons nicely */
+                border-right: none;
+                border-bottom: 2px solid #f0f0f0;
+                padding-right: 0;
+                padding-bottom: 8px;
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -254,86 +214,73 @@
             }
         }
 
-        /* --- FREE SHIPPING BADGE (ANIMATED & ATTRACTIVE) --- */
+        /* --- FREE SHIPPING BADGE (PREMIUM TEXT-ONLY DESIGN) --- */
         .free-shipping-wrapper {
             clear: both;
-            padding-top: 12px;
+            padding-top: 5px;
             padding-bottom: 15px;
         }
 
         .free-shipping-badge {
             display: inline-flex;
             align-items: center;
-            background: linear-gradient(45deg, #00b59c, #10e0a1);
-            color: #ffffff;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 700;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Gradient text effect to make it look premium but still just text */
+        .free-shipping-badge .fs-text {
+            font-size: 16px;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            /* The pulse animation acts as a modern 'blink' */
-            animation: free-ship-pulse 1.5s infinite;
+            letter-spacing: 0.8px;
+            background: linear-gradient(90deg, #00b59c, #007a69);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .free-shipping-badge i {
             margin-right: 6px;
-            font-size: 16px;
-            /* Optional: adds a tiny bounce to the truck */
-            animation: truck-bounce 2s infinite ease-in-out;
+            font-size: 22px;
+            color: #00b59c;
+            animation: drive-truck 2.5s ease-in-out infinite;
         }
 
-        /* Outer glowing pulse effect */
-        @keyframes free-ship-pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(0, 181, 156, 0.6);
-            }
+        /* The active glowing dot grabs attention without using a box background */
+        .glowing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00e6a8;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            box-shadow: 0 0 8px #00e6a8;
+            animation: pulse-dot 1.5s infinite alternate;
+        }
 
-            70% {
-                box-shadow: 0 0 0 10px rgba(0, 181, 156, 0);
+        @keyframes pulse-dot {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.6;
+                box-shadow: 0 0 4px #00e6a8;
             }
 
             100% {
-                box-shadow: 0 0 0 0 rgba(0, 181, 156, 0);
+                transform: scale(1.2);
+                opacity: 1;
+                box-shadow: 0 0 12px #00e6a8;
             }
         }
 
-        /* Inner sweeping light shimmer */
-        .free-shipping-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: skewX(-25deg);
-            z-index: -1;
-            animation: free-ship-shimmer 2.5s infinite;
-        }
-
-        @keyframes free-ship-shimmer {
-            0% {
-                left: -100%;
-            }
-
-            100% {
-                left: 200%;
-            }
-        }
-
-        @keyframes truck-bounce {
+        @keyframes drive-truck {
 
             0%,
             100% {
-                transform: translateY(0);
+                transform: translateX(0);
             }
 
             50% {
-                transform: translateY(-2px);
+                transform: translateX(4px);
             }
         }
 
@@ -745,11 +692,13 @@
                                 @endif
                             </div>
 
-                            {{-- START: Free Shipping Badge --}}
+                            {{-- START: Free Shipping Badge (PREMIUM TEXT-ONLY DESIGN) --}}
                             <div class="free-shipping-wrapper">
-                                <span class="free-shipping-badge">
-                                    <i class="fi-rs-truck"></i> Free Shipping
-                                </span>
+                                <div class="free-shipping-badge">
+                                    <span class="glowing-dot"></span>
+                                    <i class="fi-rs-truck"></i>
+                                    <span class="fs-text">Free Shipping</span>
+                                </div>
                             </div>
                             {{-- END: Free Shipping Badge --}}
 

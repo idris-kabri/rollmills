@@ -301,6 +301,11 @@
                             <li class="menu-item-has-children">
                                 <a href="/" class="w-100">Home</a>
                             </li>
+                            <li>
+                                <a class="" href="/shop?category_id=33">Get 2
+                                    perfume
+                                    at ₹429</a>
+                            </li>
                             <li class="menu-item-has-children">
                                 <a href="/shop" class="w-100">shop</a>
                                 {{-- <ul class="dropdown">
