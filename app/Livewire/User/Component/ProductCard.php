@@ -20,6 +20,7 @@ class ProductCard extends Component
     public $groupedAttributes = [];
     public $selectedProductId;
     protected $listeners = [];
+    public $is_in_cart = false;
 
     public function mount($product, $parameter = null, $get_sold = false)
     {

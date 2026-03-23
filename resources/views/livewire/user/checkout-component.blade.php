@@ -338,22 +338,30 @@
             color: #fff;
         }
 
+        /* REPLACED: Converted the COD text link into a secondary outlined button */
         .cod-modal-redesign .btn-proceed-cod {
-            background: transparent;
-            color: #999;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
+            background: #ffffff;
+            color: #6c757d;
+            border: 2px solid #606060;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 700;
             width: 100%;
-            margin-top: 5px;
+            margin-top: 10px;
             transition: all 0.3s;
-            text-decoration: underline;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .cod-modal-redesign .btn-proceed-cod:hover {
+            background: #f8f9fa;
             color: #dc3545;
+            border-color: #dc3545;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.1);
         }
     </style>
 
