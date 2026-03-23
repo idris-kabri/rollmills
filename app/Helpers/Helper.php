@@ -481,7 +481,6 @@ function calculateRates($products, $pincode, $payment_method)
             logger()->error("Shiprocket API error for item {$cart_item->id}", [
                 'response' => $response->body(),
             ]);
-            dd('error', $response->body());
             return false;
         }
     }

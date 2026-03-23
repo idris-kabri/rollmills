@@ -120,7 +120,7 @@ class Create extends Component
             foreach ($categories as $cat) {
                 $categories_array[$cat->id] = [
                     'id' => $cat->id,
-                    'name' => $cat->name
+                    'name' => $cat->name,
                 ];
             }
         } else {
@@ -130,14 +130,14 @@ class Create extends Component
                 $categories_array[$cat->id] = [
                     'id' => $cat->id,
                     'name' => $cat->name,
-                    'items' => []
+                    'items' => [],
                 ];
                 if (isset($child_category) && count($child_category) > 0) {
                     foreach ($child_category as $child) {
                         $categories_array[$cat->id]['items'][] = [
                             'id' => $child->id,
                             'name' => $child->name,
-                            'parent_id' => $child->parent_id
+                            'parent_id' => $child->parent_id,
                         ];
                     }
                 }
@@ -176,7 +176,6 @@ class Create extends Component
     public function removeOption($attributeId, $index)
     {
         if (isset($this->selectedOptions[$attributeId]['items'][$index])) {
-
             unset($this->selectedOptions[$attributeId]['items'][$index]);
 
             $this->selectedOptions[$attributeId]['items'] = array_values($this->selectedOptions[$attributeId]['items']);
@@ -201,16 +200,19 @@ class Create extends Component
     public function addRow($attributeId)
     {
         if (isset($this->selectedOptions[$attributeId])) {
-            $this->selectedOptions[$attributeId]['items'][] = "";
+            $this->selectedOptions[$attributeId]['items'][] = '';
         }
     }
 
     public function addOptionFromGlobal()
     {
         if (!empty($this->selectedVariation)) {
-            $compositeKey = implode('|', array_map(function ($item) {
-                return $item;
-            }, $this->selectedVariation));
+            $compositeKey = implode(
+                '|',
+                array_map(function ($item) {
+                    return $item;
+                }, $this->selectedVariation),
+            );
 
             if (!isset($this->selectedVariationOption)) {
                 $this->selectedVariationOption = [];
@@ -223,7 +225,7 @@ class Create extends Component
                 'width' => $this->width,
                 'height' => $this->height,
                 'is_active' => 1,
-                'shipping_margin_br' => 0
+                'shipping_margin_br' => 0,
             ];
         }
     }
@@ -299,14 +301,14 @@ class Create extends Component
 
         if ($validator->fails()) {
             $this->dispatch('validation-errors', [
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ]);
         } else {
             try {
                 sleep(1);
                 DB::beginTransaction();
                 $product_id = [];
-                $product = new Product;
+                $product = new Product();
                 $product->name = $this->name;
                 $product->slug = $this->slug;
                 $product->description = $this->main_description;
@@ -356,14 +358,13 @@ class Create extends Component
                     $product->images = json_encode($gallaries);
                 }
 
-
                 $product->save();
 
                 $product_id[] = $product->id;
 
                 if ($this->selectedVariationOption != null && isset($this->selectedVariationOption) && count($this->selectedVariationOption) > 0) {
                     foreach ($this->selectedVariationOption as $key => $option) {
-                        $product_variation = new Product;
+                        $product_variation = new Product();
 
                         $product_variation->name = $this->name;
                         $product_variation->description = $option['details']['description'] ?? $this->main_description;
@@ -372,12 +373,10 @@ class Create extends Component
                         $product_variation->SKU = $option['details']['sku'] ?? $this->sku;
                         $product_variation->price = $option['details']['regular_price'] ?? $this->price;
                         $product_variation->sale_default_price = $option['details']['sale_default_price'] ?? $this->sale_default_price;
-                        $product_variation->sale_price = $option['details']['sale_price'] ?? $this->discount ?? 0;
+                        $product_variation->sale_price = $option['details']['sale_price'] ?? ($this->discount ?? 0);
                         $product_variation->sale_from_date = $option['details']['from_date'] ?? $this->discount_start_date;
                         $product_variation->sale_to_date = $option['details']['sale_date'] ?? $this->discount_end_date;
-                        $product_variation->out_of_stock = isset($option['details']['stock_status'])
-                            ? ($option['details']['stock_status'] == false ? 0 : 1)
-                            : $this->stock_status;
+                        $product_variation->out_of_stock = isset($option['details']['stock_status']) ? ($option['details']['stock_status'] == false ? 0 : 1) : $this->stock_status;
                         if ($option['details']['is_active'] == false) {
                             $product_variation->active_inactive_status = 0;
                         } else {
@@ -403,7 +402,7 @@ class Create extends Component
 
                         $product_variation->parent_id = $product->id;
 
-                        if (isset($option['details']['image'])  && $option['details']['image'] != null && $option['details']['image'] != '') {
+                        if (isset($option['details']['image']) && $option['details']['image'] != null && $option['details']['image'] != '') {
                             $imagePath = $option['details']['image']->store('product', 'public');
                             $product_variation->featured_image = $imagePath;
                         } else {
@@ -430,16 +429,12 @@ class Create extends Component
                             $value_array = explode(',', $value);
                             $attributeId = $value_array[0];
                             $itemIndex = $value_array[1];
-                            if (
-                                isset($value_array[0], $value_array[1]) &&
-                                isset($this->selectedOptions[$value_array[0]]) &&
-                                isset($this->selectedOptions[$value_array[0]]['items'][$value_array[1]])
-                            ) {
+                            if (isset($value_array[0], $value_array[1]) && isset($this->selectedOptions[$value_array[0]]) && isset($this->selectedOptions[$value_array[0]]['items'][$value_array[1]])) {
                                 $name .= $this->selectedOptions[$value_array[0]]['items'][$value_array[1]] . ' ';
                                 $isDefaultIndex = $this->selectedOptions[$attributeId]['is_default'] ?? null;
                                 $isDefault = $isDefaultIndex == $itemIndex;
 
-                                $attributes_assign = new ProductAttributeAssign;
+                                $attributes_assign = new ProductAttributeAssign();
                                 $attributes_assign->product_id = $product_variation->id;
                                 $attributes_assign->product_set_id = $value_array[0];
                                 $attributes_assign->title = $this->selectedOptions[$value_array[0]]['items'][$value_array[1]];
@@ -450,10 +445,10 @@ class Create extends Component
                                 $attributes_names[] = $this->selectedOptions[$value_array[0]]['items'][$value_array[1]];
                             }
                         }
-                        $product_variation->name = $this->name . " " . $name;
+                        $product_variation->name = $this->name . ' ' . $name;
                         $product_variation->attribute_id = implode(',', $attributes);
                         $product_variation->attributes_name = implode(',', $attributes_names);
-                        $product_variation->slug = Str::slug($product_variation->name. '-');
+                        $product_variation->slug = Str::slug($product_variation->name . '-');
                         $product_variation->save();
                     }
                 }
@@ -461,7 +456,7 @@ class Create extends Component
                 if ($this->selectedCategories != null && isset($this->selectedCategories) && count($this->selectedCategories) > 0) {
                     foreach ($this->selectedCategories as $category) {
                         foreach ($product_id as $item) {
-                            $product_category = new ProductCategoryAssign;
+                            $product_category = new ProductCategoryAssign();
                             $product_category->product_id = $item;
                             $product_category->category_id = $category;
                             $product_category->save();
@@ -472,7 +467,7 @@ class Create extends Component
                 if ($this->related_products != null && isset($this->related_products) && count($this->related_products) > 0) {
                     foreach ($this->related_products as $related_product) {
                         foreach ($product_id as $item) {
-                            $product_relation_related = new ProductRelation;
+                            $product_relation_related = new ProductRelation();
                             $product_relation_related->product_id = $item;
                             $product_relation_related->related_product_id = $related_product;
                             $product_relation_related->type = 'Related';
@@ -484,7 +479,7 @@ class Create extends Component
                 if ($this->linked_products != null && isset($this->linked_products) && count($this->linked_products) > 0) {
                     foreach ($this->linked_products as $linked_product) {
                         foreach ($product_id as $item) {
-                            $product_relation_linked = new ProductRelation;
+                            $product_relation_linked = new ProductRelation();
                             $product_relation_linked->product_id = $item;
                             $product_relation_linked->related_product_id = $linked_product;
                             $product_relation_linked->type = 'Linked';
@@ -496,7 +491,7 @@ class Create extends Component
                 if ($this->brand_id != null && isset($this->brand_id) && count($this->brand_id) > 0) {
                     foreach ($this->brand_id as $brand) {
                         foreach ($product_id as $item) {
-                            $product_brand = new ProductBrand;
+                            $product_brand = new ProductBrand();
                             $product_brand->product_id = $item;
                             $product_brand->brand_id = $brand;
                             $product_brand->save();
@@ -509,7 +504,6 @@ class Create extends Component
                 $this->redirectWithDelay('/admin/product/');
             } catch (\Exception $e) {
                 DB::rollBack();
-                dd($e);
             }
         }
     }
@@ -529,7 +523,7 @@ class Create extends Component
     {
         $this->specifications[] = [
             'name' => '',
-            'value' => ''
+            'value' => '',
         ];
     }
 

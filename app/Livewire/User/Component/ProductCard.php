@@ -21,7 +21,6 @@ class ProductCard extends Component
     public $selectedProductId;
     protected $listeners = [];
 
-
     public function mount($product, $parameter = null, $get_sold = false)
     {
         $this->product = $product;
@@ -48,7 +47,6 @@ class ProductCard extends Component
                     'name' => $attributeName,
                     'items' => [],
                 ];
-
             }
             if (!in_array($assign->title, $this->groupedAttributes[$setIds]['items'])) {
                 $this->groupedAttributes[$setIds]['items'][] = $assign->title;
@@ -60,7 +58,6 @@ class ProductCard extends Component
     {
         $this->selected_product = $id;
         session()->put('selected_product', $id);
-        dd('Hye');
     }
 
     public function getDefaultVariation($parentId)
@@ -81,7 +78,6 @@ class ProductCard extends Component
             return Product::find($parentId);
         }
     }
-
 
     public function previewProduct($id)
     {

@@ -676,7 +676,6 @@ class Edit extends Component
                 $this->redirectWithDelay('/admin/product/');
             } catch (\Exception $e) {
                 DB::rollBack();
-                dd($e);
                 // $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => $e->getMessage()]);
             }
         }

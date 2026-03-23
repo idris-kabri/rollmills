@@ -33,7 +33,7 @@ class Profile extends Component
     public function updatedNewProfileImage()
     {
         $this->validate([
-            'new_profile_image' => 'nullable|image|max:2048'
+            'new_profile_image' => 'nullable|image|max:2048',
         ]);
     }
 
@@ -49,7 +49,7 @@ class Profile extends Component
             DB::beginTransaction();
 
             $user = User::find(Auth::id());
-            $user->name  = $this->name;
+            $user->name = $this->name;
             $user->email = $this->email;
             $user->mobile = $this->mobile;
 
@@ -65,7 +65,6 @@ class Profile extends Component
             DB::commit();
             $this->toastSuccess('Profile updated successfully!');
         } catch (\Exception $e) {
-            dd($e);
             DB::rollBack();
             Log::error('Profile Update Error: ' . $e->getMessage());
             $this->toastError('An error occurred while updating the profile.');
