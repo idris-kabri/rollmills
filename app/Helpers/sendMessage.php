@@ -215,7 +215,6 @@ function sendNormalTemplateWawi($template_name, $language_code, $phone_number)
         'template_language' => $language_code,
         'phone_number' => '+91' . $phone_number,
     ]);
-    dd($response->body());
 
     // Handle the response
     if ($response->successful()) {
