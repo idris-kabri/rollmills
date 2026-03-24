@@ -1010,8 +1010,6 @@
                                         <th>Freight Charges</th>
                                         <th>COD Charges</th>
                                         <th>Total Charges</th>
-                                        <th>Min. Weight (g)</th>
-                                        <th>Chargeable Weight (g)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1022,8 +1020,6 @@
                                             <td>₹{{ number_format($rate['cod_charges'] ?? 0, 2) }}</td>
                                             <td class="fw-bold text-primary">
                                                 ₹{{ number_format($rate['total_charges'] ?? 0, 2) }}</td>
-                                            <td>{{ $rate['min_weight'] ?? '0' }}</td>
-                                            <td>{{ $rate['chargeable_weight'] ?? '0' }}</td>
                                         </tr>
                                     @empty
                                         <tr>
