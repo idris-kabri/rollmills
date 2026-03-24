@@ -49,7 +49,11 @@ class View extends Component
     // --- Properties for Edit Discounts & Totals ---
     public $edit_special_discount = 0;
     public $edit_total_bonus = 0;
-    public $edit_order_total = 0; // NEW: Edit Order Total
+    public $edit_order_total = 0;
+
+    // --- XpressBees Properties ---
+    public $xpressbeesRates = [];
+    public $xpressbeesError = null;
 
     protected $rules = [
         'logistics.*.aggregator' => 'nullable|string|max:255',
@@ -75,6 +79,27 @@ class View extends Component
                     'charges' => $order_awb->charges_taken,
                 ];
             }
+        }
+    }
+
+    // --- XPRESSBEES LOGIC ---
+
+    public function checkExpressBees()
+    {
+        $this->xpressbeesRates = [];
+
+        $login_data = xpressBeesLogin();
+        if ($login_data['status'] == true) {
+            $token = $login_data['data'];
+            $availability_data = serviceabilityCheck($token, $this->order);
+            if ($availability_data['status'] == true) {
+                $this->xpressbeesRates = $availability_data['data'];
+                $this->dispatch('open-xpressbees-modal');
+            } else {
+                $this->toastError($availability_data['message']);
+            }
+        } else {
+            $this->toastError($login_data['message']);
         }
     }
 
@@ -307,7 +332,6 @@ class View extends Component
 
         $this->order->total = $new_total;
 
-        // Apply difference to remaining amount if the order isn't fully paid
         if ($this->order->is_cod == 1 || $this->order->status == 0) {
             $this->order->remaining_amount += $diff;
             if ($this->order->remaining_amount < 0) {

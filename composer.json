@@ -39,7 +39,8 @@
             "app/Helpers/Helper.php",
             "app/Helpers/OfferHelper.php",
             "app/Helpers/sendMessage.php",
-            "app/Helpers/ProviderHelper.php"
+            "app/Helpers/ProviderHelper.php",
+            "app/Helpers/xpressBees.php"
         ]
     },
     "autoload-dev": {

@@ -43,7 +43,36 @@
                                 </h4>
 
                                 <div class="d-flex align-items-center gap-2">
-                                    {{-- Add Item Button (Only visible if order is pending or processed) --}}
+
+                                    {{-- Check ExpressBees Button (Only if status is Processed) --}}
+                                    @if ($order->status == 1)
+                                        <button type="button" class="btn btn-sm btn-info" wire:click="checkExpressBees"
+                                            wire:loading.attr="disabled" wire:target="checkExpressBees">
+                                            <span wire:loading.remove wire:target="checkExpressBees"
+                                                class="d-flex align-items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon icon-tabler icon-tabler-truck-delivery me-1 m-0"
+                                                    width="20" height="20" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                    <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                    <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5">
+                                                    </path>
+                                                    <path d="M3 9l4 0"></path>
+                                                </svg>
+                                                Check XpressBees
+                                            </span>
+                                            <span wire:loading wire:target="checkExpressBees">
+                                                <span class="spinner-border spinner-border-sm me-1" role="status"
+                                                    aria-hidden="true"></span>
+                                                Fetching...
+                                            </span>
+                                        </button>
+                                    @endif
+
+                                    {{-- Add Item Button --}}
                                     @if (in_array($order->status, [0, 1]))
                                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#addItemModal">
@@ -98,8 +127,8 @@
                                             <span class="badge bg-success text-white d-flex align-items-center gap-1">
                                                 <svg class="icon svg-icon-ti-ti-shopping-cart-check"
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
                                                     <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
                                                     <path d="M11.5 17h-5.5v-14h-2"></path>
                                                     <path d="M6 5l14 1l-1 7h-13"></path>
@@ -933,6 +962,87 @@
         </div>
     </div>
 
+    <button type="button" class="d-none" id="xpressBess-launch-modal-btn" data-bs-toggle="modal"
+        data-bs-target="#xpressbeesModal">Launch
+        ExpressBees Modal</button>
+
+    {{-- MODAL: XpressBees Rates --}}
+    <div wire:ignore.self class="modal fade" id="xpressbeesModal" tabindex="-1" aria-hidden="true"
+        data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-truck-delivery text-info me-2" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                            <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                            <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
+                            <path d="M3 9l4 0"></path>
+                        </svg>
+                        XpressBees Serviceability
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    @if ($xpressbeesError)
+                        <div class="alert alert-danger m-4 d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-alert-circle me-2" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            {{ $xpressbeesError }}
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-vcenter table-striped table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Courier Name</th>
+                                        <th>Freight Charges</th>
+                                        <th>COD Charges</th>
+                                        <th>Total Charges</th>
+                                        <th>Min. Weight (g)</th>
+                                        <th>Chargeable Weight (g)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($xpressbeesRates as $rate)
+                                        <tr>
+                                            <td class="fw-bold">{{ $rate['name'] ?? 'N/A' }}</td>
+                                            <td>₹{{ number_format($rate['freight_charges'] ?? 0, 2) }}</td>
+                                            <td>₹{{ number_format($rate['cod_charges'] ?? 0, 2) }}</td>
+                                            <td class="fw-bold text-primary">
+                                                ₹{{ number_format($rate['total_charges'] ?? 0, 2) }}</td>
+                                            <td>{{ $rate['min_weight'] ?? '0' }}</td>
+                                            <td>{{ $rate['chargeable_weight'] ?? '0' }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">No shipping rates
+                                                found for this configuration.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- MODAL: Edit Address --}}
     <div wire:ignore.self class="modal fade" id="editAddressModal" tabindex="-1" aria-hidden="true"
         data-bs-backdrop="static">
@@ -1323,7 +1433,6 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             window.addEventListener('close-edit-address-modal', event => {
                 if (window.jQuery) {
                     $('#editAddressModal').modal('hide');

@@ -9,9 +9,14 @@
 <script src="{{ asset('assets/backend/vendor/core/core/base/libraries/jquery-cookie/jquery.cookie.js') }}"></script>
 <script src="{{ asset('assets/backend/vendor/core/core/base/js/core.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="{{ asset('assets/backend/vendor/core/core/base/libraries/mcustom-scrollbar/jquery.mCustomScrollbar.js') }}"></script>
-<script src="{{ asset('assets/backend/vendor/core/core/base/libraries/stickytableheaders/jquery.stickytableheaders.js') }}"></script>
-<script src="{{ asset('assets/backend/vendor/core/core/base/libraries/jquery-waypoints/jquery.waypoints.min.js') }}"></script>
+<script
+    src="{{ asset('assets/backend/vendor/core/core/base/libraries/mcustom-scrollbar/jquery.mCustomScrollbar.js') }}">
+</script>
+<script
+    src="{{ asset('assets/backend/vendor/core/core/base/libraries/stickytableheaders/jquery.stickytableheaders.js') }}">
+</script>
+<script src="{{ asset('assets/backend/vendor/core/core/base/libraries/jquery-waypoints/jquery.waypoints.min.js') }}">
+</script>
 <script src="{{ asset('assets/backend/vendor/core/core/base/libraries/spectrum/spectrum.js') }}"></script>
 <script src="{{ asset('assets/backend/vendor/core/core/base/libraries/fancybox/jquery.fancybox.min.js') }}"></script>
 <script src="{{ asset('assets/backend/vendor/core/core/base/libraries/fslightbox.js') }}"></script>
@@ -22,9 +27,11 @@
 <script src="{{ asset('assets/backend/vendor/core/plugins/language/js/language-global.js') }}"></script>
 <script src="{{ asset('assets/backend/vendor/core/core/dashboard/js/dashboard.js') }}"></script>
 <script src="{{ asset('assets/backend/vendor/core/core/dashboard/js/check-for-updates.js') }}"></script>
-<script src="{{ asset('assets/backend/vendor/core/plugins/analytics/libraries/jvectormap/jquery-jvectormap-1.2.2.min.js') }}">
+<script
+    src="{{ asset('assets/backend/vendor/core/plugins/analytics/libraries/jvectormap/jquery-jvectormap-1.2.2.min.js') }}">
 </script>
-<script src="{{ asset('assets/backend/vendor/core/plugins/analytics/libraries/jvectormap/jquery-jvectormap-world-mill-en.js') }}">
+<script
+    src="{{ asset('assets/backend/vendor/core/plugins/analytics/libraries/jvectormap/jquery-jvectormap-world-mill-en.js') }}">
 </script>
 <script src="{{ asset('assets/backend/vendor/core/plugins/analytics/js/analytics.js') }}"></script>
 <script src="{{ asset('assets/backend/vendor/core/plugins/blog/js/blog.js') }}"></script>
@@ -35,7 +42,7 @@
 <!-- loader scripts js -->
 <script src="{{ asset('assets/backend/js/scripts.js') }}"></script>
 <!-- jquery-ui -->
-<script src="{{ asset('assets/backend/js/jquery-ui.js') }}"></script> 
+<script src="{{ asset('assets/backend/js/jquery-ui.js') }}"></script>
 
 <!-- jQuery + DataTables JS (before </body>) -->
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -59,7 +66,9 @@
     }
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+    integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     function displayValidationErrors(errors) {
@@ -97,6 +106,10 @@
         setTimeout(() => {
             window.location.href = redirectUrl;
         }, 2000);
+    });
+
+    window.addEventListener('open-xpressbees-modal', event => {
+        $('#xpressBess-launch-modal-btn').click();
     });
 
     function displayValidationErrors(errors) {
