@@ -101,6 +101,9 @@
                                             PAYMENT METHOD
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
+                                            Created At
+                                        </th>
+                                        <th title="Name" class="text-start column-key-2">
                                             STATUS
                                         </th>
                                         <th title="Name" class="text-start column-key-2">
@@ -153,6 +156,7 @@
                                                     <p class="text text-success mb-0">Online</p>
                                                 @endif
                                             </td>
+                                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
                                             <td>
                                                 @php
                                                     // Mapping array for clean and dynamic status output

@@ -174,34 +174,6 @@ function IthinkRemittanceSync($date)
     }
 }
 
-/**
- * XpressBees Login with resiliency
- */
-function xpressBeesLogin()
-{
-    try {
-        $response = Http::timeout(15)
-            ->withHeaders(['Content-Type' => 'application/json'])
-            ->post('https://shipment.xpressbees.com/api/users/login', [
-                'email' => config('app.xpressbees_email'),
-                'password' => config('app.xpressbees_password'),
-            ]);
-
-        if ($response->successful()) {
-            $data = $response->json();
-            if ($data['status'] ?? false) {
-                return $data['data'];
-            }
-        }
-    } catch (\Exception $e) {
-        Log::error('XpressBees Login Exception: ' . $e->getMessage());
-    }
-    return false;
-}
-
-/**
- * XpressBees Tracking with resiliency
- */
 function xpressBeesTracking($token, $awb_number)
 {
     $orderAwb = OrderAWB::with('getOrder')->where('awb_number', $awb_number)->first();

@@ -31,7 +31,7 @@ class SyncOrderStatusCommand extends Command
             ->pluck('id')
             ->toArray();
         $order_awbs = OrderAWB::whereIn('order_id', $orders)->get();
-        $token = xpressBeesLogin();
+        $token_data = xpressBeesLogin();
         foreach ($order_awbs as $order_awb) {
             if ($order_awb->getOrder->status == 4) {
                 continue;
@@ -42,7 +42,10 @@ class SyncOrderStatusCommand extends Command
                 synIthinkTracking($order_awb->awb_number, $order_awb->getOrder);
             } elseif ($order_awb->aggregator == 'XpressBees') {
                 if ($token != false) {
-                    xpressBeesTracking($token, $order_awb->awb_number);
+                    if ($token_data['status'] == true) {
+                        $token = $token_data['data'];
+                        xpressBeesTracking($token, $order_awb->awb_number);
+                    }
                 }
             }
         }
