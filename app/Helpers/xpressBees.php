@@ -65,7 +65,7 @@ function serviceabilityCheck($token, $order)
         } else {
             return [
                 'status' => false,
-                'message' => $result['message'],
+                'message' => $result['data'],
             ];
         }
     } else {
