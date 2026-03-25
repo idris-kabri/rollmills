@@ -54,6 +54,7 @@ class View extends Component
     // --- XpressBees Properties ---
     public $xpressbeesRates = [];
     public $xpressbeesError = null;
+    public $selectedRateIndex = null;
 
     protected $rules = [
         'logistics.*.aggregator' => 'nullable|string|max:255',
@@ -103,7 +104,37 @@ class View extends Component
         }
     }
 
-    // --- ADD ITEM TO ORDER LOGIC ---
+    public function createShipment()
+    {
+        $selected_courier = $this->xpressbeesRates[$this->selectedRateIndex];
+        if (!empty($selected_courier)) {
+            $token_data = xpressBeesLogin();
+            if ($token_data['status'] == true) {
+                $token = $token_data['data'];
+                $shipment_data = createShipment($token, $this->order, $selected_courier['id']);
+                if ($shipment_data['status'] == true) {
+                    $order = Order::where('id', $this->order->id)->first();
+                    $order->status = 2;
+                    $order->save();
+
+                    $order_awb = new OrderAWB();
+                    $order_awb->order_id = $this->order->id;
+                    $order_awb->aggregator = 'XpressBees';
+                    $order_awb->provider = $shipment_data['courier_name'];
+                    $order_awb->awb_number = $shipment_data['awb'];
+                    $order_awb->charges_taken = $selected_courier['total_charges'];
+                    $order_awb->remarks = 'Forward Shipping Charges';
+                    $order_awb->save();
+                    $this->toastSuccess($shipment_data['message']);
+                    $this->redirectWithDelay('/admin/orders/view/' . $this->order->id);
+                } else {
+                    $this->toastError($shipment_data['message']);
+                }
+            }
+        } else {
+            $this->toastError('Please select a courier');
+        }
+    }
 
     public function updatedSearchKeyword()
     {
