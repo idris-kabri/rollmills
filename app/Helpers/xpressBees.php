@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 function xpressBeesLogin()
 {
@@ -136,6 +137,8 @@ function createXpressBeesShipment($token, $order, $courier_id)
         $response = Http::withToken($token)->acceptJson()->post($url, $payload);
 
         $responseData = $response->json();
+
+        Log::error('XpressBees Shipment Response: ' . json_encode($responseData));
 
         if ($response->successful() && isset($responseData['status']) && $responseData['status'] === true) {
             $shipmentData = $responseData['data'];
