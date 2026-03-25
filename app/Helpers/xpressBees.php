@@ -147,7 +147,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
             $courier_name = $shipmentData['courier_name'];
 
             return [
-                'success' => true,
+                'status' => true,
                 'message' => 'Shipment created successfully!',
                 'awb' => $awbNumber,
                 'courier_name' => $courier_name,
@@ -156,14 +156,14 @@ function createXpressBeesShipment($token, $order, $courier_id)
             $errorMessage = $responseData['message'] ?? 'An unknown error occurred while booking the shipment.';
 
             return [
-                'success' => false,
+                'status' => false,
                 'message' => $errorMessage,
             ];
         }
     } catch (\Exception $e) {
         Log::error('XpressBees Shipment Error: ' . json_encode($e));
         return [
-            'success' => false,
+            'status' => false,
             'message' => 'Request failed: ' . $e->getMessage(),
         ];
     }
