@@ -85,7 +85,9 @@ function createXpressBeesShipment($token, $order, $courier_id)
     $product_array = [];
 
     foreach ($order->getOrderItems as $key => $value) {
-        $weight += $value->getProduct->weight * $value->quantity;
+        $itemWeight = $value->getProduct->weight > 0 ? $value->getProduct->weight : 500;
+        $weight += $itemWeight * $value->quantity;
+
         $product_array[] = [
             'name' => $value->getProduct->name,
             'qty' => "$value->quantity",
@@ -96,13 +98,15 @@ function createXpressBeesShipment($token, $order, $courier_id)
 
     $address = json_decode($order->ship_different_address_details, true);
 
+    $actual_shipping = $order->is_cod == 1 ? $order->shipping_charges - $order->cod_charges : $order->shipping_charges;
+
     $payload = [
         'order_number' => "$order->id",
         'unique_order_number' => 'yes',
-        'shipping_charges' => 0,
-        'discount' => $order->total_bonus + $order->special_discount + $order->coupon_discount,
+        'shipping_charges' => $actual_shipping > 0 ? $actual_shipping : 0,
+        'discount' => floor($order->total_bonus + $order->special_discount + $order->coupon_discount),
         'cod_charges' => $order->is_cod == 1 ? $order->cod_charges : 0,
-        'payment_type' => $order->is_cod == 1 ? 'cod' : 'prepaid', // cod, prepaid, or reverse
+        'payment_type' => $order->is_cod == 1 ? 'cod' : 'prepaid',
         'order_amount' => "$order->total",
         'package_weight' => $weight,
         'package_length' => 10,
@@ -135,25 +139,24 @@ function createXpressBeesShipment($token, $order, $courier_id)
 
     try {
         $response = Http::withToken($token)->acceptJson()->post($url, $payload);
-
         $responseData = $response->json();
 
-        Log::error('XpressBees Shipment Response: ' . json_encode($responseData));
+        Log::info('XpressBees Shipment Payload: ' . json_encode($payload));
+        Log::info('XpressBees Shipment Response: ' . json_encode($responseData));
 
         if ($response->successful() && isset($responseData['status']) && $responseData['status'] === true) {
-            $shipmentData = $responseData['data'];
-
-            $awbNumber = $shipmentData['awb_number'];
-            $courier_name = $shipmentData['courier_name'];
+            $shipmentData = $responseData['data'] ?? $responseData;
 
             return [
                 'status' => true,
                 'message' => 'Shipment created successfully!',
-                'awb' => $awbNumber,
-                'courier_name' => $courier_name,
+                'awb' => $shipmentData['awb_number'] ?? '',
+                'courier_name' => $shipmentData['courier_name'] ?? '',
             ];
         } else {
             $errorMessage = $responseData['message'] ?? 'An unknown error occurred while booking the shipment.';
+
+            Log::error('XpressBees Shipment Failed: ' . $errorMessage);
 
             return [
                 'status' => false,
@@ -161,7 +164,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
             ];
         }
     } catch (\Exception $e) {
-        Log::error('XpressBees Shipment Error: ' . json_encode($e));
+        Log::error('XpressBees Shipment Exception: ' . $e->getMessage());
         return [
             'status' => false,
             'message' => 'Request failed: ' . $e->getMessage(),
