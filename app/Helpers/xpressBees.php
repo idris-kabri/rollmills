@@ -107,7 +107,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
         'discount' => floor($order->total_bonus + $order->special_discount + $order->coupon_discount),
         'cod_charges' => $order->is_cod == 1 ? $order->cod_charges : 0,
         'payment_type' => $order->is_cod == 1 ? 'cod' : 'prepaid',
-        'order_amount' => $order->total,
+        'order_amount' => (int) $order->total,
         'package_weight' => $weight,
         'package_length' => 10,
         'package_breadth' => 10,
@@ -134,7 +134,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
         ],
         'order_items' => $product_array,
         'courier_id' => "$courier_id",
-        'collectable_amount' => $order->is_cod == 1 ? $order->total : 0,
+        'collectable_amount' => $order->is_cod == 1 ? (int) $order->total : 0,
     ];
 
     try {
