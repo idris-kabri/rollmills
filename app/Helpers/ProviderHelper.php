@@ -257,7 +257,7 @@ function markOrderAsDelivered($order)
     $billing_address = json_decode($order->billing_address_details, true);
     $customerName = $billing_address['name'] ?? $order->getBillAddress->name;
 
-    sendParameterTemplateWawi('order_delivered_2', 'en_US', $order->getBillAddress->mobile, [$customerName, (string) $order->id, "$coupon_code"]);
+    sendParameterTemplateWawi('order_delivered_2', 'en_us', $order->getBillAddress->mobile, [$customerName, (string) $order->id, "$coupon_code"]);
 }
 
 function saveCommandLog($orderId, $commandName, $request, $response, $status)
