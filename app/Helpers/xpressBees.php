@@ -98,7 +98,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
 
     $address = json_decode($order->ship_different_address_details, true);
 
-    $actual_shipping = $order->is_cod == 1 ? $order->shipping_charges - $order->cod_charges : $order->shipping_charges;
+    $actual_shipping = $order->is_cod == 1 ? $order->shipping_charges : 0;
 
     $payload = [
         'order_number' => "$order->id",
