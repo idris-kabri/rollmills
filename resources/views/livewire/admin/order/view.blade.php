@@ -1006,6 +1006,7 @@
                             <table class="table table-vcenter table-striped table-hover mb-0">
                                 <thead class="table-light">
                                     <tr>
+                                        <th class="w-1"></th>
                                         <th>Courier Name</th>
                                         <th>Freight Charges</th>
                                         <th>COD Charges</th>
@@ -1013,8 +1014,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($xpressbeesRates as $rate)
+                                    @forelse($xpressbeesRates as $index => $rate)
                                         <tr>
+                                            <td>
+                                                <input type="radio" class="form-check-input m-0 align-middle"
+                                                    name="selected_xpressbees_rate" wire:model="selectedRateIndex"
+                                                    value="{{ $index }}"
+                                                    aria-label="Select {{ $rate['name'] ?? 'Courier' }}">
+                                            </td>
                                             <td class="fw-bold">{{ $rate['name'] ?? 'N/A' }}</td>
                                             <td>₹{{ number_format($rate['freight_charges'] ?? 0, 2) }}</td>
                                             <td>₹{{ number_format($rate['cod_charges'] ?? 0, 2) }}</td>
@@ -1023,7 +1030,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center text-muted py-4">No shipping rates
+                                            <td colspan="5" class="text-center text-muted py-4">No shipping rates
                                                 found for this configuration.</td>
                                         </tr>
                                     @endforelse
@@ -1033,7 +1040,20 @@
                     @endif
                 </div>
                 <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-link link-secondary"
+                        data-bs-dismiss="modal">Cancel</button>
+
+                    <button type="button" class="btn btn-primary" wire:click="createShipment"
+                        wire:loading.attr="disabled" wire:target="createShipment">
+                        <span wire:loading.remove wire:target="createShipment">
+                            Create Shipment
+                        </span>
+                        <span wire:loading wire:target="createShipment">
+                            <span class="spinner-border spinner-border-sm me-1" role="status"
+                                aria-hidden="true"></span>
+                            Creating...
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1394,8 +1414,9 @@
                                 <span class="input-group-text bg-white">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="icon icon-tabler icon-tabler-box-multiple" width="20"
-                                        height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        height="20" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path
                                             d="M7 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z">
