@@ -111,7 +111,7 @@ class View extends Component
             $token_data = xpressBeesLogin();
             if ($token_data['status'] == true) {
                 $token = $token_data['data'];
-                $shipment_data = createShipment($token, $this->order, $selected_courier['id']);
+                $shipment_data = createXpressBeesShipment($token, $this->order, $selected_courier['id']);
                 if ($shipment_data['status'] == true) {
                     $order = Order::where('id', $this->order->id)->first();
                     $order->status = 2;
