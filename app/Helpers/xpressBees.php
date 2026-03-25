@@ -161,6 +161,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
             ];
         }
     } catch (\Exception $e) {
+        Log::error('XpressBees Shipment Error: ' . json_encode($e));
         return [
             'success' => false,
             'message' => 'Request failed: ' . $e->getMessage(),
