@@ -83,31 +83,50 @@ function createXpressBeesShipment($token, $order, $courier_id)
 
     $weight = 0;
     $product_array = [];
+    $total_item_price = 0; // Track the sum of the item prices
 
     foreach ($order->getOrderItems as $key => $value) {
         $itemWeight = $value->getProduct->weight > 0 ? $value->getProduct->weight : 500;
         $weight += $itemWeight * $value->quantity;
 
+        // Safely get the price
+        $item_price = $value->sale_default_price > 0 ? $value->sale_default_price : $value->regular_price;
+        $total_item_price += $item_price * $value->quantity;
+
         $product_array[] = [
             'name' => $value->getProduct->name,
             'qty' => "$value->quantity",
             'sku' => "sku$value->id",
-            'price' => "$value->sale_default_price",
+            'price' => "$item_price",
         ];
+    }
+
+    // THE BULLETPROOF MATH FIX:
+    // Reverse-engineer the discount so XpressBees' calculation matches your $order->total exactly.
+    $xpressbees_discount = $total_item_price - $order->total;
+
+    // Failsafe: If shipping makes the total greater than the items, we can't send a negative discount.
+    // We cap discount at 0 and add the difference to the first item's price so XpressBees doesn't reject it.
+    if ($xpressbees_discount < 0) {
+        $difference = abs($xpressbees_discount);
+        if (count($product_array) > 0) {
+            $product_array[0]['price'] = (string) ($product_array[0]['price'] + $difference);
+        }
+        $xpressbees_discount = 0;
     }
 
     $address = json_decode($order->ship_different_address_details, true);
 
-    $actual_shipping = $order->is_cod == 1 ? $order->shipping_charges : 0;
+    $actual_shipping = $order->is_cod == 1 ? $order->shipping_charges - $order->cod_charges : $order->shipping_charges;
 
     $payload = [
         'order_number' => "$order->id",
         'unique_order_number' => 'yes',
         'shipping_charges' => $actual_shipping > 0 ? $actual_shipping : 0,
-        'discount' => floor($order->total_bonus + $order->special_discount + $order->coupon_discount),
+        'discount' => floor($xpressbees_discount),
         'cod_charges' => $order->is_cod == 1 ? $order->cod_charges : 0,
         'payment_type' => $order->is_cod == 1 ? 'cod' : 'prepaid',
-        'order_amount' => (int) $order->total,
+        'order_amount' => "$order->total",
         'package_weight' => $weight,
         'package_length' => 10,
         'package_breadth' => 10,
@@ -134,15 +153,15 @@ function createXpressBeesShipment($token, $order, $courier_id)
         ],
         'order_items' => $product_array,
         'courier_id' => "$courier_id",
-        'collectable_amount' => $order->is_cod == 1 ? (int) $order->total : 0,
+        'collectable_amount' => $order->is_cod == 1 ? "$order->total" : '0',
     ];
 
     try {
         $response = Http::withToken($token)->acceptJson()->post($url, $payload);
         $responseData = $response->json();
 
-        Log::info('XpressBees Shipment Payload: ' . json_encode($payload));
-        Log::info('XpressBees Shipment Response: ' . json_encode($responseData));
+        Log::info('XpressBees Payload: ' . json_encode($payload));
+        Log::info('XpressBees Response: ' . json_encode($responseData));
 
         if ($response->successful() && isset($responseData['status']) && $responseData['status'] === true) {
             $shipmentData = $responseData['data'] ?? $responseData;
@@ -154,9 +173,8 @@ function createXpressBeesShipment($token, $order, $courier_id)
                 'courier_name' => $shipmentData['courier_name'] ?? '',
             ];
         } else {
-            $errorMessage = $responseData['message'] ?? 'An unknown error occurred while booking the shipment.';
-
-            Log::error('XpressBees Shipment Failed: ' . $errorMessage);
+            $errorMessage = $responseData['message'] ?? 'An unknown error occurred.';
+            Log::error('XpressBees Failed: ' . $errorMessage);
 
             return [
                 'status' => false,
@@ -164,7 +182,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
             ];
         }
     } catch (\Exception $e) {
-        Log::error('XpressBees Shipment Exception: ' . $e->getMessage());
+        Log::error('XpressBees Exception: ' . $e->getMessage());
         return [
             'status' => false,
             'message' => 'Request failed: ' . $e->getMessage(),
