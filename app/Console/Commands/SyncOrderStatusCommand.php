@@ -41,11 +41,9 @@ class SyncOrderStatusCommand extends Command
                 synIthinkOrderDetail($order_awb->awb_number, $order_awb->getOrder);
                 synIthinkTracking($order_awb->awb_number, $order_awb->getOrder);
             } elseif ($order_awb->aggregator == 'XpressBees') {
-                if ($token != false) {
-                    if ($token_data['status'] == true) {
-                        $token = $token_data['data'];
-                        xpressBeesTracking($token, $order_awb->awb_number);
-                    }
+                if ($token_data['status'] == true) {
+                    $token = $token_data['data'];
+                    xpressBeesTracking($token, $order_awb->awb_number);
                 }
             }
         }
