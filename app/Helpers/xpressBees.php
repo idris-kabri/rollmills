@@ -126,7 +126,7 @@ function createXpressBeesShipment($token, $order, $courier_id)
         'discount' => floor($xpressbees_discount),
         'cod_charges' => $order->is_cod == 1 ? $order->cod_charges : 0,
         'payment_type' => $order->is_cod == 1 ? 'cod' : 'prepaid',
-        'order_amount' => "$total_item_price",
+        'order_amount' => $total_item_price,
         'package_weight' => $weight,
         'package_length' => 10,
         'package_breadth' => 10,
