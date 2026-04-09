@@ -67,7 +67,6 @@ Route::get('/meesho-deduction-import', [ImportController::class, 'meeshoDeductio
 Route::get('/meesho-payment-import', [ImportController::class, 'meeshoPaymentImport']);
 Route::get('/xpress-bees-rto-import', [ImportController::class, 'xpressBeesRTOImport']);
 Route::get('/xpress-bees-remittance-import', [ImportController::class, 'xpressBeesRemittanceImport']);
-
-Route::get('/claim-coupon-order/{id}', [ImportController::class, 'test']);
+Route::redirect('/checkout', '/cart');
 
 @include 'admin.php';

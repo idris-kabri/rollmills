@@ -44,6 +44,10 @@
 
                                 <div class="d-flex align-items-center gap-2">
 
+                                    <a href="{{ route('tracking-info', $order->id) }}" target="_blank"
+                                        class="btn btn-sm btn-info">Track
+                                        Order</a>
+
                                     {{-- Check ExpressBees Button (Only if status is Processed) --}}
                                     @if ($order->status == 1)
                                         <button type="button" class="btn btn-sm btn-info" wire:click="checkExpressBees"
@@ -300,7 +304,7 @@
                                                 @if ($item->is_gift_item == 1)
                                                     ₹0
                                                 @else
-                                                    ₹{{ number_format($item->total + $item->bonus, 2) }}
+                                                    ₹{{ number_format($item->sale_default_price, 2) }}
                                                 @endif
                                             </td>
 
@@ -727,6 +731,7 @@
                                                         <option value="" disabled>Select Aggregator</option>
                                                         <option value="Ithink">Ithink</option>
                                                         <option value="XpressBees">XpressBees</option>
+                                                        <option value="ShadowFax">ShadowFax</option>
                                                         <option value="Custom">Custom</option>
                                                     </select>
                                                     @error('logistics.{{ $index }}.aggregator')

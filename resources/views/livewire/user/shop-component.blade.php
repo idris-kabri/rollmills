@@ -250,7 +250,7 @@
                     <i class="fi-rs-badge"></i>
                 </div>
                 <div class="premium-offer-text">
-                    <h4>Get 20% OFF Instantly!</h4>
+                    <h4>Get {{ fetchDiscountPercentage() }}% OFF Instantly!</h4>
                     <p>Pay online via UPI or Card to unlock this exclusive offer.</p>
                 </div>
             </div>
@@ -782,7 +782,7 @@
 
                 <div class="cod-modal-header">
                     <div class="cod-discount-badge">
-                        20% OFF
+                        {{ fetchDiscountPercentage() }}% OFF
                     </div>
                     <img src="https://cdn-icons-png.flaticon.com/512/726/726182.png" alt="Gift"
                         class="gift-icon-bounce">
@@ -807,7 +807,8 @@
                     </div>
 
                     <ul class="cod-benefits">
-                        <li><i class="fi-rs-check-circle"></i> Instant 20% discount applied</li>
+                        <li><i class="fi-rs-check-circle"></i> Instant {{ fetchDiscountPercentage() }}% discount
+                            applied</li>
                         <li><i class="fi-rs-check-circle"></i> Faster, priority dispatch</li>
                         <li><i class="fi-rs-check-circle"></i> Secure payments via Razorpay/Stripe</li>
                     </ul>
@@ -815,7 +816,7 @@
                     <div class="text-center mt-4">
                         <button type="button" class="btn-pay-prepaid" wire:click="switchToPrepaid"
                             data-bs-dismiss="modal">
-                            💳 Pay Now & Save 20%
+                            💳 Pay Now & Save {{ fetchDiscountPercentage() }}%
                         </button>
                         <button type="button" class="btn-continue-cod" data-bs-dismiss="modal"
                             wire:click="continueWithCOD">

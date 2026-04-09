@@ -138,7 +138,7 @@
                                         {{-- ADDED TOOLTIP ATTRIBUTES HERE --}}
                                         <tr data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
                                             title="{{ $tooltipContent }}" style="cursor: pointer;">
-                                            <td>{{ $i++ }}</td>
+                                            <td>{{ $order->id }}</td>
                                             @if ($order->getUser)
                                                 <td>
                                                     {{ $order->getUser->name }}<br>

@@ -1,370 +1,4 @@
 <main class="main">
-
-    <style>
-        /* --- GENERAL HELPER STYLES --- */
-        .text-free-green {
-            color: #25b579 !important;
-            font-weight: bold;
-        }
-
-        /* --- GIFT ROW STYLES (ORDER SUMMARY) --- */
-        .gift-row-summary {
-            background-color: #fffbf0;
-            border-left: 3px solid #ffbc0d;
-        }
-
-        .gift-badge-small {
-            background-color: #ffbc0d;
-            color: #fff;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-
-        /* --- UNIFIED ADDRESS CARD STYLES (Used for Billing & Shipping) --- */
-        .coupon-card-cart {
-            display: block;
-            border: 1px solid #ececec;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            position: relative;
-            transition: all 0.3s;
-            background: #fff;
-            cursor: pointer;
-        }
-
-        .coupon-card-cart:hover {
-            border-color: #ffbc0d;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .coupon-card-cart.selected {
-            border-color: #ffbc0d;
-            background-color: #fffbf0;
-        }
-
-        .coupon-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .coupon-code-section {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Avatar Circle */
-        .coupon-code-section span {
-            width: 35px;
-            height: 35px;
-            background-color: #ffbc0d;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
-
-        .coupon-code-cart {
-            font-weight: 700;
-            color: #253D4E;
-            font-size: 16px;
-        }
-
-        /* Checkmark Icon */
-        .check-circle {
-            display: none;
-            width: 24px;
-            height: 24px;
-            background: #ffbc0d;
-            border-radius: 50%;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .coupon-card-cart.selected .check-circle {
-            display: flex;
-        }
-
-        input[type="text"] {
-            height: 50px !important;
-        }
-
-        .checkout-radio.form-check-input:checked[type=radio] {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23dca915'/%3e%3c/svg%3e");
-        }
-
-        .checkout-radio.form-check-input:checked {
-            background-color: #fff;
-            border-color: #dca915;
-        }
-
-        .checkout-radio.form-check-input:focus {
-            border-color: #dca915;
-            outline: 0;
-            box-shadow: 0 0 0 .25rem #dcaa1540;
-            background-position: center;
-        }
-
-        .checkout-radio.form-check-input {
-            width: 18px;
-            height: 18px;
-            margin-top: .25em;
-            background-size: 22px;
-        }
-
-        .form-check.form-radio-checkout {
-            display: flex;
-        }
-
-        /* --- FREE SHIPPING WIDGET STYLES (Checkout Version) --- */
-        .shipping-widget-checkout {
-            background: #f4f6fa;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px dashed #c4cdd5;
-        }
-
-        .shipping-progress-bg {
-            background-color: #e9ecef;
-            border-radius: 10px;
-            height: 8px;
-            width: 100%;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .shipping-progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.6s ease;
-            position: relative;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-            background-size: 1rem 1rem;
-            animation: progress-bar-stripes 1s linear infinite;
-        }
-
-        .shipping-text {
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .shipping-highlight {
-            color: #00b59c;
-            font-weight: 700;
-        }
-
-        /* --- EXPRESS DELIVERY TAG STYLES --- */
-        .express-delivery-tag {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-flex;
-            align-items: center;
-            box-shadow: 0 2px 6px rgba(255, 65, 108, 0.4);
-            animation: pulse-express 2s infinite;
-            white-space: nowrap;
-        }
-
-        @keyframes pulse-express {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 65, 108, 0.5);
-            }
-
-            70% {
-                box-shadow: 0 0 0 6px rgba(255, 65, 108, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 65, 108, 0);
-            }
-        }
-
-        @media (max-width: 576px) {
-            .express-delivery-tag {
-                font-size: 10px;
-                padding: 2px 8px;
-            }
-        }
-
-        /* --- NEW REDESIGNED COD MODAL STYLES --- */
-        .cod-modal-redesign .modal-content {
-            border-radius: 16px;
-            border: none;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .cod-modal-redesign .modal-header-custom {
-            background: #ffffff;
-            padding: 40px 20px 15px;
-            text-align: center;
-            border-bottom: none;
-        }
-
-        /* Danger Warning Icon Styles */
-        .cod-modal-redesign .icon-warning-pulse {
-            width: 75px;
-            height: 75px;
-            background: #ffe5e8;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            color: #dc3545;
-            animation: pulse-danger 2s infinite;
-        }
-
-        @keyframes pulse-danger {
-            0% {
-                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
-            }
-
-            70% {
-                box-shadow: 0 0 0 15px rgba(220, 53, 69, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-            }
-        }
-
-        /* Highlight text for losing discount */
-        .cod-modal-redesign .loss-highlight-badge {
-            display: inline-block;
-            background: #dc3545;
-            color: #ffffff;
-            font-weight: 800;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            margin-top: 8px;
-            text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
-            transform: scale(1.05);
-        }
-
-        .cod-modal-redesign .price-comparison {
-            background: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            margin: 20px 0;
-            display: flex;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-        }
-
-        .cod-modal-redesign .price-col {
-            flex: 1;
-            padding: 15px 10px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .cod-modal-redesign .price-col:first-child {
-            border-right: 1px solid #e9ecef;
-            background: #fafafa;
-        }
-
-        .cod-modal-redesign .price-col-success {
-            background: #f0fdf4;
-            border: 2px solid #28a745;
-            border-radius: 12px;
-            position: relative;
-            transform: scale(1.02);
-            z-index: 2;
-        }
-
-        .cod-modal-redesign .badge-save {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #28a745;
-            color: white;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 20px;
-            white-space: nowrap;
-        }
-
-        .cod-modal-redesign .btn-switch-online {
-            background: #28a745;
-            color: #fff;
-            border-radius: 10px;
-            padding: 14px 20px;
-            font-size: 16px;
-            font-weight: 700;
-            width: 100%;
-            transition: all 0.3s;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .cod-modal-redesign .btn-switch-online:hover {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.25);
-            color: #fff;
-        }
-
-        /* REPLACED: Converted the COD text link into a secondary outlined button */
-        .cod-modal-redesign .btn-proceed-cod {
-            background: #ffffff;
-            color: #6c757d;
-            border: 2px solid #606060;
-            border-radius: 10px;
-            padding: 12px 20px;
-            font-size: 15px;
-            font-weight: 700;
-            width: 100%;
-            margin-top: 10px;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .cod-modal-redesign .btn-proceed-cod:hover {
-            background: #f8f9fa;
-            color: #dc3545;
-            border-color: #dc3545;
-            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.1);
-        }
-    </style>
-
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
@@ -645,64 +279,9 @@
                 </div>
             </div>
 
-            {{-- 5. ORDER SUMMARY SECTION --}}
+            {{-- 5. ORDER SUMMARY SECTION (REDESIGNED) --}}
             <div class="col-lg-5">
-                <style>
-                    /* Mobile Card Styling */
-                    .checkout-product-mobile {
-                        display: flex;
-                        align-items: center;
-                        padding-bottom: 15px;
-                        margin-bottom: 15px;
-                        border-bottom: 1px solid #ececec;
-                    }
-
-                    .checkout-product-mobile:last-child {
-                        border-bottom: none;
-                    }
-
-                    .checkout-product-mobile .img-wrap {
-                        width: 80px;
-                        height: 80px;
-                        flex-shrink: 0;
-                        border-radius: 10px;
-                        overflow: hidden;
-                        border: 1px solid #f0f0f0;
-                        margin-right: 15px;
-                        position: relative;
-                    }
-
-                    .checkout-product-mobile .img-wrap img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-
-                    .checkout-product-mobile .content-wrap {
-                        flex-grow: 1;
-                    }
-
-                    .gift-row-mobile {
-                        background: #fffbf0;
-                        border: 1px solid #f7e3a6;
-                        border-radius: 8px;
-                        padding: 10px;
-                    }
-
-                    .gift-badge-mobile {
-                        background-color: #ffbc0d;
-                        color: #fff;
-                        padding: 2px 8px;
-                        border-radius: 4px;
-                        font-size: 10px;
-                        font-weight: 700;
-                        text-transform: uppercase;
-                        margin-bottom: 4px;
-                        display: inline-block;
-                    }
-                </style>
-
-                {{-- START: Dynamic Discount Offer Progress Widget (Sidebar) --}}
+                {{-- Dynamic Discount Offer Progress Widget (Sidebar) --}}
                 @php
                     $cartSubtotalNumeric = 0;
                     foreach (Cart::instance('cart')->content() as $item) {
@@ -746,460 +325,228 @@
                         </div>
                     @endif
                 </div>
-                {{-- END: Dynamic Discount Offer Progress Widget --}}
 
-                <div class="border p-20 cart-totals mb-3">
-                    <div class="d-flex align-items-end justify-content-between mb-30">
-                        <h4 class="underline">Your Order</h4>
-                        <h6 class="text-muted">Subtotal</h6>
-                    </div>
+                {{-- REPLACED CHECKOUT BLOCK --}}
+                <div class="co-wrap">
+                    {{-- Products List --}}
+                    @php
+                        $total_original_price = 0;
+                    @endphp
+                    @foreach (Cart::instance('cart')->content() as $item)
+                        @php
+                            $isGift = $item->options['is_gift_product'] ?? false;
+                            $shop_detail_url = $item->model->slug
+                                ? route('shop-detail', [
+                                    'slug' => $item->model->slug,
+                                    'id' => $item->model->id,
+                                ])
+                                : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
+                            $total_original_price += $item->model->price * $item->qty;
+                        @endphp
 
-                    {{-- Desktop View (Table) --}}
-                    <div class="table-responsive order_table checkout d-none d-md-block">
-                        <table class="table no-border">
-                            @php
-                                $total_original_price = 0;
-                            @endphp
-                            <tbody>
-                                @foreach (Cart::instance('cart')->content() as $item)
-                                    @php
-                                        $isGift = $item->options['is_gift_product'] ?? false;
-                                        $shop_detail_url = $item->model->slug
-                                            ? route('shop-detail', [
-                                                'slug' => $item->model->slug,
-                                                'id' => $item->model->id,
-                                            ])
-                                            : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
-                                        $total_original_price += $item->model->price * $item->qty;
-                                    @endphp
-
-                                    <tr class="{{ $isGift ? 'gift-row-summary' : '' }}">
-                                        <td class="image product-thumbnail">
-                                            <img src="{{ asset('storage/' . $item->model->featured_image) }}"
-                                                alt="#">
-                                        </td>
-                                        <td>
-                                            <h6 class="w-160 mb-5">
-                                                @if ($isGift)
-                                                    <span class="gift-badge-small">Gift</span>
-                                                @endif
-                                                @if (!$isGift)
-                                                    <a href="{{ $shop_detail_url }}"
-                                                        class="text-heading two-liner-text">{{ $item->model->name }}</a>
-                                                @else
-                                                    <a href="javascript:void(0);"
-                                                        class="text-heading two-liner-text">{{ $item->model->name }}</a>
-                                                @endif
-                                            </h6>
-                                            @if (!$isGift)
-                                                @php
-                                                    $reviews = \App\Models\ProductReview::where('status', 1)
-                                                        ->where('product_id', $item->model->id)
-                                                        ->get();
-                                                    $reviews_avg =
-                                                        $reviews->count() > 0 ? round($reviews->avg('ratings'), 1) : 0;
-                                                    $reviews_percentage = ($reviews_avg / 5) * 100;
-                                                @endphp
-                                                <div class="product-rate-cover">
-                                                    <div class="product-rate d-inline-block">
-                                                        <div class="product-rating"
-                                                            style="width: {{ $reviews_percentage }}%"></div>
-                                                    </div>
-                                                    <span
-                                                        class="font-small ml-5 text-muted">({{ $reviews_avg }})</span>
-                                                </div>
-                                            @else
-                                                <span class="font-xs text-muted">Surprise Offer Applied</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <h6 class="text-muted pl-20 pr-20">x {{ $item->qty }}</h6>
-                                        </td>
-                                        <td>
-                                            @if ($isGift)
-                                                <h4 class="text-free-green">FREE</h4>
-                                                <span class="font-xs text-muted"
-                                                    style="text-decoration: line-through;">₹{{ number_format($item->model->price) }}</span>
-                                            @else
-                                                <h4 class="text-brand">₹{{ number_format($item->price * $item->qty) }}
-                                                </h4>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {{-- Mobile View (Cards) --}}
-                    <div class="d-block d-md-none">
-                        @foreach (Cart::instance('cart')->content() as $item)
-                            @php
-                                $isGift = $item->options['is_gift_product'] ?? false;
-                                $shop_detail_url = $item->model->slug
-                                    ? route('shop-detail', ['slug' => $item->model->slug, 'id' => $item->model->id])
-                                    : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
-                            @endphp
-
-                            <div class="checkout-product-mobile {{ $isGift ? 'gift-row-mobile' : '' }}">
-                                <div class="img-wrap">
-                                    <img src="{{ asset('storage/' . $item->model->featured_image) }}"
-                                        alt="{{ $item->model->name }}">
+                        <div class="co-order-row {{ $isGift ? 'gift-row-summary' : '' }}">
+                            <div class="co-thumb">
+                                <img src="{{ asset('storage/' . $item->model->featured_image) }}"
+                                    alt="{{ $item->model->name }}">
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <div class="co-prod-name">
+                                    @if ($isGift)
+                                        <span class="co-badge-inline"
+                                            style="background:#ffbc0d;margin-left:0;margin-right:5px;">Gift</span>
+                                    @endif
+                                    <a href="{{ !$isGift ? $shop_detail_url : 'javascript:void(0)' }}"
+                                        style="color: inherit;">{{ $item->model->name }}</a>
                                 </div>
-                                <div class="content-wrap">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            @if ($isGift)
-                                                <span class="gift-badge-mobile">Surprise Gift</span>
-                                            @endif
-                                            <h6 class="mb-1" style="line-height: 1.2;">
-                                                <a href="{{ $shop_detail_url }}"
-                                                    class="text-heading two-liner-text">{{ $item->model->name }}</a>
-                                            </h6>
-                                        </div>
+                                <div class="co-prod-sub">Qty: {{ $item->qty }}</div>
+                            </div>
+                            <div class="co-prod-price">
+                                @if ($isGift)
+                                    <span style="color:#25b579;">FREE</span>
+                                @else
+                                    ₹{{ number_format($item->price * $item->qty) }}
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+
+                    {{-- Details / Totals section --}}
+                    <div class="co-details">
+                        <div class="co-details-title">Details</div>
+                        <div class="co-row muted"><span>Cart Total
+                                (MRP)</span><span>₹{{ number_format($total_original_price, 2) }}</span></div>
+
+                        @php
+                            $cartSubtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+                            $customer_save_amount = $total_original_price - $cartSubtotal;
+                        @endphp
+                        <div class="co-row green"><span>You Save</span><span>-
+                                ₹{{ number_format($customer_save_amount, 2) }}</span></div>
+
+                        <div class="co-row muted">
+                            <span>Subtotal</span><span>₹{{ Cart::instance('cart')->subtotal() }}</span></div>
+
+                        {{-- Extra Discount --}}
+                        @if ($extra_discount > 0)
+                            <div class="co-row green">
+                                <span>Special Discount ({{ $discount_percentage }}% OFF)</span>
+                                <span>- ₹{{ number_format($extra_discount, 2) }}</span>
+                            </div>
+                        @endif
+
+                        {{-- Coupon Discount --}}
+                        @php
+                            $discount = $mainDiscountAmount;
+                            $couponCode = session()->get('coupon_code');
+                        @endphp
+                        @if ($discount != 0)
+                            <div class="co-row green">
+                                <span>Coupon Applied @if ($couponCode)
+                                        ({{ strtoupper($couponCode) }})
+                                    @endif
+                                </span>
+                                <span>- ₹{{ number_format($discount, 2) }}</span>
+                            </div>
+                        @endif
+
+                        {{-- Prepaid Discount --}}
+                        @if ($is_first_order && $payment_method == 'online')
+                            <div class="co-row green" id="prepaid-disc-row">
+                                <span>Prepaid Discount<span class="co-badge-inline">AUTO</span></span>
+                                <span>- ₹{{ number_format($onlineDiscountAmount, 2) }}</span>
+                            </div>
+                        @endif
+
+                        {{-- COD Fee --}}
+                        @if ($payment_method == 'cod')
+                            <div class="co-row red" id="cod-fee-row">
+                                <span>COD charges<span class="co-badge-inline warn">COD</span></span>
+                                <span>+
+                                    ₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount), 2) }}</span>
+                            </div>
+                        @endif
+
+                        {{-- Shipping Charges --}}
+                        <div class="co-row muted">
+                            <span>Shipping Charges</span>
+                            @if (session('flat_rate_charge') != null)
+                                <span>₹{{ number_format(session('flat_rate_charge'), 2) }}</span>
+                            @elseif (floatval($online_payment_amount) == 0)
+                                <span style="color:#1a8a3c;font-weight:700;">Free Shipping</span>
+                            @else
+                                <span>₹{{ number_format(ceil($online_payment_amount), 2) }}</span>
+                            @endif
+                        </div>
+
+                        {{-- Total --}}
+                        <div class="co-row total">
+                            <span>Your Total</span>
+                            <span>
+                                @if ($payment_method == 'online')
+                                    ₹{{ number_format(ceil($finalTotal + $online_payment_amount), 2) }}
+                                @else
+                                    ₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}
+                                @endif
+                            </span>
+                        </div>
+
+                        @if ($is_first_order && $payment_method == 'online')
+                            <div class="co-saved-msg">🎉 You have saved 20% on every product!!</div>
+                        @endif
+                    </div>
+
+                    {{-- Compare Box Calculation --}}
+                    @php
+                        $cartTotalRaw = (float) str_replace(',', '', Cart::instance('cart')->total());
+                        $potentialOnlineTotal =
+                            $cartTotalRaw -
+                            $offerDiscount -
+                            $couponDiscount -
+                            round($cartTotalRaw * 0.2, 2) -
+                            $extra_discount +
+                            $online_payment_amount;
+                        $potentialCodTotal =
+                            $cartTotalRaw -
+                            $offerDiscount -
+                            $couponDiscount -
+                            $extra_discount +
+                            $cash_on_delivery_amount;
+                        $savings = $potentialCodTotal - $potentialOnlineTotal;
+                    @endphp
+                    @if ($is_first_order && $potentialOnlineTotal > 0)
+                        <div class="co-compare-box mt-3">
+                            <div class="co-compare-row">
+                                <div class="co-compare-col prepaid-col">
+                                    <div class="co-compare-label">✅ Pay Online</div>
+                                    <div class="co-compare-price green">
+                                        ₹{{ number_format(ceil($potentialOnlineTotal)) }}</div>
+                                    <div class="co-compare-note">After 20% off · Free delivery</div>
+                                </div>
+                                <div class="co-compare-col cod-col">
+                                    <div class="co-compare-label">🚚 Cash on Delivery</div>
+                                    <div class="co-compare-price red">₹{{ number_format(ceil($potentialCodTotal)) }}
                                     </div>
-
-                                    <div class="d-flex justify-content-between align-items-end mt-2">
-                                        <div class="text-muted font-sm">
-                                            Qty: <strong class="text-brand">{{ $item->qty }}</strong>
-                                        </div>
-                                        <div class="text-end">
-                                            @if ($isGift)
-                                                <h5 class="text-success mb-0">FREE</h5>
-                                                <small class="text-muted"
-                                                    style="text-decoration: line-through; font-size: 11px;">₹{{ number_format($item->model->price) }}</small>
-                                            @else
-                                                <h5 class="text-brand mb-0">
-                                                    ₹{{ number_format($item->price * $item->qty) }}</h5>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    <div class="co-compare-note">No discount · +₹15 COD fee</div>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="border p-20 cart-totals ml-0 ml-sm-30">
-                    <h4 class="mb-30 pb-2 underline">Details</h4>
-                    <div class="table-responsive">
-                        <table class="table no-border">
-                            <tbody>
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Cart Total</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h4 class="text-end fs-16">
-                                            ₹{{ number_format($total_original_price, 2) }}</h4>
-                                    </td>
-                                </tr>
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">You Save</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        @php
-                                            $cartSubtotal = (float) str_replace(
-                                                ',',
-                                                '',
-                                                Cart::instance('cart')->subtotal(),
-                                            );
-                                            $customer_save_amount = $total_original_price - $cartSubtotal;
-                                        @endphp
-                                        <h4 class="text-end fs-16 text-success">
-                                            - ₹{{ number_format($customer_save_amount, 2) }}</h4>
-                                    </td>
-                                </tr>
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Subtotal</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">
-                                            ₹{{ Cart::instance('cart')->subtotal() }}</h4>
-                                    </td>
-                                </tr>
-
-                                {{-- NEW EXTRA DISCOUNT ROW --}}
-                                @if ($extra_discount > 0)
-                                    <tr class="d-flex justify-content-between border-0 align-items-center">
-                                        <td class="cart_total_label text-start">
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge bg-success me-2">Special Discount</span>
-                                                <h6 class="text-success m-0">({{ $discount_percentage }}% OFF)</h6>
-                                            </div>
-                                        </td>
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-end fs-16 text-success fw-bold">
-                                                - ₹{{ number_format($extra_discount, 2) }}
-                                            </h5>
-                                        </td>
-                                    </tr>
-                                @endif
-
-                                @php
-                                    $discount = $mainDiscountAmount;
-                                    $couponCode = session()->get('coupon_code');
-                                @endphp
-                                @if ($discount != 0)
-                                    <tr class="d-flex justify-content-between border-0 align-items-center">
-                                        <td class="cart_total_label text-start">
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge bg-success me-2">Coupon Applied</span>
-                                                <h6 class="text-success m-0">
-                                                    @if ($couponCode)
-                                                        ({{ strtoupper($couponCode) }})
-                                                    @endif
-                                                </h6>
-                                            </div>
-                                        </td>
-
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-end fs-16 text-success fw-bold">
-                                                - ₹{{ number_format($discount, 2) }}
-                                            </h5>
-                                        </td>
-                                    </tr>
-                                @endif
-
-                                {{-- ROW FOR ONLINE 10% DISCOUNT --}}
-                                @if ($is_first_order && $payment_method == 'online')
-                                    <tr class="d-flex justify-content-between border-0 align-items-center">
-                                        <td class="cart_total_label text-start">
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge bg-info me-2">Prepaid Discount</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-end fs-16 text-success fw-bold">
-                                                - ₹{{ number_format($onlineDiscountAmount, 2) }}
-                                            </h5>
-                                        </td>
-                                    </tr>
-                                @endif
-
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Shipping Charges</h6>
-                                    </td>
-
-                                    <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end fs-16">
-                                            @if (session('flat_rate_charge') != null)
-                                                {{ number_format(session('flat_rate_charge'), 2) }}
-                                            @elseif (floatval($online_payment_amount) == 0)
-                                                Free Shipping
-                                            @else
-                                                {{-- Displays the active shipping charge in session (swapped by payment method) --}}
-                                                ₹{{ number_format(ceil($online_payment_amount), 2) }}
-                                            @endif
-                                        </h5>
-                                    </td>
-                                </tr>
-
-                                @if ($payment_method == 'cod')
-                                    <tr class="d-flex justify-content-between border-0">
-                                        <td class="cart_total_label text-start">
-                                            <h6 class="text-muted">COD charges</h6>
-                                        </td>
-
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-heading text-end fs-16">
-                                                ₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount), 2) }}
-                                            </h5>
-                                        </td>
-                                    </tr>
-                                @endif
-
-                                <tr class="d-flex justify-content-between border-0">
-                                    <td class="cart_total_label text-start">
-                                        <h6 class="text-muted">Your Total</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end fs-16">
-                                            @if ($payment_method == 'online')
-                                                ₹{{ number_format(ceil($finalTotal + $online_payment_amount), 2) }}
-                                            @else
-                                                ₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}
-                                            @endif
-                                        </h4>
-                                    </td>
-                                </tr>
-                                @if ($is_first_order && $payment_method == 'online')
-                                    <tr class="d-flex justify-content-between border-0">
-                                        <td class="cart_total_label text-start py-0">
-                                            <h6 class="text-success fs-14">You have saved 20% on every product!!</h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
-
-                        <div class="px-2 pt-4" style="border-top: 2px dashed #ddd;">
-                            <div class="heading mb-4">
-                                <h5 class="underline pb-2">Select Payment Method</h5>
-                            </div>
-                            <div class="">
-                                <div class="form-check form-radio-checkout mb-3 align-items-start">
-                                    <input class="form-check-input checkout-radio me-2 mt-1" type="radio"
-                                        name="flexRadioDefault" wire:click="paymentMethod('online')"
-                                        id="flexRadioDefault2" {{ $payment_method == 'online' ? 'checked' : '' }}>
-                                    <label class="form-check-label quicksand fw-700 fs-16 w-100"
-                                        for="flexRadioDefault2">
-                                        <div class="d-flex align-items-center flex-wrap">
-                                            Pay via UPI/Credit Card
-                                            <span class="express-delivery-tag ms-2">⚡ Free Express Delivery</span>
-                                        </div>
-                                        @if ($is_first_order)
-                                            <span class="fs-12 text-muted d-block mt-1">(Get Instant <strong
-                                                    class="color-1">20% Off</strong> on each product.)</span>
-                                        @endif
-                                    </label>
-                                </div>
-
-                                <div class="form-check form-radio-checkout align-items-start">
-                                    <input class="form-check-input checkout-radio me-2 mt-1" type="radio"
-                                        name="flexRadioDefault" id="flexRadioDefault1"
-                                        wire:click="paymentMethod('cod')"
-                                        {{ $payment_method == 'cod' ? 'checked' : '' }}>
-                                    <label class="form-check-label quicksand fw-700 fs-16 w-100"
-                                        for="flexRadioDefault1">
-                                        Cash On Delivery
-                                    </label>
-                                </div>
-                            </div>
+                            <div class="co-compare-winner">⭐ Save ₹{{ number_format(ceil($savings)) }} by choosing
+                                Online Payment</div>
                         </div>
 
-                    </div>
-                </div>
-
-                <div class="payment ml-0 ml-sm-30">
-                    <button
-                        class="btn btn-fill-out btn-block mt-20 w-100 d-flex justify-content-center align-items-center"
-                        wire:click.prevent="verifyCheckout" wire:loading.attr="disabled"
-                        wire:target="verifyCheckout, placeOrder, proceedWithCOD">
-                        <span wire:loading.remove wire:target="verifyCheckout, placeOrder, proceedWithCOD">
-                            Place an Order
-                            <i class="fi-rs-sign-out ml-15"></i>
-                        </span>
-                        <span wire:loading wire:target="verifyCheckout, placeOrder, proceedWithCOD">
-                            <span class="spinner-border spinner-border-sm mr-8"></span>
-                            Processing...
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- MODAL 1: COD ALERT (REDESIGNED V2 - HIGH FOCUS ON LOSS) --}}
-    <div class="modal fade cod-modal-redesign" id="codAlertModal2" tabindex="-1" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                @php
-                    $currentTotal = $finalTotal;
-
-                    $couponDiscount = $couponDiscount ?? 0;
-                    $cartTotalForCalc = (float) str_replace(',', '', Cart::instance('cart')->total());
-                    $potentialDiscount = $cartTotalForCalc * 0.2 + $couponDiscount;
-
-                    $codShip = $cash_on_delivery_amount ?? 0;
-                    $onlineShip = $online_payment_amount ?? 0;
-
-                    $potentialOnlineTotal =
-                        $currentTotal - $codShip + $onlineShip - $potentialDiscount + ceil($couponDiscount);
-
-                    $codTotal = ceil($finalTotal + $cash_on_delivery_amount);
-                    $onlineTotal = ceil($finalTotal + $online_payment_amount - $potentialDiscount);
-                @endphp
-
-                <div class="modal-header-custom">
-                    <div class="icon-warning-pulse">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
-                            </path>
-                            <line x1="12" y1="9" x2="12" y2="13"></line>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                    </div>
-
-                    <h3 class="fw-bolder mb-2 text-dark" style="font-size: 26px; letter-spacing: -0.5px;">Wait! Are
-                        you sure?</h3>
-                    <p class="mb-0 quicksand" style="font-size: 16px; color: #555;">
-                        By selecting Cash on Delivery, you are
-                        <br>
-                        <span class="loss-highlight-badge">Losing Your 20% Discount</span>
-                    </p>
-                </div>
-
-                <div class="modal-body px-4 pb-4 pt-1 text-center">
-
-                    <div class="price-comparison">
-                        <div class="price-col">
-                            <span class="text-muted font-sm fw-600 mb-1">If you choose COD</span>
-                            <h4 class="text-dark mb-0">₹{{ number_format($codTotal, 2) }}</h4>
+                        <div class="co-social">
+                            <div class="co-social-pill">✅ Most customers choose Prepaid & save more</div>
+                            <div class="co-social-pill">✅ Extra discount on online payment</div>
                         </div>
-                        <div class="price-col price-col-success">
-                            <div class="badge-save">Save ₹{{ number_format($potentialDiscount, 2) }}</div>
-                            <span class="text-success font-sm fw-700 mb-1">If you Pay via UPI/Credit Card</span>
-                            <h3 class="text-success fw-900 mb-0">₹{{ number_format($onlineTotal, 2) }}</h3>
+                    @endif
+
+                    {{-- Payment Section --}}
+                    <div class="co-payment-section">
+                        <div class="co-payment-title">Select Payment Method</div>
+
+                        <div class="co-option {{ $payment_method == 'online' ? 'selected' : '' }}"
+                            wire:click="paymentMethod('online')">
+                            <div class="co-option-header">
+                                <div class="co-radio {{ $payment_method == 'online' ? 'on' : '' }}">
+                                    <div class="co-radio-dot"></div>
+                                </div>
+                                <span class="co-option-label">Pay via UPI / Credit Card</span>
+                                <span class="co-express-badge">⚡ FREE EXPRESS DELIVERY</span>
+                            </div>
+                            @if ($is_first_order)
+                                <div class="co-option-sub green">Get instant 20% off on each product</div>
+                            @endif
+                        </div>
+
+                        <div class="co-option {{ $payment_method == 'cod' ? 'selected-cod' : '' }}"
+                            wire:click="paymentMethod('cod')">
+                            <div class="co-option-header">
+                                <div class="co-radio {{ $payment_method == 'cod' ? 'on-cod' : '' }}">
+                                    <div class="co-radio-dot"></div>
+                                </div>
+                                <span class="co-option-label">Cash on Delivery</span>
+                            </div>
+                            @if ($is_first_order)
+                                <div class="co-option-sub red">
+                                    ₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount)) }}
+                                    handling fee applies · No 20% discount</div>
+                            @endif
                         </div>
                     </div>
 
-                    <div class="button-group mt-2">
-                        <button class="btn-switch-online quicksand" data-bs-dismiss="modal">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2">
-                                </rect>
-                                <line x1="1" y1="10" x2="23" y2="10"></line>
-                            </svg>
-                            Pay via UPI/Credit card & Save ₹{{ number_format($potentialDiscount, 2) }}
+                    {{-- CTA Section --}}
+                    <div class="co-cta">
+                        <button class="co-cta-btn" wire:click.prevent="verifyCheckout" wire:loading.attr="disabled"
+                            wire:target="verifyCheckout, placeOrder">
+                            <span wire:loading.remove wire:target="verifyCheckout, placeOrder">
+                                Place an Order {{ $payment_method == 'online' ? '(Prepaid)' : '(COD)' }} →
+                            </span>
+                            <span wire:loading wire:target="verifyCheckout, placeOrder">
+                                <span class="spinner-border spinner-border-sm me-2"></span> Processing...
+                            </span>
                         </button>
-
-                        <button class="btn-proceed-cod quicksand" wire:loading.attr="disabled"
-                            wire:target="proceedWithCOD" wire:click.prevent="proceedWithCOD">
-                            <span wire:loading.remove wire:target="proceedWithCOD">Skip savings & pay
-                                ₹{{ number_format($codTotal, 2) }} on delivery</span>
-                            <span wire:loading wire:target="proceedWithCOD">Processing...</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- MODAL 2: GENERIC PLACE ORDER CONFIRMATION --}}
-    <div wire:ignore.self class="modal fade" id="placeOrderModal" tabindex="-1" data-bs-backdrop="static"
-        data-bs-keyboard="false" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content-custom w-100">
-                <div class="mb-4">
-                    <div class="d-flex justify-content-center">
-                        <img src="{{ asset('assets/frontend/imgs/page/coupon-claim.png') }}"
-                            class="img-fluid mb-3 mt-4 modal-logo" style="height: 130px" />
+                        <div class="co-secure">🔒 100% Secure · UPI · Card · Net Banking</div>
                     </div>
 
-                    <h1 class="fs-3 text-center">Are you Sure?</h1>
-                    <p class="fs-6 mx-auto text-center quicksand">
-                        {{ $confirmMessage }}
-                    </p>
-                </div>
-
-                <div class="pb-4 d-flex flex-column justify-content-center">
-                    <button class="btn mb-3 w-90-per pt-10 pb-10" wire:click.prevent="{{ $confirmAction }}"
-                        style="background-color: #1e9663;">
-                        Confirm Order
-                    </button>
-
-                    <button class="btn mx-auto pt-10 pb-10 w-90-per" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
                 </div>
             </div>
         </div>
@@ -1235,24 +582,6 @@
                 }, 100);
             });
 
-            window.addEventListener('open-cod-modal', function(event) {
-                var el = document.getElementById('codAlertModal2');
-                var myModal = new bootstrap.Modal(el, {
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                myModal.show();
-            });
-
-            window.addEventListener('open-place-order-modal', function(event) {
-                var el = document.getElementById('placeOrderModal');
-                var myModal = new bootstrap.Modal(el, {
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                myModal.show();
-            });
-
             window.addEventListener('initiate-razorpay', function(event) {
                 const detail = event.detail[0] || event.detail;
                 var options = {
@@ -1278,6 +607,7 @@
                 var rzp1 = new Razorpay(options);
                 rzp1.open();
             });
+
             window.addEventListener('trigger-first-order-modal', function(event) {
                 updateCountdown();
                 totalSeconds = 240
@@ -1293,7 +623,6 @@
                 const sec1 = Math.floor(seconds / 10);
                 const sec2 = seconds % 10;
 
-                // Elements might not exist if modal is removed, added check
                 if (document.getElementById('minutes1')) {
                     document.getElementById('minutes1').textContent = min1;
                     document.getElementById('minutes2').textContent = min2;
@@ -1304,11 +633,10 @@
                 if (totalSeconds > 0) {
                     totalSeconds--;
                 } else {
-                    totalSeconds = 900; // Reset to 15 minutes
+                    totalSeconds = 900;
                 }
             }
 
-            // Update countdown every second
             setInterval(updateCountdown, 1000);
         });
     </script>

@@ -1,0 +1,917 @@
+/* ========================================================
+   GIFT ROW STYLES (ORDER SUMMARY)
+   ======================================================== */
+.gift-row {
+    background: linear-gradient(90deg, #fffbf0 0%, #ffffff 100%);
+    border: 1px solid #f7e3a6;
+    border-left: 5px solid #ffbc0d;
+}
+
+.gift-badge {
+    background-color: #ffbc0d;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.price-free {
+    color: #25b579;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.gift-icon-container {
+    color: #ffbc0d;
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+/* ========================================================
+   PREMIUM OFFER BANNER STYLES
+   ======================================================== */
+.premium-offer-banner {
+    background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+    border-radius: 16px;
+    padding: 20px 30px;
+    margin: 10px 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(0, 176, 155, 0.25);
+    color: #ffffff;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.premium-offer-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.premium-offer-icon {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #ffffff;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.premium-offer-text h4 {
+    color: #ffffff;
+    margin: 0 0 4px 0;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.premium-offer-text p {
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+}
+
+.premium-payment-pill {
+    background: #ffffff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.premium-payment-pill .secure-text {
+    color: #25b579;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-right: 2px solid #f0f0f0;
+    padding-right: 15px;
+    letter-spacing: 0.5px;
+}
+
+.premium-payment-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.premium-payment-icons img {
+    height: 20px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .premium-offer-banner {
+        padding: 12px 10px;
+        gap: 8px;
+        border-radius: 12px;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    .premium-offer-left {
+        flex-direction: row;
+        text-align: left;
+        gap: 8px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .premium-offer-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 15px;
+        flex-shrink: 0;
+    }
+
+    .premium-offer-text {
+        min-width: 0;
+    }
+
+    .premium-offer-text h4 {
+        font-size: 13px;
+        margin-bottom: 2px;
+        white-space: normal;
+        line-height: 1.2;
+    }
+
+    .premium-offer-text p {
+        font-size: 11px;
+        line-height: 1.2;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .premium-payment-pill {
+        padding: 6px 10px;
+        flex-shrink: 0;
+        flex-wrap: nowrap;
+    }
+
+    .premium-payment-pill .secure-text {
+        display: none;
+    }
+
+    .premium-payment-icons {
+        gap: 5px;
+    }
+
+    .premium-payment-icons img {
+        height: 12px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+
+    .container.shop-detail-page-main,
+    .container.footer-strip,
+    .container.footer-mid-inner,
+    .container.footer-lower {
+        padding: 0 1rem !important;
+        max-width: 100%;
+    }
+}
+
+/* ========================================================
+   FREE SHIPPING BADGE
+   ======================================================== */
+.free-shipping-wrapper {
+    clear: both;
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
+
+.free-shipping-badge {
+    display: inline-flex;
+    align-items: center;
+    pointer-events: none;
+    user-select: none;
+}
+
+.free-shipping-badge .fs-text {
+    font-size: 16px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: linear-gradient(90deg, #00b59c, #007a69);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.free-shipping-badge i {
+    margin-right: 6px;
+    font-size: 22px;
+    color: #00b59c;
+    animation: drive-truck 2.5s ease-in-out infinite;
+}
+
+.glowing-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #00e6a8;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 0 8px #00e6a8;
+    animation: pulse-dot 1.5s infinite alternate;
+}
+
+@keyframes pulse-dot {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.6;
+        box-shadow: 0 0 4px #00e6a8;
+    }
+
+    100% {
+        transform: scale(1.2);
+        opacity: 1;
+        box-shadow: 0 0 12px #00e6a8;
+    }
+}
+
+@keyframes drive-truck {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(4px);
+    }
+}
+
+/* ========================================================
+   TRUST BADGE STRIP
+   ======================================================== */
+.trust-badge-strip {
+    background-color: #eef2ff;
+    border-radius: 12px;
+    padding: 20px 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #e0e6fd;
+}
+
+.trust-badge-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.trust-badge-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background-color: #d4dbf0;
+}
+
+.trust-icon-box {
+    background-color: #ffffff;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.trust-icon-box i {
+    font-size: 20px;
+}
+
+.icon-price,
+.icon-cod {
+    color: #00b59c;
+}
+
+.icon-return,
+.icon-express {
+    color: #fd7e14;
+}
+
+.trust-badge-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* ========================================================
+   DISCOUNT PROGRESS WIDGET
+   ======================================================== */
+.shipping-widget-container {
+    background: linear-gradient(to right, #fffdf2, #ffffff);
+    padding: 10px 20px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    border: 1px solid #fde047;
+    box-shadow: 0 4px 15px rgba(253, 224, 71, 0.15);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.shipping-widget-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #eab308;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.shipping-widget-container.success {
+    border-color: #bbf7d0;
+    background: linear-gradient(to right, #f0fdf4, #ffffff);
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.1);
+}
+
+.shipping-widget-container.success::before {
+    background-color: #22c55e;
+}
+
+.shipping-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.shipping-icon-wrapper {
+    background: #fef08a;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ca8a04;
+    font-size: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(202, 138, 4, 0.15);
+}
+
+.shipping-highlight {
+    color: #b45309;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.shipping-widget-container.success .shipping-highlight {
+    color: #16a34a;
+}
+
+.shipping-progress-bg {
+    background-color: #f1f5f9;
+    border-radius: 20px;
+    height: 10px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.shipping-progress-bar {
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, .25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+    animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+    0% {
+        background-position: 1rem 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.shipping-status-text {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.current-total-pill {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.current-total-pill strong {
+    color: #334155;
+    font-weight: 800;
+}
+
+@media (max-width: 480px) {
+    .shipping-widget-container {
+        padding: 15px 12px;
+    }
+
+    .shipping-text {
+        font-size: 13px;
+        gap: 8px;
+    }
+
+    .shipping-icon-wrapper {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    .shipping-highlight {
+        font-size: 14px;
+    }
+}
+
+/* ========================================================
+   SPECS TOGGLE STYLES
+   ======================================================== */
+.specs-container {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.specs-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.specs-wrapper {
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.specs-wrapper.collapsed {
+    max-height: 140px;
+}
+
+.specs-wrapper.expanded {
+    max-height: 2000px;
+}
+
+.gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+
+.specs-wrapper.expanded .gradient-overlay {
+    opacity: 0;
+}
+
+.specs-table {
+    width: 100%;
+    font-size: 13px;
+}
+
+.specs-table td {
+    padding: 8px 5px;
+    border-bottom: 1px solid #f5f5f5;
+    vertical-align: top;
+}
+
+.specs-table td:first-child {
+    color: #777;
+    font-weight: 600;
+    width: 45%;
+}
+
+.specs-table td:last-child {
+    color: #333;
+    font-weight: 500;
+    text-align: right;
+}
+
+.specs-toggle-btn {
+    background: none;
+    border: none;
+    color: #00b59c;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 10px 0 0 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    justify-content: center;
+}
+
+.specs-toggle-btn:hover {
+    text-decoration: underline;
+}
+
+/* ========================================================
+   VIEW CART BUTTON
+   ======================================================== */
+.btn-view-cart-detail {
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background-color: #3BB77E !important;
+    color: #ffffff !important;
+    border-radius: 4px;
+    padding: 10px 30px !important;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.3s ease 0s;
+    text-decoration: none;
+    line-height: 1.5;
+    border: none;
+    height: 50px;
+}
+
+.btn-view-cart-detail i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.btn-view-cart-detail:hover {
+    background-color: #29a56c !important;
+    transform: translateY(-2px);
+}
+
+/* ========================================================
+   ULTRA-COMPACT PREPAID OFFER BANNER
+   ======================================================== */
+.theme-prepaid-box {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 18px 15px 12px 15px;
+    /* Tighter padding for compact look */
+    margin-top: 30px;
+    margin-bottom: 8px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    /* Reduced gap between text and button */
+    font-family: 'Quicksand', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.theme-prepaid-box:hover {
+    border-color: #bce3c9;
+    box-shadow: 0 4px 15px rgba(59, 183, 126, 0.08);
+}
+
+.theme-prepaid-badges {
+    position: absolute;
+    top: -12px;
+    left: 15px;
+    /* Align with tighter padding */
+    display: flex;
+    gap: 4px;
+}
+
+.theme-prepaid-badge-yellow {
+    background-color: #f6c042;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 8px 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.theme-prepaid-badge-green {
+    background-color: #e5f8ed;
+    color: #3bb77e;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 10px;
+    border-radius: 3px;
+    line-height: 1.2;
+}
+
+.theme-prepaid-text {
+    flex: 1;
+}
+
+.theme-prepaid-title {
+    font-size: 15px;
+    color: #253d4e;
+    margin-bottom: 0px;
+    /* Removed margin to tighten spacing */
+    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+.theme-prepaid-highlight {
+    color: #3BB77E;
+    font-weight: 800;
+    font-size: 22px;
+    /* Slimmer price height */
+    letter-spacing: -0.5px;
+}
+
+.theme-prepaid-desc {
+    font-size: 13px;
+    /* Slightly smaller description */
+    color: #7E7E7E;
+    font-weight: 500;
+    margin-top: -2px;
+    /* Pull text up slightly */
+}
+
+/* --- ACTION BUTTON & ALIGNED ICONS --- */
+.theme-prepaid-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    /* Bring icons closely tucked under the button */
+}
+
+.theme-prepaid-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    /* Tighter gap between payment icons */
+    opacity: 0.9;
+}
+
+.theme-prepaid-icons-text {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.theme-prepaid-icons img {
+    height: 12px;
+    /* Slimmer payment icons */
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.theme-prepaid-btn {
+    background-color: #2b3b4a;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 4px;
+    /* Less rounded for a sleek look */
+    padding: 8px 18px;
+    /* Significantly slimmer vertical height */
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 150px;
+    /* Reduced width */
+}
+
+.theme-prepaid-btn:hover {
+    background-color: #1e2a35;
+    transform: translateY(-2px);
+}
+
+.theme-prepaid-btn-main {
+    font-size: 13px;
+    /* Scaled down */
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.theme-prepaid-btn-sub {
+    font-size: 12px;
+    /* Scaled down */
+    font-weight: 600;
+    color: #f6c042;
+}
+
+@media (max-width: 768px) {
+    .theme-prepaid-box {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px 12px 12px 12px;
+    }
+
+    .theme-prepaid-action {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .theme-prepaid-btn {
+        width: 100%;
+    }
+
+    .theme-prepaid-badges {
+        left: 12px;
+    }
+}
+
+/* ========================================================
+   SINGLE COMBO PROMO BANNER (MATCHED TO SCREENSHOT)
+   ======================================================== */
+.theme-single-promo {
+    background-color: #5eb584;
+    /* Soft green matching your screenshot */
+    border-radius: 8px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-family: 'Quicksand', sans-serif;
+}
+
+/* Diagonal shine effect on the right */
+.theme-single-promo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 15%;
+    width: 120px;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    pointer-events: none;
+}
+
+.promo-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 1;
+}
+
+/* The translucent circle for the icon */
+.promo-icon {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.promo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.promo-text h4 {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.promo-text p {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* The exact styling for the coupon code box */
+.promo-code-highlight {
+    background-color: rgba(0, 0, 0, 0.15);
+    /* Dark translucent box */
+    color: #f6c042;
+    /* Gold text */
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.promo-action {
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+/* The golden button */
+.btn-promo {
+    background-color: #f5bc41;
+    /* Gold to match screenshot */
+    color: #1e2a35 !important;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.btn-promo:hover {
+    background-color: #e5ae3a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 188, 65, 0.3);
+    color: #000000 !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .theme-single-promo {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        gap: 18px;
+    }
+
+    .promo-action {
+        width: 100%;
+    }
+
+    .btn-promo {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -171,7 +171,7 @@
                     <i class="fi-rs-badge"></i>
                 </div>
                 <div class="premium-offer-text">
-                    <h4>Get 20% OFF Instantly!</h4>
+                    <h4>Get {{ fetchDiscountPercentage() }}% OFF Instantly!</h4>
                     <p>Pay online via UPI or Card to unlock this exclusive offer.</p>
                 </div>
             </div>

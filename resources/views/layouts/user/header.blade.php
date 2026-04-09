@@ -30,6 +30,10 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/plugins/slider-range.css') }}" />
     <!-- Custom New CSS -->
     <link rel="stylesheet" href="{{ asset('assets/custom_css/index.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/custom_css/checkout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/custom_css/cart.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/custom_css/tracking.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/custom_css/shop-detail.css') }}" />
     @if (Request::is('coupon-claim') || Request::is('pay-now'))
         <link rel="stylesheet" href="{{ asset('assets/frontend/css/apply_coupon.css') }}" />
     @endif
@@ -224,7 +228,8 @@
                                             Us</a>
                                     </li>
                                     <li>
-                                        <a href="/contact" class="{{ Request::is('contact') ? 'active' : '' }}">Contact
+                                        <a href="/contact"
+                                            class="{{ Request::is('contact') ? 'active' : '' }}">Contact
                                             Us</a>
                                     </li>
                                 </ul>

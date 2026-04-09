@@ -42,7 +42,7 @@ class CheckoutComponent extends Component
     public $ship_to_different_address_enabled = false;
     public $gift_card_code;
     public $mainDiscountAmount = 0;
-    public $onlineDiscountAmount = 0; // Stores the 10% discount value
+    public $onlineDiscountAmount = 0;
     public $items_checkout_event_array = [];
     public $out_of_stock_id = [];
     public $pincode_validation_id = [];
@@ -55,15 +55,10 @@ class CheckoutComponent extends Component
     public $online_payment_amount;
     public $cash_on_delivery_user_additional_pay;
 
-    // --- NEW VARIABLES FOR DYNAMIC DISCOUNT ---
     public $minimum_order_value = 1000;
     public $discount_percentage = 15;
     public $maximum_extra_discount_amount = 500;
     public $extra_discount = 0;
-
-    // Properties for generic modal
-    public $confirmMessage = '';
-    public $confirmAction = '';
 
     public function mount()
     {
@@ -266,7 +261,6 @@ class CheckoutComponent extends Component
             $this->finalTotal = $cartTotal - $this->offerDiscount - $this->onlineDiscountAmount - $this->extra_discount + $shippingCharge;
         }
 
-        // Ensure total doesn't go negative
         if ($this->finalTotal < 0) {
             $this->finalTotal = 0;
         }
@@ -617,21 +611,7 @@ class CheckoutComponent extends Component
             throw $e;
         }
 
-        if ($this->payment_method == 'cod') {
-            if ($this->is_first_order) {
-                $this->dispatch('open-cod-modal');
-            } else {
-                $this->confirmMessage = 'Are you sure you want to proceed with Cash on Delivery?';
-                $this->confirmAction = 'proceedWithCOD';
-                $this->dispatch('open-place-order-modal');
-            }
-        } else {
-            $this->placeOrder();
-        }
-    }
-
-    public function proceedWithCOD()
-    {
+        // Proceed directly with placeOrder for both COD and Prepaid
         $this->placeOrder();
     }
 
@@ -691,7 +671,6 @@ class CheckoutComponent extends Component
                 $user_order->offer_discount = 0;
             }
 
-            // Record dynamic extra discount into the new special_discount column
             if ($this->extra_discount > 0) {
                 $user_order->special_discount = $this->extra_discount;
             } else {
