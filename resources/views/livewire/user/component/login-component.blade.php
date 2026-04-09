@@ -7,7 +7,7 @@
 
                     <img class="img-fluid" src="{{ asset('assets/frontend/imgs/theme/logo.png') }}" alt="">
                     <p class="tagline">
-                        Pay using UPI / Credit Card and get FLAT 20% OFF.
+                        Pay using UPI / Credit Card and get FLAT {{ fetchDiscountPercentage() }}% OFF.
                     </p>
 
                     <div class="d-none d-lg-flex gap-3">

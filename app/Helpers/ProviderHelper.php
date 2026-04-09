@@ -117,6 +117,10 @@ function synIthinkTracking($awb_number, $order)
                     $order->tracking_updates = json_encode($trackingUpdates);
                 }
 
+                if ($apiData['expected_delivery_date'] != '' && $apiData['expected_delivery_date'] != null) {
+                    $order->estimated_delivery_date = $apiData['expected_delivery_date'];
+                }
+
                 if ($new_status == 7 && $old_status != $new_status) {
                     sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
                 } elseif ($new_status == 3 && $old_status != $new_status) {
@@ -220,6 +224,10 @@ function xpressBeesTracking($token, $awb_number)
                         ->toArray();
 
                     $order->tracking_updates = json_encode($history);
+                }
+
+                if ($shipment['pdd'] != 0) {
+                    $order->estimated_delivery_date = $shipment['pdd'];
                 }
 
                 if ($new_status == 7 && $old_status != $new_status) {

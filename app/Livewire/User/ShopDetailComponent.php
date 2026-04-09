@@ -43,15 +43,15 @@ class ShopDetailComponent extends Component
 
     // --- NEW VARIABLES ADDED HERE ---
     public $minimum_order_value = 1000; // Set your desired minimum order amount
-    public $discount_percentage = 15; // Set your desired discount percentage
+    public $discount_percentage = 0; // Set your desired discount percentage
 
     protected $listeners = ['closeQuickView' => 'handleCloseQuickView'];
 
     public function mount($slug = null, $id)
     {
+        $this->discount_percentage = fetchDiscountPercentage();
         $this->id = $id;
         $this->minimum_order_value = Setting::where('label', 'extra_discount_order_value')->first()->value;
-        $this->discount_percentage = Setting::where('label', 'extra_discount')->first()->value;
         $setting = Setting::where('label', 'surprise_gift_product_id')->first()->value;
         if ($id == (int) $setting) {
             return redirect('/');
@@ -270,7 +270,7 @@ class ShopDetailComponent extends Component
         $this->dispatch('item-view', $items);
     }
 
-    public function addToCart()
+    public function addToCart($option = 'default')
     {
         $existing_qauntity = 0;
         $cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use (&$existing_qauntity) {
@@ -332,7 +332,11 @@ class ShopDetailComponent extends Component
         $items[] = $item;
         $this->dispatch('add-to-cart', $items);
         if ($addToCart) {
-            $this->toastSuccess('Successfully Added In Your Cart!');
+            if ($option == 'prepaid') {
+                return redirect()->route('cart');
+            } else {
+                $this->toastSuccess('Successfully Added In Your Cart!');
+            }
         } else {
             $this->toastSuccess('Product Quntity Change Successfully!');
         }

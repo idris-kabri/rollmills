@@ -15,6 +15,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Setting;
 
 function razorPayPayment($amount, $user_id, $refrence_id, $refrence_table, $description)
 {
@@ -499,4 +500,9 @@ function isInCart($id)
 function isInWishlist($id)
 {
     return Cart::instance('wishlist')->content()->where('id', $id)->count() > 0;
+}
+
+function fetchDiscountPercentage()
+{
+    return Setting::where('label', 'discount_value')->first()->value;
 }

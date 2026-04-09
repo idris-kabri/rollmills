@@ -94,7 +94,8 @@ class CodConversionComponent extends Component
                     $order_items = $order->getOrderItems;
                     foreach ($order_items as $order_item) {
                         $official_price = $order_item->sale_default_price;
-                        $bonus_amount = ($official_price * 10) / 100;
+                        $discount_percentage = fetchDiscountPercentage();
+                        $bonus_amount = ($official_price * $discount_percentage) / 100;
 
                         $order_item->bonus = $bonus_amount;
                         $total = $order_item->total;

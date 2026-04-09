@@ -1,0 +1,469 @@
+/* --- UNIFIED ADDRESS CARD STYLES (Used for Billing & Shipping) --- */
+.coupon-card-cart {
+    display: block;
+    border: 1px solid #ececec;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    transition: all 0.3s;
+    background: #fff;
+    cursor: pointer;
+}
+
+.coupon-card-cart:hover {
+    border-color: #ffbc0d;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.coupon-card-cart.selected {
+    border-color: #ffbc0d;
+    background-color: #fffbf0;
+}
+
+.coupon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.coupon-code-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.coupon-code-section span {
+    width: 35px;
+    height: 35px;
+    background-color: #ffbc0d;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.coupon-code-cart {
+    font-weight: 700;
+    color: #253D4E;
+    font-size: 16px;
+}
+
+.check-circle {
+    display: none;
+    width: 24px;
+    height: 24px;
+    background: #ffbc0d;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+}
+
+.coupon-card-cart.selected .check-circle {
+    display: flex;
+}
+
+/* --- FREE SHIPPING WIDGET STYLES --- */
+.shipping-widget-checkout {
+    background: #f4f6fa;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px dashed #c4cdd5;
+}
+
+.shipping-progress-bg {
+    background-color: #e9ecef;
+    border-radius: 10px;
+    height: 8px;
+    width: 100%;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.shipping-progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.6s ease;
+    position: relative;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+    animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+    0% {
+        background-position: 1rem 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.shipping-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.shipping-highlight {
+    color: #00b59c;
+    font-weight: 700;
+}
+
+/* --- NEW CHECKOUT SUMMARY BLOCK STYLES --- */
+.co-wrap {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+    color: #222;
+}
+
+.co-order-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.co-order-row.gift-row-summary {
+    background-color: #fffbf0;
+    border-left: 3px solid #ffbc0d;
+}
+
+.co-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    background: #f5f0e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.co-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.co-prod-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.3;
+}
+
+.co-prod-sub {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+}
+
+.co-prod-price {
+    margin-left: auto;
+    font-size: 16px;
+    font-weight: 800;
+    color: #c8940a;
+}
+
+.co-details {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.co-details-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #c8940a;
+    padding-bottom: 6px;
+    display: inline-block;
+}
+
+.co-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.co-row.muted {
+    color: #888;
+    font-weight: 500;
+}
+
+.co-row.green {
+    color: #1a8a3c;
+    font-weight: 700;
+}
+
+.co-row.red {
+    color: #e63946;
+    font-weight: 700;
+}
+
+.co-row.total {
+    font-size: 16px;
+    font-weight: 800;
+    color: #222;
+    border-top: 1px dashed #ddd;
+    margin-top: 8px;
+    padding-top: 10px;
+}
+
+.co-badge-inline {
+    background: #1a8a3c;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.co-badge-inline.warn {
+    background: #e63946;
+}
+
+.co-saved-msg {
+    font-size: 12px;
+    color: #1a8a3c;
+    margin-top: 8px;
+    font-weight: 700;
+}
+
+.co-compare-box {
+    margin: 0 16px 16px;
+    border-radius: 9px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+.co-compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.co-compare-col {
+    padding: 12px;
+    text-align: center;
+}
+
+.co-compare-col.prepaid-col {
+    background: #f2fbf5;
+    border-right: 1px solid #c5e8d0;
+}
+
+.co-compare-col.cod-col {
+    background: #fff5f5;
+}
+
+.co-compare-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.co-compare-price {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 4px 0;
+}
+
+.co-compare-price.green {
+    color: #1a8a3c;
+}
+
+.co-compare-price.red {
+    color: #c0392b;
+}
+
+.co-compare-note {
+    font-size: 11px;
+    color: #888;
+    font-weight: 500;
+}
+
+.co-compare-winner {
+    text-align: center;
+    background: #1a8a3c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px;
+}
+
+.co-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 16px 16px;
+}
+
+.co-social-pill {
+    background: #eafaf1;
+    color: #1a5c31;
+    border: 1px solid #a8d5b5;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+}
+
+.co-payment-section {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.co-payment-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 12px;
+}
+
+.co-option {
+    border: 1.5px solid #e0e0e0;
+    border-radius: 9px;
+    padding: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.co-option.selected {
+    border-color: #1a8a3c;
+    background: #f2fbf5;
+}
+
+.co-option.selected-cod {
+    border-color: #e63946;
+    background: #fff5f5;
+}
+
+.co-option-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.co-radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #bbb;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.co-radio.on {
+    border-color: #1a8a3c;
+    background: #1a8a3c;
+}
+
+.co-radio.on-cod {
+    border-color: #e63946;
+    background: #e63946;
+}
+
+.co-radio-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    display: none;
+}
+
+.co-radio.on .co-radio-dot,
+.co-radio.on-cod .co-radio-dot {
+    display: block;
+}
+
+.co-option-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #222;
+}
+
+.co-express-badge {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 15px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.co-option-sub {
+    font-size: 12px;
+    margin-top: 6px;
+    margin-left: 28px;
+}
+
+.co-option-sub.green {
+    color: #1a8a3c;
+    font-weight: 600;
+}
+
+.co-option-sub.red {
+    color: #e63946;
+    font-weight: 600;
+}
+
+.co-cta {
+    padding: 16px;
+}
+
+.co-cta-btn {
+    width: 100%;
+    background: #c8940a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: 0.3s;
+}
+
+.co-cta-btn:hover {
+    background: #b08209;
+    transform: translateY(-2px);
+}
+
+.co-secure {
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+    margin-top: 10px;
+    font-weight: 600;
+}

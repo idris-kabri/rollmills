@@ -29,6 +29,7 @@ class Index extends Component
                     $q->whereHas('getUser', function ($userQuery) {
                         $userQuery->where('name', 'like', '%' . $this->search . '%')->orWhere('mobile', 'like', '%' . $this->search . '%');
                     })
+                        ->orWhere('id', 'like', '%' . $this->search . '%')
                         ->orWhere('subtotal', 'like', '%' . $this->search . '%')
                         ->orWhere('coupon_discount', 'like', '%' . $this->search . '%')
                         ->orWhere('offer_discount', 'like', '%' . $this->search . '%')

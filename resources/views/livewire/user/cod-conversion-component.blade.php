@@ -267,8 +267,9 @@
                             @php
                                 // Calculate Totals
                                 $discount = 0;
+                                $discount_percentage = fetchDiscountPercentage();
                                 foreach ($order->getOrderItems as $item) {
-                                    $discount += ($item->total * 10) / 100;
+                                    $discount += ($item->total * $discount_percentage) / 100;
                                 }
                                 $final_amount = ceil($order->total - $discount - $order->cod_charges);
                             @endphp
@@ -326,7 +327,8 @@
                                             </div>
 
                                             <div class="summary-row savings">
-                                                <span><i class="fi-rs-check-circle me-1"></i> 10% Discount</span>
+                                                <span><i class="fi-rs-check-circle me-1"></i>
+                                                    {{ $discount_percentage }} % Discount</span>
                                                 <span>- ₹{{ number_format($discount, 2) }}</span>
                                             </div>
 
@@ -611,11 +613,10 @@
                     "order_id": detail.razorpay_order_id,
                     "handler": function(response) {
                         window.location.href =
-                            `${detail.success_url}?transaction_id=${detail.transaction_id}&payment_id=${response.razorpay_payment_id}&order_id=${detail.razorpay_order_id}&title=${detail.title}&customer_name=${detail.customer_name}&customer_email=${detail.customer_email}&type=order_payment&id=${detail.id}`;
+                            `${detail.success_url}?transaction_id=${detail.transaction_id}&payment_id=${response.razorpay_payment_id}&order_id=${detail.razorpay_order_id}&title=${detail.title}&customer_name=${detail.customer_name}&type=order_payment&id=${detail.id}`;
                     },
                     "prefill": {
-                        "name": detail.name,
-                        "email": detail.email
+                        "name": detail.name
                     },
                     "theme": {
                         "color": "#CF9007"

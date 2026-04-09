@@ -1,513 +1,4 @@
 <main class="main">
-    <style>
-        /* --- GIFT ROW STYLES (ORDER SUMMARY) --- */
-        .gift-row {
-            background: linear-gradient(90deg, #fffbf0 0%, #ffffff 100%);
-            border: 1px solid #f7e3a6;
-            border-left: 5px solid #ffbc0d;
-        }
-
-        .gift-badge {
-            background-color: #ffbc0d;
-            color: #fff;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 5px;
-        }
-
-        .price-free {
-            color: #25b579;
-            font-weight: 800;
-            font-size: 18px;
-        }
-
-        .gift-icon-container {
-            color: #ffbc0d;
-            font-size: 20px;
-            margin-right: 5px;
-        }
-
-        /* --- DISCOUNT PROGRESS WIDGET STYLES --- */
-        .shipping-widget-cart {
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px dashed;
-        }
-
-        .shipping-progress-bg {
-            background-color: #e9ecef;
-            border-radius: 10px;
-            height: 8px;
-            width: 100%;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .shipping-progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.6s ease;
-            position: relative;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-            background-size: 1rem 1rem;
-            animation: progress-bar-stripes 1s linear infinite;
-        }
-
-        @keyframes progress-bar-stripes {
-            0% {
-                background-position: 1rem 0;
-            }
-
-            100% {
-                background-position: 0 0;
-            }
-        }
-
-        .shipping-text {
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .shipping-highlight {
-            font-weight: 700;
-        }
-
-        /* --- PREMIUM OFFER BANNER STYLES --- */
-        .premium-offer-banner {
-            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
-            border-radius: 16px;
-            padding: 20px 30px;
-            margin: 10px 0 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 10px 25px rgba(0, 176, 155, 0.25);
-            color: #ffffff;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .premium-offer-left {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-
-        .premium-offer-icon {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(8px);
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            color: #ffffff;
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        .premium-offer-text h4 {
-            color: #ffffff;
-            margin: 0 0 4px 0;
-            font-weight: 800;
-            font-size: 22px;
-            letter-spacing: 0.5px;
-            line-height: 1.2;
-            font-family: 'Quicksand', sans-serif;
-        }
-
-        .premium-offer-text p {
-            color: rgba(255, 255, 255, 0.95);
-            margin: 0;
-            font-weight: 600;
-            font-size: 15px;
-            letter-spacing: 0.3px;
-        }
-
-        .premium-payment-pill {
-            background: #ffffff;
-            padding: 10px 20px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .premium-payment-pill .secure-text {
-            color: #25b579;
-            font-size: 13px;
-            font-weight: 800;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            border-right: 2px solid #f0f0f0;
-            padding-right: 15px;
-            letter-spacing: 0.5px;
-        }
-
-        .premium-payment-icons {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .premium-payment-icons img {
-            height: 20px;
-            width: auto;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* --- UPDATED MOBILE COMPACT VIEW --- */
-        @media (max-width: 768px) {
-            .premium-offer-banner {
-                padding: 12px 10px;
-                gap: 8px;
-                border-radius: 12px;
-                flex-wrap: nowrap;
-                align-items: center;
-            }
-
-            .premium-offer-left {
-                flex-direction: row;
-                text-align: left;
-                gap: 8px;
-                flex: 1;
-                min-width: 0;
-            }
-
-            .premium-offer-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 15px;
-                flex-shrink: 0;
-            }
-
-            .premium-offer-text {
-                min-width: 0;
-            }
-
-            .premium-offer-text h4 {
-                font-size: 13px;
-                margin-bottom: 2px;
-                white-space: normal;
-                line-height: 1.2;
-            }
-
-            .premium-offer-text p {
-                font-size: 11px;
-                line-height: 1.2;
-                white-space: normal;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-
-            .premium-payment-pill {
-                padding: 6px 10px;
-                flex-shrink: 0;
-                flex-wrap: nowrap;
-            }
-
-            .premium-payment-pill .secure-text {
-                display: none;
-            }
-
-            .premium-payment-icons {
-                gap: 5px;
-            }
-
-            .premium-payment-icons img {
-                height: 12px !important;
-            }
-        }
-
-        @media (max-width: 1200px) {
-
-            .container.shop-detail-page-main,
-            .container.footer-strip,
-            .container.footer-mid-inner,
-            .container.footer-lower {
-                padding: 0 1rem !important;
-                max-width: 100%;
-            }
-        }
-
-        /* --- FREE SHIPPING BADGE (PREMIUM TEXT-ONLY DESIGN) --- */
-        .free-shipping-wrapper {
-            clear: both;
-            padding-top: 5px;
-            padding-bottom: 15px;
-        }
-
-        .free-shipping-badge {
-            display: inline-flex;
-            align-items: center;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .free-shipping-badge .fs-text {
-            font-size: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            background: linear-gradient(90deg, #00b59c, #007a69);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .free-shipping-badge i {
-            margin-right: 6px;
-            font-size: 22px;
-            color: #00b59c;
-            animation: drive-truck 2.5s ease-in-out infinite;
-        }
-
-        .glowing-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #00e6a8;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-            box-shadow: 0 0 8px #00e6a8;
-            animation: pulse-dot 1.5s infinite alternate;
-        }
-
-        @keyframes pulse-dot {
-            0% {
-                transform: scale(0.8);
-                opacity: 0.6;
-                box-shadow: 0 0 4px #00e6a8;
-            }
-
-            100% {
-                transform: scale(1.2);
-                opacity: 1;
-                box-shadow: 0 0 12px #00e6a8;
-            }
-        }
-
-        @keyframes drive-truck {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            50% {
-                transform: translateX(4px);
-            }
-        }
-
-        /* --- TRUST BADGE STRIP --- */
-        .trust-badge-strip {
-            background-color: #eef2ff;
-            border-radius: 12px;
-            padding: 20px 10px;
-            margin-top: 25px;
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            text-align: center;
-            border: 1px solid #e0e6fd;
-        }
-
-        .trust-badge-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .trust-badge-item:not(:last-child)::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: 20%;
-            height: 60%;
-            width: 1px;
-            background-color: #d4dbf0;
-        }
-
-        .trust-icon-box {
-            background-color: #ffffff;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .trust-icon-box i {
-            font-size: 20px;
-        }
-
-        .icon-price,
-        .icon-cod {
-            color: #00b59c;
-        }
-
-        .icon-return,
-        .icon-express {
-            color: #fd7e14;
-        }
-
-        .trust-badge-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #333;
-            margin: 0;
-            line-height: 1.2;
-        }
-
-        /* --- DISCOUNT PROGRESS WIDGET STYLES --- */
-        .shipping-widget-container {
-            background: #fdfaf3;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            margin-top: 15px;
-            border: 1px dashed #f5c518;
-        }
-
-        /* --- SPECS TOGGLE STYLES (SIDEBAR VERSION) --- */
-        .specs-container {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .specs-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .specs-wrapper {
-            position: relative;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
-
-        .specs-wrapper.collapsed {
-            max-height: 140px;
-        }
-
-        .specs-wrapper.expanded {
-            max-height: 2000px;
-        }
-
-        .gradient-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-            pointer-events: none;
-            transition: opacity 0.3s;
-            opacity: 1;
-        }
-
-        .specs-wrapper.expanded .gradient-overlay {
-            opacity: 0;
-        }
-
-        .specs-table {
-            width: 100%;
-            font-size: 13px;
-        }
-
-        .specs-table td {
-            padding: 8px 5px;
-            border-bottom: 1px solid #f5f5f5;
-            vertical-align: top;
-        }
-
-        .specs-table td:first-child {
-            color: #777;
-            font-weight: 600;
-            width: 45%;
-        }
-
-        .specs-table td:last-child {
-            color: #333;
-            font-weight: 500;
-            text-align: right;
-        }
-
-        .specs-toggle-btn {
-            background: none;
-            border: none;
-            color: #00b59c;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 10px 0 0 0;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .specs-toggle-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* --- VIEW CART BUTTON (DETAIL PAGE SPECIFIC) --- */
-        .btn-view-cart-detail {
-            width: auto !important;
-            display: inline-flex !important;
-            align-items: center;
-            justify-content: center;
-            background-color: #3BB77E !important;
-            color: #ffffff !important;
-            border-radius: 4px;
-            padding: 10px 30px !important;
-            /* Matches standard button size */
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s ease 0s;
-            text-decoration: none;
-            line-height: 1.5;
-            border: none;
-            height: 50px;
-            /* Aligns perfectly with qty box */
-        }
-
-        .btn-view-cart-detail i {
-            margin-right: 8px;
-            font-size: 16px;
-        }
-
-        .btn-view-cart-detail:hover {
-            background-color: #29a56c !important;
-            color: #ffffff !important;
-            transform: translateY(-2px);
-        }
-    </style>
 
     <div class="page-header breadcrumb-wrap">
         <div class="">
@@ -528,6 +19,7 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="premium-offer-banner wow animate__animated animate__fadeInDown mt-4">
             <div class="premium-offer-left">
@@ -535,7 +27,7 @@
                     <i class="fi-rs-badge"></i>
                 </div>
                 <div class="premium-offer-text">
-                    <h4>Get 20% OFF Instantly!</h4>
+                    <h4>Get {{ fetchDiscountPercentage() }}% OFF Instantly!</h4>
                     <p>Pay online via UPI or Card to unlock this exclusive offer.</p>
                 </div>
             </div>
@@ -559,6 +51,7 @@
             </div>
         </div>
     </div>
+
     <div class="shop-detail-page-main container mb-30">
         <div class="m-auto">
             <div class="product-detail accordion-detail">
@@ -627,6 +120,7 @@
                             $percentage =
                                 $original_price > 0 ? (($original_price - $sale_price) / $original_price) * 100 : 0;
                         @endphp
+
                         <div class="detail-info">
                             @if ($mainProduct->out_of_stock == 0)
                                 @if ($check_type == 'sale_product')
@@ -641,7 +135,9 @@
                             @else
                                 <span class="product-cart-componet-badge hot">Out of Stock</span>
                             @endif
+
                             <h2 class="title-detail">{{ $mainProduct->name }}</h2>
+
                             @php
                                 $review = checkReview();
                             @endphp
@@ -659,6 +155,7 @@
                                     </div>
                                 </div>
                             @endif
+
                             @php
                                 $original_price = $mainProduct->price;
                                 $sale_price = 0;
@@ -682,6 +179,7 @@
                                             : 0;
                                 }
                             @endphp
+
                             <div class="clearfix product-price-cover">
                                 @if ($sale_price > 0)
                                     <div class="product-price primary-color float-left mb-0">
@@ -702,38 +200,102 @@
                                 @endif
                             </div>
 
-                            {{-- START: Free Shipping Badge (PREMIUM TEXT-ONLY DESIGN) --}}
-                            <div class="free-shipping-wrapper">
-                                <div class="free-shipping-badge">
-                                    <span class="glowing-dot"></span>
-                                    <i class="fi-rs-truck"></i>
-                                    <span class="fs-text">Free Shipping</span>
-                                </div>
-                            </div>
-                            {{-- END: Free Shipping Badge --}}
-
-                            {{-- START: Dynamic Cart Progress Widget --}}
                             @php
-                                // Get the current cart subtotal and convert it to a float safely
+                                // 1. Get the COD charge from settings
+                                $cod_price = (float) \App\Models\Setting::where('label', 'cod_charges')->first()->value;
+
+                                // 2. Determine the active item price (use sale price if available, otherwise regular price)
+                                $active_price = $sale_price > 0 ? $sale_price : $mainProduct->price;
+
+                                // 3. Calculate COD Total (Item Price + COD Fee)
+                                $cod_total = $active_price;
+
+                                $discount_percent = fetchDiscountPercentage();
+
+                                $prepaid_price = ceil($active_price * ((100 - $discount_percent) / 100));
+
+                                // 5. Calculate Savings (Difference between COD Total and Prepaid Total)
+                                $savings = $cod_total - $prepaid_price;
+
+                                // Check if item is already in cart globally here
+                                $itemInCart =
+                                    \Cart::instance('cart')->content()->where('id', $mainProduct->id)->count() > 0;
+                            @endphp
+
+                            @if ($mainProduct->out_of_stock == 0 && !$itemInCart)
+                                <div class="theme-prepaid-box">
+                                    <div class="theme-prepaid-badges">
+                                        <div class="theme-prepaid-badge-yellow">SAVE {{ $discount_percent }}%</div>
+                                        <div class="theme-prepaid-badge-green">Free Delivery</div>
+                                    </div>
+
+                                    <div class="theme-prepaid-text">
+                                        <div class="theme-prepaid-title">Pay Online at <span
+                                                class="theme-prepaid-highlight">₹{{ number_format($prepaid_price) }}</span>
+                                        </div>
+                                        <div class="theme-prepaid-desc">Extra {{ $discount_percent }}% discount + Free
+                                            Shipping</div>
+                                    </div>
+
+                                    <div class="theme-prepaid-action">
+                                        <button type="button" class="theme-prepaid-btn"
+                                            wire:click="addToCart('prepaid')" wire:loading.attr="disabled">
+                                            <span wire:loading.remove wire:target="addToCart('prepaid')"
+                                                style="display: flex; align-items: center; gap: 6px;">
+                                                <span class="theme-prepaid-btn-main">PAY ONLINE</span>
+                                                <span class="theme-prepaid-btn-sub">Save
+                                                    ₹{{ number_format($savings) }}</span>
+                                            </span>
+                                            <span wire:loading wire:target="addToCart('prepaid')">
+                                                <span class="spinner-border spinner-border-sm me-1"></span>
+                                                Processing...
+                                            </span>
+                                        </button>
+
+                                        <div class="theme-prepaid-icons">
+                                            <span class="theme-prepaid-icons-text">Via</span>
+                                            <img src="{{ asset('assets/frontend/imgs/theme/upi_logo.webp') }}"
+                                                alt="UPI">
+                                            <img src="{{ asset('assets/frontend/imgs/theme/mastercard_logo.png') }}"
+                                                alt="MasterCard">
+                                            <img src="{{ asset('assets/frontend/imgs/theme/rupay.png') }}"
+                                                alt="RuPay">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cart-sb-trust-pills">
+                                    <span class="cart-sb-trust-pill"><i class="fi-rs-check"></i> Most customers choose
+                                        Prepaid & save more</span>
+                                    <span class="cart-sb-trust-pill"><i class="fi-rs-check"></i> Extra discount on
+                                        online
+                                        payment</span>
+                                </div>
+                            @endif
+
+                            @php
                                 $cart_subtotal = (float) str_replace(',', '', \Cart::instance('cart')->subtotal());
                                 $remaining_amount = max(0, $minimum_order_value - $cart_subtotal);
-
-                                // Calculate the percentage complete for the progress bar
                                 $progress_percentage =
                                     $cart_subtotal >= $minimum_order_value
                                         ? 100
                                         : ($cart_subtotal / $minimum_order_value) * 100;
                             @endphp
 
-                            <div class="shipping-widget-container">
+                            <div
+                                class="shipping-widget-container {{ $cart_subtotal >= $minimum_order_value ? 'success' : '' }}">
                                 <div class="shipping-text">
                                     @if ($cart_subtotal >= $minimum_order_value)
-                                        <i class="fi-rs-check-circle" style="color: #28a745; font-size: 20px;"></i>
-                                        <span>Congratulations! You've unlocked <span class="shipping-highlight"
-                                                style="color:#28a745">{{ $discount_percentage }}% OFF</span> your
+                                        <div class="shipping-icon-wrapper"
+                                            style="background: #dcfce7; color: #16a34a; box-shadow: 0 2px 5px rgba(22, 163, 74, 0.15);">
+                                            <i class="fi-rs-check"></i>
+                                        </div>
+                                        <span>Congratulations! You've unlocked <span
+                                                class="shipping-highlight">{{ $discount_percentage }}% OFF</span> your
                                             order!</span>
                                     @else
-                                        <i class="fi-rs-shopping-bag" style="color: #e6b400; font-size: 20px;"></i>
+                                        <div class="shipping-icon-wrapper">
+                                            <i class="fi-rs-shopping-bag"></i>
+                                        </div>
                                         <span>Add <span
                                                 class="shipping-highlight">₹{{ number_format($remaining_amount) }}</span>
                                             more to your cart to get <span
@@ -743,21 +305,46 @@
                                 </div>
                                 <div class="shipping-progress-bg">
                                     <div class="shipping-progress-bar"
-                                        style="width: {{ $progress_percentage }}%; background-color: {{ $cart_subtotal >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
+                                        style="width: {{ $progress_percentage }}%; background-color: {{ $cart_subtotal >= $minimum_order_value ? '#16a34a' : '#eab308' }};">
                                     </div>
                                 </div>
                                 @if ($cart_subtotal < $minimum_order_value)
-                                    <div style="text-align: right; font-size: 11px; margin-top: 5px; color: #888;">
-                                        Current Total: ₹{{ number_format($cart_subtotal) }} /
-                                        ₹{{ number_format($minimum_order_value) }}
+                                    <div class="shipping-status-text">
+                                        <div class="current-total-pill">
+                                            Current Total: <strong>₹{{ number_format($cart_subtotal) }}</strong> /
+                                            ₹{{ number_format($minimum_order_value) }}
+                                        </div>
                                     </div>
                                 @endif
                             </div>
-                            {{-- END: Dynamic Cart Progress Widget --}}
 
+                            <div class="theme-single-promo mt-30 mb-30">
+                                <div class="promo-content">
+                                    <div class="promo-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z">
+                                            </path>
+                                            <line x1="7" y1="7" x2="7.01" y2="7">
+                                            </line>
+                                        </svg>
+                                    </div>
+                                    <div class="promo-text">
+                                        <h4>SPECIAL COMBO: BUY 2 AT ₹429</h4>
+                                    </div>
+                                </div>
+                                <div class="promo-action">
+                                    <a href="/your-combo-page" class="btn-promo">
+                                        BUY NOW &rarr;
+                                    </a>
+                                </div>
+                            </div>
                             <div class="short-desc mb-30">
                                 <p class="font-lg">{!! $mainProduct->short_description !!}</p>
                             </div>
+
                             @foreach ($groupedAttributes as $key => $attributes)
                                 <div class="attr-detail attr-size mb-30" wire:ignore>
                                     <strong class="mr-10">{{ $attributes['name'] }}: </strong>
@@ -771,6 +358,7 @@
                                     </ul>
                                 </div>
                             @endforeach
+
                             <div class="d-flex detail-extralink flex-wrap gap-3 justify-content-sm-start mb-30">
                                 @if ($mainProduct->out_of_stock == 0)
                                     @php
@@ -780,12 +368,8 @@
                                         ) use ($mainProduct) {
                                             return $wishlistItem->model->id === $mainProduct->id;
                                         });
-
-                                        // Check if main product is currently in the cart
-                                        $itemInCart =
-                                            \Cart::instance('cart')->content()->where('id', $mainProduct->id)->count() >
-                                            0;
                                     @endphp
+
                                     @if (!$itemInCart)
                                         <div class="detail-qty border radius ps-4 pt-10 pb-10 me-0">
                                             <a href="#" class="qty-down"
@@ -798,8 +382,8 @@
                                                     class="fi-rs-angle-small-up"></i></a>
                                         </div>
                                     @endif
-                                    <div class="product-extra-link2">
 
+                                    <div class="product-extra-link2">
                                         @if ($itemInCart)
                                             <a href="{{ route('cart') }}" class="btn-view-cart-detail">
                                                 <i class="fi-rs-eye"></i> View Cart
@@ -810,8 +394,7 @@
                                                 <span wire:loading.remove wire:target="addToCart"><i
                                                         class="fi-rs-shopping-cart"></i>Add to cart</span>
                                                 <span wire:loading wire:target="addToCart"><span
-                                                        class="spinner-border spinner-border-sm mr-5"></span>
-                                                    Adding...</span>
+                                                        class="spinner-border spinner-border-sm mr-5"></span>Adding...</span>
                                             </button>
                                         @endif
 
@@ -835,27 +418,19 @@
 
                             <div class="trust-badge-strip">
                                 <div class="trust-badge-item">
-                                    <div class="trust-icon-box">
-                                        <i class="fi-rs-label icon-price"></i>
-                                    </div>
+                                    <div class="trust-icon-box"><i class="fi-rs-label icon-price"></i></div>
                                     <p class="trust-badge-title">Lowest<br>Price</p>
                                 </div>
                                 <div class="trust-badge-item">
-                                    <div class="trust-icon-box">
-                                        <i class="fi-rs-rocket icon-express"></i>
-                                    </div>
+                                    <div class="trust-icon-box"><i class="fi-rs-rocket icon-express"></i></div>
                                     <p class="trust-badge-title">Express<br>Delivery</p>
                                 </div>
                                 <div class="trust-badge-item">
-                                    <div class="trust-icon-box">
-                                        <i class="fi-rs-money icon-cod"></i>
-                                    </div>
+                                    <div class="trust-icon-box"><i class="fi-rs-money icon-cod"></i></div>
                                     <p class="trust-badge-title">Cash on<br>Delivery</p>
                                 </div>
                                 <div class="trust-badge-item">
-                                    <div class="trust-icon-box">
-                                        <i class="fi-rs-refresh icon-return"></i>
-                                    </div>
+                                    <div class="trust-icon-box"><i class="fi-rs-refresh icon-return"></i></div>
                                     @if ($mainProduct->product_return_days > 0)
                                         <p class="trust-badge-title">
                                             {{ $mainProduct->product_return_days }}-day<br>Returns</p>
@@ -934,8 +509,7 @@
                                                                     <div>
                                                                         <h6 class="mb-0 font-heading text-brand"
                                                                             style="font-size: 14px; font-weight: bold;">
-                                                                            {{ $review->name }}
-                                                                        </h6>
+                                                                            {{ $review->name }}</h6>
                                                                     </div>
                                                                 </div>
 
@@ -955,8 +529,7 @@
                                                                 <div class="desc">
                                                                     <p class="mb-0 text-secondary fs-14"
                                                                         style="line-height: 1.3;">
-                                                                        {{ $review->remarks }}
-                                                                    </p>
+                                                                        {{ $review->remarks }}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1018,10 +591,8 @@
                                     <h3 class="mb-20">Add a review</h3>
                                     <div class="star_rating mb-20" id="star_rating">
                                         @for ($i = 1; $i <= 5; $i++)
-                                            <span data-value="{{ $i }}">
-                                                <i
-                                                    class="{{ $review_rating >= $i ? 'fas' : 'far' }} fa-star fs-22"></i>
-                                            </span>
+                                            <span data-value="{{ $i }}"><i
+                                                    class="{{ $review_rating >= $i ? 'fas' : 'far' }} fa-star fs-22"></i></span>
                                         @endfor
                                     </div>
                                     <div class="row">
@@ -1091,19 +662,17 @@
         </div>
     </div>
 </main>
+
 @push('scripts')
     <script>
-        // --- JS FUNCTION FOR TABLE TOGGLE ---
         function toggleSpecs(btnElement) {
             const wrapper = document.getElementById('specsWrapper');
 
             if (wrapper.classList.contains('collapsed')) {
-                // Open it
                 wrapper.classList.remove('collapsed');
                 wrapper.classList.add('expanded');
                 btnElement.innerHTML = 'Show Less <i class="fi-rs-angle-up ms-1"></i>';
             } else {
-                // Close it
                 wrapper.classList.remove('expanded');
                 wrapper.classList.add('collapsed');
                 btnElement.innerHTML = 'Show More <i class="fi-rs-angle-down ms-1"></i>';
@@ -1116,16 +685,12 @@
             stars.forEach(star => {
                 star.addEventListener('click', function() {
                     const rating = parseInt(this.getAttribute('data-value'));
-
-                    // Update Livewire property
                     @this.set('review_rating', rating);
-
-                    // Update star colors visually
                     stars.forEach((s, index) => {
                         const starIcon = s.querySelector('i');
                         if (index < rating) {
                             starIcon.classList.remove('far');
-                            starIcon.classList.add('fas', 'text-warning'); // gold color
+                            starIcon.classList.add('fas', 'text-warning');
                         } else {
                             starIcon.classList.remove('fas', 'text-warning');
                             starIcon.classList.add('far');
@@ -1138,14 +703,10 @@
             document.querySelectorAll(".product_gallery_item").forEach(item => {
                 item.addEventListener("mouseover", function(e) {
                     e.preventDefault();
-
                     const newImage = this.getAttribute("data-image");
                     const zoomImage = this.getAttribute("data-zoom-image");
-
                     mainImage.src = newImage;
                     mainImage.setAttribute("data-zoom-image", zoomImage);
-
-                    // active class handling
                     document.querySelectorAll(".product_gallery_item").forEach(el => el.classList
                         .remove("active"));
                     this.classList.add("active");

@@ -21,6 +21,7 @@ class TrackingComponent extends Component
     public $id;
     public $mainProduct;
     public $quantity = 1;
+    public $discount_percentage = 0;
 
     // Payment Variables mapped to URL query string
     #[Url]
@@ -31,6 +32,7 @@ class TrackingComponent extends Component
     public function mount($id)
     {
         $this->id = $id;
+        $this->discount_percentage = fetchDiscountPercentage();
 
         // Catch URL parameters returning from Razorpay success
         $this->transaction_id = request()->query('transaction_id');
@@ -69,7 +71,7 @@ class TrackingComponent extends Component
                     $order_items = $order->getOrderItems;
                     foreach ($order_items as $order_item) {
                         $official_price = $order_item->sale_default_price;
-                        $bonus_amount = ($official_price * 20) / 100;
+                        $bonus_amount = ($official_price * $this->discount_percentage) / 100;
 
                         $order_item->bonus = $bonus_amount;
                         $total = $order_item->total;
@@ -85,7 +87,8 @@ class TrackingComponent extends Component
                     }
 
                     if (method_exists($this, 'toastSuccess')) {
-                        $this->toastSuccess('Successfully converted to Prepaid! 20% Discount applied.');
+                        $discount_percentage = $this->discount_percentage;
+                        $this->toastSuccess("Successfully converted to Prepaid! $discount_percentage% Discount applied.");
                     }
                 }
             }
@@ -102,8 +105,9 @@ class TrackingComponent extends Component
 
         // Calculate 10% discount on items to find the exact payable amount
         $discount = 0;
+
         foreach ($order->getOrderItems as $item) {
-            $discount += ($item->total * 20) / 100;
+            $discount += ($item->total * $this->discount_percentage) / 100;
         }
         $final_amount = ceil($order->total - $discount - $order->cod_charges);
 
