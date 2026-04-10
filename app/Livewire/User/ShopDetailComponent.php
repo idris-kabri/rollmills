@@ -279,7 +279,9 @@ class ShopDetailComponent extends Component
                 return true;
             }
         });
+
         $addToCart = finalAddToCart($this->mainProduct, $this->quantity + $existing_qauntity, 'update-quantity');
+
         $sale_price = 0;
         $currentDate = Carbon::now();
         $sale_from_date = Carbon::parse($this->mainProduct->sale_from_date);
@@ -331,14 +333,19 @@ class ShopDetailComponent extends Component
 
         $items[] = $item;
         $this->dispatch('add-to-cart', $items);
+
         if ($addToCart) {
+            // NEW LOGIC: Handle the direct "Buy Now" checkout bypass
             if ($option == 'prepaid') {
                 return redirect()->route('cart');
+            } elseif ($option == 'checkout') {
+                // Assuming 'checkout' is your route name for the final checkout page
+                return redirect()->route('checkout');
             } else {
                 $this->toastSuccess('Successfully Added In Your Cart!');
             }
         } else {
-            $this->toastSuccess('Product Quntity Change Successfully!');
+            $this->toastSuccess('Product Quantity Changed Successfully!');
         }
     }
 

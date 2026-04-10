@@ -520,8 +520,6 @@
                                 </div>
 
                                 <div class="cart-sb-trust-pills">
-                                    <span class="cart-sb-trust-pill"><i class="fi-rs-check"></i> Most customers choose
-                                        Prepaid & save more</span>
                                     <span class="cart-sb-trust-pill"><i class="fi-rs-check"></i> Extra discount on
                                         online
                                         payment</span>

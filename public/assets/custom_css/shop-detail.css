@@ -915,3 +915,165 @@
         justify-content: center;
     }
 }
+
+/* ========================================================
+   PRICE VICINITY SHIPPING BADGE (PREMIUM)
+   ======================================================== */
+/* ========================================================
+   PRICE VICINITY SHIPPING BADGE (ANCHORED UNDER PRICE)
+   ======================================================== */
+.shipping-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f4fdf8;
+    /* Very subtle green background */
+    border: 1px solid #bce3c9;
+    border-radius: 4px;
+    /* Soft rectangle to match your buttons */
+    padding: 6px 12px 6px 8px;
+}
+
+.shipping-tag .tag-icon {
+    color: #25b579;
+    font-size: 16px;
+    margin-right: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shipping-tag .tag-text {
+    color: #25b579;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    background: transparent !important;
+}
+
+
+.button-add-to-cart-outline {
+    background-color: transparent !important;
+    color: #3BB77E !important;
+    border: 2px solid #3BB77E !important;
+    border-radius: 4px;
+    padding: 10px 20px !important;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    height: 50px;
+}
+
+.button-add-to-cart-outline:hover {
+    background-color: #f0fdf4 !important;
+}
+
+.button-buy-now {
+    background-color: #ffbc0d !important;
+    color: #1e2a35 !important;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 25px !important;
+    font-weight: 800;
+    transition: all 0.3s ease;
+    height: 50px;
+    text-transform: uppercase;
+}
+
+.button-buy-now i {
+    margin-right: 6px;
+}
+
+.button-buy-now:hover {
+    background-color: #e5a80b !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 188, 13, 0.3);
+}
+
+@media (max-width: 576px) {
+    .w-100-mobile {
+        width: 100%;
+    }
+
+    .w-100-mobile .button-add-to-cart-outline,
+    .w-100-mobile .button-buy-now {
+        flex: 1;
+        padding: 10px 5px !important;
+        font-size: 14px;
+    }
+}
+
+/* ========================================================
+   MOBILE STICKY ACTION BAR (NEW)
+   ======================================================== */
+
+.mobile-sticky-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    z-index: 9999;
+    border-top: 1px solid #eaeaea;
+}
+
+.sticky-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.sticky-price {
+    font-size: 20px;
+    font-weight: 800;
+    color: #253d4e;
+    line-height: 1;
+}
+
+.sticky-shipping {
+    font-size: 11px;
+    font-weight: 600;
+    color: #16a34a;
+    margin-top: 4px;
+}
+
+.sticky-right {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-sticky-cart {
+    background-color: #f1f5f9;
+    color: #3BB77E;
+    border: none;
+    border-radius: 6px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.btn-sticky-buy {
+    background-color: #ffbc0d;
+    color: #1e2a35;
+    border: none;
+    border-radius: 6px;
+    padding: 0 20px;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    height: 45px;
+}
+
+/* Add padding to body on mobile so the footer doesn't get covered by the sticky bar */
+@media (max-width: 991px) {
+    body {
+        padding-bottom: 75px !important;
+    }
+}
