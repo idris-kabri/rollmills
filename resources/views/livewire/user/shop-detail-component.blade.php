@@ -113,6 +113,7 @@
                                 $check_type = 'sale_product';
                             } elseif ($mainProduct->is_featured == 1 && $check_type == '') {
                                 $check_type = 'featured_product';
+                                $sale_price = $mainProduct->sale_default_price;
                             } else {
                                 $sale_price = $mainProduct->sale_default_price;
                                 $check_type = 'sale_default_product';
