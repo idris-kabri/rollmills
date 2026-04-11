@@ -182,7 +182,7 @@
                             <div class="mb-20">
                                 <div class="shipping-tag">
                                     <span class="tag-icon"><i class="fi-rs-shield-check"></i></span>
-                                    <span class="tag-text">Free Shipping + COD Available</span>
+                                    <span class="tag-text">Free Shipping and COD Available</span>
                                 </div>
                             </div>
 
@@ -460,7 +460,7 @@
         <div class="mobile-sticky-bar d-lg-none">
             <div class="sticky-left">
                 <div class="sticky-price">₹{{ number_format($active_price) }}</div>
-                <div class="sticky-shipping">Free Delivery + COD</div>
+                <div class="sticky-shipping">Free Delivery and COD available</div>
             </div>
             <div class="sticky-right">
                 <button type="button" wire:click="addToCart()" class="btn-sticky-cart">
