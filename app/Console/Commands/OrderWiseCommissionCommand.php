@@ -77,35 +77,41 @@ class OrderWiseCommissionCommand extends Command
             }
         });
 
-        $pending_orders = Order::where('status', 0)->get();
+        try {
+            $pending_orders = Order::where('status', 0)->get();
 
-        foreach ($pending_orders as $order) {
-            $transactions = Transaction::where('refrence_id', $order->id)->where('refrence_table', 'orders')->get();
-            foreach ($transactions as $key => $transaction) {
-                $payment_id = str_contains($transaction->payment_id, 'order_') ? getPaymentId($transaction->payment_id) : $transaction->payment_id;
-                if (!$payment_id) {
-                    continue;
+            Log::error(json_encode($pending_orders));
+
+            foreach ($pending_orders as $order) {
+                $transactions = Transaction::where('refrence_id', $order->id)->where('refrence_table', 'orders')->get();
+                foreach ($transactions as $key => $transaction) {
+                    $payment_id = str_contains($transaction->payment_id, 'order_') ? getPaymentId($transaction->payment_id) : $transaction->payment_id;
+                    if (!$payment_id) {
+                        continue;
+                    }
+                    $response = Http::withBasicAuth(config('app.razorpay_key_id'), config('app.razorpay_secret_key'))->get("https://api.razorpay.com/v1/payments/{$payment_id}");
+                    if ($order->id == 1457) {
+                        Log::info(json_encode);
+                    }
+                    $payment_response = $response->json();
+                    $transaction->payment_id = $payment_id;
+                    if (isset($payment_response['status']) && $payment_response['status'] === 'captured') {
+                        $commission_final = $payment_response['fee'] > 0 ? $payment_response['fee'] / 100 : 0;
+                        $transaction->status = 1;
+                        $transaction->commission = $commission_final;
+                        $order->status = 1;
+                        $order->is_cod = 0;
+                        $order->paid_amount = $order->total;
+                        $order->remaining_amount = 0;
+                        $order->cod_charges = 0;
+                        $order->commission = $commission_final;
+                        $order->save();
+                    }
+                    $transaction->save();
                 }
-                $response = Http::withBasicAuth(config('app.razorpay_key_id'), config('app.razorpay_secret_key'))->get("https://api.razorpay.com/v1/payments/{$payment_id}");
-                if ($order->id == 1457) {
-                    Log::info(json_encode);
-                }
-                $payment_response = $response->json();
-                $transaction->payment_id = $payment_id;
-                if (isset($payment_response['status']) && $payment_response['status'] === 'captured') {
-                    $commission_final = $payment_response['fee'] > 0 ? $payment_response['fee'] / 100 : 0;
-                    $transaction->status = 1;
-                    $transaction->commission = $commission_final;
-                    $order->status = 1;
-                    $order->is_cod = 0;
-                    $order->paid_amount = $order->total;
-                    $order->remaining_amount = 0;
-                    $order->cod_charges = 0;
-                    $order->commission = $commission_final;
-                    $order->save();
-                }
-                $transaction->save();
             }
+        } catch (Exception $e) {
+            Log::error(json_encode($e));
         }
 
         $this->info('Commission updates completed successfully.');
