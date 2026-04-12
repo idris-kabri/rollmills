@@ -134,4 +134,7 @@ return [
     'whatsapp_api_token' => env('WHATSAPP_API_TOKEN'),
     'whatsapp_phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
     'whatsapp_api_version' => env('WHATSAPP_API_VERSION'),
+
+    'rate_token' => env('RATE_TOKEN'),
+    'shadowfax_token' => env('SHADOWFAX_TOKEN'),
 ];

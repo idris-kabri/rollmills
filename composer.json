@@ -40,7 +40,8 @@
             "app/Helpers/OfferHelper.php",
             "app/Helpers/sendMessage.php",
             "app/Helpers/ProviderHelper.php",
-            "app/Helpers/xpressBees.php"
+            "app/Helpers/xpressBees.php",
+            "app/Helpers/shadowFax.php"
         ]
     },
     "autoload-dev": {

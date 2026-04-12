@@ -45,6 +45,8 @@ class SyncOrderStatusCommand extends Command
                     $token = $token_data['data'];
                     xpressBeesTracking($token, $order_awb->awb_number);
                 }
+            } elseif ($order_awb->aggregator == 'ShadowFax') {
+                shadowFaxTracking($order_awb->awb_number);
             }
         }
     }
