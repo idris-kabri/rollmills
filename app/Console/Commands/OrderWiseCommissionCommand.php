@@ -103,6 +103,16 @@ class OrderWiseCommissionCommand extends Command
                         $order->cod_charges = 0;
                         $order->commission = $commission_final;
                         $order->save();
+                    } else {
+                        $check_order = Order::where('logged_in_user_id', $order->logged_in_user_id)
+                            ->where('id', '!=', $order->id)
+                            ->whereNotIn('status', [0, 10])
+                            ->whereDate('created_at', $order->created_at->toDateString())
+                            ->first();
+                        if ($check_order != null) {
+                            $order->status = 10;
+                            $order->save();
+                        }
                     }
                     $transaction->save();
                 }
