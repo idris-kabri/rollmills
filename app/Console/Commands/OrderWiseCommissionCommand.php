@@ -80,6 +80,8 @@ class OrderWiseCommissionCommand extends Command
         try {
             $pending_orders = Order::where('status', 0)->get();
 
+            Log::error(json_encode($pending_orders));
+
             foreach ($pending_orders as $order) {
                 $transactions = Transaction::where('refrence_id', $order->id)->where('refrence_table', 'orders')->get();
                 foreach ($transactions as $key => $transaction) {
