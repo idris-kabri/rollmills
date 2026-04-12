@@ -90,9 +90,6 @@ class OrderWiseCommissionCommand extends Command
                         continue;
                     }
                     $response = Http::withBasicAuth(config('app.razorpay_key_id'), config('app.razorpay_secret_key'))->get("https://api.razorpay.com/v1/payments/{$payment_id}");
-                    if ($order->id == 1457) {
-                        Log::info(json_encode);
-                    }
                     $payment_response = $response->json();
                     $transaction->payment_id = $payment_id;
                     if (isset($payment_response['status']) && $payment_response['status'] === 'captured') {
