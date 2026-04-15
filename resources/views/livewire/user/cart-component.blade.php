@@ -554,11 +554,10 @@
                                 @endif
                             </div>
 
-                            <button type="button"
-                                class="btn btn-proceed-checkout mt-3 d-flex justify-content-center align-items-center"
-                                wire:click.prevent="openCheckoutModal">
+                            <a href="/checkout"
+                                class="btn btn-proceed-checkout mt-3 d-flex justify-content-center align-items-center">
                                 Proceed To Checkout <i class="fi-rs-sign-out ms-2"></i>
-                            </button>
+                            </a>
                         </div>
 
                         <div class="p-3 border-radius-15 border mt-4 shadow-sm bg-white">
@@ -605,277 +604,15 @@
                 <span class="text-brand fs-14 fw-800">₹{{ number_format($finalTotal) }}</span>
             </div>
         </div>
-        <button type="button" class="btn w-100 d-flex justify-content-center align-items-center"
-            wire:click.prevent="openCheckoutModal">
-            Proceed To CheckOut <i class="fi-rs-sign-out ml-15"></i>
-        </button>
+        <a href="/checkout" class="btn w-100 d-flex justify-content-center align-items-center">
+            Proceed To Checkout <i class="fi-rs-sign-out ml-15"></i>
+        </a>
     </div>
 
-    <div wire:ignore.self class="modal fade checkout-centered-modal" id="checkoutBottomSheet"
-        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkoutBottomSheetLabel"
-        aria-hidden="true" style="z-index: 1055;">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0 fw-800 text-dark" id="checkoutBottomSheetLabel">Complete Your Order</h4>
-                    <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fi-rs-cross"></i>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="container-fluid p-0">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-12">
-
-                                {{-- BILLING HEADER & TOGGLE BUTTON --}}
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="mb-0 fw-800 text-dark">Billing Details</h5>
-                                    @if (count($fetch_user_address) > 0 && $add_new_address == false)
-                                        <button class="btn btn-sm btn-fill-out" wire:click="addNewAddress"><i
-                                                class="fi-rs-plus mr-5"></i>Add New</button>
-                                    @elseif($add_new_address && count($fetch_user_address) > 0)
-                                        <button class="btn btn-sm btn-outline"
-                                            wire:click="cancelNewAddress">Cancel</button>
-                                    @endif
-                                </div>
-
-                                {{-- 1. BILLING ADDRESS LIST VIEW --}}
-                                @if (count($fetch_user_address) > 0 && $add_new_address == false)
-                                    <div class="row g-3 mb-4">
-                                        @foreach ($fetch_user_address as $address)
-                                            <div class="col-md-6">
-                                                <div class="default-address-div"
-                                                    wire:click="storeAddressInToBilling({{ $address->id }})">
-                                                    <a
-                                                        class="coupon-card-cart m-0 {{ isset($billing_address['id']) && $billing_address['id'] == $address->id ? 'selected' : '' }}">
-                                                        <div class="coupon-header">
-                                                            <div class="d-flex coupon-code-section">
-                                                                <div class="coupon-code-cart">Address
-                                                                    {{ $loop->index + 1 }}</div>
-                                                            </div>
-                                                            <div class="check-circle"><i class="fi-rs-check"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="coupon-description">
-                                                            <ul class="list-unstyled mb-0">
-                                                                <li class="mb-1 fw-500 font-sm text-dark">
-                                                                    <strong>Phone:</strong> {{ $address->mobile }}
-                                                                </li>
-                                                                <li class="mb-1 fw-500 font-sm text-dark">
-                                                                    <strong>Address:</strong>
-                                                                    {{ $address->address_line_1 }},
-                                                                    {{ $address->city }}, {{ $address->state }} -
-                                                                    {{ $address->zipcode }}
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    {{-- 2. BILLING ADDRESS FORM VIEW --}}
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-md-6">
-                                            <label class="modern-label">Name *</label>
-                                            <input type="text" class="modern-input" required
-                                                wire:model="billing_address.name">
-                                            @error('billing_address.name')
-                                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="modern-label">State *</label>
-                                            <input type="text" class="modern-input" required
-                                                wire:model="billing_address.state">
-                                            @error('billing_address.state')
-                                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="modern-label">City *</label>
-                                            <input type="text" class="modern-input" required
-                                                wire:model="billing_address.city">
-                                            @error('billing_address.city')
-                                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="modern-label">Address Line 1 *</label>
-                                            <input type="text" class="modern-input" required
-                                                wire:model="billing_address.billing_address1">
-                                            @error('billing_address.billing_address1')
-                                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="modern-label">Address Line 2</label>
-                                            <input type="text" class="modern-input"
-                                                wire:model="billing_address.billing_address2">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="modern-label">Postcode / ZIP *</label>
-                                            <input type="text" class="modern-input"
-                                                wire:model="billing_address.zipcode">
-                                            @error('billing_address.zipcode')
-                                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="modern-label">Phone *</label>
-                                            <input required type="text" class="modern-input"
-                                                wire:model.live.debounce.800ms="billing_address.mobile"
-                                                wire:keyup.debounce.800ms="billingAddressMobile">
-                                            @error('billing_address.mobile')
-                                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <div class="mb-4">
-                                    <textarea class="modern-input" rows="2" placeholder="Additional information (Optional)"
-                                        wire:model="additional_information"></textarea>
-                                </div>
-
-                                {{-- SHIPPING DETAILS --}}
-                                <div class="ship_detail">
-                                    @if ($ship_to_different_address_enabled)
-                                        <div id="collapseAddress" class="different_address collapse in show">
-                                            @if (count($fetch_user_address) > 0 && !$add_new_shipp_address)
-                                                <div
-                                                    class="d-flex justify-content-between align-items-center mb-3 mt-4">
-                                                    <h5 class="mb-0 fw-800 text-dark">Select Delivery Address:</h5>
-                                                    <button class="btn btn-sm btn-fill-out"
-                                                        wire:click="addNewShipAddress"><i class="fi-rs-plus mr-5"></i>
-                                                        Add New</button>
-                                                </div>
-                                                <div class="row g-3">
-                                                    @foreach ($fetch_user_address as $address)
-                                                        <div class="col-md-6">
-                                                            <div class="default-address-div"
-                                                                wire:click="storeAddressInToShipping({{ $address->id }})">
-                                                                <a
-                                                                    class="coupon-card-cart m-0 {{ isset($ship_to_different_address['id']) && $ship_to_different_address['id'] == $address->id ? 'selected' : '' }}">
-                                                                    <div class="coupon-header">
-                                                                        <div class="d-flex coupon-code-section">
-                                                                            <span>{{ strtoupper(substr($address->name, 0, 1)) }}</span>
-                                                                            <div class="coupon-code-cart">
-                                                                                {{ $address->name }}</div>
-                                                                        </div>
-                                                                        <div class="check-circle"><i
-                                                                                class="fi-rs-check"></i></div>
-                                                                    </div>
-                                                                    <div class="coupon-description">
-                                                                        <ul class="list-unstyled mb-0">
-                                                                            <li class="mb-1 fw-500 font-sm text-dark">
-                                                                                <strong>Phone:</strong>
-                                                                                {{ $address->mobile }}
-                                                                            </li>
-                                                                            <li class="mb-1 fw-500 font-sm text-dark">
-                                                                                <strong>Address:</strong>
-                                                                                {{ $address->address_line_1 }},
-                                                                                {{ $address->city }}
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @else
-                                                <div
-                                                    class="d-flex justify-content-between align-items-center mb-3 mt-4">
-                                                    <h5 class="mb-0 fw-800 text-dark">New Shipping Address</h5>
-                                                    @if (count($fetch_user_address) > 0)
-                                                        <button class="btn btn-outline btn-sm"
-                                                            wire:click="cancelNewShipAddress">Cancel</button>
-                                                    @endif
-                                                </div>
-                                                <div class="row g-3">
-                                                    <div class="col-md-6"><label class="modern-label">Name
-                                                            *</label><input type="text" class="modern-input"
-                                                            required wire:model="ship_to_different_address.name"></div>
-                                                    <div class="col-md-6"><label class="modern-label">Mobile
-                                                            *</label><input required type="text"
-                                                            class="modern-input"
-                                                            wire:model.live.debounce.800ms="ship_to_different_address.mobile"
-                                                            wire:keyup="shippingAddressMobile"></div>
-                                                    <div class="col-md-6"><label class="modern-label">Address Line 1
-                                                            *</label><input type="text" class="modern-input"
-                                                            required
-                                                            wire:model="ship_to_different_address.billing_address1">
-                                                    </div>
-                                                    <div class="col-md-6"><label class="modern-label">Address Line
-                                                            2</label><input type="text" class="modern-input"
-                                                            wire:model="ship_to_different_address.billing_address2">
-                                                    </div>
-                                                    <div class="col-md-6"><label class="modern-label">City / Town
-                                                            *</label><input required type="text"
-                                                            class="modern-input"
-                                                            wire:model="ship_to_different_address.city"></div>
-                                                    <div class="col-md-6"><label class="modern-label">State
-                                                            *</label><input required type="text"
-                                                            class="modern-input"
-                                                            wire:model="ship_to_different_address.state"></div>
-                                                    <div class="col-md-6"><label class="modern-label">Zipcode
-                                                            *</label><input required type="text"
-                                                            class="modern-input"
-                                                            wire:model="ship_to_different_address.zipcode"
-                                                            @if (session('shipping_charge')) disabled @endif></div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer-custom">
-                    <div class="d-flex justify-content-between align-items-end mb-3">
-                        <div>
-                            <h3 class="mb-0 fw-900 text-dark" style="font-size: 22px;">Total:
-                                ₹{{ number_format($finalTotal) }}</h3>
-                            <span
-                                class="text-muted fw-600 fs-12">({{ $payment_method == 'online' ? 'Prepaid Order' : 'Cash on Delivery' }})</span>
-                        </div>
-                        <div class="text-end d-none d-sm-block">
-                            <div class="font-xs text-muted fw-600"><i class="fi-rs-lock text-success"></i> 100% Secure
-                            </div>
-                            <div class="font-xs text-muted" style="font-size: 11px;">UPI &middot; Card &middot; Net
-                                Banking</div>
-                        </div>
-                    </div>
-                    <button
-                        class="btn btn-golden w-100 py-3 fw-800 fs-16 rounded d-flex justify-content-center align-items-center"
-                        wire:click.prevent="verifyCheckout" wire:loading.attr="disabled"
-                        wire:target="verifyCheckout, placeOrder">
-                        <span wire:loading.remove wire:target="verifyCheckout, placeOrder">
-                            Place Order <i class="fi-rs-arrow-right ms-2"></i>
-                        </span>
-                        <span wire:loading wire:target="verifyCheckout, placeOrder">
-                            <span class="spinner-border spinner-border-sm me-2"></span> Processing...
-                        </span>
-                    </button>
-                    <div class="text-center mt-3 d-block d-sm-none">
-                        <span class="text-muted fw-600" style="font-size: 11px;"><i
-                                class="fi-rs-lock text-success"></i> 100% Secure &middot; UPI &middot; Card &middot;
-                            Net Banking</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
         function showCongratsOffer() {
@@ -937,7 +674,6 @@
     <script>
         document.addEventListener('livewire:init', () => {
             let wishlistModal = null;
-            let checkoutModal = null;
 
             Livewire.on('open-cart-remove-item-modal', () => {
                 wishlistModal = new bootstrap.Modal(document.getElementById('CartRemoveItemModal'), {
@@ -951,74 +687,6 @@
                 if (wishlistModal) {
                     wishlistModal.hide();
                 }
-            });
-
-            // Handle Opening Checkout Modal
-            Livewire.on('show-checkout-modal', () => {
-                checkoutModal = new bootstrap.Modal(document.getElementById('checkoutBottomSheet'), {
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                checkoutModal.show();
-            });
-
-            Livewire.on('close-checkout-modal', () => {
-                if (checkoutModal) {
-                    checkoutModal.hide();
-                } else {
-                    var myModalEl = document.getElementById('checkoutBottomSheet');
-                    var modal = bootstrap.Modal.getInstance(myModalEl);
-                    if (modal) {
-                        modal.hide();
-                    }
-                }
-            });
-
-            // SCROLL TO VALIDATION ERROR
-            window.addEventListener('validation-failed', function(event) {
-                setTimeout(() => {
-                    const firstError = document.querySelector('.text-danger.small.d-block');
-                    if (firstError) {
-                        const formGroup = firstError.closest('.col-md-6');
-                        if (formGroup) {
-                            formGroup.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        } else {
-                            firstError.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        }
-                    }
-                }, 100);
-            });
-
-            // RAZORPAY INITIATION
-            window.addEventListener('initiate-razorpay', function(event) {
-                const detail = event.detail[0] || event.detail;
-                var options = {
-                    "key": '{{ config('app.razorpay_key_id') }}',
-                    "amount": detail.amount,
-                    "currency": "INR",
-                    "name": "Roll mills",
-                    "description": detail.description,
-                    "image": "https://rollmills.store/assets/frontend/imgs/theme/logo.png",
-                    "order_id": detail.razorpay_order_id,
-                    "handler": function(response) {
-                        window.location.href =
-                            `${detail.success_url}?transaction_id=${detail.transaction_id}&payment_id=${response.razorpay_payment_id}&order_id=${detail.razorpay_order_id}&title=${detail.title}&customer_name=${detail.customer_name}&type=order_payment&id=${detail.id}`;
-                    },
-                    "prefill": {
-                        "name": detail.name
-                    },
-                    "theme": {
-                        "color": "#CF9007"
-                    }
-                };
-                var rzp1 = new Razorpay(options);
-                rzp1.open();
             });
         });
     </script>

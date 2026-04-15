@@ -10,6 +10,7 @@ use App\Models\ProductCategoryAssign;
 use App\Models\OrderItems;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\Transaction; // Imported for cancel payment logic
 use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -60,9 +61,16 @@ class CheckoutComponent extends Component
     public $maximum_extra_discount_amount = 500;
     public $extra_discount = 0;
 
+    // --- CANCEL & RAZORPAY VARIABLES ---
+    public $pending_order_id = null;
+    public $cancel_reason = 'cod';
+    public $cancel_reason_text = '';
+    public $potentialCodTotal = 0;
+
     public function mount()
     {
         session()->forget('first_order');
+        $this->payment_method = session()->get('selected_payment_method', 'online');
         $this->minimum_order_value = Setting::where('label', 'extra_discount_order_value')->first()->value;
         $this->discount_percentage = Setting::where('label', 'extra_discount')->first()->value;
         $this->maximum_extra_discount_amount = Setting::where('label', 'maximum_extra_discount')->first()->value;
@@ -250,10 +258,14 @@ class CheckoutComponent extends Component
 
         // First Order on Online Payment
         if ($this->is_first_order && $this->payment_method == 'online') {
-            $this->onlineDiscountAmount = round($cartTotal * 0.2, 2);
+            $discountPercentage = fetchDiscountPercentage();
+            $this->onlineDiscountAmount = round($cartTotal * ($discountPercentage / 100), 2);
         } else {
             $this->onlineDiscountAmount = 0;
         }
+
+        // Calculate potential COD total for the modal interface
+        $this->potentialCodTotal = ceil($cartTotal - $this->offerDiscount - $this->extra_discount + $this->cash_on_delivery_amount);
 
         if ($this->payment_method == 'online') {
             $this->finalTotal = $cartTotal - $this->offerDiscount - $this->couponDiscount - $this->onlineDiscountAmount - $this->extra_discount + $shippingCharge;
@@ -533,7 +545,8 @@ class CheckoutComponent extends Component
             }
             $orderItem->offer_discount = $offerPrice;
             if ($this->is_first_order == true && $this->payment_method == 'online' && (!isset($item->options['is_gift_product']) || $item->options['is_gift_product'] == false)) {
-                $item_discount = ($orderItem->subtotal * 20) / 100;
+                $discount_percentage = fetchDiscountPercentage();
+                $item_discount = ($orderItem->subtotal * $discount_percentage) / 100;
                 $this->item_sum_discount += $item_discount;
                 $total = $orderItem->subtotal - $orderItem->offer_discount - $item_discount;
                 $orderItem->bonus = $item_discount;
@@ -715,6 +728,10 @@ class CheckoutComponent extends Component
                     $user_order->total_bonus = $this->item_sum_discount;
                 }
                 $user_order->save();
+
+                // STORE PENDING ORDER ID FOR CANCELLATION LOGIC
+                $this->pending_order_id = $user_order->id;
+
                 $coupon = Coupon::find($this->coupon_discount_id);
 
                 $order = razorPayPayment(ceil($this->finalTotal + $this->online_payment_amount), Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using Online Payment');
@@ -761,6 +778,73 @@ class CheckoutComponent extends Component
             }
         } catch (\Exception $e) {
             $this->toastError($e->getMessage());
+        }
+    }
+
+    public function handleCancelPayment()
+    {
+        if (!$this->pending_order_id) {
+            $this->dispatch('close-cancel-modal');
+            return;
+        }
+
+        $order = Order::find($this->pending_order_id);
+        if (!$order) {
+            $this->dispatch('close-cancel-modal');
+            return;
+        }
+
+        if ($this->cancel_reason == 'cod') {
+            // 1. Remove previous online order items since prices/discounts might be changing
+            OrderItems::where('order_id', $order->id)->delete();
+
+            // Clear old transaction if any exists
+            if (class_exists(Transaction::class)) {
+                Transaction::where('refrence_table', 'orders')->where('refrence_id', $order->id)->delete();
+            }
+
+            // 2. Set payment method to COD and RUN CALCULATETOTALS
+            $this->paymentMethod('cod');
+            $this->calculateTotals();
+
+            // 3. Update the order with the freshly calculated COD totals
+            $order->subtotal = (float) str_replace(',', '', Cart::instance('cart')->total());
+            $order->coupon_discount = 0; // Clear online-only coupon
+            $order->coupon_id = null;
+            $order->offer_discount = $this->offerDiscount > 0 ? $this->offerDiscount : 0;
+            $order->special_discount = $this->extra_discount > 0 ? $this->extra_discount : 0;
+
+            $order->total = ceil($this->finalTotal + $this->cash_on_delivery_amount); // Uses the updated COD total
+            $order->shipping_charges = (float) $this->cash_on_delivery_amount;
+            $order->paid_amount = 0;
+            $order->remaining_amount = ceil($this->finalTotal + $this->cash_on_delivery_amount);
+            $order->cod_charges = (int) $this->cash_on_delivery_amount - $this->online_payment_amount;
+            $order->is_cod = 1;
+            $order->status = 1; // Order success status
+            $order->total_bonus = 0; // Clear online bonus
+            $order->gift_card_discount = $this->gift_card_amount > 0 ? $this->gift_card_amount : 0;
+
+            $order->save();
+
+            // Create items based on COD calculations
+            $this->createOrderItem($order);
+
+            Cart::instance('cart')->destroy();
+            if (Auth::check()) {
+                Cart::instance('cart')->store(Auth::user()->mobile);
+            }
+            session()->forget(['coupon_discount_amount', 'coupon_discount_id', 'coupon_code']);
+
+            $this->dispatch('close-cancel-modal');
+
+            return redirect('/order-completed?id=' . $order->id)->with('success', 'Your order was successfully placed with Cash on Delivery!');
+        } else {
+            $appendInfo = "\nCancel Reason (Payment Exit): " . $this->cancel_reason_text;
+            $order->additional_information = $order->additional_information . $appendInfo;
+            $order->save();
+
+            $this->toastError('Payment process cancelled.');
+            $this->dispatch('close-cancel-modal');
         }
     }
 

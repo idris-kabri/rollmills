@@ -1,4 +1,85 @@
 <main class="main">
+    @php
+        $discount_percentage = fetchDiscountPercentage();
+    @endphp
+    {{-- CANCEL PAYMENT MODAL --}}
+    <div wire:ignore.self class="modal fade cancel-payment-modal" id="RazorpayCancelModal" tabindex="-1"
+        data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg modal-custom-radius">
+
+                <div class="modal-header border-0 pb-0 justify-content-end">
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body pt-0 px-sm-5 px-4 pb-16">
+                    <div class="text-center">
+                        <img src="{{ asset('assets/frontend/imgs/icon&images/complain.png') }}" alt="Alert"
+                            class="img-fluid cancel-modal-icon" />
+                        <h4 class="cancel-modal-title">Payment Cancelled</h4>
+                        <p class="cancel-modal-subtitle">Don't leave empty-handed! Why are you cancelling?</p>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <label class="cancel-reason-label {{ $cancel_reason === 'cod' ? 'active-cod' : '' }}">
+                            <div class="form-check me-3 mt-1">
+                                <input class="form-check-input custom-radio-lg" type="radio" name="cancelReason"
+                                    value="cod" wire:model.live="cancel_reason">
+                            </div>
+                            <div class="w-100">
+                                <span class="reason-title text-success">
+                                    <i class="fi-rs-truck me-2"></i> Switch to Cash on Delivery
+                                </span>
+                                <span class="reason-desc">Skip the online payment and seamlessly place your order using
+                                    Cash on Delivery right now.</span>
+                            </div>
+                        </label>
+
+                        <label class="cancel-reason-label {{ $cancel_reason === 'other' ? 'active-other' : '' }}">
+                            <div class="form-check me-3">
+                                <input class="form-check-input custom-radio-lg" type="radio" name="cancelReason"
+                                    value="other" wire:model.live="cancel_reason">
+                            </div>
+                            <div>
+                                <span class="reason-title text-dark">Other reason</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    @if ($cancel_reason === 'other')
+                        <div class="mb-4 slide-down">
+                            <textarea class="form-control custom-textarea" rows="3" placeholder="Please specify your reason for cancelling..."
+                                wire:model="cancel_reason_text"></textarea>
+                        </div>
+                    @endif
+
+                    <div class="cancel-modal-actions">
+                        <button type="button" class="btn btn-outline-secondary flex-grow-1"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="button"
+                            class="btn btn-golden flex-grow-1 fw-bold d-flex align-items-center justify-content-center"
+                            wire:click.prevent="handleCancelPayment" wire:loading.attr="disabled"
+                            wire:target="handleCancelPayment">
+                            <span wire:loading.remove wire:target="handleCancelPayment">
+                                @if ($cancel_reason === 'cod')
+                                    Place COD Order (₹{{ number_format($potentialCodTotal) }})
+                                @else
+                                    Submit
+                                @endif
+                                <i class="fi-rs-arrow-right ms-2"></i>
+                            </span>
+                            <span wire:loading wire:target="handleCancelPayment">
+                                <span class="spinner-border spinner-border-sm me-2"></span> Processing...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
@@ -146,8 +227,8 @@
                                 </div>
 
                                 <div class="form-group col-lg-6">
-                                    <input required type="text" name="billing_address.mobile" placeholder="Phone *"
-                                        wire:model="billing_address.mobile"
+                                    <input required type="text" name="billing_address.mobile"
+                                        placeholder="Phone *" wire:model="billing_address.mobile"
                                         wire:keyup.debounce.800ms="billingAddressMobile">
                                     @error('billing_address.mobile')
                                         <span class="text-danger small d-block">{{ $message }}</span>
@@ -279,274 +360,287 @@
                 </div>
             </div>
 
-            {{-- 5. ORDER SUMMARY SECTION (REDESIGNED) --}}
+            {{-- 5. ORDER SUMMARY SECTION (REDESIGNED USING CART STYLE) --}}
             <div class="col-lg-5">
-                {{-- Dynamic Discount Offer Progress Widget (Sidebar) --}}
-                @php
-                    $cartSubtotalNumeric = 0;
-                    foreach (Cart::instance('cart')->content() as $item) {
-                        if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
-                            continue;
-                        }
-                        $cartSubtotalNumeric += $item->price * $item->qty;
-                    }
-                    $remainingAmount = max(0, $minimum_order_value - $cartSubtotalNumeric);
-                    $progressPercentage =
-                        $cartSubtotalNumeric >= $minimum_order_value
-                            ? 100
-                            : ($cartSubtotalNumeric / $minimum_order_value) * 100;
-                @endphp
+                <div class="cart-sb-wrap">
+                    <div class="co-wrap p-3">
 
-                <div class="shipping-widget-checkout mb-4"
-                    style="background: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#f0fdf4' : '#fdfaf3' }}; border-color: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
-                    <div class="shipping-text">
-                        @if ($cartSubtotalNumeric >= $minimum_order_value)
-                            <i class="fi-rs-check-circle" style="color: #28a745; font-size: 18px;"></i>
-                            <span style="font-size:13px; line-height:1.2">Congratulations! You've unlocked <span
-                                    class="shipping-highlight" style="color:#28a745">{{ $discount_percentage }}% OFF
-                                    (Up to ₹{{ $maximum_extra_discount_amount }})</span>!</span>
-                        @else
-                            <i class="fi-rs-shopping-bag" style="color: #e6b400; font-size: 18px;"></i>
-                            <span style="font-size:13px; line-height:1.2">Add <span class="shipping-highlight"
-                                    style="color:#d32f2f">₹{{ number_format($remainingAmount) }}</span> more for
-                                <span class="shipping-highlight" style="color:#d32f2f">{{ $discount_percentage }}%
-                                    OFF (Up to ₹{{ $maximum_extra_discount_amount }})</span>!</span>
-                        @endif
-                    </div>
-                    <div class="shipping-progress-bg">
-                        <div class="shipping-progress-bar"
-                            style="width: {{ $progressPercentage }}%; background-color: {{ $cartSubtotalNumeric >= $minimum_order_value ? '#28a745' : '#f5c518' }};">
-                        </div>
-                    </div>
-                    @if ($cartSubtotalNumeric < $minimum_order_value)
-                        <div style="text-align: right; font-size: 11px; margin-top: 5px; color: #888;">
-                            Total: ₹{{ number_format($cartSubtotalNumeric) }} /
-                            ₹{{ number_format($minimum_order_value) }}
-                        </div>
-                    @endif
-                </div>
+                        <h3 class="cart-sb-title mb-3">Order Items</h3>
 
-                {{-- REPLACED CHECKOUT BLOCK --}}
-                <div class="co-wrap">
-                    {{-- Products List --}}
-                    @php
-                        $total_original_price = 0;
-                    @endphp
-                    @foreach (Cart::instance('cart')->content() as $item)
-                        @php
-                            $isGift = $item->options['is_gift_product'] ?? false;
-                            $shop_detail_url = $item->model->slug
-                                ? route('shop-detail', [
-                                    'slug' => $item->model->slug,
-                                    'id' => $item->model->id,
-                                ])
-                                : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
-                            $total_original_price += $item->model->price * $item->qty;
-                        @endphp
+                        {{-- Products List --}}
+                        <div class="mb-4 pb-3 border-bottom">
+                            @php
+                                $total_original_price = 0;
+                            @endphp
+                            @foreach (Cart::instance('cart')->content() as $item)
+                                @php
+                                    $isGift = $item->options['is_gift_product'] ?? false;
+                                    $shop_detail_url = $item->model->slug
+                                        ? route('shop-detail', [
+                                            'slug' => $item->model->slug,
+                                            'id' => $item->model->id,
+                                        ])
+                                        : route('shop-detail', ['slug' => 'no-slug', 'id' => $item->model->id]);
+                                    $total_original_price += $item->model->price * $item->qty;
+                                @endphp
 
-                        <div class="co-order-row {{ $isGift ? 'gift-row-summary' : '' }}">
-                            <div class="co-thumb">
-                                <img src="{{ asset('storage/' . $item->model->featured_image) }}"
-                                    alt="{{ $item->model->name }}">
-                            </div>
-                            <div style="flex-grow: 1;">
-                                <div class="co-prod-name">
-                                    @if ($isGift)
-                                        <span class="co-badge-inline"
-                                            style="background:#ffbc0d;margin-left:0;margin-right:5px;">Gift</span>
-                                    @endif
-                                    <a href="{{ !$isGift ? $shop_detail_url : 'javascript:void(0)' }}"
-                                        style="color: inherit;">{{ $item->model->name }}</a>
+                                <div class="co-order-row {{ $isGift ? 'gift-row-summary' : '' }}">
+                                    <div class="co-thumb">
+                                        <img src="{{ asset('storage/' . $item->model->featured_image) }}"
+                                            alt="{{ $item->model->name }}">
+                                    </div>
+                                    <div style="flex-grow: 1;">
+                                        <div class="co-prod-name">
+                                            @if ($isGift)
+                                                <span class="co-badge-inline"
+                                                    style="background:#ffbc0d;margin-left:0;margin-right:5px;">Gift</span>
+                                            @endif
+                                            <a href="{{ !$isGift ? $shop_detail_url : 'javascript:void(0)' }}"
+                                                style="color: inherit;">{{ $item->model->name }}</a>
+                                        </div>
+                                        <div class="co-prod-sub">Qty: {{ $item->qty }}</div>
+                                    </div>
+                                    <div class="co-prod-price">
+                                        @if ($isGift)
+                                            <span style="color:#25b579;">FREE</span>
+                                        @else
+                                            ₹{{ number_format($item->price * $item->qty) }}
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="co-prod-sub">Qty: {{ $item->qty }}</div>
+                            @endforeach
+                        </div>
+
+                        <h3 class="cart-sb-title">Details</h3>
+
+                        <div class="mb-4">
+                            <div class="cart-sb-row muted">
+                                <span class="cart-sb-label">Cart Total (MRP)</span>
+                                <span class="cart-sb-val">₹{{ number_format($total_original_price, 2) }}</span>
                             </div>
-                            <div class="co-prod-price">
-                                @if ($isGift)
-                                    <span style="color:#25b579;">FREE</span>
+
+                            @php
+                                $cartSubtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+                                $customer_save_amount = $total_original_price - $cartSubtotal;
+                            @endphp
+
+                            @if ($customer_save_amount > 0)
+                                <div class="cart-sb-row green">
+                                    <span class="cart-sb-label">You Save</span>
+                                    <span class="cart-sb-val">- ₹{{ number_format($customer_save_amount, 2) }}</span>
+                                </div>
+                            @endif
+
+                            <div class="cart-sb-row muted">
+                                <span class="cart-sb-label">Subtotal</span>
+                                <span class="cart-sb-val">₹{{ Cart::instance('cart')->subtotal() }}</span>
+                            </div>
+
+                            {{-- Extra Discount --}}
+                            @if ($extra_discount > 0)
+                                @php
+                                    $extra_discount_percentage = \App\Models\Setting::where(
+                                        'label',
+                                        'extra_discount',
+                                    )->first();
+                                @endphp
+                                <div class="cart-sb-row green">
+                                    <span class="cart-sb-label">Special Discount
+                                        ({{ $extra_discount_percentage->value }}%
+                                        OFF)</span>
+                                    <span class="cart-sb-val">- ₹{{ number_format($extra_discount, 2) }}</span>
+                                </div>
+                            @endif
+
+                            {{-- Coupon Discount --}}
+                            @php
+                                $discount = $mainDiscountAmount;
+                                $couponCode = session()->get('coupon_code');
+                            @endphp
+                            @if ($discount != 0)
+                                <div class="cart-sb-row green">
+                                    <span class="cart-sb-label">Coupon Applied @if ($couponCode)
+                                            ({{ strtoupper($couponCode) }})
+                                        @endif
+                                    </span>
+                                    <span class="cart-sb-val">- ₹{{ number_format($discount, 2) }}</span>
+                                </div>
+                            @endif
+
+                            {{-- Prepaid Discount --}}
+                            @if ($is_first_order && $payment_method == 'online')
+                                <div class="cart-sb-row green">
+                                    <span class="cart-sb-label">Prepaid Discount <span
+                                            class="cart-sb-auto-badge">AUTO</span></span>
+                                    <span class="cart-sb-val">- ₹{{ number_format($onlineDiscountAmount, 2) }}</span>
+                                </div>
+                            @endif
+
+                            {{-- COD Fee --}}
+                            @if ($payment_method == 'cod')
+                                <div class="cart-sb-row red">
+                                    <span class="cart-sb-label">COD Handling Fee</span>
+                                    <span class="cart-sb-val">+
+                                        ₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount), 2) }}</span>
+                                </div>
+                            @endif
+
+                            {{-- Shipping Charges --}}
+                            <div class="cart-sb-row muted">
+                                <span class="cart-sb-label">Shipping</span>
+                                @if (session('flat_rate_charge') != null)
+                                    <span
+                                        class="cart-sb-val">₹{{ number_format(session('flat_rate_charge'), 2) }}</span>
+                                @elseif (floatval($online_payment_amount) == 0 && $payment_method == 'online')
+                                    <span class="cart-sb-val text-success fw-bold" style="color: #16a34a;">Free</span>
                                 @else
-                                    ₹{{ number_format($item->price * $item->qty) }}
+                                    <span class="cart-sb-val">
+                                        @if ($payment_method == 'online')
+                                            ₹{{ number_format(ceil($online_payment_amount), 2) }}
+                                        @else
+                                            ₹{{ number_format(ceil($cash_on_delivery_amount), 2) }}
+                                        @endif
+                                    </span>
                                 @endif
                             </div>
-                        </div>
-                    @endforeach
 
-                    {{-- Details / Totals section --}}
-                    <div class="co-details">
-                        <div class="co-details-title">Details</div>
-                        <div class="co-row muted"><span>Cart Total
-                                (MRP)</span><span>₹{{ number_format($total_original_price, 2) }}</span></div>
+                            <div class="cart-sb-divider"></div>
 
-                        @php
-                            $cartSubtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
-                            $customer_save_amount = $total_original_price - $cartSubtotal;
-                        @endphp
-                        <div class="co-row green"><span>You Save</span><span>-
-                                ₹{{ number_format($customer_save_amount, 2) }}</span></div>
-
-                        <div class="co-row muted">
-                            <span>Subtotal</span><span>₹{{ Cart::instance('cart')->subtotal() }}</span></div>
-
-                        {{-- Extra Discount --}}
-                        @if ($extra_discount > 0)
-                            <div class="co-row green">
-                                <span>Special Discount ({{ $discount_percentage }}% OFF)</span>
-                                <span>- ₹{{ number_format($extra_discount, 2) }}</span>
-                            </div>
-                        @endif
-
-                        {{-- Coupon Discount --}}
-                        @php
-                            $discount = $mainDiscountAmount;
-                            $couponCode = session()->get('coupon_code');
-                        @endphp
-                        @if ($discount != 0)
-                            <div class="co-row green">
-                                <span>Coupon Applied @if ($couponCode)
-                                        ({{ strtoupper($couponCode) }})
+                            {{-- Total --}}
+                            <div class="cart-sb-total-row">
+                                <span class="cart-sb-label">Your Total</span>
+                                <span class="cart-sb-val">
+                                    @if ($payment_method == 'online')
+                                        ₹{{ number_format(ceil($finalTotal + $online_payment_amount), 2) }}
+                                    @else
+                                        ₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}
                                     @endif
                                 </span>
-                                <span>- ₹{{ number_format($discount, 2) }}</span>
                             </div>
-                        @endif
 
-                        {{-- Prepaid Discount --}}
-                        @if ($is_first_order && $payment_method == 'online')
-                            <div class="co-row green" id="prepaid-disc-row">
-                                <span>Prepaid Discount<span class="co-badge-inline">AUTO</span></span>
-                                <span>- ₹{{ number_format($onlineDiscountAmount, 2) }}</span>
-                            </div>
-                        @endif
-
-                        {{-- COD Fee --}}
-                        @if ($payment_method == 'cod')
-                            <div class="co-row red" id="cod-fee-row">
-                                <span>COD charges<span class="co-badge-inline warn">COD</span></span>
-                                <span>+
-                                    ₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount), 2) }}</span>
-                            </div>
-                        @endif
-
-                        {{-- Shipping Charges --}}
-                        <div class="co-row muted">
-                            <span>Shipping Charges</span>
-                            @if (session('flat_rate_charge') != null)
-                                <span>₹{{ number_format(session('flat_rate_charge'), 2) }}</span>
-                            @elseif (floatval($online_payment_amount) == 0)
-                                <span style="color:#1a8a3c;font-weight:700;">Free Shipping</span>
-                            @else
-                                <span>₹{{ number_format(ceil($online_payment_amount), 2) }}</span>
+                            @if ($is_first_order && $payment_method == 'online')
+                                <div class="cart-sb-saved-msg">🎉 You have saved {{ $discount_percentage }}% on every
+                                    product!!</div>
                             @endif
                         </div>
 
-                        {{-- Total --}}
-                        <div class="co-row total">
-                            <span>Your Total</span>
-                            <span>
-                                @if ($payment_method == 'online')
-                                    ₹{{ number_format(ceil($finalTotal + $online_payment_amount), 2) }}
-                                @else
-                                    ₹{{ number_format(ceil($finalTotal + $cash_on_delivery_amount), 2) }}
-                                @endif
-                            </span>
+                        <div class="cart-sb-promo-strip">
+                            <div class="cart-sb-promo-icon">🎫</div>
+                            @php
+                                $minimum_order_value = \App\Models\Setting::where(
+                                    'label',
+                                    'extra_discount_order_value',
+                                )->first()->value;
+                                $maximum_extra_discount = \App\Models\Setting::where(
+                                    'label',
+                                    'maximum_extra_discount',
+                                )->first()->value;
+                                $extra_discount_val = \App\Models\Setting::where('label', 'extra_discount')->first()
+                                    ->value;
+                            @endphp
+                            <div class="cart-sb-promo-text">Order above ₹{{ $minimum_order_value }}? Get
+                                <b>extra {{ $extra_discount_val }}% off (upto ₹{{ $maximum_extra_discount }})</b>
+                            </div>
                         </div>
 
-                        @if ($is_first_order && $payment_method == 'online')
-                            <div class="co-saved-msg">🎉 You have saved 20% on every product!!</div>
-                        @endif
-                    </div>
-
-                    {{-- Compare Box Calculation --}}
-                    @php
-                        $cartTotalRaw = (float) str_replace(',', '', Cart::instance('cart')->total());
-                        $potentialOnlineTotal =
-                            $cartTotalRaw -
-                            $offerDiscount -
-                            $couponDiscount -
-                            round($cartTotalRaw * 0.2, 2) -
-                            $extra_discount +
-                            $online_payment_amount;
-                        $potentialCodTotal =
-                            $cartTotalRaw -
-                            $offerDiscount -
-                            $couponDiscount -
-                            $extra_discount +
-                            $cash_on_delivery_amount;
-                        $savings = $potentialCodTotal - $potentialOnlineTotal;
-                    @endphp
-                    @if ($is_first_order && $potentialOnlineTotal > 0)
-                        <div class="co-compare-box mt-3">
-                            <div class="co-compare-row">
-                                <div class="co-compare-col prepaid-col">
-                                    <div class="co-compare-label">✅ Pay Online</div>
-                                    <div class="co-compare-price green">
-                                        ₹{{ number_format(ceil($potentialOnlineTotal)) }}</div>
-                                    <div class="co-compare-note">After 20% off · Free delivery</div>
-                                </div>
-                                <div class="co-compare-col cod-col">
-                                    <div class="co-compare-label">🚚 Cash on Delivery</div>
-                                    <div class="co-compare-price red">₹{{ number_format(ceil($potentialCodTotal)) }}
+                        {{-- Compare Box Calculation --}}
+                        @php
+                            $cartTotalRaw = (float) str_replace(',', '', Cart::instance('cart')->total());
+                            $potentialOnlineTotalLocal =
+                                $cartTotalRaw -
+                                $offerDiscount -
+                                $couponDiscount -
+                                round($cartTotalRaw * ($discount_percentage / 100), 2) -
+                                $extra_discount +
+                                $online_payment_amount;
+                            $potentialCodTotalLocal =
+                                $cartTotalRaw -
+                                $offerDiscount -
+                                $couponDiscount -
+                                $extra_discount +
+                                $cash_on_delivery_amount;
+                            $savings = $potentialCodTotalLocal - $potentialOnlineTotalLocal;
+                        @endphp
+                        @if ($is_first_order && $potentialOnlineTotalLocal > 0)
+                            <div class="cart-sb-compare mt-3">
+                                <div class="cart-sb-compare-inner">
+                                    <div class="cart-sb-compare-half prepaid {{ $payment_method == 'online' ? 'active' : '' }}"
+                                        style="cursor:pointer;" wire:click="paymentMethod('online')">
+                                        <div class="cart-sb-compare-title green"><i class="fi-rs-check-circle"></i>
+                                            Pay Online</div>
+                                        <div class="cart-sb-compare-price green">
+                                            ₹{{ number_format(ceil($potentialOnlineTotalLocal)) }}</div>
+                                        <div class="cart-sb-compare-sub">After {{ $discount_percentage }}% off · Free
+                                            delivery</div>
                                     </div>
-                                    <div class="co-compare-note">No discount · +₹15 COD fee</div>
+                                    <div class="cart-sb-compare-half cod {{ $payment_method == 'cod' ? 'active' : '' }}"
+                                        style="cursor:pointer;" wire:click="paymentMethod('cod')">
+                                        <div class="cart-sb-compare-title red"><i class="fi-rs-truck"></i> Cash on
+                                            Delivery</div>
+                                        <div class="cart-sb-compare-price red">
+                                            ₹{{ number_format(ceil($potentialCodTotalLocal)) }}</div>
+                                        <div class="cart-sb-compare-sub">No discount ·
+                                            +₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount)) }}
+                                            COD fee</div>
+                                    </div>
+                                </div>
+                                <div class="cart-sb-compare-footer">
+                                    <i class="fi-rs-star"></i> Save ₹{{ number_format(ceil($savings)) }} by choosing
+                                    Online Payment
                                 </div>
                             </div>
-                            <div class="co-compare-winner">⭐ Save ₹{{ number_format(ceil($savings)) }} by choosing
-                                Online Payment</div>
-                        </div>
 
-                        <div class="co-social">
-                            <div class="co-social-pill">✅ Most customers choose Prepaid & save more</div>
-                            <div class="co-social-pill">✅ Extra discount on online payment</div>
-                        </div>
-                    @endif
+                            <div class="cart-sb-trust-pills mt-2">
+                                <span class="cart-sb-trust-pill"><i class="fi-rs-check"></i> Extra discount on online
+                                    payment</span>
+                            </div>
+                        @endif
 
-                    {{-- Payment Section --}}
-                    <div class="co-payment-section">
-                        <div class="co-payment-title">Select Payment Method</div>
+                        <h3 class="cart-sb-title mt-4">Select Payment Method</h3>
 
-                        <div class="co-option {{ $payment_method == 'online' ? 'selected' : '' }}"
+                        <div class="cart-sb-payment-box {{ $payment_method == 'online' ? 'active' : '' }}"
                             wire:click="paymentMethod('online')">
-                            <div class="co-option-header">
-                                <div class="co-radio {{ $payment_method == 'online' ? 'on' : '' }}">
-                                    <div class="co-radio-dot"></div>
-                                </div>
-                                <span class="co-option-label">Pay via UPI / Credit Card</span>
-                                <span class="co-express-badge">⚡ FREE EXPRESS DELIVERY</span>
+                            <div class="cart-sb-payment-header">
+                                <div class="cart-sb-radio"></div>
+                                <span class="cart-sb-payment-method-name">Pay via UPI / Credit Card</span>
+                                <span class="cart-sb-express-badge">FREE EXPRESS DELIVERY</span>
                             </div>
                             @if ($is_first_order)
-                                <div class="co-option-sub green">Get instant 20% off on each product</div>
+                                <div class="cart-sb-payment-sub green">Get instant {{ $discount_percentage }}% off on
+                                    each product</div>
                             @endif
                         </div>
 
-                        <div class="co-option {{ $payment_method == 'cod' ? 'selected-cod' : '' }}"
+                        <div class="cart-sb-payment-box {{ $payment_method == 'cod' ? 'active' : '' }}"
                             wire:click="paymentMethod('cod')">
-                            <div class="co-option-header">
-                                <div class="co-radio {{ $payment_method == 'cod' ? 'on-cod' : '' }}">
-                                    <div class="co-radio-dot"></div>
-                                </div>
-                                <span class="co-option-label">Cash on Delivery</span>
+                            <div class="cart-sb-payment-header">
+                                <div class="cart-sb-radio"></div>
+                                <span class="cart-sb-payment-method-name">Cash on Delivery</span>
                             </div>
                             @if ($is_first_order)
-                                <div class="co-option-sub red">
+                                <div class="cart-sb-payment-sub red">
                                     ₹{{ number_format(ceil($cash_on_delivery_amount - $online_payment_amount)) }}
-                                    handling fee applies · No 20% discount</div>
+                                    handling fee applies · No {{ $discount_percentage }}% discount
+                                </div>
                             @endif
                         </div>
-                    </div>
 
-                    {{-- CTA Section --}}
-                    <div class="co-cta">
-                        <button class="co-cta-btn" wire:click.prevent="verifyCheckout" wire:loading.attr="disabled"
+                        <button
+                            class="btn btn-proceed-checkout mt-4 w-100 d-flex justify-content-center align-items-center"
+                            wire:click.prevent="verifyCheckout" wire:loading.attr="disabled"
                             wire:target="verifyCheckout, placeOrder">
                             <span wire:loading.remove wire:target="verifyCheckout, placeOrder">
-                                Place an Order {{ $payment_method == 'online' ? '(Prepaid)' : '(COD)' }} →
+                                Place Order {{ $payment_method == 'online' ? '(Prepaid)' : '(COD)' }} <i
+                                    class="fi-rs-arrow-right ms-2"></i>
                             </span>
                             <span wire:loading wire:target="verifyCheckout, placeOrder">
                                 <span class="spinner-border spinner-border-sm me-2"></span> Processing...
                             </span>
                         </button>
-                        <div class="co-secure">🔒 100% Secure · UPI · Card · Net Banking</div>
-                    </div>
+                        <div class="text-center mt-3 text-muted" style="font-size: 0.85rem;">🔒 100% Secure · UPI ·
+                            Card · Net Banking</div>
 
+                    </div>
                 </div>
             </div>
         </div>
@@ -558,6 +652,30 @@
     <script>
         let totalSeconds = 240;
         document.addEventListener('livewire:init', function() {
+
+            // --- CANCEL MODAL LOGIC ---
+            let cancelModal = null;
+            window.addEventListener('open-cancel-modal', () => {
+                cancelModal = new bootstrap.Modal(document.getElementById('RazorpayCancelModal'), {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                cancelModal.show();
+            });
+
+            Livewire.on('close-cancel-modal', () => {
+                if (cancelModal) {
+                    cancelModal.hide();
+                } else {
+                    var cancelModalEl = document.getElementById('RazorpayCancelModal');
+                    if (cancelModalEl) {
+                        var cModal = bootstrap.Modal.getInstance(cancelModalEl);
+                        if (cModal) {
+                            cModal.hide();
+                        }
+                    }
+                }
+            });
 
             // --- SCROLL TO VALIDATION ERROR ---
             window.addEventListener('validation-failed', function(event) {
@@ -582,6 +700,7 @@
                 }, 100);
             });
 
+            // --- RAZORPAY INITIALIZATION ---
             window.addEventListener('initiate-razorpay', function(event) {
                 const detail = event.detail[0] || event.detail;
                 var options = {
@@ -602,6 +721,14 @@
                     },
                     "theme": {
                         "color": "#CF9007"
+                    },
+                    "modal": {
+                        "ondismiss": function() {
+                            // Automatically trigger modal when payment window is closed by the user
+                            setTimeout(() => {
+                                window.dispatchEvent(new CustomEvent('open-cancel-modal'));
+                            }, 400);
+                        }
                     }
                 };
                 var rzp1 = new Razorpay(options);
