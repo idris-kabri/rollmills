@@ -117,6 +117,11 @@ class View extends Component
                     $order->status = 2;
                     $order->save();
 
+                    $order_id = $order->id;
+                    $body_para = [$order->getBillAddress->name, "$order_id"];
+                    $button_para = ["$order_id"];
+                    messageSend($order->getBillAddress->mobile, 'order_shipped', $body_para, $button_para, 'en');
+
                     $order_awb = new OrderAWB();
                     $order_awb->order_id = $this->order->id;
                     $order_awb->aggregator = 'XpressBees';
@@ -425,6 +430,10 @@ class View extends Component
         $this->order->status = $this->status;
 
         if ($this->status == 2) {
+            $order_id = $this->order->id;
+            $body_para = [$this->order->getBillAddress->name, "$order_id"];
+            $button_para = ["$order_id"];
+            messageSend($this->order->getBillAddress->mobile, 'order_shipped', $body_para, $button_para, 'en');
             $this->order->shipped_at = now();
         } elseif ($this->status == 3) {
             $this->order->complete_at = now();
