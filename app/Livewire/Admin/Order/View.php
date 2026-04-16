@@ -117,9 +117,19 @@ class View extends Component
                     $order->status = 2;
                     $order->save();
 
+                    $items = '';
+
+                    foreach ($order->getOrderItems as $key => $item) {
+                        if ($key > 0) {
+                            $items .= ', ';
+                        }
+                        $items .= $item->getProduct->name . ' x ' . $item->quantity;
+                    }
+
                     $order_id = $order->id;
-                    $body_para = [$order->getBillAddress->name, "$order_id"];
+                    $body_para = [$order->getBillAddress->name, "$order_id", $items];
                     $button_para = ["$order_id"];
+
                     messageSend($order->getBillAddress->mobile, 'order_shipped', $body_para, $button_para, 'en');
 
                     $order_awb = new OrderAWB();
@@ -430,8 +440,16 @@ class View extends Component
         $this->order->status = $this->status;
 
         if ($this->status == 2) {
+            $items = '';
+
+            foreach ($this->order->getOrderItems as $key => $item) {
+                if ($key > 0) {
+                    $items .= ', ';
+                }
+                $items .= $item->getProduct->name . ' x ' . $item->quantity;
+            }
             $order_id = $this->order->id;
-            $body_para = [$this->order->getBillAddress->name, "$order_id"];
+            $body_para = [$this->order->getBillAddress->name, "$order_id", $items];
             $button_para = ["$order_id"];
             messageSend($this->order->getBillAddress->mobile, 'order_shipped', $body_para, $button_para, 'en');
             $this->order->shipped_at = now();
