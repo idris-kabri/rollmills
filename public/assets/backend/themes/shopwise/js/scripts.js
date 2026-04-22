@@ -6,18 +6,18 @@
                     return (
                         (a =
                             "function" == typeof Symbol &&
-                            "symbol" == typeof Symbol.iterator
+                                "symbol" == typeof Symbol.iterator
                                 ? function (a) {
-                                      return typeof a;
-                                  }
+                                    return typeof a;
+                                }
                                 : function (a) {
-                                      return a &&
-                                          "function" == typeof Symbol &&
-                                          a.constructor === Symbol &&
-                                          a !== Symbol.prototype
-                                          ? "symbol"
-                                          : typeof a;
-                                  }),
+                                    return a &&
+                                        "function" == typeof Symbol &&
+                                        a.constructor === Symbol &&
+                                        a !== Symbol.prototype
+                                        ? "symbol"
+                                        : typeof a;
+                                }),
                         a(e)
                     );
                 }
@@ -31,38 +31,38 @@
                             function (o, t) {
                                 a >= 1200
                                     ? e(t).data("img-src") &&
-                                      e(t).css({
-                                          "background-image":
-                                              "url(" +
-                                              e(t).data("img-src") +
-                                              ")",
-                                      })
+                                    e(t).css({
+                                        "background-image":
+                                            "url(" +
+                                            e(t).data("img-src") +
+                                            ")",
+                                    })
                                     : a > 768
-                                    ? e(t).data("tablet-img-src") &&
-                                      e(t).css({
-                                          "background-image":
-                                              "url(" +
-                                              e(t).data("tablet-img-src") +
-                                              ")",
-                                      })
-                                    : a <= 768 &&
-                                      e(t).data("mobile-img-src") &&
-                                      e(t).css({
-                                          "background-image":
-                                              "url(" +
-                                              e(t).data("mobile-img-src") +
-                                              ")",
-                                      });
+                                        ? e(t).data("tablet-img-src") &&
+                                        e(t).css({
+                                            "background-image":
+                                                "url(" +
+                                                e(t).data("tablet-img-src") +
+                                                ")",
+                                        })
+                                        : a <= 768 &&
+                                        e(t).data("mobile-img-src") &&
+                                        e(t).css({
+                                            "background-image":
+                                                "url(" +
+                                                e(t).data("mobile-img-src") +
+                                                ")",
+                                        });
                             }
                         );
                     }
                     e(window).on("load", function () {
-                        setTimeout(function () {
-                            e(".preloader")
-                                .delay(300)
-                                .fadeOut(300)
-                                .addClass("loaded");
-                        }, 400);
+                        // setTimeout(function () {
+                        //     e(".preloader")
+                        //         .delay(300)
+                        //         .fadeOut(300)
+                        //         .addClass("loaded");
+                        // }, 400);
                     }),
                         e(".background_bg").each(function () {
                             var o = e(this).attr("data-img-src");
@@ -112,14 +112,14 @@
                         }),
                         e(window).on("scroll", function () {
                             e(window).scrollTop() >=
-                            e(".bottom_header").offset().top +
+                                e(".bottom_header").offset().top +
                                 e(".bottom_header").height()
                                 ? e(".bottom_header_sticky.fixed-top").addClass(
-                                      "nav-fixed"
-                                  )
+                                    "nav-fixed"
+                                )
                                 : e(
-                                      ".bottom_header_sticky.fixed-top"
-                                  ).removeClass("nav-fixed");
+                                    ".bottom_header_sticky.fixed-top"
+                                ).removeClass("nav-fixed");
                         }),
                         e(document).ready(function () {
                             e(".dropdown-menu a.dropdown-toggler").on(
@@ -127,11 +127,11 @@
                                 function () {
                                     return (
                                         e(this).next().hasClass("show") ||
-                                            e(this)
-                                                .parents(".dropdown-menu")
-                                                .first()
-                                                .find(".show")
-                                                .removeClass("show"),
+                                        e(this)
+                                            .parents(".dropdown-menu")
+                                            .first()
+                                            .find(".show")
+                                            .removeClass("show"),
                                         e(this)
                                             .next(".dropdown-menu")
                                             .toggleClass("show"),
@@ -167,7 +167,7 @@
                         e(".navbar-toggler").on("click", function () {
                             e("header").toggleClass("active"),
                                 e(".search-overlay").hasClass("open") &&
-                                    (e(".search-overlay").removeClass("open"),
+                                (e(".search-overlay").removeClass("open"),
                                     e(".search_trigger").removeClass("open"));
                         }),
                         e(document).ready(function () {
@@ -238,13 +238,13 @@
                     e("html").on("click", function () {
                         r &&
                             (e(".categories_btn").addClass("collapsed"),
-                            e(".categories_btn,.side_navbar_toggler").attr(
-                                "aria-expanded",
-                                "false"
-                            ),
-                            e("#navCatContent,#navbarSidetoggle").removeClass(
-                                "show"
-                            )),
+                                e(".categories_btn,.side_navbar_toggler").attr(
+                                    "aria-expanded",
+                                    "false"
+                                ),
+                                e("#navCatContent,#navbarSidetoggle").removeClass(
+                                    "show"
+                                )),
                             (r = !0);
                     }),
                         e(
@@ -261,10 +261,10 @@
                                 (e("a.page-scroll.active").removeClass(
                                     "active"
                                 ),
-                                e(this)
-                                    .closest(".page-scroll")
-                                    .addClass("active"),
-                                location.pathname.replace(/^\//, "") ===
+                                    e(this)
+                                        .closest(".page-scroll")
+                                        .addClass("active"),
+                                    location.pathname.replace(/^\//, "") ===
                                     this.pathname.replace(/^\//, "") &&
                                     location.hostname === this.hostname)
                             ) {
@@ -275,10 +275,10 @@
                                     : e("[name=" + this.hash.slice(1) + "]"))
                                     .length &&
                                     (event.preventDefault(),
-                                    e("html, body").animate(
-                                        { scrollTop: a.offset().top - d },
-                                        o
-                                    ));
+                                        e("html, body").animate(
+                                            { scrollTop: a.offset().top - d },
+                                            o
+                                        ));
                             }
                         }
                     ),
@@ -300,13 +300,13 @@
                                         : "";
                             a !== r &&
                                 ((a = r),
-                                o
-                                    .closest(".page-scroll")
-                                    .removeClass("active")
-                                    .end()
-                                    .filter("[href='#" + r + "']")
-                                    .closest(".page-scroll")
-                                    .addClass("active"));
+                                    o
+                                        .closest(".page-scroll")
+                                        .removeClass("active")
+                                        .end()
+                                        .filter("[href='#" + r + "']")
+                                        .closest(".page-scroll")
+                                        .addClass("active"));
                         }),
                         e(".more_slide_open").slideUp(),
                         e(".more_categories").on("click", function () {
@@ -384,7 +384,7 @@
                                 e("body").toggleClass("search_open"),
                                 (c = !1),
                                 e(".navbar-collapse").hasClass("show") &&
-                                    (e(".navbar-collapse").removeClass("show"),
+                                (e(".navbar-collapse").removeClass("show"),
                                     e(".navbar-toggler").addClass("collapsed"),
                                     e(".navbar-toggler").attr(
                                         "aria-expanded",
@@ -397,10 +397,10 @@
                         e("html").on("click", function () {
                             c &&
                                 (e("body").removeClass("open"),
-                                e(".search_wrap,.search_overlay").removeClass(
-                                    "open"
-                                ),
-                                e("body").removeClass("search_open")),
+                                    e(".search_wrap,.search_overlay").removeClass(
+                                        "open"
+                                    ),
+                                    e("body").removeClass("search_open")),
                                 (c = !0);
                         }),
                         e(window).on("scroll", function () {
@@ -423,19 +423,19 @@
                                     a.imagesLoaded(function () {
                                         a.hasClass("masonry")
                                             ? a.isotope({
-                                                  itemSelector: ".grid_item",
-                                                  percentPosition: !0,
-                                                  layoutMode: "masonry",
-                                                  masonry: {
-                                                      columnWidth:
-                                                          ".grid-sizer",
-                                                  },
-                                              })
+                                                itemSelector: ".grid_item",
+                                                percentPosition: !0,
+                                                layoutMode: "masonry",
+                                                masonry: {
+                                                    columnWidth:
+                                                        ".grid-sizer",
+                                                },
+                                            })
                                             : a.isotope({
-                                                  itemSelector: ".grid_item",
-                                                  percentPosition: !0,
-                                                  layoutMode: "fitRows",
-                                              });
+                                                itemSelector: ".grid_item",
+                                                percentPosition: !0,
+                                                layoutMode: "fitRows",
+                                            });
                                     }),
                                     e(document).on("click", o, function () {
                                         e(o).removeClass("current"),
@@ -444,21 +444,21 @@
                                         return (
                                             a.hasClass("masonry")
                                                 ? a.isotope({
-                                                      itemSelector:
-                                                          ".grid_item",
-                                                      layoutMode: "masonry",
-                                                      masonry: {
-                                                          columnWidth:
-                                                              ".grid_item",
-                                                      },
-                                                      filter: t,
-                                                  })
+                                                    itemSelector:
+                                                        ".grid_item",
+                                                    layoutMode: "masonry",
+                                                    masonry: {
+                                                        columnWidth:
+                                                            ".grid_item",
+                                                    },
+                                                    filter: t,
+                                                })
                                                 : a.isotope({
-                                                      itemSelector:
-                                                          ".grid_item",
-                                                      layoutMode: "fitRows",
-                                                      filter: t,
-                                                  }),
+                                                    itemSelector:
+                                                        ".grid_item",
+                                                    layoutMode: "fitRows",
+                                                    filter: t,
+                                                }),
                                             !1
                                         );
                                     }),
@@ -519,25 +519,25 @@
                             fixedContentPos: !1,
                         }),
                         e("select").length &&
-                            e.each(e("select"), function (a, o) {
-                                var t = e(o);
-                                "" === t.val() && t.addClass("first_null"),
-                                    t.val() || t.addClass("not_chosen"),
-                                    t.on("change", function () {
-                                        t.val()
-                                            ? t.removeClass("not_chosen")
-                                            : t.addClass("not_chosen");
-                                    });
-                            }),
+                        e.each(e("select"), function (a, o) {
+                            var t = e(o);
+                            "" === t.val() && t.addClass("first_null"),
+                                t.val() || t.addClass("not_chosen"),
+                                t.on("change", function () {
+                                    t.val()
+                                        ? t.removeClass("not_chosen")
+                                        : t.addClass("not_chosen");
+                                });
+                        }),
                         e(".fit-videos").length > 0 &&
-                            e(".fit-videos").fitVids({
-                                customSelector:
-                                    "iframe[src^='https://w.soundcloud.com']",
-                            }),
+                        e(".fit-videos").fitVids({
+                            customSelector:
+                                "iframe[src^='https://w.soundcloud.com']",
+                        }),
                         e(".custome_select").length > 0 &&
-                            e(document).ready(function () {
-                                e(".custome_select").msDropdown();
-                            });
+                        e(document).ready(function () {
+                            e(".custome_select").msDropdown();
+                        });
                     var p = function (a) {
                         return (
                             (window.trans = window.trans || {}),
@@ -552,14 +552,14 @@
                             e(this).html(
                                 a.strftime(
                                     '<div class="countdown_box"><div class="countdown-wrap"><span class="countdown days">%D </span><span class="cd_text">' +
-                                        p("Days") +
-                                        '</span></div></div><div class="countdown_box"><div class="countdown-wrap"><span class="countdown hours">%H</span><span class="cd_text">' +
-                                        p("Hours") +
-                                        '</span></div></div><div class="countdown_box"><div class="countdown-wrap"><span class="countdown minutes">%M</span><span class="cd_text">' +
-                                        p("Minutes") +
-                                        '</span></div></div><div class="countdown_box"><div class="countdown-wrap"><span class="countdown seconds">%S</span><span class="cd_text">' +
-                                        p("Seconds") +
-                                        "</span></div></div>"
+                                    p("Days") +
+                                    '</span></div></div><div class="countdown_box"><div class="countdown-wrap"><span class="countdown hours">%H</span><span class="cd_text">' +
+                                    p("Hours") +
+                                    '</span></div></div><div class="countdown_box"><div class="countdown-wrap"><span class="countdown minutes">%M</span><span class="cd_text">' +
+                                    p("Minutes") +
+                                    '</span></div></div><div class="countdown_box"><div class="countdown-wrap"><span class="countdown seconds">%S</span><span class="cd_text">' +
+                                    p("Seconds") +
+                                    "</span></div></div>"
                                 )
                             );
                         });
@@ -567,22 +567,22 @@
                         e(document).on("click", ".shorting_icon", function () {
                             e(this).hasClass("grid")
                                 ? (e(".shop_container")
-                                      .removeClass("list")
-                                      .addClass("grid"),
-                                  e(this)
-                                      .addClass("active")
-                                      .siblings()
-                                      .removeClass("active"))
+                                    .removeClass("list")
+                                    .addClass("grid"),
+                                    e(this)
+                                        .addClass("active")
+                                        .siblings()
+                                        .removeClass("active"))
                                 : e(this).hasClass("list") &&
-                                  (e(".shop_container")
-                                      .removeClass("grid")
-                                      .addClass("list"),
-                                  e(this)
-                                      .addClass("active")
-                                      .siblings()
-                                      .removeClass("active")),
+                                (e(".shop_container")
+                                    .removeClass("grid")
+                                    .addClass("list"),
+                                    e(this)
+                                        .addClass("active")
+                                        .siblings()
+                                        .removeClass("active")),
                                 e(".shop_container").append(
-                                    '<div class="loading_pr"><div class="mfp-preloader"></div></div>'
+                                    // '<div class="loading_pr"><div class="mfp-preloader"></div></div>'
                                 ),
                                 setTimeout(function () {
                                     e(".loading_pr").remove();
@@ -663,21 +663,21 @@
                                     l = (
                                         n
                                             ? (function (a, e) {
-                                                  var o = Math.pow(10, e);
-                                                  return Math.round(a * o) / o;
-                                              })(i, n)
+                                                var o = Math.pow(10, e);
+                                                return Math.round(a * o) / o;
+                                            })(i, n)
                                             : Math.round(i)
                                     )
                                         .toString()
                                         .split(".");
                                 return (
                                     l[0].length > 3 &&
-                                        (l[0] = l[0].replace(
-                                            /\B(?=(?:\d{3})+(?!\d))/g,
-                                            s
-                                        )),
+                                    (l[0] = l[0].replace(
+                                        /\B(?=(?:\d{3})+(?!\d))/g,
+                                        s
+                                    )),
                                     (l[1] || "").length < n &&
-                                        ((l[1] = l[1] || ""),
+                                    ((l[1] = l[1] || ""),
                                         (l[1] += new Array(
                                             n - l[1].length + 1
                                         ).join("0"))),
@@ -726,13 +726,13 @@
                             e(".star_rating span").on("click", function () {
                                 for (
                                     var a = parseFloat(
-                                            e(this).data("value"),
-                                            10
-                                        ),
-                                        o = e(this)
-                                            .parent()
-                                            .children(".star_rating span"),
-                                        t = 0;
+                                        e(this).data("value"),
+                                        10
+                                    ),
+                                    o = e(this)
+                                        .parent()
+                                        .children(".star_rating span"),
+                                    t = 0;
                                     t < o.length;
                                     t++
                                 )
@@ -746,53 +746,53 @@
                             });
                         }),
                         e(".ps-list--categories").length > 0 &&
-                            e(
-                                ".ps-list--categories .menu-item-has-children > .sub-toggle"
-                            ).on("click", function (a) {
-                                a.preventDefault();
-                                var o = e(this).parent(
-                                    ".menu-item-has-children"
-                                );
-                                e(this).toggleClass("active"),
+                        e(
+                            ".ps-list--categories .menu-item-has-children > .sub-toggle"
+                        ).on("click", function (a) {
+                            a.preventDefault();
+                            var o = e(this).parent(
+                                ".menu-item-has-children"
+                            );
+                            e(this).toggleClass("active"),
+                                o
+                                    .siblings()
+                                    .find(".sub-toggle")
+                                    .removeClass("active"),
+                                o.children(".sub-menu").slideToggle(350),
+                                o.siblings().find(".sub-menu").slideUp(350),
+                                o.hasClass("has-mega-menu") &&
+                                (o
+                                    .children(".mega-menu")
+                                    .slideToggle(350),
                                     o
-                                        .siblings()
-                                        .find(".sub-toggle")
-                                        .removeClass("active"),
-                                    o.children(".sub-menu").slideToggle(350),
-                                    o.siblings().find(".sub-menu").slideUp(350),
-                                    o.hasClass("has-mega-menu") &&
-                                        (o
-                                            .children(".mega-menu")
-                                            .slideToggle(350),
-                                        o
-                                            .siblings(".has-mega-menu")
-                                            .find(".mega-menu")
-                                            .slideUp(350));
-                            }),
+                                        .siblings(".has-mega-menu")
+                                        .find(".mega-menu")
+                                        .slideUp(350));
+                        }),
                         e(document).ready(function () {
                             var a;
                             (a = e("#product_img")),
                                 !!1
                                     ? e(a).length > 0 &&
-                                      e(a).elevateZoom({
-                                          cursor: "crosshair",
-                                          easing: !0,
-                                          gallery: "pr_item_gallery",
-                                          zoomType: "inner",
-                                          galleryActiveClass: "active",
-                                      })
+                                    e(a).elevateZoom({
+                                        cursor: "crosshair",
+                                        easing: !0,
+                                        gallery: "pr_item_gallery",
+                                        zoomType: "inner",
+                                        galleryActiveClass: "active",
+                                    })
                                     : (e.removeData(a, "elevateZoom"),
-                                      e(".zoomContainer:last-child").remove()),
+                                        e(".zoomContainer:last-child").remove()),
                                 1 != e("#product_img").data("zoom-enable") &&
-                                    setTimeout(function () {
-                                        e.removeData(
-                                            e("#product_img"),
-                                            "elevateZoom"
-                                        ),
-                                            e(
-                                                ".zoomContainer:last-child"
-                                            ).remove();
-                                    }, 500);
+                                setTimeout(function () {
+                                    e.removeData(
+                                        e("#product_img"),
+                                        "elevateZoom"
+                                    ),
+                                        e(
+                                            ".zoomContainer:last-child"
+                                        ).remove();
+                                }, 500);
                         }),
                         e(document).on(
                             "click",
@@ -820,78 +820,78 @@
                                                         void 0 === e
                                                         ? void 0
                                                         : e.reduce(function (
-                                                              a,
-                                                              e
-                                                          ) {
-                                                              return (
-                                                                  a +
-                                                                  '<div class="item">' +
-                                                                  e +
-                                                                  "</div>"
-                                                              );
-                                                          },
-                                                          "")
+                                                            a,
+                                                            e
+                                                        ) {
+                                                            return (
+                                                                a +
+                                                                '<div class="item">' +
+                                                                e +
+                                                                "</div>"
+                                                            );
+                                                        },
+                                                            "")
                                                 )
                                             ),
-                                            u(),
-                                            o.attr("data-loaded", 1));
+                                                u(),
+                                                o.attr("data-loaded", 1));
                                     },
                                 });
                             }
                         );
                 })(jQuery);
             },
-            7723: () => {},
-            3319: () => {},
-            2471: () => {},
-            6872: () => {},
-            845: () => {},
-            2453: () => {},
-            2455: () => {},
-            4693: () => {},
-            4429: () => {},
-            7324: () => {},
-            2154: () => {},
-            8926: () => {},
-            5586: () => {},
-            4034: () => {},
-            247: () => {},
-            7236: () => {},
-            1978: () => {},
-            8773: () => {},
-            6555: () => {},
-            1682: () => {},
-            7216: () => {},
-            5974: () => {},
-            5944: () => {},
-            7505: () => {},
-            1289: () => {},
-            9665: () => {},
-            6969: () => {},
-            5581: () => {},
-            2547: () => {},
-            5722: () => {},
-            1323: () => {},
-            5282: () => {},
-            3504: () => {},
-            444: () => {},
-            976: () => {},
-            2581: () => {},
-            587: () => {},
-            5071: () => {},
-            129: () => {},
-            4497: () => {},
-            3391: () => {},
-            7214: () => {},
-            6679: () => {},
-            6649: () => {},
-            9246: () => {},
-            4324: () => {},
-            7288: () => {},
-            1424: () => {},
-            4055: () => {},
-            1874: () => {},
-            1769: () => {},
+            7723: () => { },
+            3319: () => { },
+            2471: () => { },
+            6872: () => { },
+            845: () => { },
+            2453: () => { },
+            2455: () => { },
+            4693: () => { },
+            4429: () => { },
+            7324: () => { },
+            2154: () => { },
+            8926: () => { },
+            5586: () => { },
+            4034: () => { },
+            247: () => { },
+            7236: () => { },
+            1978: () => { },
+            8773: () => { },
+            6555: () => { },
+            1682: () => { },
+            7216: () => { },
+            5974: () => { },
+            5944: () => { },
+            7505: () => { },
+            1289: () => { },
+            9665: () => { },
+            6969: () => { },
+            5581: () => { },
+            2547: () => { },
+            5722: () => { },
+            1323: () => { },
+            5282: () => { },
+            3504: () => { },
+            444: () => { },
+            976: () => { },
+            2581: () => { },
+            587: () => { },
+            5071: () => { },
+            129: () => { },
+            4497: () => { },
+            3391: () => { },
+            7214: () => { },
+            6679: () => { },
+            6649: () => { },
+            9246: () => { },
+            4324: () => { },
+            7288: () => { },
+            1424: () => { },
+            4055: () => { },
+            1874: () => { },
+            1769: () => { },
         },
         o = {};
     function t(a) {
@@ -908,7 +908,7 @@
                 for (c = 0; c < a.length; c++) {
                     for (var [o, i, n] = a[c], r = !0, l = 0; l < o.length; l++)
                         (!1 & n || s >= n) &&
-                        Object.keys(t.O).every((a) => t.O[a](o[l]))
+                            Object.keys(t.O).every((a) => t.O[a](o[l]))
                             ? o.splice(l--, 1)
                             : ((r = !1), n < s && (s = n));
                     if (r) {
@@ -982,18 +982,18 @@
             };
             t.O.j = (e) => 0 === a[e];
             var e = (e, o) => {
-                    var i,
-                        n,
-                        [s, r, l] = o,
-                        d = 0;
-                    if (s.some((e) => 0 !== a[e])) {
-                        for (i in r) t.o(r, i) && (t.m[i] = r[i]);
-                        if (l) var c = l(t);
-                    }
-                    for (e && e(o); d < s.length; d++)
-                        (n = s[d]), t.o(a, n) && a[n] && a[n][0](), (a[n] = 0);
-                    return t.O(c);
-                },
+                var i,
+                    n,
+                    [s, r, l] = o,
+                    d = 0;
+                if (s.some((e) => 0 !== a[e])) {
+                    for (i in r) t.o(r, i) && (t.m[i] = r[i]);
+                    if (l) var c = l(t);
+                }
+                for (e && e(o); d < s.length; d++)
+                    (n = s[d]), t.o(a, n) && a[n] && a[n][0](), (a[n] = 0);
+                return t.O(c);
+            },
                 o = (self.webpackChunk = self.webpackChunk || []);
             o.forEach(e.bind(null, 0)), (o.push = e.bind(null, o.push.bind(o)));
         })(),
