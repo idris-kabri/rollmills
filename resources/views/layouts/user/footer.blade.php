@@ -243,16 +243,16 @@
 @endif
 
 <!-- Preloader Start -->
-<div id="preloader-active">
+{{-- <div id="preloader-active">
     <div class="preloader d-flex align-items-center justify-content-center">
         <div class="preloader-inner position-relative">
-            {{-- <div class="text-center">
+            <div class="text-center">
                 <img src="{{ asset('assets/frontend/imgs/theme/loading.gif') }}" alt="" />
-            </div> --}}
+            </div>
             <div class="loader-new"></div>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- OwlCarousel --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" crossorigin="anonymous">
 </script>

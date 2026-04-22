@@ -12,10 +12,10 @@
         // let modalShown = localStorage.getItem("triggeredModal");
 
         // if (!modalShown) {
-            $("#preloader-active").delay(0).fadeOut("slow");
-            $("body").delay(0).css({ overflow: "visible" });
-            // $("#onloadModal").modal("show");
-            // localStorage.setItem("triggeredModal", "true");
+        // $("#preloader-active").delay(0).fadeOut("slow");
+        $("body").delay(0).css({ overflow: "visible" });
+        // $("#onloadModal").modal("show");
+        // localStorage.setItem("triggeredModal", "true");
         // } else {
         //     $("#preloader-active").delay(0).fadeOut("slow");
         //     // $("body").delay(0).css({ overflow: "visible" });
@@ -345,10 +345,10 @@
             $(this).html(
                 event.strftime(
                     "" +
-                        '<span class="countdown-section"><span class="countdown-amount hover-up">%D</span><span class="countdown-period"> days </span></span>' +
-                        '<span class="countdown-section"><span class="countdown-amount hover-up">%H</span><span class="countdown-period"> hours </span></span>' +
-                        '<span class="countdown-section"><span class="countdown-amount hover-up">%M</span><span class="countdown-period"> mins </span></span>' +
-                        '<span class="countdown-section"><span class="countdown-amount hover-up">%S</span><span class="countdown-period"> sec </span></span>'
+                    '<span class="countdown-section"><span class="countdown-amount hover-up">%D</span><span class="countdown-period"> days </span></span>' +
+                    '<span class="countdown-section"><span class="countdown-amount hover-up">%H</span><span class="countdown-period"> hours </span></span>' +
+                    '<span class="countdown-section"><span class="countdown-amount hover-up">%M</span><span class="countdown-period"> mins </span></span>' +
+                    '<span class="countdown-section"><span class="countdown-amount hover-up">%S</span><span class="countdown-period"> sec </span></span>'
                 )
             );
         });
