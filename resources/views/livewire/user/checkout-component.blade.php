@@ -139,8 +139,10 @@
                                                 <ul class="list-unstyled">
                                                     <li class="mb-1 fw-500 font-sm"><strong>Phone:</strong>
                                                         {{ $address->mobile }}</li>
-                                                    <li class="mb-1 fw-500 font-sm"><strong>Email:</strong>
-                                                        {{ $address->email }}</li>
+                                                    @if ($address->email)
+                                                        <li class="mb-1 fw-500 font-sm"><strong>Email:</strong>
+                                                            {{ $address->email }}</li>
+                                                    @endif
                                                     <li class="mb-1 fw-500 font-sm"><strong>Address:</strong>
                                                         {{ $address->address_line_1 }}, {{ $address->city }},
                                                         {{ $address->state }} - {{ $address->zipcode }}</li>
@@ -156,7 +158,6 @@
                     @else
                         <form method="post">
                             <div class="row">
-
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="billing_address.name" placeholder="Name *"
                                         wire:model="billing_address.name">
@@ -164,19 +165,17 @@
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
-
                                 <div class="form-group col-lg-6">
-                                    <input required type="email" name="billing_address.email"
-                                        placeholder="Email address" wire:model="billing_address.email">
-                                    @error('billing_address.email')
+                                    <input required type="text" name="billing_address.mobile"
+                                        placeholder="Phone *" wire:model="billing_address.mobile"
+                                        wire:keyup.debounce.800ms="billingAddressMobile">
+                                    @error('billing_address.mobile')
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
-
                             </div>
 
                             <div class="row">
-
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="billing_address.state" placeholder="State *"
                                         wire:model="billing_address.state">
@@ -192,11 +191,9 @@
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
-
                             </div>
 
                             <div class="row">
-
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="billing_address.billing_address1"
                                         placeholder="Address *" wire:model="billing_address.billing_address1">
@@ -212,11 +209,9 @@
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
-
                             </div>
 
                             <div class="row">
-
                                 <div class="form-group col-lg-6">
                                     <input type="text" @if (session('shipping_charge'))  @endif
                                         name="billing_address.zipcode" placeholder="Postcode / ZIP *"
@@ -225,16 +220,6 @@
                                         <span class="text-danger small d-block">{{ $message }}</span>
                                     @enderror
                                 </div>
-
-                                <div class="form-group col-lg-6">
-                                    <input required type="text" name="billing_address.mobile"
-                                        placeholder="Phone *" wire:model="billing_address.mobile"
-                                        wire:keyup.debounce.800ms="billingAddressMobile">
-                                    @error('billing_address.mobile')
-                                        <span class="text-danger small d-block">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
                             </div>
                         </form>
 
@@ -318,10 +303,6 @@
                                         <div class="form-group col-lg-6">
                                             <input type="text" required="" name="name" placeholder="Name *"
                                                 wire:model="ship_to_different_address.name">
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <input type="email" name="email" placeholder="Email *"
-                                                wire:model="ship_to_different_address.email">
                                         </div>
                                         <div class="form-group col-lg-6">
                                             <input required="" type="text" name="mobile"

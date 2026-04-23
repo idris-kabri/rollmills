@@ -10,7 +10,7 @@ use App\Models\ProductCategoryAssign;
 use App\Models\OrderItems;
 use App\Models\Setting;
 use App\Models\User;
-use App\Models\Transaction; // Imported for cancel payment logic
+use App\Models\Transaction;
 use App\Traits\HasToastNotification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -133,7 +133,8 @@ class CheckoutComponent extends Component
                     if ($key == 0) {
                         $item['item_category'] = $category->category->name;
                     } else {
-                        $item['item_category' . $key + 1] = $category->category->name;
+                        // FIXED: Added parentheses to prevent Fatal TypeError in PHP 8+
+                        $item['item_category' . ($key + 1)] = $category->category->name;
                     }
                 }
 
@@ -368,8 +369,9 @@ class CheckoutComponent extends Component
 
     public function checkBillingEmail()
     {
-        if (isset($this->billing_address['email']) && $this->billing_address['email'] != '') {
-            $email = $this->billing_address['email'];
+        $email = Auth::check() ? Auth::user()->email : $this->billing_address['email'] ?? null;
+
+        if ($email) {
             $gift_card_item_query = GiftCardItem::where('customer_email', $email)
                 ->where('used_at', null)
                 ->when($this->applied_gift_card_ids, function ($query) {
@@ -379,7 +381,7 @@ class CheckoutComponent extends Component
             if ($gift_card_item_query) {
                 $this->gift_cards_items = $gift_card_item_query;
             } else {
-                $this->gift_cards_items = [];
+                $this->gift_cards_items = collect([]);
             }
 
             $user = User::where('email', $email)->first();
@@ -401,19 +403,15 @@ class CheckoutComponent extends Component
                 }
             }
         } else {
-            $this->gift_cards_items = [];
+            $this->gift_cards_items = collect([]);
         }
     }
 
     public function applyGiftCard($gift_card_item_id = null)
     {
         if ($this->gift_card_code && $gift_card_item_id == null) {
-            if (isset($this->billing_address['email']) && $this->billing_address['email'] != '') {
-                $this->gift_card_item = GiftCardItem::where('gift_code', $this->gift_card_code)->first();
-            } else {
-                $this->toastError('Please fill the Billing Details Email field!');
-                return;
-            }
+            // Unrestricted so guests can apply manual codes without an email field
+            $this->gift_card_item = GiftCardItem::where('gift_code', $this->gift_card_code)->first();
         } else {
             $this->gift_card_item = GiftCardItem::find($gift_card_item_id);
         }
@@ -458,7 +456,7 @@ class CheckoutComponent extends Component
     {
         $address = isset($this->billing_address['id']) ? Address::find($this->billing_address['id']) ?? new Address() : new Address();
         $address->name = $this->billing_address['name'];
-        $address->email = $this->billing_address['email'] ?? null;
+        $address->email = Auth::check() ? Auth::user()->email : null; // Safe fallback
         $address->mobile = $this->billing_address['mobile'];
         $address->address_line_1 = $this->billing_address['billing_address1'];
         $address->address_line_2 = $this->billing_address['billing_address2'] ?? null;
@@ -490,7 +488,7 @@ class CheckoutComponent extends Component
     {
         $ship_different_address = isset($this->ship_to_different_address['id']) ? Address::find($this->ship_to_different_address['id']) ?? new Address() : new Address();
         $ship_different_address->name = $this->ship_to_different_address['name'];
-        $ship_different_address->email = $this->ship_to_different_address['email'] ?? $this->billing_address['email'];
+        $ship_different_address->email = Auth::check() ? Auth::user()->email : null;
         $ship_different_address->mobile = $this->ship_to_different_address['mobile'] ?? $this->billing_address['mobile'];
         $ship_different_address->address_line_1 = $this->ship_to_different_address['billing_address1'];
         $ship_different_address->address_line_2 = $this->ship_to_different_address['billing_address2'] ?? null;
@@ -556,7 +554,8 @@ class CheckoutComponent extends Component
             $orderItem->total = $total;
             $orderItem->item_return_days = $item->model->product_return_days;
             $orderItem->gst = $item->model->gst ?? 0;
-            $orderItem->gst_amount = $total - ($total * 100) / (100 + $item->model->gst ?? 0);
+            // Added safe grouping for calculation
+            $orderItem->gst_amount = $total - ($total * 100) / (100 + ($item->model->gst ?? 0));
             $orderItem->item_replacement_days = $item->model->product_replacement_days;
             $orderItem->delivery_at = now();
             $orderItem->is_gift_item = $item->options['is_gift_product'] ?? false ? 1 : 0;
@@ -575,7 +574,8 @@ class CheckoutComponent extends Component
 
         if (!$user) {
             $user = new User();
-            $user->email = $this->billing_address['email'] ? $this->billing_address['email'] : $this->ship_to_different_address['email'];
+            // Assign null if guest, input is removed
+            $user->email = null;
             $user->mobile = $this->billing_address['mobile'] ? $this->billing_address['mobile'] : $this->ship_to_different_address['mobile'];
             $user->password = Hash::make($password);
             $user->password_view = $password;
@@ -583,9 +583,7 @@ class CheckoutComponent extends Component
         }
         $user->name = $this->billing_address['name'];
         $user->role = 'User';
-        if ($this->billing_address['email'] != null && $this->billing_address['email'] != '') {
-            $user->email = $this->billing_address['email'];
-        }
+
         $user->save();
         wawiContact($user);
 
@@ -624,7 +622,6 @@ class CheckoutComponent extends Component
             throw $e;
         }
 
-        // Proceed directly with placeOrder for both COD and Prepaid
         $this->placeOrder();
     }
 
@@ -736,11 +733,12 @@ class CheckoutComponent extends Component
 
                 $order = razorPayPayment(ceil($this->finalTotal + $this->online_payment_amount), Auth::user()->id ?? ($nonAuthUser['id'] ?? null), $user_order->id, 'orders', 'Order Placed Using Online Payment');
 
+                // Provided dummy email if null to prevent Razorpay crashes
                 $user =
                     Auth::user() ??
                     (object) [
                         'name' => $nonAuthUser['name'],
-                        'email' => $nonAuthUser['email'],
+                        'email' => $nonAuthUser['email'] ?? 'guest@rollmills.store',
                     ];
 
                 $this->dispatch('initiate-razorpay', [
@@ -758,7 +756,7 @@ class CheckoutComponent extends Component
             } else {
                 $user_order->paid_amount = 0;
                 $user_order->remaining_amount = ceil($this->finalTotal + $this->cash_on_delivery_amount);
-                $user_order->cod_charges = (int) $this->cash_on_delivery_amount - $this->online_payment_amount;
+                $user_order->cod_charges = (int) ($this->cash_on_delivery_amount - $this->online_payment_amount);
                 $user_order->is_cod = 1;
                 $user_order->status = 1;
                 $user_order->save();
@@ -818,7 +816,7 @@ class CheckoutComponent extends Component
             $order->shipping_charges = (float) $this->cash_on_delivery_amount;
             $order->paid_amount = 0;
             $order->remaining_amount = ceil($this->finalTotal + $this->cash_on_delivery_amount);
-            $order->cod_charges = (int) $this->cash_on_delivery_amount - $this->online_payment_amount;
+            $order->cod_charges = (int) ($this->cash_on_delivery_amount - $this->online_payment_amount);
             $order->is_cod = 1;
             $order->status = 1; // Order success status
             $order->total_bonus = 0; // Clear online bonus
