@@ -66,7 +66,7 @@ function shadowFaxTracking($awb_number)
             $shipment = $data['order_detail'] ?? $data;
 
             // 3. Map the Status
-            $statusInput = strtolower($shipment['status_id'] ?? '');
+            $statusInput = strtolower($shipment['status'] ?? '');
             $new_status = match ($statusInput) {
                 'delivered' => 3,
                 'rto', 'in_transit_return' => 8,
