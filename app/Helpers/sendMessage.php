@@ -243,8 +243,6 @@ function sendParameterTemplateWawi($template_name, $language_code, $phone_number
 
     $response = Http::withToken($token)->post($url, $data);
 
-    Log::error(json_encode($response->json()));
-
     // Handle the response
     if ($response->successful()) {
         return $response->json();

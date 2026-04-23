@@ -109,7 +109,7 @@ function shadowFaxTracking($awb_number)
 
             // 7. Save Order and Log Success
             $order->save();
-            saveCommandLog($order->id, 'Shadowfax Tracking', ['awb' => $awb_number], $data, 'Success');
+            saveCommandLog($order->id, 'Shadowfax Tracking ' . $new_status, ['awb' => $awb_number], $data, 'Success');
         } else {
             // Log Error if API response is not successful
             saveCommandLog($order->id, 'Shadowfax Tracking', ['awb' => $awb_number], $response->json(), 'Error');
