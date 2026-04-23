@@ -63,7 +63,7 @@ function shadowFaxTracking($awb_number)
         if ($response->successful()) {
             $data = $response->json();
             // Assume the main shipment object is directly in $data or nested in a 'data' key
-            $shipment = $data['order_detail'] ?? $data;
+            $shipment = $data['order_details'] ?? $data;
 
             // 3. Map the Status
             $statusInput = strtolower($shipment['status'] ?? '');

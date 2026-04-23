@@ -160,9 +160,6 @@ function createXpressBeesShipment($token, $order, $courier_id)
         $response = Http::withToken($token)->acceptJson()->post($url, $payload);
         $responseData = $response->json();
 
-        Log::info('XpressBees Payload: ' . json_encode($payload));
-        Log::info('XpressBees Response: ' . json_encode($responseData));
-
         if ($response->successful() && isset($responseData['status']) && $responseData['status'] === true) {
             $shipmentData = $responseData['data'] ?? $responseData;
 
