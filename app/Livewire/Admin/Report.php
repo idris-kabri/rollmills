@@ -81,7 +81,7 @@ class Report extends Component
         // 5. Meesho Deductions
         $meesho_deduction = MeeshoDeduction::query();
         if ($this->from_date && $this->to_date) {
-            $meesho_deduction->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            $meesho_deduction->whereBetween('date', [$this->from_date, $this->to_date]);
         }
         // FIX: Clone here is safer to prevent side effects if you add more logic later
         $meesho_deduction_array = [
