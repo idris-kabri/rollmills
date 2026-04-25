@@ -73,7 +73,7 @@ class Report extends Component
                 // FIX: Changed $query to $meesho_query
                 'count' => (clone $meesho_query)->count(),
                 'remmitted_amount' => (clone $meesho_query)->whereNotNull('remittance_at')->sum('remittance_amount'),
-                'going_to_be_remitted_amount' => (clone $meesho_query)->sum('total') - (clone $meesho_query)->whereNotNull('remittance_at')->sum('remittance_amount'),
+                'going_to_be_remitted_amount' => (clone $meesho_query)->whereNull('remittance_at')->sum('total'),
                 'items_count' => (clone $meesho_query)->sum('quantity'),
             ];
         }
@@ -81,7 +81,7 @@ class Report extends Component
         // 5. Meesho Deductions
         $meesho_deduction = MeeshoDeduction::query();
         if ($this->from_date && $this->to_date) {
-            $meesho_deduction->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            $meesho_deduction->whereBetween('date', [$this->from_date, $this->to_date]);
         }
         // FIX: Clone here is safer to prevent side effects if you add more logic later
         $meesho_deduction_array = [
