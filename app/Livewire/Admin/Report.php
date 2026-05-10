@@ -138,6 +138,7 @@ class Report extends Component
         $ofd_ithink_order_count = (clone $ithink_orders_query)->where('orders.status', 7)->distinct()->count('orders.id');
         $undelivered_ithink_order_count = (clone $ithink_orders_query)->where('orders.status', 9)->distinct()->count('orders.id');
         $ithink_rto_rate = $ithink_order_count > 0 ? round(($returned_ithink_order_count / $ithink_order_count) * 100, 2) : 0;
+        $ithink_return_sum = (clone $ithink_orders_query)->whereIn('orders.status', [5, 8])->sum('order_awb.charges_taken');
 
         // --- ShadowFax Metrics ---
         $shipped_shadow_fax_order_count = (clone $shadow_fax_orders_query)->where('orders.status', 2)->distinct()->count('orders.id');
@@ -153,6 +154,7 @@ class Report extends Component
         $ofd_shadow_fax_order_count = (clone $shadow_fax_orders_query)->where('orders.status', 7)->distinct()->count('orders.id');
         $undelivered_shadow_fax_order_count = (clone $shadow_fax_orders_query)->where('orders.status', 9)->distinct()->count('orders.id');
         $shadow_fax_rto_rate = $shadow_fax_order_count > 0 ? round(($returned_shadow_fax_order_count / $shadow_fax_order_count) * 100, 2) : 0;
+        $shadow_fax_return_sum = (clone $shadow_fax_orders_query)->whereIn('orders.status', [5, 8])->sum('order_awb.charges_taken');
 
         // --- XpressBees Metrics ---
         $shipped_xpress_bees_order_count = (clone $xpress_bees_orders_query)->where('orders.status', 2)->distinct()->count('orders.id');
@@ -168,6 +170,7 @@ class Report extends Component
         $ofd_xpress_bees_order_count = (clone $xpress_bees_orders_query)->where('orders.status', 7)->distinct()->count('orders.id');
         $undelivered_xpress_bees_order_count = (clone $xpress_bees_orders_query)->where('orders.status', 9)->distinct()->count('orders.id');
         $xpress_bees_rto_rate = $xpress_bees_order_count > 0 ? round(($returned_xpress_bees_order_count / $xpress_bees_order_count) * 100, 2) : 0;
+        $xpress_bees_return_sum = (clone $xpress_bees_orders_query)->whereIn('orders.status', [5, 8])->sum('order_awb.charges_taken');
 
         $orders_needs_attention = Order::where('status', 2)
             ->where('shipped_at', '<=', Carbon::now()->subDays(10))
@@ -192,6 +195,7 @@ class Report extends Component
             'ofd_ithink_order_count' => $ofd_ithink_order_count,
             'undelivered_ithink_order_count' => $undelivered_ithink_order_count,
             'ithink_rto_rate' => $ithink_rto_rate,
+            'ithink_return_sum' => $ithink_return_sum,
             'shipped_shadow_fax_order_count' => $shipped_shadow_fax_order_count,
             'shadow_fax_order_count' => $shadow_fax_order_count,
             'completed_shadow_fax_order_count' => $completed_shadow_fax_order_count,
@@ -199,6 +203,7 @@ class Report extends Component
             'ofd_shadow_fax_order_count' => $ofd_shadow_fax_order_count,
             'undelivered_shadow_fax_order_count' => $undelivered_shadow_fax_order_count,
             'shadow_fax_rto_rate' => $shadow_fax_rto_rate,
+            'shadow_fax_return_sum' => $shadow_fax_return_sum,
             'shipped_xpress_bees_order_count' => $shipped_xpress_bees_order_count,
             'xpress_bees_order_count' => $xpress_bees_order_count,
             'completed_xpress_bees_order_count' => $completed_xpress_bees_order_count,
@@ -206,6 +211,7 @@ class Report extends Component
             'ofd_xpress_bees_order_count' => $ofd_xpress_bees_order_count,
             'undelivered_xpress_bees_order_count' => $undelivered_xpress_bees_order_count,
             'xpress_bees_rto_rate' => $xpress_bees_rto_rate,
+            'xpress_bees_return_sum' => $xpress_bees_return_sum,
             'orders_needs_attention' => $orders_needs_attention,
         ])->layout('layouts.admin.app');
     }
