@@ -8,6 +8,8 @@ use App\Models\OrderAWB;
 use App\Models\MeeshoOrder;
 use App\Models\MeeshoDeduction;
 use Carbon\Carbon;
+use App\Exports\OrderPincodeStatusExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Report extends Component
 {
@@ -220,5 +222,9 @@ class Report extends Component
             'xpress_bees_return_order_sum' => $xpress_bees_return_order_sum,
             'orders_needs_attention' => $orders_needs_attention,
         ])->layout('layouts.admin.app');
+    }
+    public function exportPincodeReport()
+    {
+        return Excel::download(new OrderPincodeStatusExport(), 'pincode_status_report_' . date('Y-m-d') . '.xlsx');
     }
 }

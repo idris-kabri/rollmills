@@ -10,6 +10,24 @@
                         Order & Financial Report
                     </h2>
                 </div>
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        <button wire:click="exportPincodeReport" class="btn btn-success d-none d-sm-inline-block">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                <path d="M8 11h8v7h-8z"></path>
+                                <path d="M8 15h8"></path>
+                                <path d="M11 11v7"></path>
+                            </svg>
+                            Export Pincode Report
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -133,7 +151,8 @@
                                 <td class="text-end text-muted">
                                     {{ number_format($delivered_orders_array['cod_order_revenue_not_remitted'], 2) }}
                                 </td>
-                                <td class="text-end">{{ number_format($delivered_orders_array['commission'], 2) }}</td>
+                                <td class="text-end">{{ number_format($delivered_orders_array['commission'], 2) }}
+                                </td>
                                 <td class="text-end">
                                     {{ number_format($delivered_orders_array['sc_taken_from_customer'], 2) }}</td>
                                 <td class="text-end">{{ number_format($delivered_orders_array['real_sc'], 2) }}</td>
@@ -210,8 +229,6 @@
                                 <th class="text-end text-warning">Undelivered</th>
                                 <th class="text-end text-danger">Returned</th>
                                 <th class="text-end">RTO %</th>
-                                <th class="text-end">Return Shipping charges</th>
-                                <th class="text-end">Return Order Sum</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -224,8 +241,6 @@
                                 <td class="text-end text-warning">{{ $undelivered_ithink_order_count }}</td>
                                 <td class="text-end text-danger">{{ $returned_ithink_order_count }}</td>
                                 <td class="text-end fw-bold">{{ $ithink_rto_rate }}%</td>
-                                <td class="text-end fw-bold">{{ number_format($ithink_return_sum, 2) }}</td>
-                                <td class="text-end fw-bold">{{ number_format($ithink_return_order_sum, 2) }}</td>
                             </tr>
                             <tr>
                                 <td><span class="fw-medium">ShadowFax</span></td>
@@ -236,9 +251,6 @@
                                 <td class="text-end text-warning">{{ $undelivered_shadow_fax_order_count }}</td>
                                 <td class="text-end text-danger">{{ $returned_shadow_fax_order_count }}</td>
                                 <td class="text-end fw-bold">{{ $shadow_fax_rto_rate }}%</td>
-                                <td class="text-end fw-bold">{{ number_format($shadow_fax_return_sum, 2) }}</td>
-                                <td class="text-end fw-bold">{{ number_format($shadow_fax_return_order_sum, 2) }}
-                                </td>
                             </tr>
                             <tr>
                                 <td><span class="fw-medium">XpressBees</span></td>
@@ -249,9 +261,6 @@
                                 <td class="text-end text-warning">{{ $undelivered_xpress_bees_order_count }}</td>
                                 <td class="text-end text-danger">{{ $returned_xpress_bees_order_count }}</td>
                                 <td class="text-end fw-bold">{{ $xpress_bees_rto_rate }}%</td>
-                                <td class="text-end fw-bold">{{ number_format($xpress_bees_return_sum, 2) }}</td>
-                                <td class="text-end fw-bold">{{ number_format($xpress_bees_return_order_sum, 2) }}
-                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -283,9 +292,7 @@
                             @if (isset($orders_needs_attention) && count($orders_needs_attention) > 0)
                                 @foreach ($orders_needs_attention as $order)
                                     <tr>
-                                        <td><a href="{{ route('admin.orders.view', $order->id) }}"
-                                                target="_blank">{{ $order->id }}</a>
-                                        </td>
+                                        <td>{{ $order->id }}</td>
                                         <td class="text-wrap" style="max-width: 200px;">
                                             <a href="{{ route('admin.customer.customer-detail', $order->logged_in_user_id) }}"
                                                 target="_blank">
@@ -303,14 +310,18 @@
                                                 ({{ \Carbon\Carbon::parse($order->shipped_at)->diffForHumans() }})
                                             </small>
                                         </td>
-                                        <td>{{ $order?->getOrderAWB[0]?->aggregator ?? 'N/A' }}</td>
-                                        <td>{{ $order?->getOrderAWB[0]?->provider ?? 'N/A' }}</td>
-                                        <td class="fw-bold">{{ $order?->getOrderAWB[0]?->awb_number ?? 'N/A' }}</td>
+                                        <td>{{ $order->aggregator ?? 'N/A' }}</td>
+                                        <td>{{ $order->provider ?? 'N/A' }}</td>
+                                        <td class="fw-bold">{{ $order->awb_number ?? 'N/A' }}</td>
                                         <td class="text-end" onclick="event.stopPropagation()">
-                                            <a href="{{ route('tracking-info', $order->id) }}" target="_blank"
-                                                class="btn btn-sm btn-info text-white text-nowrap">
-                                                Track
-                                            </a>
+                                            @if ($order->tracking_link)
+                                                <a href="{{ $order->tracking_link }}" target="_blank"
+                                                    class="btn btn-sm btn-info text-white text-nowrap">
+                                                    Track
+                                                </a>
+                                            @else
+                                                <span class="text-muted small text-nowrap">No Link</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
