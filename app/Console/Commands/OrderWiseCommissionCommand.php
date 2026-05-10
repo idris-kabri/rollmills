@@ -105,7 +105,7 @@ class OrderWiseCommissionCommand extends Command
                         $check_order = Order::where('logged_in_user_id', $order->logged_in_user_id)
                             ->where('id', '!=', $order->id)
                             ->whereNotIn('status', [0, 10])
-                            ->whereDate('created_at', $order->created_at->toDateString())
+                            ->whereBetween('created_at', [Carbon::parse($order->created_at)->startOfDay(), Carbon::parse($order->created_at)->endOfDay()])
                             ->first();
                         if ($check_order != null) {
                             $order->status = 10;

@@ -180,70 +180,72 @@ function IthinkRemittanceSync($date)
 
 function xpressBeesTracking($token, $awb_number)
 {
-    $orderAwb = OrderAWB::with('getOrder')->where('awb_number', $awb_number)->first();
-    if (!$orderAwb || !$orderAwb->getOrder) {
+    $orderAwbs = OrderAWB::with('getOrder')->where('awb_number', $awb_number)->get();
+    if (!$orderAwbs || count($orderAwbs) == 0) {
         return;
     }
 
-    $order = $orderAwb->getOrder;
+    foreach ($orderAwbs as $orderAwb) {
+        $order = $orderAwb->getOrder;
 
-    try {
-        $response = Http::timeout(20)
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $token,
-            ])
-            ->get('https://shipment.xpressbees.com/api/shipments2/track/' . $awb_number);
+        try {
+            $response = Http::timeout(20)
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->get('https://shipment.xpressbees.com/api/shipments2/track/' . $awb_number);
 
-        if ($response->successful()) {
-            $data = $response->json();
+            if ($response->successful()) {
+                $data = $response->json();
 
-            if ($data['status'] ?? false) {
-                $shipment = $data['data'];
-                $new_status = match (strtolower($shipment['status'] ?? '')) {
-                    'in transit' => 2,
-                    'delivered' => 3,
-                    'rto' => 5,
-                    'out for delivery' => 7,
-                    default => 2,
-                };
+                if ($data['status'] ?? false) {
+                    $shipment = $data['data'];
+                    $new_status = match (strtolower($shipment['status'] ?? '')) {
+                        'in transit' => 2,
+                        'delivered' => 3,
+                        'rto' => 5,
+                        'out for delivery' => 7,
+                        default => 2,
+                    };
 
-                $old_status = $order->status;
-                $order->status = $new_status;
+                    $old_status = $order->status;
+                    $order->status = $new_status;
 
-                if (!empty($shipment['history'])) {
-                    $history = collect($shipment['history'])
-                        ->map(
-                            fn($h) => [
-                                'status' => $h['status_code'],
-                                'date_time' => Carbon::parse($h['event_time'])->format('Y-m-d H:i:s'),
-                                'location' => $h['location'] ?? '',
-                                'remark' => $h['message'] ?? '',
-                            ],
-                        )
-                        ->toArray();
+                    if (!empty($shipment['history'])) {
+                        $history = collect($shipment['history'])
+                            ->map(
+                                fn($h) => [
+                                    'status' => $h['status_code'],
+                                    'date_time' => Carbon::parse($h['event_time'])->format('Y-m-d H:i:s'),
+                                    'location' => $h['location'] ?? '',
+                                    'remark' => $h['message'] ?? '',
+                                ],
+                            )
+                            ->toArray();
 
-                    $order->tracking_updates = json_encode($history);
+                        $order->tracking_updates = json_encode($history);
+                    }
+
+                    if ($shipment['pdd'] != 0) {
+                        $order->estimated_delivery_date = $shipment['pdd'];
+                    }
+
+                    if ($new_status == 7 && $old_status != $new_status) {
+                        sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
+                    } elseif ($new_status == 3 && $old_status != $new_status) {
+                        markOrderAsDelivered($order);
+                    }
+
+                    $order->save();
+                    saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Success');
+                } else {
+                    saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Error');
                 }
-
-                if ($shipment['pdd'] != 0) {
-                    $order->estimated_delivery_date = $shipment['pdd'];
-                }
-
-                if ($new_status == 7 && $old_status != $new_status) {
-                    sendParameterTemplateWawi('order_out_for_delivery', 'en_us', $order->getBillAddress->mobile, [$order->getBillAddress->name, $order->id]);
-                } elseif ($new_status == 3 && $old_status != $new_status) {
-                    markOrderAsDelivered($order);
-                }
-
-                $order->save();
-                saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Success');
-            } else {
-                saveCommandLog($order->id, 'XpressBees Tracking', ['awb' => $awb_number], $data, 'Error');
             }
+        } catch (\Exception $e) {
+            Log::error("XpressBees Tracking Exception for $awb_number: " . $e->getMessage());
         }
-    } catch (\Exception $e) {
-        Log::error("XpressBees Tracking Exception for $awb_number: " . $e->getMessage());
     }
 }
 

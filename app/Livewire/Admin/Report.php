@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Order;
+use App\Models\OrderAWB;
 use App\Models\MeeshoOrder;
 use App\Models\MeeshoDeduction;
 use Carbon\Carbon;
@@ -52,7 +53,7 @@ class Report extends Component
         $shipped_orders_array = $getStats((clone $baseQuery)->where('status', 2), 'shipped_orders');
         $delivered_orders_array = $getStats((clone $baseQuery)->where('status', 3), 'delivered_orders');
         $cancelled_orders_array = $getStats((clone $baseQuery)->where('status', 4), 'cancelled_orders');
-        $returned_orders_array = $getStats((clone $baseQuery)->where('status', 5), 'returned_orders');
+        $returned_orders_array = $getStats((clone $baseQuery)->whereIn('status', [5, 8]), 'returned_orders');
         $lost_orders_array = $getStats((clone $baseQuery)->where('status', 6), 'lost_orders');
 
         // --- FIX STARTS HERE ---
@@ -113,6 +114,65 @@ class Report extends Component
             }
         }
 
+        $provider_base_query = OrderAWB::query()->join('orders', 'orders.id', '=', 'order_awb.order_id');
+
+        if ($this->from_date && $this->to_date) {
+            $provider_base_query->whereBetween('orders.created_at', [Carbon::parse($this->from_date)->startOfDay(), Carbon::parse($this->to_date)->endOfDay()]);
+        }
+
+        $ithink_orders_query = (clone $provider_base_query)->where('order_awb.aggregator', 'Ithink');
+        $shadow_fax_orders_query = (clone $provider_base_query)->where('order_awb.aggregator', 'ShadowFax');
+        $xpress_bees_orders_query = (clone $provider_base_query)->where('order_awb.aggregator', 'XpressBees');
+
+        // --- iThink Metrics ---
+        $shipped_ithink_order_count = (clone $ithink_orders_query)->where('orders.status', 2)->distinct()->count('orders.id');
+        $ithink_order_count = (clone $ithink_orders_query)
+            ->whereIn('orders.status', [2, 3, 5, 8, 7, 9])
+            ->distinct()
+            ->count('orders.id');
+        $completed_ithink_order_count = (clone $ithink_orders_query)->where('orders.status', 3)->distinct()->count('orders.id');
+        $returned_ithink_order_count = (clone $ithink_orders_query)
+            ->whereIn('orders.status', [5, 8])
+            ->distinct()
+            ->count('orders.id');
+        $ofd_ithink_order_count = (clone $ithink_orders_query)->where('orders.status', 7)->distinct()->count('orders.id');
+        $undelivered_ithink_order_count = (clone $ithink_orders_query)->where('orders.status', 9)->distinct()->count('orders.id');
+        $ithink_rto_rate = $ithink_order_count > 0 ? round(($returned_ithink_order_count / $ithink_order_count) * 100, 2) : 0;
+
+        // --- ShadowFax Metrics ---
+        $shipped_shadow_fax_order_count = (clone $shadow_fax_orders_query)->where('orders.status', 2)->distinct()->count('orders.id');
+        $shadow_fax_order_count = (clone $shadow_fax_orders_query)
+            ->whereIn('orders.status', [2, 3, 5, 8, 7, 9])
+            ->distinct()
+            ->count('orders.id');
+        $completed_shadow_fax_order_count = (clone $shadow_fax_orders_query)->where('orders.status', 3)->distinct()->count('orders.id');
+        $returned_shadow_fax_order_count = (clone $shadow_fax_orders_query)
+            ->whereIn('orders.status', [5, 8])
+            ->distinct()
+            ->count('orders.id');
+        $ofd_shadow_fax_order_count = (clone $shadow_fax_orders_query)->where('orders.status', 7)->distinct()->count('orders.id');
+        $undelivered_shadow_fax_order_count = (clone $shadow_fax_orders_query)->where('orders.status', 9)->distinct()->count('orders.id');
+        $shadow_fax_rto_rate = $shadow_fax_order_count > 0 ? round(($returned_shadow_fax_order_count / $shadow_fax_order_count) * 100, 2) : 0;
+
+        // --- XpressBees Metrics ---
+        $shipped_xpress_bees_order_count = (clone $xpress_bees_orders_query)->where('orders.status', 2)->distinct()->count('orders.id');
+        $xpress_bees_order_count = (clone $xpress_bees_orders_query)
+            ->whereIn('orders.status', [2, 3, 5, 8, 7, 9])
+            ->distinct()
+            ->count('orders.id');
+        $completed_xpress_bees_order_count = (clone $xpress_bees_orders_query)->where('orders.status', 3)->distinct()->count('orders.id');
+        $returned_xpress_bees_order_count = (clone $xpress_bees_orders_query)
+            ->whereIn('orders.status', [5, 8])
+            ->distinct()
+            ->count('orders.id');
+        $ofd_xpress_bees_order_count = (clone $xpress_bees_orders_query)->where('orders.status', 7)->distinct()->count('orders.id');
+        $undelivered_xpress_bees_order_count = (clone $xpress_bees_orders_query)->where('orders.status', 9)->distinct()->count('orders.id');
+        $xpress_bees_rto_rate = $xpress_bees_order_count > 0 ? round(($returned_xpress_bees_order_count / $xpress_bees_order_count) * 100, 2) : 0;
+
+        $orders_needs_attention = Order::where('status', 2)
+            ->where('shipped_at', '<=', Carbon::now()->subDays(10))
+            ->get();
+
         return view('livewire.admin.report', [
             'process_orders_array' => $process_orders_array,
             'shipped_orders_array' => $shipped_orders_array,
@@ -125,6 +185,28 @@ class Report extends Component
             'meesho_items' => $meesho_items,
             'prepaid_order_sum' => $prepaid_order_sum,
             'cod_order_sum' => $cod_order_sum,
+            'shipped_ithink_order_count' => $shipped_ithink_order_count,
+            'ithink_order_count' => $ithink_order_count,
+            'completed_ithink_order_count' => $completed_ithink_order_count,
+            'returned_ithink_order_count' => $returned_ithink_order_count,
+            'ofd_ithink_order_count' => $ofd_ithink_order_count,
+            'undelivered_ithink_order_count' => $undelivered_ithink_order_count,
+            'ithink_rto_rate' => $ithink_rto_rate,
+            'shipped_shadow_fax_order_count' => $shipped_shadow_fax_order_count,
+            'shadow_fax_order_count' => $shadow_fax_order_count,
+            'completed_shadow_fax_order_count' => $completed_shadow_fax_order_count,
+            'returned_shadow_fax_order_count' => $returned_shadow_fax_order_count,
+            'ofd_shadow_fax_order_count' => $ofd_shadow_fax_order_count,
+            'undelivered_shadow_fax_order_count' => $undelivered_shadow_fax_order_count,
+            'shadow_fax_rto_rate' => $shadow_fax_rto_rate,
+            'shipped_xpress_bees_order_count' => $shipped_xpress_bees_order_count,
+            'xpress_bees_order_count' => $xpress_bees_order_count,
+            'completed_xpress_bees_order_count' => $completed_xpress_bees_order_count,
+            'returned_xpress_bees_order_count' => $returned_xpress_bees_order_count,
+            'ofd_xpress_bees_order_count' => $ofd_xpress_bees_order_count,
+            'undelivered_xpress_bees_order_count' => $undelivered_xpress_bees_order_count,
+            'xpress_bees_rto_rate' => $xpress_bees_rto_rate,
+            'orders_needs_attention' => $orders_needs_attention,
         ])->layout('layouts.admin.app');
     }
 }

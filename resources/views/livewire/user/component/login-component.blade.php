@@ -48,7 +48,7 @@
 
                     @if (!$otp_section_show)
                         <div id="stepMobile">
-                            <h4 class="fw-bold text-dark mb-sm-3 quicksand">Login to Continue</h4>
+                            <h4 class="fw-bold text-dark mb-sm-3 quicksand">Login to Continue Idris</h4>
                             <label class="form-label fw-semibold pb-sm-4">Mobile Number (WhatsApp)</label>
                             <div class="input-group mb-3">
                                 <span class="input-group-text">🇮🇳 +91</span>
