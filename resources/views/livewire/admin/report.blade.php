@@ -194,6 +194,126 @@
                 </div>
             </div>
 
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Shipping Aggregators Breakdown</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table card-table table-vcenter text-nowrap table-striped table-hover">
+                        <thead>
+                            <tr class="bg-light">
+                                <th>Aggregator</th>
+                                <th class="text-end">Total Tracked Orders</th>
+                                <th class="text-end">Shipped</th>
+                                <th class="text-end text-info">Out For Delivery</th>
+                                <th class="text-end text-success">Completed</th>
+                                <th class="text-end text-warning">Undelivered</th>
+                                <th class="text-end text-danger">Returned</th>
+                                <th class="text-end">RTO %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="fw-medium">iThink Logistics</span></td>
+                                <td class="text-end fw-bold">{{ $ithink_order_count }}</td>
+                                <td class="text-end">{{ $shipped_ithink_order_count }}</td>
+                                <td class="text-end text-info">{{ $ofd_ithink_order_count }}</td>
+                                <td class="text-end text-success">{{ $completed_ithink_order_count }}</td>
+                                <td class="text-end text-warning">{{ $undelivered_ithink_order_count }}</td>
+                                <td class="text-end text-danger">{{ $returned_ithink_order_count }}</td>
+                                <td class="text-end fw-bold">{{ $ithink_rto_rate }}%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="fw-medium">ShadowFax</span></td>
+                                <td class="text-end fw-bold">{{ $shadow_fax_order_count }}</td>
+                                <td class="text-end">{{ $shipped_shadow_fax_order_count }}</td>
+                                <td class="text-end text-info">{{ $ofd_shadow_fax_order_count }}</td>
+                                <td class="text-end text-success">{{ $completed_shadow_fax_order_count }}</td>
+                                <td class="text-end text-warning">{{ $undelivered_shadow_fax_order_count }}</td>
+                                <td class="text-end text-danger">{{ $returned_shadow_fax_order_count }}</td>
+                                <td class="text-end fw-bold">{{ $shadow_fax_rto_rate }}%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="fw-medium">XpressBees</span></td>
+                                <td class="text-end fw-bold">{{ $xpress_bees_order_count }}</td>
+                                <td class="text-end">{{ $shipped_xpress_bees_order_count }}</td>
+                                <td class="text-end text-info">{{ $ofd_xpress_bees_order_count }}</td>
+                                <td class="text-end text-success">{{ $completed_xpress_bees_order_count }}</td>
+                                <td class="text-end text-warning">{{ $undelivered_xpress_bees_order_count }}</td>
+                                <td class="text-end text-danger">{{ $returned_xpress_bees_order_count }}</td>
+                                <td class="text-end fw-bold">{{ $xpress_bees_rto_rate }}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-warning" wire:ignore>
+                <div class="card-header bg-warning-lt">
+                    <h3 class="card-title text-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i> Orders Needs Attention (> 10 Days Shipped)
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table card-table table-vcenter table-striped table-hover"
+                        id="report-orders-attention-table">
+                        <thead>
+                            <tr class="bg-light">
+                                <th class="text-nowrap"># Order Id</th>
+                                <th>User Name/Mobile</th>
+                                <th class="text-nowrap">Ordered Date</th>
+                                <th class="text-nowrap">Shipped At</th>
+                                <th>Aggregator</th>
+                                <th>Provider</th>
+                                <th>AWB</th>
+                                <th class="text-end">Track</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 14px">
+                            @if (isset($orders_needs_attention) && count($orders_needs_attention) > 0)
+                                @foreach ($orders_needs_attention as $order)
+                                    <tr>
+                                        <td><a href="{{ route('admin.orders.view', $order->id) }}"
+                                                target="_blank">{{ $order->id }}</a>
+                                        </td>
+                                        <td class="text-wrap" style="max-width: 200px;">
+                                            <a href="{{ route('admin.customer.customer-detail', $order->logged_in_user_id) }}"
+                                                target="_blank">
+                                                {{ $order->getUser->name ?? 'N/A' }}<br>
+                                                {{ $order->getUser->mobile ?? 'N/A' }}
+                                            </a>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            {{ \Carbon\Carbon::parse($order->created_at)->format('d M, Y h:i A') }}
+                                        </td>
+                                        <td class="text-danger fw-bold text-nowrap">
+                                            {{ \Carbon\Carbon::parse($order->shipped_at)->format('d M, Y h:i A') }}
+                                            <br>
+                                            <small class="text-muted">
+                                                ({{ \Carbon\Carbon::parse($order->shipped_at)->diffForHumans() }})
+                                            </small>
+                                        </td>
+                                        <td>{{ $order?->getOrderAWB[0]?->aggregator ?? 'N/A' }}</td>
+                                        <td>{{ $order?->getOrderAWB[0]?->provider ?? 'N/A' }}</td>
+                                        <td class="fw-bold">{{ $order?->getOrderAWB[0]?->awb_number ?? 'N/A' }}</td>
+                                        <td class="text-end" onclick="event.stopPropagation()">
+                                            <a href="{{ route('tracking-info', $order->id) }}" target="_blank"
+                                                class="btn btn-sm btn-info text-white text-nowrap">
+                                                Track
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-4">No orders need attention
+                                        for the selected filters.</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="row row-cards mb-4">
                 <div class="col-md-6">
                     <div class="card h-100">
@@ -308,3 +428,23 @@
         </div>
     </footer>
 </div>
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // Initialize Orders Needs Attention Table as a DataTable
+            if ($('#report-orders-attention-table').length) {
+                $('#report-orders-attention-table').DataTable({
+                    "pageLength": 10,
+                    "lengthMenu": [5, 10, 25, 50, 100],
+                    "ordering": true,
+                    "searching": true,
+                    "margin": 5,
+                    "order": [
+                        [3, "asc"]
+                    ], // Order by 'Shipped At' column ascending to show oldest orders first
+                });
+            }
+        });
+    </script>
+@endsection
