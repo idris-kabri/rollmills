@@ -211,6 +211,7 @@
                                 <th class="text-end text-danger">Returned</th>
                                 <th class="text-end">RTO %</th>
                                 <th class="text-end">Return Shipping charges</th>
+                                <th class="text-end">Return Order Sum</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -224,6 +225,7 @@
                                 <td class="text-end text-danger">{{ $returned_ithink_order_count }}</td>
                                 <td class="text-end fw-bold">{{ $ithink_rto_rate }}%</td>
                                 <td class="text-end fw-bold">{{ number_format($ithink_return_sum, 2) }}</td>
+                                <td class="text-end fw-bold">{{ number_format($ithink_return_order_sum, 2) }}</td>
                             </tr>
                             <tr>
                                 <td><span class="fw-medium">ShadowFax</span></td>
@@ -235,6 +237,8 @@
                                 <td class="text-end text-danger">{{ $returned_shadow_fax_order_count }}</td>
                                 <td class="text-end fw-bold">{{ $shadow_fax_rto_rate }}%</td>
                                 <td class="text-end fw-bold">{{ number_format($shadow_fax_return_sum, 2) }}</td>
+                                <td class="text-end fw-bold">{{ number_format($shadow_fax_return_order_sum, 2) }}
+                                </td>
                             </tr>
                             <tr>
                                 <td><span class="fw-medium">XpressBees</span></td>
@@ -246,6 +250,8 @@
                                 <td class="text-end text-danger">{{ $returned_xpress_bees_order_count }}</td>
                                 <td class="text-end fw-bold">{{ $xpress_bees_rto_rate }}%</td>
                                 <td class="text-end fw-bold">{{ number_format($xpress_bees_return_sum, 2) }}</td>
+                                <td class="text-end fw-bold">{{ number_format($xpress_bees_return_order_sum, 2) }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
