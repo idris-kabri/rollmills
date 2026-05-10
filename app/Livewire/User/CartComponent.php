@@ -32,8 +32,6 @@ class CartComponent extends Component
     public $discount_percentage = 15;
     public $maximum_extra_discount_amount = 500;
     public $extra_discount = 0;
-    public $surprise_gift_amount = 0;
-    public $surprise_gift_product_id = null;
     public $productCategoryIds = [];
     public $flat_rate = 0;
     public $confirmMessage = '';
@@ -106,19 +104,11 @@ class CartComponent extends Component
         $this->productCategoryIds = array_unique($this->productCategoryIds);
         $this->dispatch('view-cart', ['items' => $items, 'total' => Cart::instance('cart')->total()]);
 
-        $giftAmountSetting = Setting::where('label', 'surprise_gift_minimum_amount')->first();
-        $this->surprise_gift_amount = $giftAmountSetting ? (int) $giftAmountSetting->value : 0;
-
-        $giftProductSetting = Setting::where('label', 'surprise_gift_product_id')->first();
-        $this->surprise_gift_product_id = $giftProductSetting ? $giftProductSetting->value : null;
-
         $flatRateSetting = Setting::where('label', 'Flat Rate')->first();
         if ($flatRateSetting) {
             $this->flat_rate = (int) $flatRateSetting->value;
             session()->put('flat_rate_charge', (int) $this->flat_rate);
         }
-
-        $this->checkSurpriseGift();
     }
 
     public function checkFirstOrder()
@@ -324,55 +314,6 @@ class CartComponent extends Component
         return $display_coupons;
     }
 
-    public function checkSurpriseGift()
-    {
-        if (!$this->surprise_gift_product_id) {
-            return;
-        }
-        $giftProductId = $this->surprise_gift_product_id;
-        $threshold = (float) $this->surprise_gift_amount;
-
-        $currentCartTotal = 0;
-        $existingGiftRowId = null;
-
-        foreach (Cart::instance('cart')->content() as $item) {
-            if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
-                $existingGiftRowId = $item->rowId;
-                continue;
-            }
-            $currentCartTotal += $item->price * $item->qty;
-        }
-
-        if ($currentCartTotal >= $threshold) {
-            if (!$existingGiftRowId) {
-                $product = Product::find($giftProductId);
-                if ($product) {
-                    Cart::instance('cart')
-                        ->add($product->id, $product->name, 1, 0, [
-                            'is_gift_product' => true,
-                            'featured_image' => $product->featured_image,
-                            'discount_price' => 0,
-                        ])
-                        ->associate('App\Models\Product');
-                    $this->dispatch('coupon-applied');
-                    $this->dispatch('surprise-gift');
-                }
-            }
-            if (!session()->has('free_gift') || session()->get('free_gift') == false) {
-                session()->put('free_gift', true);
-                $this->dispatch('surprise-gift');
-            }
-        } else {
-            if ($existingGiftRowId) {
-                Cart::instance('cart')->remove($existingGiftRowId);
-            }
-            if (session()->has('free_gift')) {
-                session()->forget('free_gift');
-                $this->dispatch('surprise-gift');
-            }
-        }
-    }
-
     public function incrementQuantity($rowId)
     {
         $item = Cart::instance('cart')->get($rowId);
@@ -384,7 +325,6 @@ class CartComponent extends Component
                 $this->applyCoupon();
             }
         }
-        $this->checkSurpriseGift();
     }
 
     public function decrementQuantity($rowId)
@@ -398,7 +338,6 @@ class CartComponent extends Component
                 $this->applyCoupon();
             }
         }
-        $this->checkSurpriseGift();
     }
 
     public function removeFromCart($rowId)
@@ -406,7 +345,6 @@ class CartComponent extends Component
         finalRemoveFromCart($rowId);
         $this->toastError('Product Remove Successfully From Your Cart!');
         $this->dispatch('close-cart-remove-item-modal');
-        $this->checkSurpriseGift();
     }
 
     public function checkCoupon($coupon_code)
@@ -432,9 +370,6 @@ class CartComponent extends Component
 
         $currentCartTotal = 0;
         foreach (Cart::instance('cart')->content() as $item) {
-            if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
-                continue;
-            }
             $currentCartTotal += $item->price * $item->qty;
         }
 
@@ -483,17 +418,9 @@ class CartComponent extends Component
 
     public function render()
     {
-        $giftAlreadyAdded = false;
-        foreach (Cart::instance('cart')->content() as $item) {
-            if (isset($item->options['is_gift_product']) && $item->options['is_gift_product'] == true) {
-                $giftAlreadyAdded = true;
-                break;
-            }
-        }
-
         $this->calculateTotals();
         $display_coupons = $this->fetchDisplayCoupons();
 
-        return view('livewire.user.cart-component', compact('giftAlreadyAdded', 'display_coupons'))->layout('layouts.user.app');
+        return view('livewire.user.cart-component', compact('display_coupons'))->layout('layouts.user.app');
     }
 }

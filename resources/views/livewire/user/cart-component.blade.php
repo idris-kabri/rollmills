@@ -11,18 +11,6 @@
     @php
         $shippingCharge = (float) (session('shipping_charge') ?? 0);
         $total = floatval(str_replace(',', '', Cart::total()));
-
-        $remain_amount = 0;
-        if ($surprise_gift_amount <= 0) {
-            $percentage = 0;
-            $remain_amount = 0;
-        } elseif ($total >= $surprise_gift_amount) {
-            $percentage = 100;
-            $remain_amount = 0;
-        } else {
-            $percentage = ($total / $surprise_gift_amount) * 100;
-            $remain_amount = $surprise_gift_amount - $total;
-        }
     @endphp
 
     <div wire:ignore.self class="modal fade" id="CartRemoveItemModal" tabindex="-1" data-bs-backdrop="static"
@@ -57,66 +45,6 @@
                 </div>
             </div>
 
-            <div class="container-sm mb-3 mb-md-0" wire:ignore>
-                <div class="row">
-                    <div class="col-12 px-0 px-sm-3">
-                        <div class="mb-md-5 mb-2">
-                            <div class="gift-progress-container">
-                                <div class="gift-text-measure">
-                                    <div class="progress-title d-none d-sm-block">Grab Your Gift Now!!</div>
-                                    <h6 class="d-block d-sm-none text-start text-brand">Shop
-                                        ₹{{ $surprise_gift_amount }} & Grab Your Gift Now!!</h6>
-                                    <p class="quicksand fw-500 quicksand d-none d-sm-block">Shop
-                                        ₹{{ $surprise_gift_amount }} and get exclusive surprise gift only on RollMills.
-                                        Let the offers Roll-In !!</p>
-                                </div>
-                                <div class="gift-scroll-bar">
-                                    <div class="progress-bar-cart" id=""
-                                        data-width="{{ $giftAlreadyAdded ? 100 : $percentage }}"
-                                        data-skip="{{ $giftAlreadyAdded ? 'true' : 'false' }}">
-                                        <div class="bar-circle">
-                                            <i class="fa-solid fa-gift d-none d-sm-block"></i>
-                                            @php $cartSubtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal()); @endphp
-                                            <span class="d-block d-sm-none fs-12 fw-600"
-                                                style="line-height: 1em">₹{{ $cartSubtotal }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="milestone-marker"
-                                        style="{{ $giftAlreadyAdded ? 'display:none;' : '' }}">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/istockphoto-2172206741-612x612-removebg-preview__1_-removebg-preview.png') }}"
-                                            alt="" class="img-fluid">
-                                    </div>
-                                    <div class="milestone-marker-open"
-                                        style="{{ $giftAlreadyAdded ? 'display:block;' : '' }}">
-                                        <img src="{{ asset('assets/frontend/imgs/shop/surprise-gift-box-vector-with-white-bow-suitable-for-use-on-birthday-party-new-year-and-marry-christmas-2R4YDP3-removebg-preview__1_-removebg-preview.png') }}"
-                                            alt="" class="img-fluid">
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <p class="text-center mt-md-4 mt-3 quicksand fs-20 fw-500 d-none d-sm-block">
-                                        @if ($remain_amount > 0)
-                                            You are ₹{{ $remain_amount }} away from your gift &nbsp;<a
-                                                href="/shop">Shop Now </a>
-                                        @else
-                                            Your Surprise gift has been successfully added to your cart
-                                        @endif
-                                    </p>
-                                    <span class="text-center mt-md-4 mt-3 quicksand fs-13 fw-600 d-block d-sm-none"
-                                        style="line-height: 1.2em">
-                                        @if ($remain_amount > 0)
-                                            You are ₹{{ $remain_amount }} away from your gift &nbsp;<a
-                                                href="/shop">Shop Now </a>
-                                        @else
-                                            Your Surprise gift has been successfully added to your cart
-                                        @endif
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-xl-8">
                     <div class="table-responsive shopping-summery table-responsive-custom d-none d-sm-block">
@@ -134,33 +62,26 @@
                             <tbody>
                                 @foreach (Cart::instance('cart')->content() as $item)
                                     @php
-                                        $isGift = $item->options['is_gift_product'] ?? false;
                                         $shop_detail_url = route('shop-detail', [
                                             'slug' => $item->model->slug ? $item->model->slug : 'no-slug',
                                             'id' => $item->model->id,
                                         ]);
                                     @endphp
-                                    <tr class="pt-3 {{ $isGift ? 'gift-row' : '' }}">
+                                    <tr class="pt-3">
                                         <td class="image product-thumbnail pt-40 position-relative ps-3">
                                             <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                                 alt="{{ $item->model->seo_meta }}">
-                                            @if (!$isGift)
-                                                <div class="display-visible-480 d-none custom-remove-item">
-                                                    <a href="#"
-                                                        class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                        wire:click.prevent="askRemove('{{ $item->rowId }}')">
-                                                        <i class="fi-rs-trash text-white"></i></a>
-                                                </div>
-                                            @endif
+                                            <div class="display-visible-480 d-none custom-remove-item">
+                                                <a href="#"
+                                                    class="text-body fs-16 rounded-pill p-2 bg-brand d-flex align-items-center justify-content-center fit-content"
+                                                    wire:click.prevent="askRemove('{{ $item->rowId }}')">
+                                                    <i class="fi-rs-trash text-white"></i></a>
+                                            </div>
                                         </td>
                                         <td class="product-des product-name px-sm-3">
-                                            @if ($isGift)
-                                                <span class="gift-badge badge py-1 quicksand"><i
-                                                        class="fi-rs-gift mr-5"></i> Surprise Gift</span>
-                                            @endif
                                             <h6 class="mb-5">
                                                 <a class="product-name mb-10 text-heading two-liner-text"
-                                                    href="{{ !$isGift ? $shop_detail_url : 'javascript:void(0);' }}">
+                                                    href="{{ $shop_detail_url }}">
                                                     {{ $item->model->name }}
                                                 </a>
                                             </h6>
@@ -184,69 +105,44 @@
                                             @endif
                                         </td>
                                         <td class="price small-screen-table-td me-3" data-title="Price">
-                                            @if ($isGift)
-                                                <h4 class="text-body small-screen-table-td-content">
+                                            @php
+                                                $originalPrice = $item->model->price;
+                                                $total_original_price += $item->model->price * $item->qty;
+                                                $cartPrice = $item->price;
+                                            @endphp
+                                            <h4 class="text-body small-screen-table-td-content">
+                                                @if ($cartPrice < $originalPrice)
                                                     <del
-                                                        class="text-muted fs-6">₹{{ number_format($item->model->price) }}</del><br>
-                                                    <span class="price-free">FREE</span>
-                                                </h4>
-                                            @else
-                                                @php
-                                                    $originalPrice = $item->model->price;
-                                                    $total_original_price += $item->model->price * $item->qty;
-                                                    $cartPrice = $item->price;
-                                                @endphp
-                                                <h4 class="text-body small-screen-table-td-content">
-                                                    @if ($cartPrice < $originalPrice)
-                                                        <del
-                                                            class="text-muted fs-6">₹{{ number_format($originalPrice) }}</del><br>
-                                                        <span
-                                                            class="price-transition">₹{{ number_format($cartPrice) }}</span>
-                                                    @else
-                                                        <span
-                                                            class="price-transition">₹{{ number_format($cartPrice) }}</span>
-                                                    @endif
-                                                </h4>
-                                            @endif
+                                                        class="text-muted fs-6">₹{{ number_format($originalPrice) }}</del><br>
+                                                    <span
+                                                        class="price-transition">₹{{ number_format($cartPrice) }}</span>
+                                                @else
+                                                    <span
+                                                        class="price-transition">₹{{ number_format($cartPrice) }}</span>
+                                                @endif
+                                            </h4>
                                         </td>
                                         <td class="text-center detail-info" data-title="Stock">
-                                            @if ($isGift)
-                                                <div class="detail-qty border radius bg-light disabled"
-                                                    style="cursor: not-allowed; opacity: 0.7;"><span
-                                                        class="qty-val">1</span></div>
-                                            @else
-                                                <div class="detail-extralink mr-15 display-hide-480">
-                                                    <div class="detail-qty border radius">
-                                                        <a href="#"
-                                                            wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
-                                                            class="qty-down"><i
-                                                                class="fi-rs-angle-small-down"></i></a>
-                                                        <span class="qty-val">{{ $item->qty }}</span>
-                                                        <a href="#"
-                                                            wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
-                                                            class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                                    </div>
+                                            <div class="detail-extralink mr-15 display-hide-480">
+                                                <div class="detail-qty border radius">
+                                                    <a href="#"
+                                                        wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
+                                                        class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                    <span class="qty-val">{{ $item->qty }}</span>
+                                                    <a href="#"
+                                                        wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
+                                                        class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                                 </div>
-                                            @endif
+                                            </div>
                                         </td>
                                         <td class="price small-screen-table-td" data-title="Total Price">
-                                            @if ($isGift)
-                                                <h4 class="price-free small-screen-table-td-content">₹0</h4>
-                                            @else
-                                                <h4 class="text-brand small-screen-table-td-content">
-                                                    ₹{{ number_format($item->price * $item->qty) }}</h4>
-                                            @endif
+                                            <h4 class="text-brand small-screen-table-td-content">
+                                                ₹{{ number_format($item->price * $item->qty) }}</h4>
                                         </td>
                                         <td class="action text-center small-screen-table-td remove-btn pe-sm-2"
                                             data-title="Remove">
-                                            @if ($isGift)
-                                                <span class="text-muted" title="Automatic Gift"><i
-                                                        class="fi-rs-lock"></i></span>
-                                            @else
-                                                <a href="#"
-                                                    wire:click.prevent="askRemove('{{ $item->rowId }}')"
-                                                    class="text-body"><i class="fi-rs-trash"></i></a>
-                                            @endif
+                                            <a href="#" wire:click.prevent="askRemove('{{ $item->rowId }}')"
+                                                class="text-body"><i class="fi-rs-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -257,7 +153,6 @@
                     <div class="product-detail-small-screen d-block d-sm-none">
                         @foreach (Cart::instance('cart')->content() as $item)
                             @php
-                                $isGift = $item->options['is_gift_product'] ?? false;
                                 $shop_detail_url = route('shop-detail', [
                                     'slug' => $item->model->slug ? $item->model->slug : 'no-slug',
                                     'id' => $item->model->id,
@@ -268,24 +163,16 @@
                                     <div class="img-section position-relative">
                                         <img src="{{ asset('storage/' . $item->model->featured_image) }}"
                                             alt="{{ $item->model->seo_meta }}" class="img-fluid">
-                                        @if (!$isGift)
-                                            <div class="d-block d-sm-none custom-remove-item">
-                                                <a href="#"
-                                                    class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
-                                                    wire:click.prevent="askRemove('{{ $item->rowId }}')">
-                                                    <i class="fi-rs-trash text-white fs-13"></i></a>
-                                            </div>
-                                        @endif
+                                        <div class="d-block d-sm-none custom-remove-item">
+                                            <a href="#"
+                                                class="text-body fs-16 rounded-pill p-1 bg-brand d-flex align-items-center justify-content-center fit-content"
+                                                wire:click.prevent="askRemove('{{ $item->rowId }}')">
+                                                <i class="fi-rs-trash text-white fs-13"></i></a>
+                                        </div>
                                     </div>
                                     <div class="content-section">
-                                        @if ($isGift)
-                                            <span
-                                                class="gift-badge fs-10 badge px-2 text-capitalize quicksand">Surprise
-                                                Gift</span>
-                                        @endif
                                         <a class="product-name fw-600 quicksand text-dark hover-a two-liner-text mb-1"
-                                            style="line-height: 1.2em"
-                                            href="{{ !$isGift ? $shop_detail_url : 'javascript:void(0);' }}">
+                                            style="line-height: 1.2em" href="{{ $shop_detail_url }}">
                                             {{ $item->model->name }}
                                         </a>
                                         @php
@@ -297,30 +184,22 @@
                                         @endphp
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="product-price">
-                                                @if ($isGift)
-                                                    <h4 class="text-body small-screen-table-td-content">
-                                                        <del
-                                                            class="text-muted fs-14 fw-500">₹{{ number_format($item->model->price) }}</del><br>
-                                                        <span class="price-free">FREE</span>
-                                                    </h4>
+                                                @if ($item->model->sale_price > 0 && now() >= $item->model->sale_start_date && now() <= $item->model->sale_end_date)
+                                                    <h3
+                                                        class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                        ₹{{ $item->model->sale_price * $item->qty }}</h3>
+                                                    <del
+                                                        class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
+                                                @elseif($item->model->sale_default_price > 0)
+                                                    <h3
+                                                        class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                        ₹{{ $item->model->sale_default_price * $item->qty }}</h3>
+                                                    <del
+                                                        class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
                                                 @else
-                                                    @if ($item->model->sale_price > 0 && now() >= $item->model->sale_start_date && now() <= $item->model->sale_end_date)
-                                                        <h3
-                                                            class="text-brand small-screen-table-td-content d-inline-block me-1">
-                                                            ₹{{ $item->model->sale_price * $item->qty }}</h3>
-                                                        <del
-                                                            class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
-                                                    @elseif($item->model->sale_default_price > 0)
-                                                        <h3
-                                                            class="text-brand small-screen-table-td-content d-inline-block me-1">
-                                                            ₹{{ $item->model->sale_default_price * $item->qty }}</h3>
-                                                        <del
-                                                            class="old-price fw-600 text-muted">₹{{ $item->model->price }}</del>
-                                                    @else
-                                                        <h3
-                                                            class="text-brand small-screen-table-td-content d-inline-block me-1">
-                                                            ₹{{ $item->model->price * $item->qty }}</h3>
-                                                    @endif
+                                                    <h3
+                                                        class="text-brand small-screen-table-td-content d-inline-block me-1">
+                                                        ₹{{ $item->model->price * $item->qty }}</h3>
                                                 @endif
                                             </div>
 
@@ -334,25 +213,18 @@
                                             </div>
                                         </div>
 
-                                        @if ($isGift)
-                                            <div class="detail-qty border radius bg-light disabled"
-                                                style="cursor: not-allowed; opacity: 0.7;"><span
-                                                    class="qty-val">1</span></div>
-                                        @else
-                                            @if ($item->model->out_of_stock != 1)
-                                                <div class="detail-extralink mr-15 display-hide-480">
-                                                    <div class="detail-qty border radius">
-                                                        <a href="#"
-                                                            wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
-                                                            class="qty-down"><i
-                                                                class="fi-rs-angle-small-down"></i></a>
-                                                        <span class="qty-val">{{ $item->qty }}</span>
-                                                        <a href="#"
-                                                            wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
-                                                            class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                                    </div>
+                                        @if ($item->model->out_of_stock != 1)
+                                            <div class="detail-extralink mr-15 display-hide-480">
+                                                <div class="detail-qty border radius">
+                                                    <a href="#"
+                                                        wire:click.prevent="decrementQuantity('{{ $item->rowId }}')"
+                                                        class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                    <span class="qty-val">{{ $item->qty }}</span>
+                                                    <a href="#"
+                                                        wire:click.prevent="incrementQuantity('{{ $item->rowId }}')"
+                                                        class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                                 </div>
-                                            @endif
+                                            </div>
                                         @endif
 
                                         @if ($item->model->out_of_stock == 1)
@@ -626,48 +498,6 @@
         }
         window.addEventListener('coupon-applied', event => {
             showCongratsOffer();
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const bar = document.querySelector(".progress-bar-cart");
-            const markerClosed = document.querySelector(".milestone-marker");
-            const markerOpen = document.querySelector(".milestone-marker-open");
-
-            if (bar && markerClosed && markerOpen) {
-                let finalWidth = parseInt(bar.getAttribute("data-width"));
-                let skipAnimation = bar.getAttribute("data-skip") === "true";
-
-                if (skipAnimation) {
-                    bar.style.transition = "none";
-                    bar.style.width = "100%";
-                    markerClosed.style.display = "none";
-                    markerOpen.style.display = "block";
-                    return;
-                }
-
-                if (finalWidth == 0) {
-                    bar.style.width = "4%";
-                } else {
-                    bar.style.width = finalWidth + "%";
-                }
-
-                bar.addEventListener("transitionend", function() {
-                    let reachedWidth = parseInt(bar.style.width);
-
-                    if (reachedWidth >= 100) {
-                        showCongratsOffer();
-                        setTimeout(() => {
-                            markerClosed.style.display = "none";
-                            markerOpen.style.display = "block";
-                        }, 800);
-                    } else {
-                        markerClosed.style.display = "block";
-                        markerOpen.style.display = "none";
-                    }
-                });
-            }
         });
     </script>
 
