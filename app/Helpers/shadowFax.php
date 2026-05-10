@@ -69,8 +69,8 @@ function shadowFaxTracking($awb_number)
                 $statusInput = strtolower($shipment['status'] ?? '');
                 $new_status = match ($statusInput) {
                     'delivered' => 3,
-                    'rto', 'in_transit_return' => 8,
-                    'rto_d', 'rts_d' => 5,
+                    'rto', 'in_transit_return', 'rts_d' => 8,
+                    'rto_d', 'rto', 'rts' => 5,
                     'ofd', 'assigned_for_delivery' => 7,
                     'lost' => 6,
                     'cancelled_by_customer' => 9,
