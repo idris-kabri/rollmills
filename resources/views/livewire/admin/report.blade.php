@@ -297,7 +297,8 @@
                             @if (isset($orders_needs_attention) && count($orders_needs_attention) > 0)
                                 @foreach ($orders_needs_attention as $order)
                                     <tr>
-                                        <td>{{ $order->id }}</td>
+                                        <td><a href="{{ route('admin.orders.view', $order->id) }}"
+                                                target="_blank">{{ $order->id }}</a></td>
                                         <td class="text-wrap" style="max-width: 200px;">
                                             <a href="{{ route('admin.customer.customer-detail', $order->logged_in_user_id) }}"
                                                 target="_blank">
@@ -315,18 +316,14 @@
                                                 ({{ \Carbon\Carbon::parse($order->shipped_at)->diffForHumans() }})
                                             </small>
                                         </td>
-                                        <td>{{ $order->aggregator ?? 'N/A' }}</td>
-                                        <td>{{ $order->provider ?? 'N/A' }}</td>
-                                        <td class="fw-bold">{{ $order->awb_number ?? 'N/A' }}</td>
+                                        <td>{{ $order->getOrderAWB[0]->aggregator ?? 'N/A' }}</td>
+                                        <td>{{ $order->getOrderAWB[0]->provider ?? 'N/A' }}</td>
+                                        <td class="fw-bold">{{ $order->getOrderAWB[0]->awb_number ?? 'N/A' }}</td>
                                         <td class="text-end" onclick="event.stopPropagation()">
-                                            @if ($order->tracking_link)
-                                                <a href="{{ $order->tracking_link }}" target="_blank"
-                                                    class="btn btn-sm btn-info text-white text-nowrap">
-                                                    Track
-                                                </a>
-                                            @else
-                                                <span class="text-muted small text-nowrap">No Link</span>
-                                            @endif
+                                            <a href="{{ route('tracking-info', $order->id) }}" target="_blank"
+                                                class="btn btn-sm btn-info text-white text-nowrap">
+                                                Track
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
