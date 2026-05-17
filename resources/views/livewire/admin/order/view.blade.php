@@ -48,7 +48,7 @@
                                         class="btn btn-sm btn-info">Track
                                         Order</a>
 
-                                    {{-- Check ExpressBees Button (Only if status is Processed) --}}
+                                    {{-- Check ExpressBees & ShadowFax Buttons (Only if status is Processed) --}}
                                     @if ($order->status == 1)
                                         <button type="button" class="btn btn-sm btn-info" wire:click="checkExpressBees"
                                             wire:loading.attr="disabled" wire:target="checkExpressBees">
@@ -69,6 +69,31 @@
                                                 Check XpressBees
                                             </span>
                                             <span wire:loading wire:target="checkExpressBees">
+                                                <span class="spinner-border spinner-border-sm me-1" role="status"
+                                                    aria-hidden="true"></span>
+                                                Fetching...
+                                            </span>
+                                        </button>
+
+                                        <button type="button" class="btn btn-sm btn-dark" wire:click="checkShadowFax"
+                                            wire:loading.attr="disabled" wire:target="checkShadowFax">
+                                            <span wire:loading.remove wire:target="checkShadowFax"
+                                                class="d-flex align-items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon icon-tabler icon-tabler-truck me-1 m-0" width="20"
+                                                    height="20" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <circle cx="7" cy="17" r="2"></circle>
+                                                    <circle cx="17" cy="17" r="2"></circle>
+                                                    <path
+                                                        d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5">
+                                                    </path>
+                                                </svg>
+                                                Check ShadowFax
+                                            </span>
+                                            <span wire:loading wire:target="checkShadowFax">
                                                 <span class="spinner-border spinner-border-sm me-1" role="status"
                                                     aria-hidden="true"></span>
                                                 Fetching...
@@ -917,6 +942,33 @@
                                             @endif
                                             {{ $shippAddress->city ?? '' }}, {{ $shippAddress->state ?? '' }} <br>
                                             {{ $shippAddress->zipcode ?? '' }}
+
+                                            <br>
+                                            {{-- Verify Pincode Button --}}
+                                            <button type="button" wire:click="verifyAddressPincode"
+                                                wire:loading.attr="disabled" class="btn btn-sm btn-outline-info mt-2">
+                                                <span wire:loading.remove wire:target="verifyAddressPincode"
+                                                    class="d-flex align-items-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="icon icon-tabler icon-tabler-map-search me-1 m-0"
+                                                        width="16" height="16" viewBox="0 0 24 24"
+                                                        stroke-width="2" stroke="currentColor" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M11 18l-2 -1l-6 3v-13l6 -3l6 3l6 -3v7.5"></path>
+                                                        <path d="M9 4v13"></path>
+                                                        <path d="M15 7v5"></path>
+                                                        <path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                                                        <path d="M20.2 20.2l1.8 1.8"></path>
+                                                    </svg>
+                                                    Verify Pincode
+                                                </span>
+                                                <span wire:loading wire:target="verifyAddressPincode">
+                                                    <span class="spinner-border spinner-border-sm me-1" role="status"
+                                                        aria-hidden="true"></span>
+                                                    Verifying...
+                                                </span>
+                                            </button>
                                         </dd>
 
                                         @php
@@ -967,9 +1019,139 @@
         </div>
     </div>
 
+    {{-- MODAL: Verify Pincode --}}
+    <div wire:ignore.self class="modal fade" id="verifyPincodeModal" tabindex="-1" aria-hidden="true"
+        data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title">Pincode Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    @if ($pincodeError)
+                        <div class="alert alert-danger m-0 d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-alert-circle me-2" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            {{ $pincodeError }}
+                        </div>
+                    @elseif ($pincodeDetails)
+                        <div class="text-success mb-2 d-flex align-items-center justify-content-center fw-bold">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-circle-check me-1" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <path d="M9 12l2 2l4 -4"></path>
+                            </svg>
+                            Pincode Verified
+                        </div>
+                        <h2 class="mb-2 fw-bold text-dark">{{ $pincodeDetails['pincode'] }}</h2>
+                        <div class="bg-light p-3 rounded text-start">
+                            <p class="mb-1 text-muted"><strong>City/District:</strong> <span
+                                    class="text-dark">{{ $pincodeDetails['city'] }}</span></p>
+                            <p class="mb-0 text-muted"><strong>State:</strong> <span
+                                    class="text-dark">{{ $pincodeDetails['state'] }}</span></p>
+                        </div>
+                    @else
+                        <div class="py-4">
+                            <span class="spinner-border text-primary" role="status"></span>
+                            <p class="mt-2 text-muted">Loading Details...</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="d-none" id="verif-Pincode-launch-modal-btn" data-bs-toggle="modal"
+        data-bs-target="#verifyPincodeModal">Launch ShadowFax Modal</button>
+
+    {{-- MODAL: ShadowFax Serviceability/Rate Estimate --}}
+    <div wire:ignore.self class="modal fade" id="shadowfaxModal" tabindex="-1" aria-hidden="true"
+        data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-truck text-dark me-2" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="7" cy="17" r="2"></circle>
+                            <circle cx="17" cy="17" r="2"></circle>
+                            <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
+                        </svg>
+                        ShadowFax Rate Estimate
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    @if ($shadowfaxError)
+                        <div class="alert alert-danger d-flex align-items-center m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-alert-circle me-2" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            {{ $shadowfaxError }}
+                        </div>
+                    @elseif ($shadowfaxRate !== null)
+                        <div class="text-center">
+                            <h4 class="text-muted text-uppercase mb-2">Estimated Rate</h4>
+                            <h1 class="text-dark fw-bold display-5">₹{{ number_format($shadowfaxRate, 2) }}</h1>
+                            <p class="text-muted mt-2 mb-0">Delivery Pincode:
+                                <strong>{{ json_decode($order->ship_different_address_details)->zipcode ?? $order->getBillAddress->zipcode }}</strong>
+                            </p>
+                        </div>
+                    @else
+                        <div class="text-center py-4 text-muted">
+                            <span class="spinner-border spinner-border-sm me-2" role="status"
+                                aria-hidden="true"></span>
+                            Fetching ShadowFax serviceability...
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-link link-secondary"
+                        data-bs-dismiss="modal">Cancel</button>
+
+                    @if ($shadowfaxRate !== null && !$shadowfaxError)
+                        <button type="button" class="btn btn-dark" wire:click="createShadowfaxShipment"
+                            wire:loading.attr="disabled" wire:target="createShadowfaxShipment">
+                            <span wire:loading.remove wire:target="createShadowfaxShipment">
+                                Create Shipment
+                            </span>
+                            <span wire:loading wire:target="createShadowfaxShipment">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"
+                                    aria-hidden="true"></span>
+                                Creating...
+                            </span>
+                        </button>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="d-none" id="shadowFax-launch-modal-btn" data-bs-toggle="modal"
+        data-bs-target="#shadowfaxModal">Launch ShadowFax Modal</button>
+
+
     <button type="button" class="d-none" id="xpressBess-launch-modal-btn" data-bs-toggle="modal"
-        data-bs-target="#xpressbeesModal">Launch
-        ExpressBees Modal</button>
+        data-bs-target="#xpressbeesModal">Launch ExpressBees Modal</button>
 
     {{-- MODAL: XpressBees Rates --}}
     <div wire:ignore.self class="modal fade" id="xpressbeesModal" tabindex="-1" aria-hidden="true"
@@ -1251,7 +1433,8 @@
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="icon icon-tabler icon-tabler-shopping-cart-plus me-1 text-primary"
                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
                                 <path d="M12.5 17h-6.5v-14h-2"></path>
@@ -1274,8 +1457,9 @@
                             <div class="input-icon">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
                                         <path d="M21 21l-6 -6"></path>
@@ -1315,9 +1499,10 @@
                                 <div class="dropdown-menu show w-100 position-absolute shadow mt-1 border-0 text-center py-3 text-muted"
                                     style="z-index: 1055; top: 100%;">
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon icon-tabler icon-tabler-mood-empty mb-2 opacity-50" width="32"
-                                        height="32" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        class="icon icon-tabler icon-tabler-mood-empty mb-2 opacity-50"
+                                        width="32" height="32" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                                         <path d="M9 10l.01 0"></path>
@@ -1336,10 +1521,10 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center"
                                             style="width: 32px; height: 32px;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon m-0" width="20"
-                                                height="20" viewBox="0 0 24 24" stroke-width="2"
-                                                stroke="currentColor" fill="none" stroke-linecap="round"
-                                                stroke-linejoin="round">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon m-0"
+                                                width="20" height="20" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                 <path d="M5 12l5 5l10 -10"></path>
                                             </svg>
@@ -1356,7 +1541,8 @@
                             </div>
 
                             <div class="mb-3 p-3 bg-light rounded border">
-                                <label class="form-label fw-bold">Quantity <span class="text-danger">*</span></label>
+                                <label class="form-label fw-bold">Quantity <span
+                                        class="text-danger">*</span></label>
                                 <div class="input-group input-group-lg w-50">
                                     <span class="input-group-text bg-white">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -1383,8 +1569,8 @@
 
                     </div>
                     <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-link link-secondary" wire:click="clearSelectedProduct"
-                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-link link-secondary"
+                            wire:click="clearSelectedProduct" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary ms-auto"
                             @if (!$selectedProductId) disabled @endif>
                             <span wire:loading.remove wire:target="addItemToOrder">Add to Order</span>
@@ -1455,6 +1641,29 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            // XpressBees Listeners
+            window.addEventListener('open-xpressbees-modal', event => {
+                if (window.jQuery) {
+                    $('#xpressbeesModal').modal('show');
+                } else if (typeof bootstrap !== 'undefined') {
+                    var myModal = new bootstrap.Modal(document.getElementById('xpressbeesModal'));
+                    myModal.show();
+                }
+            });
+
+            window.addEventListener('close-shadowfax-modal', event => {
+                if (window.jQuery) {
+                    $('#shadowfaxModal').modal('hide');
+                } else if (typeof bootstrap !== 'undefined') {
+                    var myModalEl = document.getElementById('shadowfaxModal');
+                    var myModal = bootstrap.Modal.getInstance(myModalEl);
+                    if (myModal) myModal.hide();
+                }
+                cleanUpBackdrop();
+            });
+
+
             window.addEventListener('close-edit-address-modal', event => {
                 if (window.jQuery) {
                     $('#editAddressModal').modal('hide');

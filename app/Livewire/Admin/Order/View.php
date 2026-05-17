@@ -56,6 +56,14 @@ class View extends Component
     public $xpressbeesError = null;
     public $selectedRateIndex = null;
 
+    // --- ShadowFax Properties ---
+    public $shadowfaxRate = null;
+    public $shadowfaxError = null;
+
+    // --- Pincode Verification Properties ---
+    public $pincodeDetails = null;
+    public $pincodeError = null;
+
     protected $rules = [
         'logistics.*.aggregator' => 'nullable|string|max:255',
         'logistics.*.provider' => 'nullable|string|max:255',
@@ -80,6 +88,131 @@ class View extends Component
                     'charges' => $order_awb->charges_taken,
                 ];
             }
+        }
+    }
+
+    // --- PINCODE VERIFICATION LOGIC ---
+    // --- PINCODE VERIFICATION LOGIC ---
+    public function verifyAddressPincode()
+    {
+        $this->pincodeDetails = null;
+        $this->pincodeError = null;
+
+        $shippAddress = json_decode($this->order->ship_different_address_details);
+        $pincode = $shippAddress->zipcode ?? $this->order->getBillAddress->zipcode;
+
+        if (!$pincode) {
+            $this->pincodeError = 'No pincode found for this order.';
+            $this->dispatch('open-verify-pincode-modal');
+            return;
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept' => 'application/json',
+            ])
+                ->withoutVerifying()
+                ->get("https://api.postalpincode.in/pincode/{$pincode}");
+
+            if ($response->successful()) {
+                $data = $response->json();
+                if (isset($data[0]['Status']) && $data[0]['Status'] === 'Success') {
+                    $postOffice = $data[0]['PostOffice'][0];
+
+                    // Prioritize 'Block' (City/Tehsil), fallback to 'Name' if Block is 'NA' or empty
+                    $cityName = !empty($postOffice['Block']) && $postOffice['Block'] !== 'NA' ? $postOffice['Block'] : $postOffice['Name'];
+
+                    $this->pincodeDetails = [
+                        'pincode' => $pincode,
+                        'city' => $cityName,
+                        'state' => $postOffice['State'],
+                    ];
+                } else {
+                    $this->pincodeError = 'Invalid Pincode. No matching records found.';
+                }
+            } else {
+                $this->pincodeError = 'Failed to connect to the verification service.';
+            }
+        } catch (\Exception $e) {
+            $this->pincodeError = 'An error occurred while verifying the pincode.';
+        }
+
+        $this->dispatch('open-verify-pincode-modal');
+    }
+
+    // --- SHADOWFAX LOGIC ---
+    public function checkShadowFax()
+    {
+        $this->shadowfaxRate = null;
+        $this->shadowfaxError = null;
+
+        $shippAddress = json_decode($this->order->ship_different_address_details);
+        $pincode = $shippAddress->zipcode ?? $this->order->getBillAddress->zipcode;
+
+        if (!$pincode) {
+            $this->shadowfaxError = 'Delivery pincode is missing.';
+            $this->dispatch('open-shadowfax-modal');
+            return;
+        }
+
+        // Call your helper function
+        $response = getRate($pincode);
+
+        if ($response['status'] == 200) {
+            $this->shadowfaxRate = $response['rate'];
+        } else {
+            $this->shadowfaxError = $response['message'];
+        }
+        $this->dispatch('open-shadowfax-modal');
+    }
+
+    public function createShadowfaxShipment()
+    {
+        // Call your helper function
+        $shipmentResponse = createShadowfaxOrder($this->order, $this->shadowfaxRate ?? 0);
+
+        if ($shipmentResponse['status'] == true && !empty($shipmentResponse['awb'])) {
+            // 1. Update Order Status
+            $this->order->status = 2;
+            $this->order->save();
+
+            // 2. Build items string for WhatsApp
+            $items = '';
+            foreach ($this->order->getOrderItems as $key => $item) {
+                if ($key > 0) {
+                    $items .= ', ';
+                }
+                $items .= $item->getProduct->name . ' x ' . $item->quantity;
+            }
+
+            // 3. Send WhatsApp Notification
+            $shippAddress = json_decode($this->order->ship_different_address_details);
+            $name = $shippAddress->name ?? $this->order->getBillAddress->name;
+            $mobile = $shippAddress->mobile ?? $this->order->getBillAddress->mobile;
+            $order_id = $this->order->id;
+
+            $body_para = [$name, "$order_id", $items];
+            $button_para = ["$order_id"];
+            messageSend($mobile, 'order_shipped', $body_para, $button_para, 'en');
+
+            // 4. Save AWB directly to Logistics
+            $order_awb = new OrderAWB();
+            $order_awb->order_id = $this->order->id;
+            $order_awb->aggregator = 'ShadowFax';
+            $order_awb->provider = 'ShadowFax';
+            $order_awb->awb_number = $shipmentResponse['awb'];
+            $order_awb->charges_taken = $this->shadowfaxRate ?? 0;
+            $order_awb->remarks = 'Forward Shipping Charges';
+            $order_awb->save();
+
+            // 5. Success Notifications
+            $this->toastSuccess($shipmentResponse['message']);
+            $this->dispatch('close-shadowfax-modal');
+            $this->redirectWithDelay('/admin/orders/view/' . $this->order->id);
+        } else {
+            // Fail Gracefully
+            $this->toastError($shipmentResponse['message'] ?? 'Failed to retrieve AWB from ShadowFax.');
         }
     }
 
