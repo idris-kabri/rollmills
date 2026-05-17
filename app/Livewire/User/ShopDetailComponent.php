@@ -41,9 +41,8 @@ class ShopDetailComponent extends Component
     public $review_image;
     public $check_user_can_review;
 
-    // --- NEW VARIABLES ADDED HERE ---
-    public $minimum_order_value = 1000; // Set your desired minimum order amount
-    public $discount_percentage = 0; // Set your desired discount percentage
+    public $minimum_order_value = 1000;
+    public $discount_percentage = 0;
 
     protected $listeners = ['closeQuickView' => 'handleCloseQuickView'];
 
@@ -96,19 +95,53 @@ class ShopDetailComponent extends Component
             $setIds = $assign->product_set_id;
             $attributeName = $assign->productAttribute->name;
 
-            $assignItems = $assign->productAttribute->getAttibuteItems;
-
             if (!isset($this->groupedAttributes[$setIds])) {
                 $this->groupedAttributes[$setIds] = [
                     'name' => $attributeName,
                     'items' => [],
                 ];
-
                 $this->selectedAttribute[$setIds] = null;
             }
-            if (!in_array($assign->title, $this->groupedAttributes[$setIds]['items'])) {
-                $this->groupedAttributes[$setIds]['items'][] = $assign->title;
+
+            // Check if attribute already exists to prevent duplicates
+            $exists = collect($this->groupedAttributes[$setIds]['items'])->contains('title', $assign->title);
+
+            if (!$exists) {
+                // Fetch the child product to get image and prices for the variation card
+                $child = Product::where('parent_id', $id)
+                    ->where('attributes_name', 'LIKE', '%' . $assign->title . '%')
+                    ->first();
+
+                $price = 0;
+                $old_price = 0;
+                $image = null;
+
+                if ($child) {
+                    $image = $child->featured_image;
+                    $currentDate = Carbon::now();
+                    $sale_from = Carbon::parse($child->sale_from_date);
+                    $sale_to = Carbon::parse($child->sale_to_date);
+
+                    if ($child->sale_price > 0 && $currentDate->between($sale_from, $sale_to)) {
+                        $price = $child->sale_price;
+                        $old_price = $child->price;
+                    } elseif ($child->sale_default_price > 0) {
+                        $price = $child->sale_default_price;
+                        $old_price = $child->price;
+                    } else {
+                        $price = $child->price;
+                        $old_price = $child->price > $price ? $child->price : 0;
+                    }
+                }
+
+                $this->groupedAttributes[$setIds]['items'][] = [
+                    'title' => $assign->title,
+                    'price' => $price,
+                    'old_price' => $old_price,
+                    'image' => $image,
+                ];
             }
+
             if ($assign->is_default == 1) {
                 $this->handleAttributeClick($setIds, $assign->title);
             }
@@ -175,11 +208,13 @@ class ShopDetailComponent extends Component
             $this->toastError($e->getMessage());
         }
     }
+
     public function handleAttributeClick($key, $item)
     {
         $this->selectedAttribute[$key] = $item;
         $filtered = array_filter($this->selectedAttribute);
         $attributeName = implode(',', $filtered);
+
         $product = Product::where('parent_id', $this->id)->where('attributes_name', $attributeName)->first();
         if ($product) {
             $this->mainProduct = $product;
@@ -335,11 +370,9 @@ class ShopDetailComponent extends Component
         $this->dispatch('add-to-cart', $items);
 
         if ($addToCart) {
-            // NEW LOGIC: Handle the direct "Buy Now" checkout bypass
             if ($option == 'prepaid') {
                 return redirect()->route('cart');
             } elseif ($option == 'checkout') {
-                // Assuming 'checkout' is your route name for the final checkout page
                 return redirect()->route('checkout');
             } else {
                 $this->toastSuccess('Successfully Added In Your Cart!');
@@ -422,15 +455,12 @@ class ShopDetailComponent extends Component
 
     public function render()
     {
-        // Define the OG Image
-        // Check if mainProduct has an image, otherwise fallback to logo
         $ogImage = $this->mainProduct->featured_image ? asset('storage/' . $this->mainProduct->featured_image) : asset('assets/frontend/imgs/theme/logo.png');
 
         $metaTitle = $this->mainProduct->meta_title;
         $metaDescription = $this->mainProduct->seo_description;
         $metaKeywords = $this->mainProduct->seo_meta;
 
-        // Prepare the data to pass to the layout
         $layoutData = [
             'meta_title' => $metaTitle,
             'meta_description' => $metaDescription,
@@ -441,7 +471,6 @@ class ShopDetailComponent extends Component
             'og_image' => $ogImage,
         ];
 
-        // Pass $layoutData as the second argument
         return view('livewire.user.shop-detail-component')->layout('layouts.user.app', $layoutData);
     }
 }
