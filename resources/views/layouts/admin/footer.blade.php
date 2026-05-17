@@ -112,6 +112,14 @@
         $('#xpressBess-launch-modal-btn').click();
     });
 
+    window.addEventListener('open-shadowfax-modal', event => {
+        document.getElementById('shadowFax-launch-modal-btn').click();
+    });
+
+    window.addEventListener('open-verify-pincode-modal', event => {
+        document.getElementById('verif-Pincode-launch-modal-btn').click();
+    });
+
     function displayValidationErrors(errors) {
         // Clear any previous error messages
         document.querySelectorAll('.error-message').forEach((elem) => elem.remove());

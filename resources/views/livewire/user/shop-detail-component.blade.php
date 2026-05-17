@@ -1,4 +1,94 @@
 <main class="main">
+    <style>
+        .custom-var-card {
+            border: 1px solid #d5d9d9;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 125px;
+            /* Fixed width for uniform grid */
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-var-card:hover {
+            background-color: #f7fafa;
+            border-color: #a6a6a6;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        .custom-var-card.active {
+            border: 2px solid #007185;
+            /* Premium e-commerce teal */
+            background-color: #f4f8fb;
+            padding: 9px;
+            /* Offset by 1px to prevent layout shift from thicker border */
+            box-shadow: 0 0 0 3px rgba(0, 113, 133, 0.1);
+        }
+
+        .custom-var-img {
+            width: 100%;
+            height: 85px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #fff;
+            /* Ensures transparent PNGs pop */
+        }
+
+        .custom-var-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f1111;
+            line-height: 1.3;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .custom-var-price-wrap {
+            display: flex;
+            align-items: baseline;
+            /* Aligns the numbers nicely on the same line */
+            gap: 6px;
+            /* Spacing between new and old price */
+            line-height: 1.1;
+        }
+
+        .custom-var-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .custom-var-old-price {
+            font-size: 12px;
+            color: #565959;
+            text-decoration: line-through;
+        }
+
+        .var-label-title {
+            font-size: 15px;
+            color: #565959;
+            font-weight: 500;
+        }
+
+        .var-label-value {
+            font-size: 15px;
+            color: #0f1111;
+            font-weight: 700;
+            margin-left: 6px;
+        }
+    </style>
 
     <div class="page-header breadcrumb-wrap">
         <div class="">
@@ -191,19 +281,39 @@
                             </div>
 
                             @foreach ($groupedAttributes as $key => $attributes)
-                                <div class="attr-detail attr-size mb-30" wire:ignore>
-                                    <strong class="mr-10">{{ $attributes['name'] }}: </strong>
-                                    <ul class="list-filter size-filter font-small">
-                                        @foreach ($attributes['items'] as $item)
-                                            <li class="{{ $selectedAttribute[$key] == $item ? 'active' : '' }}">
-                                                <a href="#" class="quicksand"
-                                                    wire:click.prevent="handleAttributeClick({{ $key }}, '{{ $item }}')">{{ $item }}</a>
-                                            </li>
+                                <div class="mb-30" wire:key="attr-group-{{ $key }}">
+                                    <div class="mb-2 d-flex align-items-center">
+                                        <span class="var-label-title">{{ $attributes['name'] }}:</span>
+                                        <span class="var-label-value">{{ $selectedAttribute[$key] ?? '' }}</span>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        @foreach ($attributes['items'] as $index => $item)
+                                            <div class="custom-var-card {{ $selectedAttribute[$key] == $item['title'] ? 'active' : '' }}"
+                                                wire:click.prevent="handleAttributeClick({{ $key }}, '{{ $item['title'] }}')"
+                                                wire:key="attr-item-{{ $key }}-{{ $index }}">
+
+                                                @if ($item['image'])
+                                                    <img src="{{ asset('storage/' . $item['image']) }}"
+                                                        class="custom-var-img" alt="{{ $item['title'] }}">
+                                                @endif
+
+                                                <div class="custom-var-title">{{ $item['title'] }}</div>
+
+                                                @if ($item['price'] > 0)
+                                                    <div class="custom-var-price-wrap">
+                                                        <span
+                                                            class="custom-var-price">₹{{ number_format($item['price']) }}</span>
+                                                        @if ($item['old_price'] > $item['price'])
+                                                            <span
+                                                                class="custom-var-old-price">₹{{ number_format($item['old_price']) }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </div>
                                         @endforeach
-                                    </ul>
+                                    </div>
                                 </div>
                             @endforeach
-
                             @php
                                 $itemInCart =
                                     \Cart::instance('cart')->content()->where('id', $mainProduct->id)->count() > 0;
@@ -510,19 +620,24 @@
                     });
                 });
             });
-            const mainImage = document.getElementById("product_img");
 
-            document.querySelectorAll(".product_gallery_item").forEach(item => {
-                item.addEventListener("mouseover", function(e) {
+            document.addEventListener('mouseover', function(e) {
+                const item = e.target.closest('.product_gallery_item');
+                if (item) {
                     e.preventDefault();
-                    const newImage = this.getAttribute("data-image");
-                    const zoomImage = this.getAttribute("data-zoom-image");
-                    mainImage.src = newImage;
-                    mainImage.setAttribute("data-zoom-image", zoomImage);
-                    document.querySelectorAll(".product_gallery_item").forEach(el => el.classList
-                        .remove("active"));
-                    this.classList.add("active");
-                });
+                    const mainImage = document.getElementById("product_img");
+                    const newImage = item.getAttribute("data-image");
+                    const zoomImage = item.getAttribute("data-zoom-image");
+
+                    if (mainImage && newImage) {
+                        mainImage.src = newImage;
+                        mainImage.setAttribute("data-zoom-image", zoomImage);
+
+                        document.querySelectorAll(".product_gallery_item").forEach(el => el.classList
+                            .remove("active"));
+                        item.classList.add("active");
+                    }
+                }
             });
         });
     </script>

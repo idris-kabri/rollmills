@@ -120,3 +120,107 @@ function shadowFaxTracking($awb_number)
         }
     }
 }
+
+function createShadowfaxOrder($order, $shippingAmount)
+{
+    try {
+        // Prepare Address
+        $shippAddress = json_decode($order->ship_different_address_details);
+        $name = $shippAddress->name ?? $order->getBillAddress->name;
+        $mobile = $shippAddress->mobile ?? $order->getBillAddress->mobile;
+        $pincode = $shippAddress->zipcode ?? $order->getBillAddress->zipcode;
+        $city = $shippAddress->city ?? $order->getBillAddress->city;
+        $state = $shippAddress->state ?? $order->getBillAddress->state;
+
+        $addressParts = [];
+        if (!empty($shippAddress->address_line_1)) {
+            $addressParts[] = $shippAddress->address_line_1;
+        }
+        if (!empty($shippAddress->address_line_2)) {
+            $addressParts[] = $shippAddress->address_line_2;
+        }
+        $fullAddress = implode(', ', $addressParts);
+        if (empty($fullAddress)) {
+            $fullAddress = $order->getBillAddress->address_line_1 . ' ' . $order->getBillAddress->address_line_2;
+        }
+
+        // Prepare Products
+        $product_details = [];
+        foreach ($order->getOrderItems as $item) {
+            $price = $item->sale_default_price > 0 ? $item->sale_default_price : $item->regular_price;
+            $product_details[] = [
+                'name' => $item->getProduct->name,
+                'sku_id' => '128',
+                'category' => '',
+                'price' => (float) $price,
+                'quantity' => (int) $item->quantity,
+            ];
+        }
+
+        // Add COD as a separate item if applicable
+        if ($order->is_cod == 1 && $order->cod_charges > 0) {
+            $product_details[] = [
+                'name' => 'Cash on delivery Charges',
+                'sku_id' => '123',
+                'category' => '',
+                'price' => (float) $order->cod_charges,
+                'quantity' => 1,
+            ];
+        }
+
+        $shipmentData = [
+            'fwd_order' => [
+                'client_order_id' => (string) $order->id,
+                'payment_mode' => $order->is_cod == 1 ? 'cod' : 'prepaid',
+
+                'pickup_details' => [
+                    'name' => 'Roll Mills',
+                    'contact' => '8764766553',
+                    'address' => '02nd Floor, Above Mufaddal Printing, Opposite Gopi Restaurant',
+                    'pincode' => 314025,
+                    'city' => 'Sagwara',
+                    'state' => 'Rajasthan',
+                ],
+
+                'delivery_details' => [
+                    'name' => $name,
+                    'contact' => $mobile,
+                    'address' => $fullAddress,
+                    'pincode' => (int) $pincode,
+                    'city' => $city,
+                    'state' => $state,
+                    'alternate_contact' => '',
+                ],
+
+                'product_details' => $product_details,
+            ],
+        ];
+
+        $token = config('app.rate_token') ?? 'd7e33028ee7f76bc5acb78f65e8acafc7cd104e8';
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Token ' . $token,
+            'Accept' => 'application/json',
+        ])->post('https://dale.shadowfax.in/api/portal/v1/orders/', $shipmentData);
+
+        if ($response->successful()) {
+            $result = $response->json();
+            return [
+                'status' => true,
+                'awb' => $result['data']['fwd_order']['awb_number'] ?? null,
+                'message' => 'Shipment created successfully!',
+            ];
+        } else {
+            dd($response->json());
+            return [
+                'status' => false,
+                'message' => $response->json()['message'] ?? 'Failed to create ShadowFax shipment.',
+            ];
+        }
+    } catch (\Exception $e) {
+        return [
+            'status' => false,
+            'message' => 'Exception: ' . $e->getMessage(),
+        ];
+    }
+}
