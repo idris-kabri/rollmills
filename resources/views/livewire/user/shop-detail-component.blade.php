@@ -198,7 +198,7 @@
                                 </div>
 
                                 {{-- Variations: 1st on Mobile (order-1), 2nd on Desktop (order-md-2) --}}
-                                <div class="order-1 mt-md-0 w-100">
+                                <div class="order-1 mb-3 mt-md-0 w-100">
                                     @foreach ($groupedAttributes as $key => $attributes)
                                         <div class="" wire:key="attr-group-{{ $key }}">
                                             <div class="mb-2 d-flex align-items-center">
